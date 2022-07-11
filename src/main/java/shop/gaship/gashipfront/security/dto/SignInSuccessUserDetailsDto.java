@@ -1,7 +1,6 @@
 package shop.gaship.gashipfront.security.dto;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,10 +19,9 @@ import org.springframework.security.core.userdetails.UserDetails;
  * 2022/07/09        oct_sky_out       최초 생성
  */
 public class SignInSuccessUserDetailsDto implements UserDetails {
+    private Long identifyNo;
     private String email;
-
     private String hashedPassword;
-
     private List<String> authorities;
 
     @Override
@@ -61,5 +59,9 @@ public class SignInSuccessUserDetailsDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Long getIdentifyNo() {
+        return identifyNo;
     }
 }
