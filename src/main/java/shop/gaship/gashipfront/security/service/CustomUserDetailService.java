@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security;
+package shop.gaship.gashipfront.security.service;
 
 import java.util.HashMap;
 import java.util.List;

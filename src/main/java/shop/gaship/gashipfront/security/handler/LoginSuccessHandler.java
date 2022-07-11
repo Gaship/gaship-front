@@ -13,6 +13,9 @@ import shop.gaship.gashipfront.security.dto.TokenRequestDto;
 import shop.gaship.gashipfront.util.WebClientUtil;
 
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+    private static final int THIRTY_MINUTE_AT_MILLI_SECONDS = 1_800;
+    private static final int ONE_MONTH_AT_MILLI_SECONDS = 2_629_700;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication)
@@ -20,25 +23,43 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         SignInSuccessUserDetailsDto details =
             (SignInSuccessUserDetailsDto) authentication.getPrincipal();
 
-        TokenRequestDto toeknRequestDto =
+        TokenRequestDto tokenRequestDto =
             new TokenRequestDto(
                 details.getIdentifyNo(),
                 details.getUsername(),
                 details.getAuthorities()
             );
 
-        JwtTokenDto toeknsResopnse = new WebClientUtil<JwtTokenDto>().post(
+        JwtTokenDto tokensResponse = new WebClientUtil<JwtTokenDto>().post(
             "http://localhost:7071",
             "/securities/issue-token",
             null,
             null,
-            toeknRequestDto,
+            tokenRequestDto,
             JwtTokenDto.class
         ).getBody();
 
-        Cookie accessTokenCookie = new Cookie("accessToken", toeknsResopnse.getAccessToken());
+        Cookie accessTokenCookie =
+            generateTokenCookie("accessToken",
+                tokensResponse.getAccessToken(),
+                THIRTY_MINUTE_AT_MILLI_SECONDS
+            );
+        Cookie refreshTokenCookie =
+            generateTokenCookie("refreshToken",
+            tokensResponse.getRefreshToken(),
+            ONE_MONTH_AT_MILLI_SECONDS
+        );
         response.addCookie(accessTokenCookie);
+        response.addCookie(refreshTokenCookie);
 
         super.onAuthenticationSuccess(request, response, authentication);
+    }
+
+    public Cookie generateTokenCookie(String cookieKeyName, String tokenValue, int expireSeconds) {
+        Cookie tokenCookie = new Cookie(cookieKeyName, tokenValue);
+        tokenCookie.setHttpOnly(true);
+        tokenCookie.setMaxAge(expireSeconds);
+
+        return tokenCookie;
     }
 }
