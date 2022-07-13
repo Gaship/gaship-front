@@ -35,6 +35,7 @@ public class NaverLoginServiceImpl implements NaverLoginService {
     @Value("${naver-api-url-userdata}")
     private String apiUrlForUserData;
 
+    // TODO need4 : redis에 sessionId를 이용해서 집어넣어야함. 안그러면 로드밸런싱시에 문제일어남 레디스에 넣고, 필드의 생성도 지역범위로 변경
     private BigInteger state;
 
     private final Adapter adapter;

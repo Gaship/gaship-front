@@ -13,7 +13,6 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-@PropertySource("classpath:redis.properties")
 public class RedisConfig implements BeanClassLoaderAware {
     @Value("${redis.host}")
     private String host;

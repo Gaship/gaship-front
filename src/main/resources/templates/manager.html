@@ -6,34 +6,19 @@
 </head>
 <body>
 
-
 <h1>this is member...</h1>
-<!--<div sec:authorize="hasRole('USER')">has USER ROLE</div>-->
-<!--<div sec:authorize="hasRole('MANAGER')">has MANAGER ROLE</div>-->
-<!--<div sec:authorize="hasRole('ADMIN')">has ADMIN ROLE</div>-->
+<div sec:authorize="hasRole('USER')">has USER ROLE</div>
+<div sec:authorize="hasRole('MANAGER')">has MANAGER ROLE</div>
+<div sec:authorize="hasRole('ADMIN')">has ADMIN ROLE</div>
 
 <div sec:authorize="isAuthenticated()">
     Only Authenticated user can see this Text
 </div>
 
-<!--Authenticated username:-->
-<!--<div sec:authentication="principal.username"></div>--> <!-- oauth가 아닐땐 username으로 받아야하고 oauth면 name으로 principal이 받아온다.. -->
-<!--<div sec:authentication="principal.name"></div>-->
-<!--customoauth2userdetailsservice를 만들어서 DefaultOauth2User를 사용하지 않고 새롭게 커스톰한 Oauth2UserDto를 만들었기때문에 이제 다시 username을 써도 된다 그리고 이젠 eamil이 잘나온다-->
-
-
-<!--<div sec:authentication="principal.username"></div>-->
-
-<!--Authenticated user roles-->
-<!--<div sec:authentication="principal.authorities"></div>-->
-
-
-
-<!--<div sec:authentication="principal.attribute('sub')"></div>-->
-<!--<div sec:authentication="principal.attribute('email')"></div>-->
-
-<!--<div sec:authentication="principal.name"></div>-->
-<!--<div sec:authentication="principal.fromSocial"></div>-->
+Authenticated username:
+<div sec:authentication="principal.username"></div>
+Authenticated user roles
+<div sec:authentication="principal.authorities"></div>
 
 </body>
 </html>

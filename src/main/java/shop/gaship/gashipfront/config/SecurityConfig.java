@@ -44,32 +44,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .logout();
 
-//        http.oauth2Login()
-//            .loginPage("/login")
-//            .defaultSuccessUrl("/all")
-//            .failureUrl("/login");
+        http.oauth2Login()
+            .loginPage("/login")
+            .defaultSuccessUrl("/all")
+            .failureUrl("/login");
 
         http.csrf().disable();
 //        http.logout().disable();
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider(
-        CustomUserDetailService customUserDetailService) {
-        DaoAuthenticationProvider customDaoAuthenticationProvider = new DaoAuthenticationProvider();
-        customDaoAuthenticationProvider.setUserDetailsService(customUserDetailService);
-        customDaoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-
-        return customDaoAuthenticationProvider;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-            .withUser("user1")
-            .password("$2a$10$pnrG3Vqknwc.Okcw9ab6A.S5lGjtw8UyDVd530Wwhi3GZA4V9nJVO")
-            .roles("USER");
-    }
+//    @Bean
+//    public AuthenticationProvider authenticationProvider(
+//        CustomUserDetailService customUserDetailService) {
+//        DaoAuthenticationProvider customDaoAuthenticationProvider = new DaoAuthenticationProvider();
+//        customDaoAuthenticationProvider.setUserDetailsService(customUserDetailService);
+//        customDaoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+//
+//        return customDaoAuthenticationProvider;
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

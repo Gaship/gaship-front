@@ -49,6 +49,8 @@ public class OAuthController {
     public String getAccessTokenAndAuthenticateNaver(String code, String state) throws Exception {
         // TODO think5 : 굳이 클래스를 만들 필요가 있었는지? accesstoken 값을 로그인할때는 한번만 사용하고 더이상 사용할 계획이 없는데
         NaverAccessToken naverAccessToken = naverLoginServiceImpl.getAccessToken(code, state);
+
+        // TODO think7 : 회원정보를 이용할일이 없어서 email만 받으면 되는데 클래스가 필요할까?
         NaverUserData data = naverLoginServiceImpl.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
         Member member = naverLoginServiceImpl.getMember(data.getResponse().getEmail());
 
