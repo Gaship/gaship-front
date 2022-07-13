@@ -1,14 +1,16 @@
 package shop.gaship.gashipfront.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import shop.gaship.gashipfront.security.service.CustomUserDetailService;
-import shop.gaship.gashipfront.security.handler.LoginSuccessHandler;
+import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
+import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 
 /**
  * packageName    : shop.gaship.gashipfront.configure <br/>
@@ -21,26 +23,26 @@ import shop.gaship.gashipfront.security.handler.LoginSuccessHandler;
  * -----------------------------------------------------------  <br/>
  * 2022/07/11           김민수               최초 생성                         <br/>
  */
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/**")
-            .permitAll()
-            .and();
+            .antMatchers("/manager")
+                .hasRole("USER")
+            .anyRequest()
+                .permitAll();
 
         http.sessionManagement().disable();
-
         http.formLogin()
-            .successHandler(loginSuccessHandler())
+//            .successHandler(loginSuccessHandler())
             .successForwardUrl("/")
             .failureUrl("/login")
             .and();
 
         http.csrf().disable();
-
-        http.logout().disable();
+//        http.logout().disable();
     }
 
     @Bean
@@ -53,12 +55,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return customDaoAuthenticationProvider;
     }
 
-    private PasswordEncoder passwordEncoder() {
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+            .withUser("user1")
+            .password("$2a$10$pnrG3Vqknwc.Okcw9ab6A.S5lGjtw8UyDVd530Wwhi3GZA4V9nJVO")
+            .roles("USER");
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    private LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler();
-    }
+//    private LoginSuccessHandler loginSuccessHandler() {
+//        return new LoginSuccessHandler();
+//    }
 }
 

@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.service;
+package shop.gaship.gashipfront.security.basic.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.security.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.util.WebClientUtil;
 
 /**

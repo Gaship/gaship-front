@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.dto;
+package shop.gaship.gashipfront.security.basic.dto;
 
 import lombok.Data;
 

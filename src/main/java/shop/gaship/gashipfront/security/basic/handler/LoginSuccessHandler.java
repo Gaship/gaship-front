@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.handler;
+package shop.gaship.gashipfront.security.basic.handler;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import shop.gaship.gashipfront.security.dto.JwtTokenDto;
-import shop.gaship.gashipfront.security.dto.SignInSuccessUserDetailsDto;
-import shop.gaship.gashipfront.security.dto.TokenRequestDto;
+import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
+import shop.gaship.gashipfront.security.basic.dto.JwtTokenDto;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.util.WebClientUtil;
 
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
