@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
+import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service
@@ -38,7 +39,7 @@ import shop.gaship.gashipfront.security.social.adapter.Adapter;
 class NaverLoginServiceImplTest {
     @Autowired
     @Qualifier(value = "naverLoginServiceImpl")
-    private LoginService loginService;
+    private NaverLoginService loginService;
 
     @MockBean
     private Adapter adapter;

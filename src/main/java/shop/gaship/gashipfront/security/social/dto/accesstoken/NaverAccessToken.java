@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.dto;
+package shop.gaship.gashipfront.security.social.dto.accesstoken;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

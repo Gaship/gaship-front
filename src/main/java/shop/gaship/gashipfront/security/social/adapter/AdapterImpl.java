@@ -2,14 +2,11 @@ package shop.gaship.gashipfront.security.social.adapter;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import shop.gaship.gashipfront.security.social.dto.Member;
-import shop.gaship.gashipfront.security.social.dto.NaverAccessToken;
-import shop.gaship.gashipfront.security.social.dto.NaverUserData;
-import shop.gaship.gashipfront.security.social.dto.PaycoAccessToken;
-
+import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
+import shop.gaship.gashipfront.security.social.dto.domain.Member;
+import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 
 @Component
 public class AdapterImpl implements Adapter {
@@ -25,13 +22,6 @@ public class AdapterImpl implements Adapter {
             .retrieve()
             .bodyToMono(NaverAccessToken.class)
             .block();
-
-        WebClient.ResponseSpec spec = webClient.get()
-            .retrieve();
-
-        ResponseEntity<?> response = spec.toEntity(NaverAccessToken.class).block();
-
-        response.getBody();
         return token;
     }
 
@@ -48,16 +38,6 @@ public class AdapterImpl implements Adapter {
     }
 
     @Override
-    public PaycoAccessToken requestPaycoAccessToken(String uri) {
-        return null;
-    }
-
-    @Override
-    public void requestPaycoInfo() {
-
-    }
-
-    @Override
     public Member requestMemberByMobile(String mobile) {
         WebClient webClient
             = WebClient.builder()
@@ -65,10 +45,12 @@ public class AdapterImpl implements Adapter {
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .build();
 
-        return webClient.get()
-            .uri(uri -> uri.queryParam("mobile", mobile).build())
-            .retrieve()
-            .bodyToMono(Member.class)
-            .blockOptional().orElseThrow(() -> new RuntimeException());
+//        return webClient.get()
+//            .uri(uri -> uri.queryParam("mobile", mobile).build())
+//            .retrieve()
+//            .bodyToMono(Member.class)
+//            .blockOptional().orElseThrow(() -> new RuntimeException());
+        // TODO need1 : 테스트시에 위 주석으로 해야한다. 현재는 해당서버가 닫혀있고 다른 기능을 테스트하기위해서 더미객체를 둔다.
+        return new Member();
     }
 }

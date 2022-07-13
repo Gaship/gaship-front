@@ -1,10 +1,12 @@
 package shop.gaship.gashipfront.security.social.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import shop.gaship.gashipfront.security.social.dto.domain.UserDetailsDto;
 
 /**
- * packageName    : shop.gaship.gashipfront.security.social.controller
+ * packageName    : com.example.demo
  * fileName       : HomeController
  * author         : choi-gyeom-jun
  * date           : 2022-07-12
@@ -17,7 +19,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
     @GetMapping("/")
-    public String showHome() {
+    public String home() {
         return "showHome";
+    }
+    @GetMapping("/all")
+    public String all(@AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        return "all";
+    }
+
+    @GetMapping("/manager")
+    public String manager() {
+        return "manager";
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "showLoginForm";
     }
 }

@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.service;
+package shop.gaship.gashipfront.security.social.service.dance;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -7,37 +7,34 @@ import java.security.SecureRandom;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
-import shop.gaship.gashipfront.security.social.dto.Member;
-import shop.gaship.gashipfront.security.social.dto.NaverAccessToken;
-import shop.gaship.gashipfront.security.social.dto.NaverUserData;
+import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
+import shop.gaship.gashipfront.security.social.dto.domain.Member;
+import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
+import shop.gaship.gashipfront.security.social.exception.ReceiveDataException;
 
 @Service
-//@PropertySource("classpath:oauth.properties")
-@PropertySource("classpath:application-dev.properties")
 @RequiredArgsConstructor
-public class NaverLoginServiceImpl implements LoginService {
+public class NaverLoginServiceImpl implements NaverLoginService {
     @Value("${naver-client-id}")
-    private static String clientId;
+    private String clientId;
 
     @Value("${naver-client-secret}")
-    private static String clientSecret;
+    private String clientSecret;
 
     @Value("${naver-redirect-url}")
-    private static String redirectUrl;
+    private String redirectUrl;
 
     @Value("${naver-api-url-login}")
-    private static String apiUrlForLogin;
+    private String apiUrlForLogin;
 
     @Value("${naver-api-url-accesstoken}")
-    private static String apiUrlForAccessToken;
+    private String apiUrlForAccessToken;
 
     @Value("${naver-api-url-userdata}")
-    private static String apiUrlForUserData;
+    private String apiUrlForUserData;
 
-    // TODO 2 : 동시접속시 state값 redis 관리할때 키값방향성sessionId? 그럼 다른서버에서는 ? jsessionId? 얻어오는법? (nave front단에서는 session으로 관리..)
     private BigInteger state;
 
     private final Adapter adapter;
@@ -45,7 +42,7 @@ public class NaverLoginServiceImpl implements LoginService {
     @Override
     public String getUriForLoginPageRequest() throws UnsupportedEncodingException {
         state = new BigInteger(130, new SecureRandom());
-        // TODO 1 : 동기화여부확인 필요 메서드안이니까 필요 없지않나?
+
         StringBuilder uriForLoginPageRequest = new StringBuilder();
         uriForLoginPageRequest
             .append(apiUrlForLogin)
@@ -58,24 +55,24 @@ public class NaverLoginServiceImpl implements LoginService {
 
     @Override
     public NaverAccessToken getAccessToken(String code, String state) {
-        if (!Objects.equals(state, this.state)) throw new RuntimeException("csrf protect");
-        // TODO 3 : 내가 이해한 github 이상의 csrf 방어를 위해 넣은부분이 맞는지?
-        this.state = new BigInteger(130, new SecureRandom());
+        if (!Objects.equals(state, this.state.toString())) throw new RuntimeException("csrf protect");
 
         StringBuilder uriForAccessToken = new StringBuilder();
         uriForAccessToken
             .append(apiUrlForAccessToken)
             .append("&client_id=").append(clientId)
             .append("&client_secret=").append(clientSecret)
-            .append("&code=").append(code)
-            .append("&state=").append(this.state);
+            .append("&code=").append(code);
+//            .append("&state=").append(this.state);
 
         return adapter.requestNaverAccessToken(uriForAccessToken.toString());
     }
 
     @Override
     public NaverUserData getUserDataThroughAccessToken(String accessToken) {
-        return adapter.requestNaverUserData(apiUrlForUserData, accessToken);
+        NaverUserData data = adapter.requestNaverUserData(apiUrlForUserData, accessToken);
+        if (!Objects.equals(data.getMessage(), "success")) throw new ReceiveDataException("message : " + data.getMessage());
+        return data;
     }
 
     @Override

@@ -27,19 +27,27 @@ import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
+        http.authorizeRequests()
             .antMatchers("/manager")
-                .hasRole("USER")
-            .anyRequest()
-                .permitAll();
+            .hasRole("USER")
+            .antMatchers("/all")
+            .permitAll();
 
         http.sessionManagement().disable();
         http.formLogin()
-//            .successHandler(loginSuccessHandler())
-            .successForwardUrl("/")
+            .loginPage("/login")
+            .loginProcessingUrl("/loginAction")
+            .usernameParameter("id")
+            .passwordParameter("pw")
+            .defaultSuccessUrl("/all")
             .failureUrl("/login")
-            .and();
+            .and()
+            .logout();
+
+//        http.oauth2Login()
+//            .loginPage("/login")
+//            .defaultSuccessUrl("/all")
+//            .failureUrl("/login");
 
         http.csrf().disable();
 //        http.logout().disable();
@@ -68,8 +76,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-//    private LoginSuccessHandler loginSuccessHandler() {
-//        return new LoginSuccessHandler();
-//    }
+    @Bean
+    public LoginSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler();
+    }
 }
 
