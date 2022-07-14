@@ -14,7 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.reactivestreams.Publisher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -33,12 +35,13 @@ import shop.gaship.gashipfront.security.social.dto.domain.Member;
  * 2022-07-14        choi-gyeom-jun       최초 생성
  */
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@Import(ShoppingmallServiceImpl.class)
 class ShoppingmallServiceImplTest {
-    @InjectMocks
-    private ShoppingmallServiceImpl shoppingmallService;
+    @Autowired
+    private ShoppingmallService shoppingmallService;
 
-    @Mock
+    @MockBean
     private Adapter adapter;
 
     // TODO test1 : 이런테스트는 안하는게 나은건가? (service에서 별다른 조치 없이 값만 반환하는 경우)

@@ -33,7 +33,7 @@ public class AdapterImpl implements Adapter {
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader("Authorization", Strings.concat("Bearer ", accessToken))
             .build();
-
+        
         return webClient.get().retrieve().bodyToMono(NaverUserData.class).block();
     }
 
