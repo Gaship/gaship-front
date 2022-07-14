@@ -7,7 +7,10 @@ import java.security.SecureRandom;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ContextConfiguration;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
@@ -74,15 +77,5 @@ public class NaverLoginServiceImpl implements NaverLoginService {
         NaverUserData data = adapter.requestNaverUserData(apiUrlForUserData, accessToken);
         if (!Objects.equals(data.getMessage(), "success")) throw new ReceiveDataException("message : " + data.getMessage());
         return data;
-    }
-
-    @Override
-    public Member getMember(String mobile) {
-        return adapter.requestMemberByMobile(mobile);
-    }
-
-    @Override
-    public String requestJWT(String id, String email) throws Exception {
-        return null;
     }
 }

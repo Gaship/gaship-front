@@ -53,15 +53,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        http.logout().disable();
     }
 
-//    @Bean
-//    public AuthenticationProvider authenticationProvider(
-//        CustomUserDetailService customUserDetailService) {
-//        DaoAuthenticationProvider customDaoAuthenticationProvider = new DaoAuthenticationProvider();
-//        customDaoAuthenticationProvider.setUserDetailsService(customUserDetailService);
-//        customDaoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-//
-//        return customDaoAuthenticationProvider;
-//    }
+    @Bean
+    public AuthenticationProvider authenticationProvider(
+        CustomUserDetailService customUserDetailService) {
+        DaoAuthenticationProvider customDaoAuthenticationProvider = new DaoAuthenticationProvider();
+        customDaoAuthenticationProvider.setUserDetailsService(customUserDetailService);
+        customDaoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        return customDaoAuthenticationProvider;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

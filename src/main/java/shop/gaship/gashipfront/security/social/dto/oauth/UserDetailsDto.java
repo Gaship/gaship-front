@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.dto.domain;
+package shop.gaship.gashipfront.security.social.dto.oauth;
 
 import java.util.Collection;
 import java.util.Map;
@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import shop.gaship.gashipfront.security.social.dto.domain.Member;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.dto.domain

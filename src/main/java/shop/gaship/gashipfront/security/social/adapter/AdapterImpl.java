@@ -38,19 +38,20 @@ public class AdapterImpl implements Adapter {
     }
 
     @Override
-    public Member requestMemberByMobile(String mobile) {
+    public Member requestMemberByEmail(String email) {
         WebClient webClient
             = WebClient.builder()
-            .baseUrl("http://localhost:7072/security/mobile")
+            .baseUrl("http://localhost:7072/security/email")
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .build();
 
-//        return webClient.get()
-//            .uri(uri -> uri.queryParam("mobile", mobile).build())
-//            .retrieve()
-//            .bodyToMono(Member.class)
-//            .blockOptional().orElseThrow(() -> new RuntimeException());
-        // TODO need1 : 테스트시에 위 주석으로 해야한다. 현재는 해당서버가 닫혀있고 다른 기능을 테스트하기위해서 더미객체를 둔다.
-        return new Member();
+        return webClient.get()
+            .uri(uri -> uri.queryParam("email", email).build())
+            .retrieve()
+            .bodyToMono(Member.class)
+            .blockOptional().orElseThrow(() -> new RuntimeException());
+
+        // TODO dummy3 : 테스트시에 위 주석으로 해야한다. 현재는 해당서버가 닫혀있고 다른 기능을 테스트하기위해서 더미객체를 둔다.
+//        return new Member();
     }
 }

@@ -3,7 +3,7 @@ package shop.gaship.gashipfront.security.social.controller;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import shop.gaship.gashipfront.security.social.dto.domain.UserDetailsDto;
+import shop.gaship.gashipfront.security.social.dto.oauth.UserDetailsDto;
 
 /**
  * packageName    : com.example.demo

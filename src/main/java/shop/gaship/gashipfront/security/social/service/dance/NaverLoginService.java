@@ -10,8 +10,4 @@ public interface NaverLoginService {
     NaverAccessToken getAccessToken(String code, String state);
 
     NaverUserData getUserDataThroughAccessToken(String accessToken);
-
-    Member getMember(String mobile);
-
-    String requestJWT(String id, String email) throws Exception;
 }

@@ -2,7 +2,6 @@ package shop.gaship.gashipfront.security.social.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
@@ -23,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
-import shop.gaship.gashipfront.security.social.dto.domain.UserDetailsDto;
+import shop.gaship.gashipfront.security.social.dto.oauth.UserDetailsDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
+import shop.gaship.gashipfront.security.social.service.common.ShoppingmallService;
 import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
 @Controller
@@ -33,6 +33,7 @@ import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 @Slf4j
 public class OAuthController {
     private final NaverLoginService naverLoginServiceImpl;
+    private final ShoppingmallService shoppingmallService;
 
     @GetMapping("/login/naver")
     @ResponseBody
@@ -52,14 +53,18 @@ public class OAuthController {
 
         // TODO think7 : 회원정보를 이용할일이 없어서 email만 받으면 되는데 클래스가 필요할까?
         NaverUserData data = naverLoginServiceImpl.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
-        Member member = naverLoginServiceImpl.getMember(data.getResponse().getEmail());
+        Member member = shoppingmallService.getMember(data.getResponse().getEmail());
 
-        // TODO need3 : service단으로 옮기기 refactoring
-        List<String> authorities = new ArrayList<>();
-        authorities.add("ROLE_" + "USER"); // TODO need4 : USER를 실제 member 값으로 권한 대체하기 현재는 더미데이터로 member가 왔을거라 가정하고 만들고 있음
-        member.setAuthorities(authorities);
-        member.setPassword("1234");
-        member.setEmail(data.getResponse().getEmail());
+        // TODO dummy1 : USER를 실제 member 값으로 권한 대체하기 현재는 더미데이터로 간이 test용 코드임
+        /*
+            List<String> authorities = new ArrayList<>();
+            authorities.add("ROLE_" + "USER");
+            member.setAuthorities(authorities);
+            member.setPassword("1234");
+            member.setEmail(data.getResponse().getEmail());
+        */
+        // TODO think8 : userDetailsDto에 member를 넣지만 자주쓸  email, password(사실 이건 쓸일이 없긴한데 dto 필수값이라 넣음-> 다른 더미데이타를줄까? 여기선 스프링시큐리티안들어가니까)
+        // 같은건 따로뺐는데 이게 옳은 선택일까 어느범주까지 빼야할까?
         UserDetailsDto userDetailsDto = new UserDetailsDto(member.getEmail(), member.getPassword(), member.getAuthorities().stream()
             .map(i -> new SimpleGrantedAuthority(i))
             .collect(Collectors.toList()), member);
@@ -69,6 +74,8 @@ public class OAuthController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsDto, null,
             List.of(new SimpleGrantedAuthority("ROLE_USER")));
         context.setAuthentication(authentication);
+
+        // TODO 1 : jwt 요청코드
         return "/all";
     }
 }
