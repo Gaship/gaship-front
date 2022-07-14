@@ -24,14 +24,7 @@ public class ExceptionUtil {
     }
 
     public static Mono<? extends Throwable> createErrorMono(ClientResponse response) {
-        return Mono.create(throwableMonoSink ->
-                throwableMonoSink.error(
-                        new RequestFailureException(
-                                Objects.requireNonNull(
-                                        response.toEntity(ErrorResponse.class)
-                                                .block()
-                                                .getBody())
-                        ))
-        );
+        return response.bodyToMono(ErrorResponse.class).flatMap(
+                body -> Mono.error(new RequestFailureException(body)));
     }
 }
