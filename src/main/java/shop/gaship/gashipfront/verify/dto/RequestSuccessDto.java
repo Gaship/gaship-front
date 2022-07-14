@@ -7,7 +7,7 @@ import lombok.Getter;
  * fileName       : RequestSuccessDto <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/14 <br/>
- * description    : <br/>
+ * description    : 요청이 완료되었을 시 서버로부터 응답받는 dto입니다.<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

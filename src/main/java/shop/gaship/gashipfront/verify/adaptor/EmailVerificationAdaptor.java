@@ -13,7 +13,7 @@ import shop.gaship.gashipfront.verify.dto.RequestSuccessDto;
  * fileName       : EmailVerificationAdaptor <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/14 <br/>
- * description    : <br/>
+ * description    : 이메일 인증을 서버로부터 요청하기 위한 adaptor입니다. .<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>

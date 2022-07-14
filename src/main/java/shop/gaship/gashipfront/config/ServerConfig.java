@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * fileName       : ServerConfig <br/>
  * author         : 김민수 <br/>
  * date           : 2022/07/14 <br/>
- * description    : <br/>
+ * description    : 프론트 서버 운영에 대한 전반적인 설정입니다./<br/>
  * ===========================================================  <br/>
  * DATE              AUTHOR             NOTE                    <br/>
  * -----------------------------------------------------------  <br/>
