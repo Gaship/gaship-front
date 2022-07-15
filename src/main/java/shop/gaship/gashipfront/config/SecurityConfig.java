@@ -15,7 +15,6 @@ import shop.gaship.gashipfront.security.handler.LoginSuccessHandler;
 
 
 /**
- *
  * Spring Security를 설정하기위한 클랫입니다.
  *
  * @author : 김민수

@@ -24,7 +24,7 @@ public class MemberAdaptor {
     /**
      * 쇼핑몰 서버에 회원가입을 요청하는 메서드입니다.
      *
-     * @param memberCreationRequest: 쇼핑몰의 멤버로 가입할 정보입니다.
+     * @param memberCreationRequest 쇼핑몰의 멤버로 가입할 정보입니다.
      * @return 회원가입이 정상적으로 완료시 true를 반환합니다.
      * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */

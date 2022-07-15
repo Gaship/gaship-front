@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- *
  * 프론트 서버 운영에 대한 전반적인 설정입니다.
  *
  * @author : 김민수
