@@ -4,15 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.catalina.security.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.security.CustomUserDetailService;
 import shop.gaship.gashipfront.service.TagService;
 import shop.gaship.gashipfront.testDummy.FrontTagTestDummy;
 
@@ -33,15 +39,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * -----------------------------------------------------------
  * 2022/07/15        choijungwoo       최초 생성
  */
-@WebMvcTest(value = TagController.class,
+@WebMvcTest(
+        controllers = TagController.class,
         excludeAutoConfiguration = {
                 SecurityAutoConfiguration.class,
                 OAuth2ClientAutoConfiguration.class
         },
         excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {SecurityConfig.class})
         }
 )
+//    @WebMvcTest(TagController.class)
+//@ExtendWith(SpringExtension.class)
+//@Import(value = {CustomUserDetailService.class})
+//@EnableConfigurationProperties(ServerConfig.class)
 class TagControllerTest {
     @MockBean
     TagService tagService;
