@@ -9,15 +9,10 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
 import shop.gaship.gashipfront.verify.dto.RequestSuccessDto;
 
 /**
- * packageName    : shop.gaship.gashipfront.verify.adaptor <br/>
- * fileName       : EmailVerificationAdaptor <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/14 <br/>
- * description    : 이메일 인증을 서버로부터 요청하기 위한 adaptor입니다. .<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/14           김민수               최초 생성                         <br/>
+ * 이메일 인증을 서버로부터 요청하기 위한 adaptor입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Component
 @RequiredArgsConstructor

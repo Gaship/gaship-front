@@ -11,15 +11,10 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * packageName    : shop.gaship.gashipfront.member.dto <br/>
- * fileName       : MemberCreationRequest <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/14 <br/>
- * description    : 회원가입을 하기위한 가입 정보 dto입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/14           김민수               최초 생성                         <br/>
+ * 회원가입을 하기위한 가입 정보 dto입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Getter
 @Builder

@@ -3,15 +3,10 @@ package shop.gaship.gashipfront.verify.dto;
 import lombok.Getter;
 
 /**
- * packageName    : shop.gaship.gashipfront.verify.dto <br/>
- * fileName       : RequestSuccessDto <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/14 <br/>
- * description    : 요청이 완료되었을 시 서버로부터 응답받는 dto입니다.<br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/14           김민수               최초 생성                         <br/>
+ * 요청에 성공할 시 응답 상태를 받기 위한 dto객체입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 @Getter
 public class RequestSuccessDto {
