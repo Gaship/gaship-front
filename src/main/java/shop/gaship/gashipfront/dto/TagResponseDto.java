@@ -1,5 +1,8 @@
 package shop.gaship.gashipfront.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+
 /**
  * packageName    : shop.gaship.gashipfront.dto
  * fileName       : TagResponseDto
@@ -11,6 +14,10 @@ package shop.gaship.gashipfront.dto;
  * -----------------------------------------------------------
  * 2022/07/15        choijungwoo       최초 생성
  */
+@Getter
 public class TagResponseDto {
 
+    @Builder
+    public TagResponseDto() {
+    }
 }

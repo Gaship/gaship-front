@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -17,4 +18,10 @@ import lombok.Getter;
 public class TagDeleteRequestDto {
     private Integer tagId;
     private String title;
+
+    @Builder
+    public TagDeleteRequestDto(Integer tagId, String title) {
+        this.tagId = tagId;
+        this.title = title;
+    }
 }

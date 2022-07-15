@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -16,4 +17,9 @@ import lombok.Getter;
 @Getter
 public class TagRegisterRequestDto {
     private String title;
+
+    @Builder
+    public TagRegisterRequestDto(String title) {
+        this.title = title;
+    }
 }

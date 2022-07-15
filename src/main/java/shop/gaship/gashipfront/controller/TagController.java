@@ -30,8 +30,8 @@ public class TagController {
     @PostMapping
     public ModelAndView registerTag(@ModelAttribute TagRegisterRequestDto tagRegisterRequestDto,
                                     @PathVariable Integer adminId,
-                                    ModelAndView modelAndView){
-        tagService.register(adminId,tagRegisterRequestDto);
+                                    ModelAndView modelAndView) {
+        tagService.register(adminId, tagRegisterRequestDto);
         modelAndView.setViewName("redirect:/admins/" + adminId + "tags");
         return modelAndView;
     }
@@ -39,8 +39,8 @@ public class TagController {
     @GetMapping("/{tagId}")
     public ModelAndView getTag(@ModelAttribute TagGetRequestDto tagGetRequestDto,
                                @PathVariable Integer adminId,
-                               ModelAndView modelAndView){
-        Mono<TagResponseDto> tag = tagService.getTag(adminId,tagGetRequestDto);
+                               ModelAndView modelAndView) {
+        Mono<TagResponseDto> tag = tagService.getTag(adminId, tagGetRequestDto);
         modelAndView.addObject(tag);
         modelAndView.setViewName("redirect:/admins/" + adminId + "tags/" + tagGetRequestDto.getTagId() + "details");
         return modelAndView;
@@ -50,8 +50,8 @@ public class TagController {
     public ModelAndView getTags(@ModelAttribute TagGetRequestDto tagGetRequestDto,
                                 @PathVariable Integer adminId,
                                 ModelAndView modelAndView,
-                                Pageable pageable){
-        Flux<TagResponseDto> tags = tagService.getTags(adminId,tagGetRequestDto, pageable);
+                                Pageable pageable) {
+        Flux<TagResponseDto> tags = tagService.getTags(adminId, tagGetRequestDto, pageable);
         modelAndView.addObject(tags);
         modelAndView.setViewName("redirect:/admins/" + adminId + "tags");
         return modelAndView;
@@ -60,8 +60,8 @@ public class TagController {
     @PutMapping("/{tagId}")
     public ModelAndView modifyTag(@ModelAttribute TagModifyRequestDto tagModifyRequestDto,
                                   @PathVariable Integer adminId,
-                                  ModelAndView modelAndView){
-        tagService.modifyTag(adminId,tagModifyRequestDto);
+                                  ModelAndView modelAndView) {
+        tagService.modifyTag(adminId, tagModifyRequestDto);
         modelAndView.setViewName("redirect:/admins/" + adminId + "tags/" + tagModifyRequestDto.getTagId() + "details");
         return modelAndView;
     }
@@ -69,8 +69,8 @@ public class TagController {
     @DeleteMapping("/{tagId}")
     public ModelAndView deleteTag(@ModelAttribute TagDeleteRequestDto tagDeleteRequestDto,
                                   @PathVariable Integer adminId,
-                                  ModelAndView modelAndView){
-        tagService.deleteTag(adminId,tagDeleteRequestDto);
+                                  ModelAndView modelAndView) {
+        tagService.deleteTag(adminId, tagDeleteRequestDto);
         modelAndView.setViewName("redirect:/admins/" + adminId + "tags");
         return modelAndView;
     }

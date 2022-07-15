@@ -36,14 +36,14 @@ public class TagAdapter implements TagRepository {
             .build();
 
     @Override
-    public void register(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto) {
-        webClient.post()
+    public Mono<Void> register(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto) {
+        return webClient.post()
                 .uri("/admins/{adminId}/tags",adminId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(tagRegisterRequestDto)
                 .retrieve()
                 .bodyToMono(Void.class)
-                .block();
+                .then();
     }
 
     @Override

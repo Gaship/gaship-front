@@ -20,7 +20,7 @@ import java.util.List;
  * 2022/07/15        choijungwoo       최초 생성
  */
 public interface TagRepository {
-    void register(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
+    Mono<Void> register(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
     Mono<TagResponseDto> getTag(Integer adminId, TagGetRequestDto tagGetRequestDto);
     Flux<TagResponseDto> getTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable);
     void modifyTag(Integer adminId, TagModifyRequestDto tagModifyRequestDto);
