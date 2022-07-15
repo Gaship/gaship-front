@@ -12,6 +12,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * 인메모리 데이터베이스 레디스를 설정하기위한 클래스입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
+ */
 @Configuration
 @PropertySource("classpath:redis.properties")
 public class RedisConfig implements BeanClassLoaderAware {

@@ -7,16 +7,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 /**
- * packageName    : shop.gaship.gashipauth.signin.dto
- * fileName       : SignInDto
- * author         : oct_sky_out
- * date           : 2022/07/09
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2022/07/09        oct_sky_out       최초 생성
+ * 회원의 로그인 성공시 담기는 데이터 객체입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
 public class SignInSuccessUserDetailsDto implements UserDetails {
     private Long identifyNo;

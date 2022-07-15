@@ -1,30 +1,27 @@
 package shop.gaship.gashipfront.config;
 
-import java.security.Key;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import shop.gaship.gashipfront.security.CustomUserDetailService;
 import shop.gaship.gashipfront.security.handler.LoginSuccessHandler;
 
+
 /**
- * packageName    : shop.gaship.gashipfront.configure <br/>
- * fileName       : SecurityConfig <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/11 <br/>
- * description    : <br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/11           김민수               최초 생성                         <br/>
+ * Spring Security를 설정하기위한 클랫입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
  */
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -37,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().disable();
 
         http.formLogin()
-            .successHandler(loginSuccessHandler())
+            .successHandler(loginSuccessHandler(null))
             .successForwardUrl("/")
             .failureUrl("/login")
             .and();
@@ -61,8 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    private LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler();
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler(String gatewayBaseUrl) {
+        return new LoginSuccessHandler(gatewayBaseUrl);
     }
 }
 
