@@ -12,17 +12,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import shop.gaship.gashipfront.config.SecurityConfig;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
+import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.service.common.CommonService;
 import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
@@ -66,7 +70,7 @@ class OAuthControllerTest {
     private NaverLoginService naverLoginService;
 
     @MockBean
-    private CommonService shoppingmallService;
+    private CommonService commonService;
 
     @DisplayName("지정한 uri를 redirectUri로 잘맞게 response된다.")
     @Test
@@ -82,12 +86,12 @@ class OAuthControllerTest {
             .andExpect(redirectedUrl(redirectUri));
     }
 
-    @DisplayName("서비스가 잘동작했을때 200상태코드와 /all이라는 view name이 response객체에 들어간다.")
+    @DisplayName("auth 서버에서 문제없이 통신이되었을때 200상태코드와 /all이라는 view name이 response객체에 들어가며 session에 jwt토큰이 잘 저장된다.")
     @Test
     void getAccessTokenAndAuthenticateNaver() throws Exception {
         // given
-        NaverAccessToken token = new NaverAccessToken();
-        token.setAccessToken("this is accesstoken");
+        NaverAccessToken oauthToken = new NaverAccessToken();
+        oauthToken.setAccessToken("this is accesstoken");
 
         NaverUserData data = new NaverUserData();
         NaverUserDataResponse response = new NaverUserDataResponse();
@@ -102,19 +106,33 @@ class OAuthControllerTest {
         authorities.add("USER");
         member.setAuthorities(authorities);
 
+        JwtTokenDto jwt = new JwtTokenDto();
+        jwt.setAccessToken("jwt access token");
+        jwt.setRefreshToken("jwt refresh token");
+
         given(naverLoginService.getAccessToken(any(), any(), any()))
-            .willReturn(token);
+            .willReturn(oauthToken);
 
         given(naverLoginService.getUserDataThroughAccessToken(anyString()))
             .willReturn(data);
 
-        given(shoppingmallService.getMember(anyString()))
+        given(commonService.getMember(anyString()))
             .willReturn(member);
 
+        given(commonService.getJWT(anyLong(), anyList()))
+            .willReturn(jwt);
+
         // when then
-        MvcResult result = mvc.perform(get("/securities/login/naver/callback"))
+        MockHttpSession session = new MockHttpSession();
+        mvc.perform(get("/securities/login/naver/callback").session(session))
             .andExpect(status().isOk())
-            .andExpect(view().name("/all"))
-            .andReturn();
+            .andExpect(view().name("/all"));
+
+        String accessToken = (String) session.getAttribute("accessToken");
+        String refreshToken = (String) session.getAttribute("refreshToken");
+        assertThat(accessToken)
+            .isEqualTo(jwt.getAccessToken());
+        assertThat(refreshToken)
+            .isEqualTo(jwt.getRefreshToken());
     }
 }
