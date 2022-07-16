@@ -128,7 +128,6 @@ class NaverLoginServiceImplTest {
         String fullUri = naverLoginService.getUriForLoginPageRequest(session);
 
         String[] parameter = fullUri.split("[?]")[1].split("&");
-        String apiUriForLogin = fullUri.split("[&]")[0];
 
         assertThat(session.getAttribute("state"))
             .isEqualTo(parameter[3].split("=")[1]);

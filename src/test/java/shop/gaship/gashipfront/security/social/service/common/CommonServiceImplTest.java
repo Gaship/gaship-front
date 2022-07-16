@@ -48,6 +48,7 @@ class CommonServiceImplTest {
     @MockBean
     private Adapter adapter;
 
+    @DisplayName("200으로 api서버에서 응답이 온경우에 더미 member가 잘 반환된다.")
     @Test
     void getMember() {
         // given
@@ -55,9 +56,14 @@ class CommonServiceImplTest {
         Member member = new Member();
         member.setEmail(email);
 
+        ResponseEntity<Object> response
+            = ResponseEntity.status(200)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(member);
+
         // mocking
         given(adapter.requestMemberByEmail(anyString()))
-            .willReturn(member);
+            .willReturn(response);
 
         // when
         Member actualMember = commonService.getMember(email);
