@@ -1,9 +1,12 @@
 package shop.gaship.gashipfront.security.social.service.common;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
+import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
+import shop.gaship.gashipfront.security.social.dto.jwt.SignInSuccessUserDetailsDto;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.common
@@ -18,16 +21,20 @@ import shop.gaship.gashipfront.security.social.dto.domain.Member;
  */
 @Service
 @RequiredArgsConstructor
-public class ShoppingmallServiceImpl implements ShoppingmallService {
+public class CommonServiceImpl implements CommonService {
     private final Adapter adapter;
 
     @Override
-    public Member getMember(String mobile) {
-        return adapter.requestMemberByEmail(mobile);
+    public Member getMember(String email) {
+        return adapter.requestMemberByEmail(email);
     }
 
     @Override
-    public String getJWT(String id, String email) throws Exception {
-        return null;
+    public JwtTokenDto getJWT(Long identifyNo, List<String> authorities) throws Exception {
+        SignInSuccessUserDetailsDto detailsDto = new SignInSuccessUserDetailsDto();
+        detailsDto.setIdentifyNo(identifyNo);
+        detailsDto.setAuthorities(authorities);
+
+        return adapter.requestJwt(detailsDto);
     }
 }
