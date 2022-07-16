@@ -1,27 +1,24 @@
 package shop.gaship.gashipfront.security.social.service.common;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static reactor.core.publisher.Mono.when;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.reactivestreams.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
+import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
+import shop.gaship.gashipfront.security.social.dto.jwt.SignInSuccessUserDetailsDto;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.common
@@ -36,10 +33,10 @@ import shop.gaship.gashipfront.security.social.dto.domain.Member;
  */
 
 @ExtendWith(SpringExtension.class)
-@Import(ShoppingmallServiceImpl.class)
-class ShoppingmallServiceImplTest {
+@Import(CommonServiceImpl.class)
+class CommonServiceImplTest {
     @Autowired
-    private ShoppingmallService shoppingmallService;
+    private CommonService commonService;
 
     @MockBean
     private Adapter adapter;
@@ -57,14 +54,38 @@ class ShoppingmallServiceImplTest {
             .willReturn(member);
 
         // when
-        Member actualMember = shoppingmallService.getMember(email);
+        Member actualMember = commonService.getMember(email);
 
         // then
         assertThat(actualMember)
             .isEqualTo(member);
     }
 
+    @DisplayName("식별번호와 권한을 파라미터로 jwt를 요청했고 반환받은 status가 201인경우에 JwtTokenDto타입으로 잘 넘어온다.")
     @Test
-    void getJWT() {
+    void getJWT() throws Exception {
+        // given
+        Long identifyNo = 123242124L;
+        List<String> authorities = new ArrayList<>();
+        authorities.add("USER");
+
+        String accessToken = "this is access token";
+        String refreshToken = "this is refresh token";
+
+        JwtTokenDto dummyToken = new JwtTokenDto();
+        dummyToken.setAccessToken(accessToken);
+        dummyToken.setRefreshToken(refreshToken);
+
+        given(adapter.requestJwt(any()))
+            .willReturn(dummyToken);
+
+        // when
+        JwtTokenDto token = commonService.getJWT(identifyNo, authorities);
+
+        // then
+        assertThat(token.getAccessToken())
+            .isEqualTo(accessToken);
+        assertThat(token.getRefreshToken())
+            .isEqualTo(refreshToken);
     }
 }
