@@ -28,6 +28,14 @@ import shop.gaship.gashipfront.service.TagService;
 public class TagController {
     private final TagService tagService;
 
+    /**
+     * Register tag model and view.
+     *
+     * @param tagRegisterRequestDto the tag register request dto
+     * @param adminId               the admin id
+     * @param modelAndView          the model and view
+     * @return the model and view
+     */
     @PostMapping
     public ModelAndView registerTag(@ModelAttribute TagRegisterRequestDto tagRegisterRequestDto,
                                     @PathVariable Integer adminId,
@@ -37,6 +45,14 @@ public class TagController {
         return modelAndView;
     }
 
+    /**
+     * Gets tag.
+     *
+     * @param tagGetRequestDto the tag get request dto
+     * @param adminId          the admin id
+     * @param modelAndView     the model and view
+     * @return the tag
+     */
     @GetMapping("/{tagId}")
     public ModelAndView getTag(@ModelAttribute TagGetRequestDto tagGetRequestDto,
                                @PathVariable Integer adminId,
@@ -47,6 +63,15 @@ public class TagController {
         return modelAndView;
     }
 
+    /**
+     * Gets tags.
+     *
+     * @param tagGetRequestDto the tag get request dto
+     * @param adminId          the admin id
+     * @param modelAndView     the model and view
+     * @param pageable         the pageable
+     * @return the tags
+     */
     @GetMapping
     public ModelAndView getTags(@ModelAttribute TagGetRequestDto tagGetRequestDto,
                                 @PathVariable Integer adminId,
@@ -58,6 +83,14 @@ public class TagController {
         return modelAndView;
     }
 
+    /**
+     * Modify tag model and view.
+     *
+     * @param tagModifyRequestDto the tag modify request dto
+     * @param adminId             the admin id
+     * @param modelAndView        the model and view
+     * @return the model and view
+     */
     @PutMapping("/{tagId}")
     public ModelAndView modifyTag(@ModelAttribute TagModifyRequestDto tagModifyRequestDto,
                                   @PathVariable Integer adminId,
@@ -67,6 +100,14 @@ public class TagController {
         return modelAndView;
     }
 
+    /**
+     * Delete tag model and view.
+     *
+     * @param tagDeleteRequestDto the tag delete request dto
+     * @param adminId             the admin id
+     * @param modelAndView        the model and view
+     * @return the model and view
+     */
     @DeleteMapping("/{tagId}")
     public ModelAndView deleteTag(@ModelAttribute TagDeleteRequestDto tagDeleteRequestDto,
                                   @PathVariable Integer adminId,

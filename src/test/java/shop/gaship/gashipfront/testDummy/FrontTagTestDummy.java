@@ -1,9 +1,6 @@
 package shop.gaship.gashipfront.testDummy;
 
-import shop.gaship.gashipfront.dto.TagDeleteRequestDto;
-import shop.gaship.gashipfront.dto.TagModifyRequestDto;
-import shop.gaship.gashipfront.dto.TagRegisterRequestDto;
-import shop.gaship.gashipfront.dto.TagResponseDto;
+import shop.gaship.gashipfront.dto.*;
 
 /**
  * packageName    : shop.gaship.gashipfront.testDummy
@@ -23,6 +20,12 @@ public class FrontTagTestDummy {
         TagRegisterRequestDto tagRegisterRequestDto = TagRegisterRequestDto.builder().title(title).build();
 
         return tagRegisterRequestDto;
+    }
+
+    public static TagGetRequestDto CreateTestTagGetRequestDto() {
+        TagGetRequestDto tagGetRequestDto = TagGetRequestDto.builder().tagId(0).build();
+
+        return tagGetRequestDto;
     }
 
     public static TagModifyRequestDto CreateTestTagModifyRequestDto() {

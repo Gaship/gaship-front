@@ -17,11 +17,9 @@ import lombok.Getter;
 @Getter
 public class TagGetRequestDto {
     private Integer tagId;
-    private String title;
 
     @Builder
-    public TagGetRequestDto(Integer tagId, String title) {
+    public TagGetRequestDto(Integer tagId) {
         this.tagId = tagId;
-        this.title = title;
     }
 }

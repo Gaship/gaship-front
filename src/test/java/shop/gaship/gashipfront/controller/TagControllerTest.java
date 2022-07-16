@@ -4,28 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.catalina.security.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import shop.gaship.gashipfront.config.ServerConfig;
-import shop.gaship.gashipfront.security.CustomUserDetailService;
 import shop.gaship.gashipfront.service.TagService;
 import shop.gaship.gashipfront.testDummy.FrontTagTestDummy;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -73,7 +66,6 @@ class TagControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
-
                 .andExpect(status().is3xxRedirection());
 
         verify(tagService, times(1)).register(any(), any());
@@ -82,29 +74,25 @@ class TagControllerTest {
     @Test
     void getTag() throws Exception {
         when(tagService.getTag(any(), any())).thenReturn(null);
-        String body = objectMapper.writeValueAsString(FrontTagTestDummy.CreateTestTagRegisterRequestDto());
 
-        mockMvc.perform(post("/admins/1/tags")
+        mockMvc.perform(get("/admins/1/tags/1")
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().is3xxRedirection());
 
-        verify(tagService, times(1)).register(any(), any());
+        verify(tagService, times(1)).getTag(any(), any());
     }
 
     @Test
     void getTags() throws Exception {
         doNothing().when(tagService).register(any(), any());
-        String body = objectMapper.writeValueAsString(FrontTagTestDummy.CreateTestTagRegisterRequestDto());
 
-        mockMvc.perform(post("/admins/1/tags")
+        mockMvc.perform(get("/admins/1/tags")
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().is3xxRedirection());
 
-        verify(tagService, times(1)).register(any(), any());
+        verify(tagService, times(1)).getTags(any(), any(), any());
     }
 
     @Test
@@ -116,7 +104,7 @@ class TagControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
 
         verify(tagService, times(1)).modifyTag(any(), any());
     }
@@ -124,13 +112,11 @@ class TagControllerTest {
     @Test
     void deleteTag() throws Exception {
         doNothing().when(tagService).register(any(), any());
-        String body = objectMapper.writeValueAsString(FrontTagTestDummy.CreateTestTagDeleteRequestDto());
 
         mockMvc.perform(post("/admins/1/tags/1")
                         .accept(MediaType.APPLICATION_JSON)
-                        .content(body)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
 
         verify(tagService, times(1)).deleteTag(any(), any());
     }
