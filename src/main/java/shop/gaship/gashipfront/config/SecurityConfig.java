@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
+import shop.gaship.gashipfront.security.social.handler.Oauth2LoginSuccessHandler;
+import shop.gaship.gashipfront.security.social.service.common.CommonService;
 
 /**
  * packageName    : shop.gaship.gashipfront.configure <br/>
@@ -47,7 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.oauth2Login()
             .loginPage("/login")
             .defaultSuccessUrl("/all")
-            .failureUrl("/login");
+            .failureUrl("/login")
+            .successHandler(oauth2LoginSuccessHandler(null));
 
         http.csrf().disable();
 //        http.logout().disable();
@@ -71,5 +74,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public LoginSuccessHandler loginSuccessHandler() {
         return new LoginSuccessHandler();
     }
+
+    @Bean
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(CommonService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
 }
 

@@ -83,8 +83,7 @@ public class NaverLoginServiceImpl implements NaverLoginService {
 
     @Override
     public void setSecurityContext(Member member) {
-        UserDetailsDto
-            userDetailsDto = new UserDetailsDto(member.getEmail(), member.getPassword(), member.getAuthorities().stream()
+        UserDetailsDto userDetailsDto = new UserDetailsDto(member.getEmail(), member.getPassword(), member.getAuthorities().stream()
             .map(i -> new SimpleGrantedAuthority("ROLE_" + i))
             .collect(Collectors.toList()), member);
 
