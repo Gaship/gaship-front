@@ -23,7 +23,7 @@ import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.exception.ErrorResponse;
-import shop.gaship.gashipfront.security.social.exception.JwtResponseException;
+import shop.gaship.gashipfront.security.social.exception.ResponseEntityBodyIsErrorResponseException;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.common
@@ -48,7 +48,7 @@ class CommonServiceImplTest {
 
     @DisplayName("200으로 api서버에서 응답이 온경우에 더미 member가 잘 반환된다.")
     @Test
-    void getMember() {
+    void getMemberByEmail_success() {
         // given
         String email = "gbeovhsqhtka@naver.com";
         Member member = new Member();
@@ -69,6 +69,25 @@ class CommonServiceImplTest {
         // then
         assertThat(actualMember)
             .isEqualTo(member);
+    }
+
+    @DisplayName("200으로 api서버에서 응답이 오지 않은 경우에 ErrorResponse 클래스의 내용을 담은 ResponseEntityBodyIsErrorResponseException가 발생한다.")
+    @Test
+    void getMemberByEmail_fail() {
+        // given
+        ErrorResponse errorResponse = new ErrorResponse("member가 존재하지 않아요");
+        ResponseEntity<Object> response
+            = ResponseEntity.status(500)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(errorResponse);
+
+        given(adapter.requestMemberByEmail(anyString()))
+            .willReturn(response);
+
+        // when then
+        assertThatThrownBy(() -> commonService.getMemberByEmail("none"))
+            .isInstanceOf(ResponseEntityBodyIsErrorResponseException.class)
+            .hasMessageContaining(errorResponse.getMessage());
     }
 
     @DisplayName("식별번호와 권한을 파라미터로 jwt를 요청했고 반환받은 status가 201인경우에 JwtTokenDto타입으로 잘 넘어온다.")
@@ -123,7 +142,7 @@ class CommonServiceImplTest {
 
         // when then
         assertThatThrownBy(() -> commonService.getJWT(identifyNo, authorities))
-            .isInstanceOf(JwtResponseException.class)
+            .isInstanceOf(ResponseEntityBodyIsErrorResponseException.class)
                 .hasMessageContaining("auth 서버");
     }
 }
