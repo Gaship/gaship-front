@@ -1,7 +1,5 @@
 package shop.gaship.gashipfront.security.social.service.oauth2;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -37,15 +35,8 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
 
         Map<String, Object> value = (Map<String, Object>) user.getAttributes().get("kakao_account");
         String email = (String) value.get("email");
+        Member member = adapter.requestMemberByEmail(email);
 
-//        Member member = adapter.findById(email);
-        Member member = new Member();
-
-        // TODO dummy2 : 더미용 테스트코드임
-        List<String> authorities = new ArrayList<>();
-        authorities.add("USER");
-        member.setAuthorities(authorities);
-        member.setPassword("1234");
         return new UserDetailsDto(email, member.getPassword(), member.getAuthorities().stream()
             .map(i -> new SimpleGrantedAuthority("ROLE_" + i))
             .collect(Collectors.toList()), member, user.getAttributes());

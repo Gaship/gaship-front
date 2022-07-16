@@ -48,7 +48,6 @@ class CommonServiceImplTest {
     @MockBean
     private Adapter adapter;
 
-    // TODO test1 : 이런테스트는 안하는게 나은건가? (service에서 별다른 조치 없이 값만 반환하는 경우)
     @Test
     void getMember() {
         // given

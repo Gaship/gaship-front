@@ -71,4 +71,6 @@ public class AdapterImpl implements Adapter {
 
         return response;
     }
+
+
 }

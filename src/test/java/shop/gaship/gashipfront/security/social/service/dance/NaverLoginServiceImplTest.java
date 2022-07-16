@@ -62,7 +62,6 @@ import shop.gaship.gashipfront.security.social.exception.ResponseDataException;
  * 2022-07-14        choi-gyeom-jun       최초 생성
  */
 
-// TODO test2 : 서비스로직에서 설정값을 읽게하려면 SpringBootTest말곤 방법이 없는건가?
 @ExtendWith(SpringExtension.class)
 @Import(NaverLoginServiceImpl.class)
 @TestPropertySource("classpath:application-dev.properties")

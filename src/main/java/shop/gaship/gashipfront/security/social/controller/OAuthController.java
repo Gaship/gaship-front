@@ -48,7 +48,6 @@ public class OAuthController {
         Member member = commonService.getMember(data.getResponse().getEmail());
         naverLoginService.setSecurityContext(member);
 
-        // TODO 1 : jwt 요청코드
         JwtTokenDto jwt = commonService.getJWT(member.getIdentifyNo(), member.getAuthorities());
         session.setAttribute("accessToken", jwt.getAccessToken());
         session.setAttribute("refreshToken", jwt.getRefreshToken());
