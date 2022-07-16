@@ -12,6 +12,11 @@ package shop.gaship.gashipfront.exceptions;
  * 2022/07/11           김민수               최초 생성                         <br/>
  */
 public class NoResponseDataException extends RuntimeException {
+    /**
+     * Instantiates a new No response data exception.
+     *
+     * @param message the message
+     */
     public NoResponseDataException(String message) {
         super(message);
     }
