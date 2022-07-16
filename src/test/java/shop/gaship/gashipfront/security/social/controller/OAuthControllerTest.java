@@ -90,37 +90,10 @@ class OAuthControllerTest {
     @Test
     void getAccessTokenAndAuthenticateNaver() throws Exception {
         // given
-        NaverAccessToken oauthToken = new NaverAccessToken();
-        oauthToken.setAccessToken("this is accesstoken");
-
-        NaverUserData data = new NaverUserData();
-        NaverUserDataResponse response = new NaverUserDataResponse();
-        response.setEmail("abc@naver.com");
-        data.setResponse(response);
-
-        Member member = new Member();
-        member.setEmail("abc@naver.com");
-        member.setPassword("1234");
-
-        List<String> authorities = new ArrayList<>();
-        authorities.add("USER");
-        member.setAuthorities(authorities);
-
-        JwtTokenDto jwt = new JwtTokenDto();
-        jwt.setAccessToken("jwt access token");
-        jwt.setRefreshToken("jwt refresh token");
-
-        given(naverLoginService.getAccessToken(any(), any(), any()))
-            .willReturn(oauthToken);
-
-        given(naverLoginService.getUserDataThroughAccessToken(anyString()))
-            .willReturn(data);
-
-        given(commonService.getMember(anyString()))
-            .willReturn(member);
-
-        given(commonService.getJWT(anyLong(), anyList()))
-            .willReturn(jwt);
+        givingNaverAccessToken();
+        givingNaverUserData();
+        givingMember();
+        JwtTokenDto jwt = givingJwt();
 
         // when then
         MockHttpSession session = new MockHttpSession();
@@ -134,5 +107,46 @@ class OAuthControllerTest {
             .isEqualTo(jwt.getAccessToken());
         assertThat(refreshToken)
             .isEqualTo(jwt.getRefreshToken());
+    }
+
+    private JwtTokenDto givingJwt() throws Exception {
+        JwtTokenDto jwt = new JwtTokenDto();
+        jwt.setAccessToken("jwt access token");
+        jwt.setRefreshToken("jwt refresh token");
+
+        given(commonService.getJWT(any(), any()))
+            .willReturn(jwt);
+        return jwt;
+    }
+
+    private void givingMember() {
+        Member member = new Member();
+        member.setEmail("abc@naver.com");
+        member.setPassword("1234");
+
+        List<String> authorities = new ArrayList<>();
+        authorities.add("USER");
+        member.setAuthorities(authorities);
+
+        given(commonService.getMember(anyString()))
+            .willReturn(member);
+    }
+
+    private void givingNaverUserData() {
+        NaverUserData data = new NaverUserData();
+        NaverUserDataResponse response = new NaverUserDataResponse();
+        response.setEmail("abc@naver.com");
+        data.setResponse(response);
+
+        given(naverLoginService.getUserDataThroughAccessToken(anyString()))
+            .willReturn(data);
+    }
+
+    private void givingNaverAccessToken() {
+        NaverAccessToken oauthToken = new NaverAccessToken();
+        oauthToken.setAccessToken("this is accesstoken");
+
+        given(naverLoginService.getAccessToken(any(), any(), any()))
+            .willReturn(oauthToken);
     }
 }
