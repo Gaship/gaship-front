@@ -5,8 +5,8 @@ package shop.gaship.gashipfront.security.social.exception;
  * @see java.lang.RuntimeException
  * @since 1.0
  */
-public class JwtResponseException extends RuntimeException {
-    public JwtResponseException(String message) {
+public class ResponseEntityBodyIsErrorResponseException extends RuntimeException {
+    public ResponseEntityBodyIsErrorResponseException(String message) {
         super(message);
     }
 }

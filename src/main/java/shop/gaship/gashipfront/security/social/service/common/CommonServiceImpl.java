@@ -31,7 +31,7 @@ public class CommonServiceImpl implements CommonService {
     public Member getMemberByEmail(String email) {
         ResponseEntity<Object> response = adapter.requestMemberByEmail(email);
         ResponseEntityVerifier.verify(response, HttpStatus.OK);
-        
+
         return (Member) response.getBody();
     }
 

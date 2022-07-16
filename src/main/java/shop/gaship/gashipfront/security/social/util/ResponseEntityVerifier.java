@@ -4,7 +4,7 @@ import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import shop.gaship.gashipfront.security.social.exception.ErrorResponse;
-import shop.gaship.gashipfront.security.social.exception.JwtResponseException;
+import shop.gaship.gashipfront.security.social.exception.ResponseEntityBodyIsErrorResponseException;
 import shop.gaship.gashipfront.security.social.exception.NullResponseBodyException;
 
 /**
@@ -18,7 +18,7 @@ public class ResponseEntityVerifier {
         if (!Objects.equals(response.getStatusCode(), statusCode)) {
             ErrorResponse error = (ErrorResponse) response.getBody();
             if (Objects.isNull(error)) throw new NullResponseBodyException();
-            throw new JwtResponseException(error.getMessage());
+            throw new ResponseEntityBodyIsErrorResponseException(error.getMessage());
         }
     }
 }
