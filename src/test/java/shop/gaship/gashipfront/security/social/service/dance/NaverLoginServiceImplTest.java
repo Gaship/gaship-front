@@ -3,13 +3,19 @@ package shop.gaship.gashipfront.security.social.service.dance;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpSession;
 import org.assertj.core.util.Strings;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +32,10 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,6 +43,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
+import shop.gaship.gashipfront.security.social.dto.domain.Member;
+import shop.gaship.gashipfront.security.social.dto.oauth.UserDetailsDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.exception.CsrfProtectedException;
@@ -64,6 +76,18 @@ class NaverLoginServiceImplTest {
     @MockBean
     private Adapter adapter;
 
+    private HttpSession session;
+
+    @BeforeEach
+    void setUp() {
+        session = new MockHttpSession();
+    }
+
+    @AfterEach
+    void after() {
+        session.invalidate();
+    }
+
     @Value("${naver-client-id}")
     private String clientId;
 
@@ -73,11 +97,11 @@ class NaverLoginServiceImplTest {
     @Value("${naver-api-url-login}")
     private String apiUrlForLogin;
 
-    @DisplayName("naver로 oauth 했을때 조합한 값들이 설정값과 같게 잘나온다.")
+    @DisplayName("naver로 oauth 했을때 설정에서 불러온뒤 조합한 값들이 설정값과 같게 잘나온다.")
     @Test
     void getUriForLoginPageRequest() throws UnsupportedEncodingException {
         // when
-        String fullUri = naverLoginService.getUriForLoginPageRequest();
+        String fullUri = naverLoginService.getUriForLoginPageRequest(session);
 
         String[] parameter = fullUri.split("[?]")[1].split("&");
         String apiUriForLogin = fullUri.split("[&]")[0];
@@ -98,11 +122,24 @@ class NaverLoginServiceImplTest {
         }
     }
 
-    @DisplayName("처음 로그인요청 url을 redirect로 줄때 만든 state와 사용자 로그인완료후 redirect될때 state값이 같게 들어온 경우 문제없이 메서드 진행된다.")
+    @DisplayName("naver로 oauth 했을때 state를 잘 생성하고 생성한 값이 session에 잘 들어간다. ")
+    @Test
+    void getUriForLoginPageRequest_session() throws UnsupportedEncodingException {
+        // when
+        String fullUri = naverLoginService.getUriForLoginPageRequest(session);
+
+        String[] parameter = fullUri.split("[?]")[1].split("&");
+        String apiUriForLogin = fullUri.split("[&]")[0];
+
+        assertThat(session.getAttribute("state"))
+            .isEqualTo(parameter[3].split("=")[1]);
+    }
+
+    @DisplayName("처음 로그인요청 url을 redirect로 줄때 만든 state 값과 사용자 로그인완료후 redirect될때 state값이 같게 들어온 경우 문제없이 메서드 진행된다.")
     @Test
     void getAccessToken_state_success() throws UnsupportedEncodingException {
         // given
-        String uri = naverLoginService.getUriForLoginPageRequest();
+        String uri = naverLoginService.getUriForLoginPageRequest(session);
         String[] parameters = uri.split("&state=");
 
         String state = parameters[parameters.length - 1];
@@ -116,21 +153,20 @@ class NaverLoginServiceImplTest {
             .willReturn(givenToken);
 
         // when
-        NaverAccessToken token = naverLoginService.getAccessToken(code, state);
+        NaverAccessToken token = naverLoginService.getAccessToken(code, state, (String) session.getAttribute("state"));
 
         // then
         assertThat(token)
             .isEqualTo(givenToken);
     }
 
-    @DisplayName("처음 로그인요청 url을 redirect로 줄때 만든 state와 사용자 로그인완료후 redirect될때 state값이 다르게 들어온 경우 CsrfException이 발생한다.")
+    @DisplayName("처음 로그인요청 url을 redirect로 줄때 만든 state값과 사용자 로그인완료후 redirect될때 state값이 다르게 들어온 경우 CsrfException이 발생한다.")
     @Test
     void getAccessToken_state_fail() throws UnsupportedEncodingException {
         // given
-        String uri = naverLoginService.getUriForLoginPageRequest();
-        String[] parameters = uri.split("&state=");
+        naverLoginService.getUriForLoginPageRequest(session);
 
-        String state = parameters[parameters.length - 1];
+        String state = (String) session.getAttribute("state");
         String code = "this is code";
 
         NaverAccessToken givenToken = new NaverAccessToken();
@@ -141,7 +177,7 @@ class NaverLoginServiceImplTest {
             .willReturn(givenToken);
 
         // when then
-        assertThatThrownBy(() -> naverLoginService.getAccessToken(code, state + "failstate"))
+        assertThatThrownBy(() -> naverLoginService.getAccessToken(code, state, "failstate"))
             .isInstanceOf(CsrfProtectedException.class)
             .hasMessageContaining("csrf protect");
     }
@@ -158,10 +194,8 @@ class NaverLoginServiceImplTest {
         naverUserDataResponse.setName("홍길동");
         naverUserData.setResponse(naverUserDataResponse);
 
-
         given(adapter.requestNaverUserData(anyString(), anyString()))
             .willReturn(naverUserData);
-
         // when
         NaverUserDataResponse response =
             naverLoginService.getUserDataThroughAccessToken("accessToken").getResponse();
@@ -192,5 +226,33 @@ class NaverLoginServiceImplTest {
         assertThatThrownBy(() -> naverLoginService.getUserDataThroughAccessToken("accessToken"))
             .isInstanceOf(ResponseDataException.class)
             .hasMessageContaining("message : ");
+    }
+
+    @DisplayName("member값을 이용하여 UserDetailsDto를 생성하고 그 값이 SecurityContext에 잘들어간다.")
+    @Test
+    void setSecurityContext() {
+        // given
+        Member member = new Member();
+        member.setEmail("abc@naver.com");
+        member.setPassword("1234");
+
+        List<String> authorities = new ArrayList<>();
+        authorities.add("USER");
+        member.setAuthorities(authorities);
+
+        UserDetailsDto
+            userDetailsDto = new UserDetailsDto(member.getEmail(), member.getPassword(), member.getAuthorities().stream()
+            .map(i -> new SimpleGrantedAuthority("ROLE_" + i))
+            .collect(Collectors.toList()), member);
+
+        // when
+        naverLoginService.setSecurityContext(member);
+
+        // then
+        SecurityContext context = SecurityContextHolder.getContext();
+        UserDetailsDto resultDto = (UserDetailsDto) context.getAuthentication().getPrincipal();
+
+        assertThat(resultDto)
+            .isEqualTo(userDetailsDto);
     }
 }
