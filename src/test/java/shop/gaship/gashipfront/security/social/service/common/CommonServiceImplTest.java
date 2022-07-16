@@ -110,8 +110,8 @@ class CommonServiceImplTest {
         Long identifyNo = 123242124L;
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
-        
-        ResponseEntity<Object> response = ResponseEntity.status(201)
+
+        ResponseEntity<Object> response = ResponseEntity.status(500)
             .contentType(MediaType.APPLICATION_JSON)
             .body(new ErrorResponse("auth 서버 오류로 jwt를 생성하지 못했습니다."));
 
