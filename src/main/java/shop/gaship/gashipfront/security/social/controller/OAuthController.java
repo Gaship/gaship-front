@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
+import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.service.common.CommonService;
 import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
@@ -25,7 +26,7 @@ import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 @Slf4j
 public class OAuthController {
     private final NaverLoginService naverLoginService;
-    private final CommonService shoppingmallService;
+    private final CommonService commonService;
 
     @GetMapping("/login/naver")
     @ResponseBody
@@ -44,11 +45,13 @@ public class OAuthController {
         NaverAccessToken naverAccessToken = naverLoginService.getAccessToken(code, parameterState, redisState);
 
         NaverUserData data = naverLoginService.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
-        Member member = shoppingmallService.getMember(data.getResponse().getEmail());
+        Member member = commonService.getMember(data.getResponse().getEmail());
         naverLoginService.setSecurityContext(member);
 
         // TODO 1 : jwt 요청코드
+        JwtTokenDto jwt = commonService.getJWT(member.getIdentifyNo(), member.getAuthorities());
+        session.setAttribute("accessToken", jwt.getAccessToken());
+        session.setAttribute("refreshToken", jwt.getRefreshToken());
         return "/all";
     }
-
 }

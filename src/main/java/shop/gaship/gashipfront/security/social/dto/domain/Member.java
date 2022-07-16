@@ -13,6 +13,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class Member {
+    private Long identifyNo;
     private String email;
     private List<String> authorities;
     private String password;
