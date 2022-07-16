@@ -54,8 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(
-        CustomUserDetailService customUserDetailService) {
+    public AuthenticationProvider authenticationProvider(CustomUserDetailService customUserDetailService) {
         DaoAuthenticationProvider customDaoAuthenticationProvider = new DaoAuthenticationProvider();
         customDaoAuthenticationProvider.setUserDetailsService(customUserDetailService);
         customDaoAuthenticationProvider.setPasswordEncoder(passwordEncoder());

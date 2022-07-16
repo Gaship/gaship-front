@@ -43,11 +43,11 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
 
         // TODO dummy2 : 더미용 테스트코드임
         List<String> authorities = new ArrayList<>();
-        authorities.add("ROLE_" + "USER");
+        authorities.add("USER");
         member.setAuthorities(authorities);
         member.setPassword("1234");
         return new UserDetailsDto(email, member.getPassword(), member.getAuthorities().stream()
-            .map(i -> new SimpleGrantedAuthority(i))
+            .map(i -> new SimpleGrantedAuthority("ROLE_" + i))
             .collect(Collectors.toList()), member, user.getAttributes());
     }
 }

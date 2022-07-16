@@ -5,11 +5,20 @@ import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
+import shop.gaship.gashipfront.security.social.dto.domain.Member;
+import shop.gaship.gashipfront.security.social.dto.oauth.UserDetailsDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.exception.CsrfProtectedException;
 import shop.gaship.gashipfront.security.social.exception.ResponseDataException;
@@ -34,15 +43,12 @@ public class NaverLoginServiceImpl implements NaverLoginService {
 
     @Value("${naver-api-url-userdata}")
     private String apiUrlForUserData;
-
-    // TODO need4 : redis에 sessionId를 이용해서 집어넣어야함. 안그러면 로드밸런싱시에 문제일어남 레디스에 넣고, 필드의 생성도 지역범위로 변경
-    private BigInteger state;
-
     private final Adapter adapter;
 
     @Override
-    public String getUriForLoginPageRequest() throws UnsupportedEncodingException {
-        state = new BigInteger(130, new SecureRandom());
+    public String getUriForLoginPageRequest(HttpSession session) throws UnsupportedEncodingException {
+        BigInteger state = new BigInteger(130, new SecureRandom());
+        session.setAttribute("state", String.valueOf(state));
 
         StringBuilder uriForLoginPageRequest = new StringBuilder();
         uriForLoginPageRequest
@@ -55,8 +61,8 @@ public class NaverLoginServiceImpl implements NaverLoginService {
     }
 
     @Override
-    public NaverAccessToken getAccessToken(String code, String state) {
-        if (!Objects.equals(state, this.state.toString())) throw new CsrfProtectedException("csrf protect");
+    public NaverAccessToken getAccessToken(String code, String parameterState, String redisState) {
+        if (!Objects.equals(parameterState, redisState)) throw new CsrfProtectedException("csrf protect");
 
         StringBuilder uriForAccessToken = new StringBuilder();
         uriForAccessToken
@@ -73,5 +79,18 @@ public class NaverLoginServiceImpl implements NaverLoginService {
         NaverUserData data = adapter.requestNaverUserData(apiUrlForUserData, accessToken);
         if (!Objects.equals(data.getMessage(), "success")) throw new ResponseDataException("message : " + data.getMessage());
         return data;
+    }
+
+    @Override
+    public void setSecurityContext(Member member) {
+        UserDetailsDto
+            userDetailsDto = new UserDetailsDto(member.getEmail(), member.getPassword(), member.getAuthorities().stream()
+            .map(i -> new SimpleGrantedAuthority("ROLE_" + i))
+            .collect(Collectors.toList()), member);
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetailsDto, null,
+            userDetailsDto.getAuthorities());
+        context.setAuthentication(authentication);
     }
 }
