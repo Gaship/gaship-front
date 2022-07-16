@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/all")
             .permitAll();
 
-        http.sessionManagement().disable();
+//        http.sessionManagement().disable();
         http.formLogin()
             .loginPage("/login")
             .loginProcessingUrl("/loginAction")

@@ -16,7 +16,7 @@ import shop.gaship.gashipfront.security.social.dto.oauth.UserDetailsDto;
 import shop.gaship.gashipfront.security.social.service.common.CommonService;
 
 /**
- * oauth 로그인 성공시에 기본적인 처리 및 jwt를 요청하고 session에 추가해주기 위한 클래스입니다.
+ * oauth2 기능을 통한 로그인 성공시에 기본적인 처리 및 jwt를 요청하고 session에 추가해주기 위한 클래스입니다.
  *
  * @author : 최겸준
  * @see org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler
@@ -35,7 +35,6 @@ public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
         UserDetailsDto memberDto = (UserDetailsDto) authentication.getPrincipal();
         Member member = memberDto.getMember();
-
         // 실제 구동 test를 위한 dummy data
         //        JwtTokenDto jwt = new JwtTokenDto();
         //        jwt.setRefreshToken("this is refresh!!");

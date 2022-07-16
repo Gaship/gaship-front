@@ -1,7 +1,5 @@
 package shop.gaship.gashipfront.security.social.service.oauth2;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.oauth.UserDetailsDto;
+import shop.gaship.gashipfront.security.social.service.common.CommonService;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service
@@ -29,7 +28,7 @@ import shop.gaship.gashipfront.security.social.dto.oauth.UserDetailsDto;
 @Service
 @RequiredArgsConstructor
 public class Oauth2UserService extends DefaultOAuth2UserService {
-    private final Adapter adapter;
+    private final CommonService commonService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -37,7 +36,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
 
         Map<String, Object> value = (Map<String, Object>) user.getAttributes().get("kakao_account");
         String email = (String) value.get("email");
-        Member member = adapter.requestMemberByEmail(email);
+        Member member = commonService.getMemberByEmail(email);
 
         // 서버 구동을 통한 test시에 필요한 dummy data
         //        Member member = new Member();

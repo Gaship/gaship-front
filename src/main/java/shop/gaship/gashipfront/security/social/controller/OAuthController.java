@@ -45,7 +45,7 @@ public class OAuthController {
         NaverAccessToken naverAccessToken = naverLoginService.getAccessToken(code, parameterState, redisState);
 
         NaverUserData data = naverLoginService.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
-        Member member = commonService.getMember(data.getResponse().getEmail());
+        Member member = commonService.getMemberByEmail(data.getResponse().getEmail());
         naverLoginService.setSecurityContext(member);
 
         JwtTokenDto jwt = commonService.getJWT(member.getIdentifyNo(), member.getAuthorities());

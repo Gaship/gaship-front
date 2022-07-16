@@ -16,14 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
-import shop.gaship.gashipfront.security.social.dto.jwt.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.social.exception.ErrorResponse;
 import shop.gaship.gashipfront.security.social.exception.JwtResponseException;
 
@@ -66,7 +64,7 @@ class CommonServiceImplTest {
             .willReturn(response);
 
         // when
-        Member actualMember = commonService.getMember(email);
+        Member actualMember = commonService.getMemberByEmail(email);
 
         // then
         assertThat(actualMember)

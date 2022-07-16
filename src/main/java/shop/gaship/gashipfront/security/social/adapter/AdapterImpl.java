@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
-import shop.gaship.gashipfront.security.social.dto.domain.Member;
-import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.jwt.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 
@@ -41,7 +39,7 @@ public class AdapterImpl implements Adapter {
     }
 
     @Override
-    public Member requestMemberByEmail(String email) {
+    public ResponseEntity<Object> requestMemberByEmail(String email) {
         WebClient webClient
             = WebClient.builder()
             .baseUrl("http://localhost:7071/securities/email")
@@ -51,8 +49,8 @@ public class AdapterImpl implements Adapter {
         return webClient.get()
             .uri(uri -> uri.queryParam("email", email).build())
             .retrieve()
-            .bodyToMono(Member.class)
-            .blockOptional().orElseThrow(() -> new RuntimeException());
+            .toEntity(Object.class)
+            .block();
     }
 
     @Override
@@ -63,13 +61,11 @@ public class AdapterImpl implements Adapter {
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .build();
 
-        ResponseEntity<Object> response = webClient.post()
+        return webClient.post()
             .bodyValue(detailsDto)
             .retrieve()
             .toEntity(Object.class)
             .block();
-
-        return response;
     }
 
 

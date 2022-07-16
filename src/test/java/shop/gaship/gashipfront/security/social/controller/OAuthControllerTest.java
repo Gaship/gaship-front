@@ -25,8 +25,6 @@ import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
@@ -128,7 +126,7 @@ class OAuthControllerTest {
         authorities.add("USER");
         member.setAuthorities(authorities);
 
-        given(commonService.getMember(anyString()))
+        given(commonService.getMemberByEmail(anyString()))
             .willReturn(member);
     }
 

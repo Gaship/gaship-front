@@ -1,17 +1,15 @@
 package shop.gaship.gashipfront.security.social.service.common;
 
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.jwt.SignInSuccessUserDetailsDto;
-import shop.gaship.gashipfront.security.social.exception.ErrorResponse;
-import shop.gaship.gashipfront.security.social.exception.JwtResponseException;
-import shop.gaship.gashipfront.security.social.exception.NullResponseBodyException;
+import shop.gaship.gashipfront.security.social.util.ResponseEntityVerifier;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.common
@@ -30,8 +28,11 @@ public class CommonServiceImpl implements CommonService {
     private final Adapter adapter;
 
     @Override
-    public Member getMember(String email) {
-        return adapter.requestMemberByEmail(email);
+    public Member getMemberByEmail(String email) {
+        ResponseEntity<Object> response = adapter.requestMemberByEmail(email);
+        ResponseEntityVerifier.verify(response, HttpStatus.OK);
+        
+        return (Member) response.getBody();
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CommonServiceImpl implements CommonService {
             = makeDetailsDto(identifyNo, authorities);
 
         ResponseEntity<Object> response = adapter.requestJwt(detailsDto);
-        assertResponse(response);
+        ResponseEntityVerifier.verify(response, HttpStatus.CREATED);
 
         return (JwtTokenDto) response.getBody();
     }
@@ -51,13 +52,5 @@ public class CommonServiceImpl implements CommonService {
         detailsDto.setIdentifyNo(identifyNo);
         detailsDto.setAuthorities(authorities);
         return detailsDto;
-    }
-
-    private void assertResponse(ResponseEntity<Object> response) {
-        if (!Objects.equals(response.getStatusCodeValue(), 201)) {
-            ErrorResponse error = (ErrorResponse) response.getBody();
-            if (Objects.isNull(error)) throw new NullResponseBodyException();
-            throw new JwtResponseException(error.getMessage());
-        }
     }
 }
