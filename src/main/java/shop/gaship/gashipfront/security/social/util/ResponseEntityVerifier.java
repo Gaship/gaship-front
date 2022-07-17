@@ -18,7 +18,7 @@ public class ResponseEntityVerifier {
         if (!Objects.equals(response.getStatusCode(), statusCode)) {
             ErrorResponse error = (ErrorResponse) response.getBody();
             if (Objects.isNull(error)) throw new NullResponseBodyException();
-            throw new ResponseEntityBodyIsErrorResponseException(error.getMessage());
+            throw new ResponseEntityBodyIsErrorResponseException(error.getMessage(), statusCode);
         }
     }
 }
