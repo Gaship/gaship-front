@@ -2,7 +2,6 @@ package shop.gaship.gashipfront.security.social.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +13,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.util.NestedServletException;
 import shop.gaship.gashipfront.config.SecurityConfig;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
@@ -30,6 +29,8 @@ import shop.gaship.gashipfront.security.social.service.common.CommonService;
 import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.throwable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -52,7 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * 2022-07-14        choi-gyeom-jun       최초 생성
  */
 @WebMvcTest(
-    controllers = OAuthController.class,
+    controllers = OauthController.class,
     excludeAutoConfiguration = {
         SecurityAutoConfiguration.class,
         OAuth2ClientAutoConfiguration.class,
@@ -103,7 +104,7 @@ class OAuthControllerTest {
         MockHttpSession session = new MockHttpSession();
         mvc.perform(get("/securities/login/naver/callback").session(session))
             .andExpect(status().isOk())
-            .andExpect(view().name("/all"));
+            .andExpect(view().name("all"));
 
         String accessToken = (String) session.getAttribute("accessToken");
         String refreshToken = (String) session.getAttribute("refreshToken");
@@ -122,7 +123,6 @@ class OAuthControllerTest {
         givingNaverAccessToken();
         givingNaverUserData();
         givingMember_fail_noContent();
-        JwtTokenDto jwt = givingJwt();
 
         MockHttpSession session = new MockHttpSession();
         // when then
@@ -136,6 +136,21 @@ class OAuthControllerTest {
         assertThat(email)
             .isEqualTo("abc@naver.com");
         session.invalidate();
+    }
+
+    @DisplayName("getMemberByEmail 메서드가 HttpStatus.NO_CONTENT 외의 코드를 가지는 ResponseEntityBodyIsErrorResponseException을 발생시켰을때 해당 예외가 잘 발생한다.")
+    @Test
+    void getAccessTokenAndAuthenticateNaver_fail_other() throws Exception {
+        // given
+        givingNaverAccessToken();
+        givingNaverUserData();
+        givingMember_fail_other();
+
+        // when then
+        assertThatThrownBy(() -> mvc.perform(get("/securities/login/naver/callback")))
+            .isInstanceOf(NestedServletException.class)
+            .hasMessageContaining("other error")
+            .hasCauseInstanceOf(ResponseEntityBodyIsErrorResponseException.class);
     }
 
     private JwtTokenDto givingJwt() throws Exception {
@@ -164,6 +179,13 @@ class OAuthControllerTest {
     private void givingMember_fail_noContent() {
         ResponseEntityBodyIsErrorResponseException e
             = new ResponseEntityBodyIsErrorResponseException("no content", HttpStatus.NO_CONTENT);
+        given(commonService.getMemberByEmail(anyString()))
+            .willThrow(e);
+    }
+
+    private void givingMember_fail_other() {
+        ResponseEntityBodyIsErrorResponseException e
+            = new ResponseEntityBodyIsErrorResponseException("other error", HttpStatus.GATEWAY_TIMEOUT);
         given(commonService.getMemberByEmail(anyString()))
             .willThrow(e);
     }
