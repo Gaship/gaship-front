@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.security.social.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,19 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import shop.gaship.gashipfront.config.SecurityConfig;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserDataResponse;
+import shop.gaship.gashipfront.security.social.exception.ResponseEntityBodyIsErrorResponseException;
 import shop.gaship.gashipfront.security.social.service.common.CommonService;
 import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
@@ -105,6 +111,31 @@ class OAuthControllerTest {
             .isEqualTo(jwt.getAccessToken());
         assertThat(refreshToken)
             .isEqualTo(jwt.getRefreshToken());
+
+        session.invalidate();
+    }
+
+    @DisplayName("getMemberByEmail 메서드가 HttpStatus.NO_CONTENT를 가지는 ResponseEmtityBodyIsErrorResponseException을 발생시켰을때 response객체에 302상태코드와 signup이 redirect url에 들어가며 session에 email이 저장된다.")
+    @Test
+    void getAccessTokenAndAuthenticateNaver_fail_noContent() throws Exception {
+        // given
+        givingNaverAccessToken();
+        givingNaverUserData();
+        givingMember_fail_noContent();
+        JwtTokenDto jwt = givingJwt();
+
+        MockHttpSession session = new MockHttpSession();
+        // when then
+        mvc.perform(get("/securities/login/naver/callback").session(session))
+            .andExpect(status().is(302))
+            .andExpect(view().name("redirect:signup"))
+            .andExpect(MockMvcResultMatchers.header().exists("Location"))
+            .andExpect(MockMvcResultMatchers.header().string("Location", "signup"))
+            .andExpect(redirectedUrl("signup"));
+        String email = (String) session.getAttribute("email");
+        assertThat(email)
+            .isEqualTo("abc@naver.com");
+        session.invalidate();
     }
 
     private JwtTokenDto givingJwt() throws Exception {
@@ -128,6 +159,13 @@ class OAuthControllerTest {
 
         given(commonService.getMemberByEmail(anyString()))
             .willReturn(member);
+    }
+
+    private void givingMember_fail_noContent() {
+        ResponseEntityBodyIsErrorResponseException e
+            = new ResponseEntityBodyIsErrorResponseException("no content", HttpStatus.NO_CONTENT);
+        given(commonService.getMemberByEmail(anyString()))
+            .willThrow(e);
     }
 
     private void givingNaverUserData() {
