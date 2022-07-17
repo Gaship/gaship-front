@@ -94,7 +94,7 @@ class CommonServiceImplTest {
     @Test
     void getJWT_success() throws Exception {
         // given
-        Long identifyNo = 123242124L;
+        Integer identifyNo = 123242124;
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
 
@@ -129,7 +129,7 @@ class CommonServiceImplTest {
     @Test
     void getJWT_fail() throws Exception {
         // given
-        Long identifyNo = 123242124L;
+        Integer identifyNo = 123242124;
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
 

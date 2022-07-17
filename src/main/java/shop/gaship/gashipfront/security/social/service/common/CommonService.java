@@ -18,5 +18,5 @@ import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 public interface CommonService {
     Member getMemberByEmail(String mobile);
 
-    JwtTokenDto getJWT(Long identifyNo, List<String> Authorities) throws Exception;
+    JwtTokenDto getJWT(Integer identifyNo, List<String> Authorities) throws Exception;
 }

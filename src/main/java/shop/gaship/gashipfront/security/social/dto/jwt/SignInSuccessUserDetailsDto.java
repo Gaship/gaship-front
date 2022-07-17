@@ -11,6 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SignInSuccessUserDetailsDto{
-    private Long identifyNo;
+    private Integer identifyNo;
     private List<String> authorities;
 }

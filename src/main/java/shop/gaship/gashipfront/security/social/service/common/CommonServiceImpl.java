@@ -37,7 +37,7 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public JwtTokenDto getJWT(Long identifyNo, List<String> authorities) throws Exception {
+    public JwtTokenDto getJWT(Integer identifyNo, List<String> authorities) throws Exception {
         SignInSuccessUserDetailsDto detailsDto
             = makeDetailsDto(identifyNo, authorities);
 
@@ -47,7 +47,7 @@ public class CommonServiceImpl implements CommonService {
         return (JwtTokenDto) response.getBody();
     }
 
-    private SignInSuccessUserDetailsDto makeDetailsDto(Long identifyNo,
+    private SignInSuccessUserDetailsDto makeDetailsDto(Integer identifyNo,
                                                        List<String> authorities) {
         SignInSuccessUserDetailsDto detailsDto = new SignInSuccessUserDetailsDto();
         detailsDto.setIdentifyNo(identifyNo);
