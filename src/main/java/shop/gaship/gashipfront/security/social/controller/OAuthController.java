@@ -17,7 +17,7 @@ import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.accesstoken.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
-import shop.gaship.gashipfront.security.social.exception.ResponseEntityBodyIsErrorResponseException;
+import shop.gaship.gashipfront.security.social.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.service.common.CommonService;
 import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
@@ -59,11 +59,12 @@ public class OauthController {
         return "all";
     }
 
-    private Optional<Member> getOptionalMember(HttpSession session, NaverUserData data) throws ResponseEntityBodyIsErrorResponseException {
+    private Optional<Member> getOptionalMember(HttpSession session, NaverUserData data) throws
+        RequestFailureException {
         Member member;
         try {
             member = commonService.getMemberByEmail(data.getResponse().getEmail());
-        } catch (ResponseEntityBodyIsErrorResponseException e) {
+        } catch (RequestFailureException e) {
             if (!e.getStatusCode().equals(HttpStatus.NO_CONTENT)) throw e;
             session.setAttribute("email", data.getResponse().getEmail()); // 회원가입 폼에서 자동으로 입력될 email정보
             return Optional.empty();

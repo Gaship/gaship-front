@@ -23,7 +23,7 @@ import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.exception.ErrorResponse;
-import shop.gaship.gashipfront.security.social.exception.ResponseEntityBodyIsErrorResponseException;
+import shop.gaship.gashipfront.security.social.exception.RequestFailureException;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.common
@@ -86,7 +86,7 @@ class CommonServiceImplTest {
 
         // when then
         assertThatThrownBy(() -> commonService.getMemberByEmail("none"))
-            .isInstanceOf(ResponseEntityBodyIsErrorResponseException.class)
+            .isInstanceOf(RequestFailureException.class)
             .hasMessageContaining(errorResponse.getMessage());
     }
 
@@ -142,7 +142,7 @@ class CommonServiceImplTest {
 
         // when then
         assertThatThrownBy(() -> commonService.getJWT(identifyNo, authorities))
-            .isInstanceOf(ResponseEntityBodyIsErrorResponseException.class)
+            .isInstanceOf(RequestFailureException.class)
                 .hasMessageContaining("auth 서버");
     }
 }

@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
  * @see java.lang.RuntimeException
  * @since 1.0
  */
-public class ResponseEntityBodyIsErrorResponseException extends RuntimeException {
+public class RequestFailureException extends RuntimeException {
     private HttpStatus statusCode;
 
-    public ResponseEntityBodyIsErrorResponseException(String message, HttpStatus statusCode) {
+    public RequestFailureException(String message, HttpStatus statusCode) {
         super(message);
         this.statusCode = statusCode;
     }

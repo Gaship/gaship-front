@@ -15,7 +15,6 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.NestedServletException;
 import shop.gaship.gashipfront.config.SecurityConfig;
@@ -24,13 +23,12 @@ import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dto.userdata.NaverUserDataResponse;
-import shop.gaship.gashipfront.security.social.exception.ResponseEntityBodyIsErrorResponseException;
+import shop.gaship.gashipfront.security.social.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.service.common.CommonService;
 import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.InstanceOfAssertFactories.throwable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -67,7 +65,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest(OAuthController.class)
 //@ExtendWith(SpringExtension.class)
 //@Import(CustomUserDetailService.class)
-class OAuthControllerTest {
+class OauthControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -150,7 +148,7 @@ class OAuthControllerTest {
         assertThatThrownBy(() -> mvc.perform(get("/securities/login/naver/callback")))
             .isInstanceOf(NestedServletException.class)
             .hasMessageContaining("other error")
-            .hasCauseInstanceOf(ResponseEntityBodyIsErrorResponseException.class);
+            .hasCauseInstanceOf(RequestFailureException.class);
     }
 
     private JwtTokenDto givingJwt() throws Exception {
@@ -177,15 +175,15 @@ class OAuthControllerTest {
     }
 
     private void givingMember_fail_noContent() {
-        ResponseEntityBodyIsErrorResponseException e
-            = new ResponseEntityBodyIsErrorResponseException("no content", HttpStatus.NO_CONTENT);
+        RequestFailureException e
+            = new RequestFailureException("no content", HttpStatus.NO_CONTENT);
         given(commonService.getMemberByEmail(anyString()))
             .willThrow(e);
     }
 
     private void givingMember_fail_other() {
-        ResponseEntityBodyIsErrorResponseException e
-            = new ResponseEntityBodyIsErrorResponseException("other error", HttpStatus.GATEWAY_TIMEOUT);
+        RequestFailureException e
+            = new RequestFailureException("other error", HttpStatus.GATEWAY_TIMEOUT);
         given(commonService.getMemberByEmail(anyString()))
             .willThrow(e);
     }

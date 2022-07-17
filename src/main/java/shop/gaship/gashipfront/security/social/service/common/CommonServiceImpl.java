@@ -9,7 +9,7 @@ import shop.gaship.gashipfront.security.social.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dto.domain.Member;
 import shop.gaship.gashipfront.security.social.dto.jwt.JwtTokenDto;
 import shop.gaship.gashipfront.security.social.dto.jwt.SignInSuccessUserDetailsDto;
-import shop.gaship.gashipfront.security.social.exception.ResponseEntityBodyIsErrorResponseException;
+import shop.gaship.gashipfront.security.social.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.util.ResponseEntityVerifier;
 
 /**
@@ -29,7 +29,7 @@ public class CommonServiceImpl implements CommonService {
     private final Adapter adapter;
 
     @Override
-    public Member getMemberByEmail(String email) throws ResponseEntityBodyIsErrorResponseException {
+    public Member getMemberByEmail(String email) throws RequestFailureException {
         ResponseEntity<Object> response = adapter.requestMemberByEmail(email);
         ResponseEntityVerifier.verify(response, HttpStatus.OK);
 
