@@ -2,17 +2,12 @@ package shop.gaship.gashipfront.security.social.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.parser.Entity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +25,7 @@ import shop.gaship.gashipfront.security.social.service.dance.NaverLoginService;
 @RequestMapping("/securities")
 @RequiredArgsConstructor
 @Slf4j
-public class OAuthController {
+public class OauthController {
     private final NaverLoginService naverLoginService;
     private final CommonService commonService;
 
@@ -64,18 +59,15 @@ public class OAuthController {
         return "all";
     }
 
-    private Optional<Member> getOptionalMember(HttpSession session, NaverUserData data) {
+    private Optional<Member> getOptionalMember(HttpSession session, NaverUserData data) throws ResponseEntityBodyIsErrorResponseException {
         Member member;
         try {
             member = commonService.getMemberByEmail(data.getResponse().getEmail());
         } catch (ResponseEntityBodyIsErrorResponseException e) {
-            if (e.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
-                session.setAttribute("email", data.getResponse().getEmail()); // 회원가입 폼에서 자동으로 입력될 email정보
-                return Optional.empty();
-            }
-            throw e;
+            if (!e.getStatusCode().equals(HttpStatus.NO_CONTENT)) throw e;
+            session.setAttribute("email", data.getResponse().getEmail()); // 회원가입 폼에서 자동으로 입력될 email정보
+            return Optional.empty();
         }
-
         return Optional.of(member);
     }
 }
