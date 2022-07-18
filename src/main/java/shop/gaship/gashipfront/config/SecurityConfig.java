@@ -59,8 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    private LoginSuccessHandler loginSuccessHandler(String gatewayBaseUrl) {
-        return new LoginSuccessHandler(gatewayBaseUrl);
+    private LoginSuccessHandler loginSuccessHandler(ServerConfig serverConfig) {
+        return new LoginSuccessHandler(serverConfig.getGatewayUrl());
     }
 }
 
