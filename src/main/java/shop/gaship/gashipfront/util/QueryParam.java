@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.util;
 
+
 public class QueryParam {
     String name;
     Object[] values;

@@ -4,15 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
-import shop.gaship.gashipfront.security.social.handler.Oauth2LoginSuccessHandler;
-import shop.gaship.gashipfront.security.social.service.common.CommonService;
+import shop.gaship.gashipfront.security.social.common.service.CommonService;
+import shop.gaship.gashipfront.security.social.oauth2.handler.Oauth2LoginSuccessHandler;
 
 /**
  * packageName    : shop.gaship.gashipfront.configure <br/>
@@ -35,7 +34,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/all")
             .permitAll();
 
-//        http.sessionManagement().disable();
         http.formLogin()
             .loginPage("/login")
             .loginProcessingUrl("/loginAction")
@@ -51,6 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .defaultSuccessUrl("/all")
             .failureUrl("/login")
             .successHandler(oauth2LoginSuccessHandler(null));
+//            .failureHandler((request, response, exception) -> {
+//                response.get
+//                response.sendRedirect();
+//            }));
 
         http.csrf().disable();
 //        http.logout().disable();
