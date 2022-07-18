@@ -27,18 +27,8 @@ public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
 
     @Override
-    public void register(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto) {
+    public void addTag(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto) {
         tagRepository.register(adminId, tagRegisterRequestDto);
-    }
-
-    @Override
-    public Mono<TagResponseDto> getTag(Integer adminId, TagGetRequestDto tagGetRequestDto) {
-        return tagRepository.getTag(adminId, tagGetRequestDto);
-    }
-
-    @Override
-    public Flux<TagResponseDto> getTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable) {
-        return tagRepository.getTags(adminId, tagGetRequestDto, pageable);
     }
 
     @Override
@@ -47,7 +37,18 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto) {
+    public void removeTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto) {
         tagRepository.deleteTag(adminId, tagDeleteRequestDto);
     }
+
+    @Override
+    public Mono<TagResponseDto> findTag(Integer adminId, TagGetRequestDto tagGetRequestDto) {
+        return tagRepository.getTag(adminId, tagGetRequestDto);
+    }
+
+    @Override
+    public Flux<TagResponseDto> findTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable) {
+        return tagRepository.getTags(adminId, tagGetRequestDto, pageable);
+    }
+
 }

@@ -19,9 +19,9 @@ import java.util.List;
  * 2022/07/15        choijungwoo       최초 생성
  */
 public interface TagService {
-    void register(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
-    Mono<TagResponseDto> getTag(Integer adminId, TagGetRequestDto tagGetRequestDto);
-    Flux<TagResponseDto> getTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable);
+    void addTag(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
     void modifyTag(Integer adminId, TagModifyRequestDto tagModifyRequestDto);
-    void deleteTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto);
+    void removeTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto);
+    Mono<TagResponseDto> findTag(Integer adminId, TagGetRequestDto tagGetRequestDto);
+    Flux<TagResponseDto> findTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable);
 }

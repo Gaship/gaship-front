@@ -1,7 +1,6 @@
 package shop.gaship.gashipfront.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -37,14 +36,48 @@ public class TagController {
      * @return the model and view
      */
     @PostMapping
-    public ModelAndView registerTag(@ModelAttribute TagRegisterRequestDto tagRegisterRequestDto,
+    public ModelAndView tagAdd(@ModelAttribute TagRegisterRequestDto tagRegisterRequestDto,
                                     @PathVariable Integer adminId,
                                     ModelAndView modelAndView) {
-        tagService.register(adminId, tagRegisterRequestDto);
-        modelAndView.setViewName("redirect:/admins/" + adminId + "tags");
+        tagService.addTag(adminId, tagRegisterRequestDto);
+        modelAndView.setViewName("redirect:/admins/" + adminId + "/tags");
         return modelAndView;
     }
 
+
+    /**
+     * Modify tag model and view.
+     *
+     * @param tagModifyRequestDto the tag modify request dto
+     * @param adminId             the admin id
+     * @param modelAndView        the model and view
+     * @return the model and view
+     */
+    @PutMapping("/{tagId}")
+    public ModelAndView tagModify(@ModelAttribute TagModifyRequestDto tagModifyRequestDto,
+                                  @PathVariable Integer adminId,
+                                  ModelAndView modelAndView) {
+        tagService.modifyTag(adminId, tagModifyRequestDto);
+        modelAndView.setViewName("redirect:/admins/" + adminId + "/tags/" + tagModifyRequestDto.getTagId() + "details");
+        return modelAndView;
+    }
+
+    /**
+     * Delete tag model and view.
+     *
+     * @param tagDeleteRequestDto the tag delete request dto
+     * @param adminId             the admin id
+     * @param modelAndView        the model and view
+     * @return the model and view
+     */
+    @DeleteMapping("/{tagId}")
+    public ModelAndView tagRemove(@ModelAttribute TagDeleteRequestDto tagDeleteRequestDto,
+                                  @PathVariable Integer adminId,
+                                  ModelAndView modelAndView) {
+        tagService.removeTag(adminId, tagDeleteRequestDto);
+        modelAndView.setViewName("redirect:/admins/" + adminId + "/tags");
+        return modelAndView;
+    }
     /**
      * Gets tag.
      *
@@ -54,12 +87,12 @@ public class TagController {
      * @return the tag
      */
     @GetMapping("/{tagId}")
-    public ModelAndView getTag(@ModelAttribute TagGetRequestDto tagGetRequestDto,
+    public ModelAndView tagDetails(@ModelAttribute TagGetRequestDto tagGetRequestDto,
                                @PathVariable Integer adminId,
                                ModelAndView modelAndView) {
-        Mono<TagResponseDto> tag = tagService.getTag(adminId, tagGetRequestDto);
+        Mono<TagResponseDto> tag = tagService.findTag(adminId, tagGetRequestDto);
         modelAndView.addObject(tag);
-        modelAndView.setViewName("redirect:/admins/" + adminId + "tags/" + tagGetRequestDto.getTagId() + "details");
+        modelAndView.setViewName("tagInfo");
         return modelAndView;
     }
 
@@ -73,47 +106,13 @@ public class TagController {
      * @return the tags
      */
     @GetMapping
-    public ModelAndView getTags(@ModelAttribute TagGetRequestDto tagGetRequestDto,
+    public ModelAndView tagList(@ModelAttribute TagGetRequestDto tagGetRequestDto,
                                 @PathVariable Integer adminId,
                                 ModelAndView modelAndView,
                                 Pageable pageable) {
-        Flux<TagResponseDto> tags = tagService.getTags(adminId, tagGetRequestDto, pageable);
+        Flux<TagResponseDto> tags = tagService.findTags(adminId, tagGetRequestDto, pageable);
         modelAndView.addObject(tags);
-        modelAndView.setViewName("redirect:/admins/" + adminId + "tags");
-        return modelAndView;
-    }
-
-    /**
-     * Modify tag model and view.
-     *
-     * @param tagModifyRequestDto the tag modify request dto
-     * @param adminId             the admin id
-     * @param modelAndView        the model and view
-     * @return the model and view
-     */
-    @PutMapping("/{tagId}")
-    public ModelAndView modifyTag(@ModelAttribute TagModifyRequestDto tagModifyRequestDto,
-                                  @PathVariable Integer adminId,
-                                  ModelAndView modelAndView) {
-        tagService.modifyTag(adminId, tagModifyRequestDto);
-        modelAndView.setViewName("redirect:/admins/" + adminId + "tags/" + tagModifyRequestDto.getTagId() + "details");
-        return modelAndView;
-    }
-
-    /**
-     * Delete tag model and view.
-     *
-     * @param tagDeleteRequestDto the tag delete request dto
-     * @param adminId             the admin id
-     * @param modelAndView        the model and view
-     * @return the model and view
-     */
-    @DeleteMapping("/{tagId}")
-    public ModelAndView deleteTag(@ModelAttribute TagDeleteRequestDto tagDeleteRequestDto,
-                                  @PathVariable Integer adminId,
-                                  ModelAndView modelAndView) {
-        tagService.deleteTag(adminId, tagDeleteRequestDto);
-        modelAndView.setViewName("redirect:/admins/" + adminId + "tags");
+        modelAndView.setViewName("redirect:/admins/" + adminId + "/tags");
         return modelAndView;
     }
 }
