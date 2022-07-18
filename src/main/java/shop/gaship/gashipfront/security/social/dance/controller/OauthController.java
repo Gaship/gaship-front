@@ -71,11 +71,16 @@ public class OauthController {
 
         SignupManager signupManager = new SignupManager(memberService);
         Member member = signupManager.getMember(data.getResponse());
+
         naverLoginService.setSecurityContext(member);
 
         Jwt jwt = commonService.getJWT(member.getIdentifyNo(), member.getAuthorities());
         session.setAttribute("accessToken", jwt.getAccessToken());
         session.setAttribute("refreshToken", jwt.getRefreshToken());
+
+        // TODO : testcase 추가, auth서버에서도 해당 로직을 추가로 보내줘야함
+        session.setAttribute("accessTokenExpireDateTime", jwt.getAccessTokenExpireDateTime());
+        session.setAttribute("refreshTokenExpireDateTime", jwt.getRefreshTokenExpireDateTime());
         return "all";
     }
 }

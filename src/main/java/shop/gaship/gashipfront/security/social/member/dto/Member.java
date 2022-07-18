@@ -30,4 +30,10 @@ public class Member {
     private String gender;
     private String mobile;
     private LocalDate birthDate;
+    // TODO : 테이블 컬럼 추가
+    private Boolean social;
+
+    public Boolean isSocial() {
+        return social;
+    }
 }
