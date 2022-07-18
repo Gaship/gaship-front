@@ -12,9 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import shop.gaship.gashipfront.exceptions.NoResponseDataException;
+import shop.gaship.gashipfront.tag.exceptions.NoResponseDataException;
 import shop.gaship.gashipfront.security.dto.SignInSuccessUserDetailsDto;
-import shop.gaship.gashipfront.util.WebClientUtil;
 
 /**
  * packageName    : shop.gaship.gashipauth.security <br/>

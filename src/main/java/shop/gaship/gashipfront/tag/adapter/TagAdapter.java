@@ -1,15 +1,14 @@
-package shop.gaship.gashipfront.service;
+package shop.gaship.gashipfront.tag.adapter;
 
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import shop.gaship.gashipfront.dto.*;
-
-import java.util.List;
+import shop.gaship.gashipfront.tag.dto.*;
 
 /**
- * packageName    : shop.gaship.gashipfront.service
- * fileName       : TagService
+ * packageName    : shop.gaship.gashipfront.repository
+ * fileName       : TagRepository
  * author         : choijungwoo
  * date           : 2022/07/15
  * description    :
@@ -18,8 +17,8 @@ import java.util.List;
  * -----------------------------------------------------------
  * 2022/07/15        choijungwoo       최초 생성
  */
-public interface TagService {
-    void addTag(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
+public interface TagAdapter {
+    Mono<Void> addTag(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
     void modifyTag(Integer adminId, TagModifyRequestDto tagModifyRequestDto);
     void removeTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto);
     Mono<TagResponseDto> findTag(Integer adminId, TagGetRequestDto tagGetRequestDto);

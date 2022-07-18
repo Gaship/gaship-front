@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.testDummy;
 
 import shop.gaship.gashipfront.dto.*;
+import shop.gaship.gashipfront.tag.dto.*;
 
 /**
  * packageName    : shop.gaship.gashipfront.testDummy

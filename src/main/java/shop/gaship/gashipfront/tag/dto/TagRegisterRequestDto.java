@@ -1,11 +1,11 @@
-package shop.gaship.gashipfront.dto;
+package shop.gaship.gashipfront.tag.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 /**
  * packageName    : shop.gaship.gashipfront.dto
- * fileName       : TagResponseDto
+ * fileName       : TagRegisterRequestDto
  * author         : choijungwoo
  * date           : 2022/07/15
  * description    :
@@ -15,9 +15,11 @@ import lombok.Getter;
  * 2022/07/15        choijungwoo       최초 생성
  */
 @Getter
-public class TagResponseDto {
+public class TagRegisterRequestDto {
+    private String title;
 
     @Builder
-    public TagResponseDto() {
+    public TagRegisterRequestDto(String title) {
+        this.title = title;
     }
 }

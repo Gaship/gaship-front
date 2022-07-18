@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.service;
+package shop.gaship.gashipfront.tag.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import shop.gaship.gashipfront.dto.*;
-import shop.gaship.gashipfront.repository.TagRepository;
-
-import java.util.List;
+import shop.gaship.gashipfront.tag.adapter.TagAdapter;
+import shop.gaship.gashipfront.tag.dto.*;
 
 /**
  * packageName    : shop.gaship.gashipfront.service
@@ -24,31 +23,31 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TagServiceImpl implements TagService {
-    private final TagRepository tagRepository;
+    private final TagAdapter tagAdapter;
 
     @Override
     public void addTag(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto) {
-        tagRepository.register(adminId, tagRegisterRequestDto);
+        tagAdapter.addTag(adminId, tagRegisterRequestDto);
     }
 
     @Override
     public void modifyTag(Integer adminId, TagModifyRequestDto tagModifyRequestDto) {
-        tagRepository.modifyTag(adminId, tagModifyRequestDto);
+        tagAdapter.modifyTag(adminId, tagModifyRequestDto);
     }
 
     @Override
     public void removeTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto) {
-        tagRepository.deleteTag(adminId, tagDeleteRequestDto);
+        tagAdapter.removeTag(adminId, tagDeleteRequestDto);
     }
 
     @Override
     public Mono<TagResponseDto> findTag(Integer adminId, TagGetRequestDto tagGetRequestDto) {
-        return tagRepository.getTag(adminId, tagGetRequestDto);
+        return tagAdapter.findTag(adminId, tagGetRequestDto);
     }
 
     @Override
     public Flux<TagResponseDto> findTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable) {
-        return tagRepository.getTags(adminId, tagGetRequestDto, pageable);
+        return tagAdapter.findTags(adminId, tagGetRequestDto, pageable);
     }
 
 }

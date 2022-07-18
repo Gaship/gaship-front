@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
-import shop.gaship.gashipfront.exceptions.NoResponseDataException;
+import shop.gaship.gashipfront.tag.exceptions.NoResponseDataException;
 
 /**
  * packageName    : shop.gaship.gashipauth.util

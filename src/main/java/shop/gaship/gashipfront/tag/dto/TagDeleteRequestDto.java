@@ -1,11 +1,11 @@
-package shop.gaship.gashipfront.dto;
+package shop.gaship.gashipfront.tag.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 /**
  * packageName    : shop.gaship.gashipfront.dto
- * fileName       : TagModifyRequestDto
+ * fileName       : TagDeleteRequestDto
  * author         : choijungwoo
  * date           : 2022/07/15
  * description    :
@@ -15,12 +15,12 @@ import lombok.Getter;
  * 2022/07/15        choijungwoo       최초 생성
  */
 @Getter
-public class TagModifyRequestDto {
+public class TagDeleteRequestDto {
     private Integer tagId;
     private String title;
 
     @Builder
-    public TagModifyRequestDto(Integer tagId, String title) {
+    public TagDeleteRequestDto(Integer tagId, String title) {
         this.tagId = tagId;
         this.title = title;
     }

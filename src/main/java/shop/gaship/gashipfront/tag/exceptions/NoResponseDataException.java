@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.exceptions;
+package shop.gaship.gashipfront.tag.exceptions;
 
 /**
  * packageName    : shop.gaship.gashipfront.exceptions <br/>

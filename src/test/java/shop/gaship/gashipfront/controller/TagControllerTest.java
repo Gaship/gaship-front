@@ -13,7 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import shop.gaship.gashipfront.service.TagService;
+import shop.gaship.gashipfront.tag.controller.TagController;
+import shop.gaship.gashipfront.tag.service.TagService;
 import shop.gaship.gashipfront.testDummy.FrontTagTestDummy;
 
 import static org.mockito.ArgumentMatchers.any;

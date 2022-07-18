@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.controller;
+package shop.gaship.gashipfront.tag.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -8,18 +8,11 @@ import org.springframework.web.servlet.ModelAndView;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import shop.gaship.gashipfront.dto.*;
-import shop.gaship.gashipfront.service.TagService;
+import shop.gaship.gashipfront.tag.service.TagService;
+import shop.gaship.gashipfront.tag.dto.*;
 
 /**
- * packageName    : shop.gaship.gashipfront.controller
- * fileName       : TagController
- * author         : choijungwoo
- * date           : 2022/07/15
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2022/07/15        choijungwoo       최초 생성
+ * The type Tag controller.
  */
 @Controller
 @RequiredArgsConstructor
@@ -28,7 +21,7 @@ public class TagController {
     private final TagService tagService;
 
     /**
-     * Register tag model and view.
+     * Tag add model and view.
      *
      * @param tagRegisterRequestDto the tag register request dto
      * @param adminId               the admin id
@@ -46,7 +39,7 @@ public class TagController {
 
 
     /**
-     * Modify tag model and view.
+     * Tag modify model and view.
      *
      * @param tagModifyRequestDto the tag modify request dto
      * @param adminId             the admin id
@@ -63,7 +56,7 @@ public class TagController {
     }
 
     /**
-     * Delete tag model and view.
+     * Tag remove model and view.
      *
      * @param tagDeleteRequestDto the tag delete request dto
      * @param adminId             the admin id
@@ -78,13 +71,14 @@ public class TagController {
         modelAndView.setViewName("redirect:/admins/" + adminId + "/tags");
         return modelAndView;
     }
+
     /**
-     * Gets tag.
+     * Tag details model and view.
      *
      * @param tagGetRequestDto the tag get request dto
      * @param adminId          the admin id
      * @param modelAndView     the model and view
-     * @return the tag
+     * @return the model and view
      */
     @GetMapping("/{tagId}")
     public ModelAndView tagDetails(@ModelAttribute TagGetRequestDto tagGetRequestDto,
@@ -97,13 +91,13 @@ public class TagController {
     }
 
     /**
-     * Gets tags.
+     * Tag list model and view.
      *
      * @param tagGetRequestDto the tag get request dto
      * @param adminId          the admin id
      * @param modelAndView     the model and view
      * @param pageable         the pageable
-     * @return the tags
+     * @return the model and view
      */
     @GetMapping
     public ModelAndView tagList(@ModelAttribute TagGetRequestDto tagGetRequestDto,
