@@ -32,6 +32,7 @@ import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserDataResponse;
+import shop.gaship.gashipfront.security.social.dance.service.impl.NaverLoginServiceImpl;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.social.common.exception.CsrfProtectedException;

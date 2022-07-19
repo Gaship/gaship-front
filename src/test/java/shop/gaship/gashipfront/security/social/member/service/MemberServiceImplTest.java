@@ -1,7 +1,6 @@
 package shop.gaship.gashipfront.security.social.member.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -21,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.service.impl.MemberServiceImpl;
 
 /**
  * @author : 최겸준

@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.controller;
+package shop.gaship.gashipfront.security.social.common.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

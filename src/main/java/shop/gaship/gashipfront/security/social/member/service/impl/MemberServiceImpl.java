@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.member.service;
+package shop.gaship.gashipfront.security.social.member.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.common.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
 /**
  * MemberService의 구현체입니다.
