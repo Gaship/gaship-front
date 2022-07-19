@@ -7,7 +7,7 @@ import shop.gaship.gashipfront.security.social.common.dto.ErrorResponse;
 import shop.gaship.gashipfront.security.social.common.exception.RequestFailureException;
 
 /**
- * @author : 최겸준
+ * @author : 김보민
  * @since 1.0
  */
 public class ExceptionUtil {

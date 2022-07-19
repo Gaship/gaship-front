@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.security.social.member.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -20,8 +21,8 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
-    private Integer identifyNo;
+public class Member implements Serializable {
+    private Integer memberNo;
     private String email;
     private List<String> authorities;
     private String password;
@@ -31,6 +32,8 @@ public class Member {
     private String mobile;
     private LocalDate birthDate;
     // TODO : 테이블 컬럼 추가
+
+
     private Boolean social;
 
     public Boolean isSocial() {

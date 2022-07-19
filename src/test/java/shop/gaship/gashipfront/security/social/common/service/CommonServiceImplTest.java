@@ -3,7 +3,6 @@ package shop.gaship.gashipfront.security.social.common.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -20,12 +19,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
-import shop.gaship.gashipfront.security.social.common.service.CommonService;
-import shop.gaship.gashipfront.security.social.common.service.CommonServiceImpl;
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.common.service.impl.CommonServiceImpl;
 import shop.gaship.gashipfront.security.social.common.dto.Jwt;
 
 /**

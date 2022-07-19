@@ -8,9 +8,9 @@ package shop.gaship.gashipfront.security.social.common.exception;
  */
 public class CsrfProtectedException extends RuntimeException {
     /**
-     * Instantiates a new Csrf protected exception.
+     * CsrfProtectedException클래스를 객체화시키기 위한 생성자입니다.
      *
-     * @param message the message
+     * @param message 예외 메세지를 저장하고있는 변수입니다.
      */
     public CsrfProtectedException(String message) {
         super(message);

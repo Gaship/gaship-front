@@ -16,14 +16,12 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.gaship.gashipfront.config.SecurityConfig;
 import shop.gaship.gashipfront.security.social.common.service.CommonService;
-import shop.gaship.gashipfront.security.social.dance.controller.OauthController;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.common.dto.Jwt;
 import shop.gaship.gashipfront.security.social.dance.service.NaverLoginService;
-import shop.gaship.gashipfront.security.social.common.util.SignupManager;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -148,7 +146,7 @@ class OauthControllerTest {
         Member member = new Member();
         member.setEmail("abc@naver.com");
         member.setPassword("1234");
-        member.setIdentifyNo(123412);
+        member.setMemberNo(123412);
 
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");

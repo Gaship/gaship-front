@@ -49,10 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .defaultSuccessUrl("/all")
             .failureUrl("/login")
             .successHandler(oauth2LoginSuccessHandler(null));
-//            .failureHandler((request, response, exception) -> {
-//                response.get
-//                response.sendRedirect();
-//            }));
 
         http.csrf().disable();
 //        http.logout().disable();

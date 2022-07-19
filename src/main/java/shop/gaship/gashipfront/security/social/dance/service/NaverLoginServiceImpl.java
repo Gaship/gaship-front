@@ -25,7 +25,7 @@ import shop.gaship.gashipfront.security.social.common.exception.RequestFailureEx
 
 
 /**
- * The type Naver login service.
+ * NaverLoginService 의 구현체입니다.
  *
  * @author : 최겸준
  * @see NaverLoginService

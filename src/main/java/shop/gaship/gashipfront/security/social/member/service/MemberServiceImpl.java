@@ -8,7 +8,7 @@ import shop.gaship.gashipfront.security.social.common.exception.RequestFailureEx
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 
 /**
- * The type Signup service.
+ * MemberService의 구현체입니다.
  *
  * @author : 최겸준
  * @see MemberService

@@ -42,17 +42,21 @@ public interface Adapter {
     Member requestMemberByEmail(String email);
 
     /**
-     * @param details dto
-     * @return response entity
+     * shopping-mall API에 jwt 토큰을 요청하고 반환받는 기능입니다.
+     *
+     * @param detailsDto 요청을 보낼때 담아줘야하는 정보객체입니다.
+     * @return Jwt jwt 토큰을 반환합니다.
      * @author 최겸준
      */
     Jwt requestJwt(SigninSuccessUserDetailsDto detailsDto);
 
     /**
-     * @param member creation request
+     * 멤버의 회원가입 요청을 담당하는 기능입니다.
+     *
+     * @param member 회원가입시 필요한 정보를 담고있는 Memeber객체입니다.
      * @author 최겸준
      */
-    void requestCreateMember(Member memberCreationRequest);
+    void requestCreateMember(Member member);
 
     Integer requestLastMemberNo();
 }

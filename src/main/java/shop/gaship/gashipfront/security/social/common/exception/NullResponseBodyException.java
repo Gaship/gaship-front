@@ -8,7 +8,7 @@ package shop.gaship.gashipfront.security.social.common.exception;
  */
 public class NullResponseBodyException extends RuntimeException {
     /**
-     * Instantiates a new Null response body exception.
+     * NullResponseBodyException 클래스를 객체화시키기 위한 생성자입니다. 해당 생성자는 항상 같은 값을 반환하기위해서 message를 파라미터로 받지 않습니다.
      */
     public NullResponseBodyException() {
         super("body is null : 서버에서 받아온 ResponseEntity의 body에 값이 없습니다.");

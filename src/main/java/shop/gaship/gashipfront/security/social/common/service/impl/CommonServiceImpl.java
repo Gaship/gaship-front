@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.common.service;
+package shop.gaship.gashipfront.security.social.common.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.common.dto.Jwt;
 import shop.gaship.gashipfront.security.social.common.dto.SigninSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.social.common.service.CommonService;
 
 /**
  * CommonService 구현체
@@ -20,9 +21,9 @@ public class CommonServiceImpl implements CommonService {
     private final Adapter adapter;
 
     @Override
-    public Jwt getJWT(Integer identifyNo, List<String> authorities) throws Exception {
+    public Jwt getJWT(Integer memberNo, List<String> authorities) {
         SigninSuccessUserDetailsDto detailsDto = new SigninSuccessUserDetailsDto();
-        detailsDto.setIdentifyNo(identifyNo);
+        detailsDto.setIdentifyNo(memberNo);
         detailsDto.setAuthorities(authorities);
 
         return adapter.requestJwt(detailsDto);

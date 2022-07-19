@@ -14,7 +14,7 @@ import shop.gaship.gashipfront.security.social.common.util.ExceptionUtil;
 import shop.gaship.gashipfront.security.social.common.exception.NullResponseBodyException;
 
 /**
- * The type Adapter.
+ * Adapter interface의 구현체입니다.
  *
  * @author : 최겸준
  * @see Adapter

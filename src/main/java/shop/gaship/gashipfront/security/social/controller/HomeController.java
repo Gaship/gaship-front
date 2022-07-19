@@ -1,6 +1,7 @@
-package shop.gaship.gashipfront.security.social.common.controller;
+package shop.gaship.gashipfront.security.social.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ public class HomeController {
 
     @GetMapping("/all")
     public String all(@AuthenticationPrincipal UserDetailsDto userDetailsDto, HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        session.setAttribute("jordan", "ggoo");
         return "all";
     }
 
@@ -32,5 +35,10 @@ public class HomeController {
     @GetMapping("/admin")
     public String admin() {
         return "admin";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "showLoginForm";
     }
 }

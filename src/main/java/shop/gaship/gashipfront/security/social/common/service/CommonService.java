@@ -12,12 +12,11 @@ import shop.gaship.gashipfront.security.social.member.dto.Member;
  */
 public interface CommonService {
     /**
-     * Gets jwt.
+     * jwt를 요청하고 반환받는 기능입니다.
      *
-     * @param identifyNo  the identify no
-     * @param Authorities the authorities
-     * @return the jwt
-     * @throws Exception the exception
+     * @param memberNo 멤버의 고유번호입니다.
+     * @param Authorities 멤버의 권한들입니다.
+     * @return 반환받을 Jwt dto 객체입니다.
      */
-    Jwt getJWT(Integer identifyNo, List<String> Authorities) throws Exception;
+    Jwt getJWT(Integer memberNo, List<String> Authorities);
 }

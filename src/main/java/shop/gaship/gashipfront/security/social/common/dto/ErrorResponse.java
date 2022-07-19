@@ -10,18 +10,18 @@ public class ErrorResponse {
     private String message;
 
     /**
-     * Instantiates a new Error response.
+     * ErrorResponse 클래스의 생성자입니다.
      *
-     * @param message the message
+     * @param message 요청한 API서버로부터 넘어온 예외에 대한 message를 저장하는 변수입니다.
      */
     public ErrorResponse(String message) {
         this.message = message;
     }
 
     /**
-     * Gets message.
+     * getter 입니다.
      *
-     * @return the message
+     * @return String
      */
     public String getMessage() {
         return message;
