@@ -58,7 +58,7 @@ public class AdapterImpl implements Adapter {
             .build();
 
         return webClient.get()
-            .uri("/members/{email}", email)
+            .uri("/members/email/{email}", email)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(Member.class)
@@ -69,7 +69,7 @@ public class AdapterImpl implements Adapter {
     @Override
     public void requestCreateMember(Member member) {
         WebClient.create("http://localhost:7072").post()
-            .uri("/member")
+            .uri("/members?isOauth=true")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(member)
             .retrieve()
