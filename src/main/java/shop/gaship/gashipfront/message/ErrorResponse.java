@@ -1,5 +1,7 @@
 package shop.gaship.gashipfront.message;
 
+import lombok.NoArgsConstructor;
+
 /**
  * packageName    : shop.gaship.gashipshoppingmall.message
  * fileName       : ErrorResponse
@@ -11,6 +13,7 @@ package shop.gaship.gashipfront.message;
  * -----------------------------------------------------------
  * 2022-07-14        김보민       최초 생성
  */
+@NoArgsConstructor
 public class ErrorResponse {
     private String message;
 

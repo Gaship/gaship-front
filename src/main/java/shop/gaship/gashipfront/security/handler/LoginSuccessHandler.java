@@ -1,27 +1,25 @@
 package shop.gaship.gashipfront.security.handler;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipfront.exceptions.NoResponseDataException;
 import shop.gaship.gashipfront.security.dto.JwtTokenDto;
-import shop.gaship.gashipfront.security.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.dto.SignInUserDetailsDto;
 import shop.gaship.gashipfront.security.dto.TokenRequestDto;
-import shop.gaship.gashipfront.util.WebClientUtil;
+import shop.gaship.gashipfront.util.ExceptionUtil;
 
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-    private static final int THIRTY_MINUTE_AT_MILLI_SECONDS = 1_800;
-    private static final int ONE_MONTH_AT_MILLI_SECONDS = 2_629_700;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication)
-        throws ServletException, IOException {
-        SignInSuccessUserDetailsDto details =
-            (SignInSuccessUserDetailsDto) authentication.getPrincipal();
+                                        Authentication authentication) {
+        SignInUserDetailsDto details =
+            (SignInUserDetailsDto) authentication.getPrincipal();
 
         TokenRequestDto tokenRequestDto =
             new TokenRequestDto(
@@ -30,36 +28,23 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
                 details.getAuthorities()
             );
 
-        JwtTokenDto tokensResponse = new WebClientUtil<JwtTokenDto>().post(
-            "http://localhost:7071",
-            "/securities/issue-token",
-            null,
-            null,
-            tokenRequestDto,
-            JwtTokenDto.class
-        ).getBody();
+        JwtTokenDto tokensResponse = WebClient.create("http://localhost:7070").post()
+            .uri("/securities/issue-token")
+            .bodyValue(tokenRequestDto)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .toEntity(JwtTokenDto.class)
+            .blockOptional()
+            .orElseThrow(() -> new NoResponseDataException(""))
+            .getBody();
 
-        Cookie accessTokenCookie =
-            generateTokenCookie("accessToken",
-                tokensResponse.getAccessToken(),
-                THIRTY_MINUTE_AT_MILLI_SECONDS
-            );
-        Cookie refreshTokenCookie =
-            generateTokenCookie("refreshToken",
-            tokensResponse.getRefreshToken(),
-            ONE_MONTH_AT_MILLI_SECONDS
-        );
-        response.addCookie(accessTokenCookie);
-        response.addCookie(refreshTokenCookie);
+        HttpSession session = request.getSession(false);
 
-        super.onAuthenticationSuccess(request, response, authentication);
-    }
-
-    public Cookie generateTokenCookie(String cookieKeyName, String tokenValue, int expireSeconds) {
-        Cookie tokenCookie = new Cookie(cookieKeyName, tokenValue);
-        tokenCookie.setHttpOnly(true);
-        tokenCookie.setMaxAge(expireSeconds);
-
-        return tokenCookie;
+        if(Objects.isNull(session)){
+            session = request.getSession();
+        }
+        // 세션에 토큰 저장
+        session.setAttribute("accessToken", tokensResponse.getAccessToken());
+        session.setAttribute("refreshToken", tokensResponse.getRefreshToken());
     }
 }

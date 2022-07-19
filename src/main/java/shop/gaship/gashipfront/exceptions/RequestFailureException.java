@@ -1,6 +1,5 @@
 package shop.gaship.gashipfront.exceptions;
 
-import shop.gaship.gashipfront.category.adaptor.CategoryAdaptor;
 import shop.gaship.gashipfront.message.ErrorResponse;
 
 /**

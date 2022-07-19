@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.security.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.dto <br/>
@@ -13,7 +14,8 @@ import lombok.Data;
  * -----------------------------------------------------------  <br/>
  * 2022/07/11           김민수               최초 생성                         <br/>
  */
-@Data
+@Getter
+@AllArgsConstructor
 public class JwtTokenDto {
     private String accessToken;
     private String refreshToken;
