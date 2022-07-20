@@ -1,33 +1,31 @@
 package shop.gaship.gashipfront.config;
 
+import java.security.Key;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
-import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
-import shop.gaship.gashipfront.security.social.common.service.CommonService;
-import shop.gaship.gashipfront.security.social.oauth2.handler.Oauth2LoginSuccessHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import shop.gaship.gashipfront.security.CustomUserDetailService;
+import shop.gaship.gashipfront.security.handler.LoginSuccessHandler;
 
 /**
- * packageName    : shop.gaship.gashipfront.configure <br/>
- * fileName       : SecurityConfig <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/11 <br/>
- * description    : <br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/11           김민수               최초 생성                         <br/>
+ * SpringSecurity에 관련한 전반적인 설정을 다루는 클래스입니다.
+ *
+ * @author 김민수
+ * @author 최겸준
+ * @author 조재철
+ * @since 1.0
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -50,14 +48,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginPage("/login")
             .defaultSuccessUrl("/all")
             .failureUrl("/login")
-            .successHandler(oauth2LoginSuccessHandler(null));
+            .and();
 
         http.csrf().disable();
-//        http.logout().disable();
+        http.logout().disable();
+    }
+
+    @Override
+    public void configure(WebSecurity webSecurity) {
+        webSecurity.ignoring()
+            .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger/**");
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(CustomUserDetailService customUserDetailService) {
+    public AuthenticationProvider authenticationProvider(
+        CustomUserDetailService customUserDetailService) {
         DaoAuthenticationProvider customDaoAuthenticationProvider = new DaoAuthenticationProvider();
         customDaoAuthenticationProvider.setUserDetailsService(customUserDetailService);
         customDaoAuthenticationProvider.setPasswordEncoder(passwordEncoder());

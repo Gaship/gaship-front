@@ -17,6 +17,10 @@ import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
+/**
+ * @author 조재철
+ * @since 1.0
+ */
 @Configuration
 public class RedisConfig implements BeanClassLoaderAware {
     @Value("${redis.host}")
@@ -35,6 +39,10 @@ public class RedisConfig implements BeanClassLoaderAware {
 
     private ClassLoader classLoader;
 
+    /**
+     * @return redis connection factory
+     * @author 조재철
+     */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
@@ -46,6 +54,10 @@ public class RedisConfig implements BeanClassLoaderAware {
         return new LettuceConnectionFactory(configuration);
     }
 
+    /**
+     * @return redis template
+     * @author 조재철
+     */
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();

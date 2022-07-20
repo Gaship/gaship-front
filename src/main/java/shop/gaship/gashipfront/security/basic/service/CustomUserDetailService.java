@@ -12,15 +12,8 @@ import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.util.WebClientUtil;
 
 /**
- * packageName    : shop.gaship.gashipauth.security <br/>
- * fileName       : CustomUserDetailService <br/>
- * author         : 김민수 <br/>
- * date           : 2022/07/10 <br/>
- * description    : <br/>
- * ===========================================================  <br/>
- * DATE              AUTHOR             NOTE                    <br/>
- * -----------------------------------------------------------  <br/>
- * 2022/07/10        김민수               최초 생성                 <br/>
+ * @author 조재철
+ * @since 1.0
  */
 @Service
 public class CustomUserDetailService implements UserDetailsService {

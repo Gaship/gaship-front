@@ -12,6 +12,10 @@ import shop.gaship.gashipfront.security.basic.dto.JwtTokenDto;
 import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.util.WebClientUtil;
 
+/**
+ * @author 조재철
+ * @since 1.0
+ */
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     private static final int THIRTY_MINUTE_AT_MILLI_SECONDS = 1_800;
     private static final int ONE_MONTH_AT_MILLI_SECONDS = 2_629_700;
