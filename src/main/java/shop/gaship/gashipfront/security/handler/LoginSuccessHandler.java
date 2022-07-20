@@ -12,6 +12,10 @@ import shop.gaship.gashipfront.security.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.dto.TokenRequestDto;
 import shop.gaship.gashipfront.util.WebClientUtil;
 
+/**
+ * @author 조재철
+ * @since 1.0
+ */
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

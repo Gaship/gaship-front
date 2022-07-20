@@ -12,6 +12,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ * @author 조재철
+ * @since 1.0
+ */
 @Configuration
 @PropertySource("classpath:redis.properties")
 public class RedisConfig implements BeanClassLoaderAware {
@@ -29,6 +33,10 @@ public class RedisConfig implements BeanClassLoaderAware {
 
     private ClassLoader classLoader;
 
+    /**
+     * @return redis connection factory
+     * @author 조재철
+     */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
@@ -40,6 +48,10 @@ public class RedisConfig implements BeanClassLoaderAware {
         return new LettuceConnectionFactory(configuration);
     }
 
+    /**
+     * @return redis template
+     * @author 조재철
+     */
     @Bean
     public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
