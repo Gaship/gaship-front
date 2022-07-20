@@ -3,8 +3,15 @@ package shop.gaship.gashipfront.security.dto;
 import lombok.Data;
 
 /**
- * @author : 조재철
- * @since 1.0
+ * packageName    : shop.gaship.gashipfront.security.dto <br/>
+ * fileName       : JwtTokenDto <br/>
+ * author         : 김민수 <br/>
+ * date           : 2022/07/11 <br/>
+ * description    : <br/>
+ * ===========================================================  <br/>
+ * DATE              AUTHOR             NOTE                    <br/>
+ * -----------------------------------------------------------  <br/>
+ * 2022/07/11           김민수               최초 생성                         <br/>
  */
 @Data
 public class JwtTokenDto {
