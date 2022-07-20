@@ -1,12 +1,9 @@
 package shop.gaship.gashipfront.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -72,20 +69,6 @@ public class RedisConfig implements BeanClassLoaderAware {
 
         return serializer;
     }
-
-//    @Bean
-//    public ObjectMapper objectMapper() {
-//        ObjectMapper objectMapper = new ObjectMapper();
-////        objectMapper.registerModules(SecurityJackson2Modules.getModules(classLoader));
-//        objectMapper.registerModules(new CoreJackson2Module());
-//
-//        return objectMapper;
-//    }
-
-//    @Bean
-//    public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-//        return new GenericJackson2JsonRedisSerializer(objectMapper());
-//    }
 
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
