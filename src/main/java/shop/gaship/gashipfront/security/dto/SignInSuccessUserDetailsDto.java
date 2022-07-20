@@ -8,15 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * packageName    : shop.gaship.gashipauth.signin.dto
- * fileName       : SignInDto
- * author         : oct_sky_out
- * date           : 2022/07/09
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2022/07/09        oct_sky_out       최초 생성
+ * @author : 조재철
+ * @since 1.0
  */
 public class SignInSuccessUserDetailsDto implements UserDetails {
     private Long identifyNo;
@@ -61,6 +54,11 @@ public class SignInSuccessUserDetailsDto implements UserDetails {
         return true;
     }
 
+    /**
+     * Gets identify no.
+     *
+     * @return the identify no
+     */
     public Long getIdentifyNo() {
         return identifyNo;
     }

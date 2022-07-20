@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.security.dto;
 
+import java.time.LocalDate;
 import lombok.Data;
 
 /**
@@ -7,7 +8,7 @@ import lombok.Data;
  * @since 1.0
  */
 @Data
-public class JwtTokenDto {
-    private String accessToken;
-    private String refreshToken;
+public class JwtTokenExpireTimeDto {
+    private final LocalDate accessTokenExpireTime;
+
 }
