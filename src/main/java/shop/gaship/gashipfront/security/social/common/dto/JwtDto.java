@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Jwt {
+public class JwtDto {
     private String accessToken;
     private String refreshToken;
     private LocalDateTime accessTokenExpireDateTime;

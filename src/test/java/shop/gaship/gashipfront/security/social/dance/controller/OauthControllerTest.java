@@ -20,7 +20,7 @@ import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.dto.Jwt;
+import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.dance.service.NaverLoginService;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
@@ -99,7 +99,7 @@ class OauthControllerTest {
         givingNaverAccessToken();
         givingNaverUserData();
         givingMember();
-        Jwt jwt = givingJwt();
+        JwtDto jwt = givingJwt();
 
         // when then
         MockHttpSession session = new MockHttpSession();
@@ -156,8 +156,8 @@ class OauthControllerTest {
             .willReturn(member);
     }
 
-    private Jwt givingJwt() throws Exception {
-        Jwt jwt = new Jwt();
+    private JwtDto givingJwt() throws Exception {
+        JwtDto jwt = new JwtDto();
         jwt.setAccessToken("jwt access token");
         jwt.setRefreshToken("jwt refresh token");
 

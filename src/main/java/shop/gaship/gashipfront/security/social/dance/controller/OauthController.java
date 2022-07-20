@@ -16,7 +16,7 @@ import shop.gaship.gashipfront.security.social.common.service.CommonService;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
-import shop.gaship.gashipfront.security.social.common.dto.Jwt;
+import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.dance.service.NaverLoginService;
 import shop.gaship.gashipfront.security.social.common.util.SignupManager;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
@@ -76,11 +76,9 @@ public class OauthController {
 
         naverLoginService.setSecurityContext(member);
 
-        Jwt jwt = commonService.getJWT(member.getMemberNo(), member.getAuthorities());
+        JwtDto jwt = commonService.getJWT(member.getMemberNo(), member.getAuthorities());
         session.setAttribute("accessToken", jwt.getAccessToken());
         session.setAttribute("refreshToken", jwt.getRefreshToken());
-
-        // TODO : testcase 추가, auth서버에서도 해당 로직을 추가로 보내줘야함
         session.setAttribute("accessTokenExpireDateTime", jwt.getAccessTokenExpireDateTime());
         session.setAttribute("refreshTokenExpireDateTime", jwt.getRefreshTokenExpireDateTime());
         return "all";

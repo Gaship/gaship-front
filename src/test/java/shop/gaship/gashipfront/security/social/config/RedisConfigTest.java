@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.test.context.TestPropertySource;
 
 /**
  * @author : 최겸준
  * @since 1.0
  */
 @SpringBootTest
-@EnableRedisHttpSession
+@TestPropertySource("classpath:application-dev.properties")
 public class RedisConfigTest {
     @Autowired
     private RedisTemplate redisTemplate;

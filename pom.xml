@@ -90,7 +90,6 @@
             <scope>test</scope>
         </dependency>
 
-        // TODO : lettuce가 누구에게 있는가
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>

@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
-import shop.gaship.gashipfront.security.social.common.dto.Jwt;
+import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.common.dto.SigninSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.social.common.service.CommonService;
 
@@ -21,7 +21,7 @@ public class CommonServiceImpl implements CommonService {
     private final Adapter adapter;
 
     @Override
-    public Jwt getJWT(Integer memberNo, List<String> authorities) {
+    public JwtDto getJWT(Integer memberNo, List<String> authorities) {
         SigninSuccessUserDetailsDto detailsDto = new SigninSuccessUserDetailsDto();
         detailsDto.setIdentifyNo(memberNo);
         detailsDto.setAuthorities(authorities);

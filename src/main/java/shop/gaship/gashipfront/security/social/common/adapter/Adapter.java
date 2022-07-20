@@ -3,7 +3,7 @@ package shop.gaship.gashipfront.security.social.common.adapter;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.dto.Jwt;
+import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.common.dto.SigninSuccessUserDetailsDto;
 
 /**
@@ -48,7 +48,7 @@ public interface Adapter {
      * @return Jwt jwt 토큰을 반환합니다.
      * @author 최겸준
      */
-    Jwt requestJwt(SigninSuccessUserDetailsDto detailsDto);
+    JwtDto requestJwt(SigninSuccessUserDetailsDto detailsDto);
 
     /**
      * 멤버의 회원가입 요청을 담당하는 기능입니다.

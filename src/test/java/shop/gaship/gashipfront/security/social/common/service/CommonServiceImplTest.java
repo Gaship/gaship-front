@@ -22,7 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.common.service.impl.CommonServiceImpl;
-import shop.gaship.gashipfront.security.social.common.dto.Jwt;
+import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.common
@@ -60,14 +60,14 @@ class CommonServiceImplTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Jwt dummyToken = new Jwt();
+        JwtDto dummyToken = new JwtDto();
         dummyToken.setAccessToken(accessToken);
         dummyToken.setRefreshToken(refreshToken);
 
         given(adapter.requestJwt(any()))
             .willReturn(dummyToken);
         // when
-        Jwt token = commonService.getJWT(identifyNo, authorities);
+        JwtDto token = commonService.getJWT(identifyNo, authorities);
 
         // then
         verify(adapter).requestJwt(any());

@@ -1,8 +1,7 @@
 package shop.gaship.gashipfront.security.social.common.service;
 
 import java.util.List;
-import shop.gaship.gashipfront.security.social.common.dto.Jwt;
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
 
 /**
  * 다른 controller에서도 공통으로 사용할만한 기능들을 모아놓는 service입니다.
@@ -18,5 +17,5 @@ public interface CommonService {
      * @param Authorities 멤버의 권한들입니다.
      * @return 반환받을 Jwt dto 객체입니다.
      */
-    Jwt getJWT(Integer memberNo, List<String> Authorities);
+    JwtDto getJWT(Integer memberNo, List<String> Authorities);
 }

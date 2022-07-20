@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
-import shop.gaship.gashipfront.security.dto.JwtTokenDto;
+import shop.gaship.gashipfront.security.basic.dto.JwtTokenDto;
 
 /**
  * The type Check access token expire time aspect.

@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.dto.Jwt;
+import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.common.dto.SigninSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.social.common.util.ExceptionUtil;
 import shop.gaship.gashipfront.security.social.common.exception.NullResponseBodyException;
@@ -53,7 +53,7 @@ public class AdapterImpl implements Adapter {
     public Member requestMemberByEmail(String email) {
         WebClient webClient
             = WebClient.builder()
-            .baseUrl("http://localhost:7072")
+            .baseUrl("http://localhost:7000")
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .build();
 
@@ -68,7 +68,7 @@ public class AdapterImpl implements Adapter {
 
     @Override
     public void requestCreateMember(Member member) {
-        WebClient.create("http://localhost:7072").post()
+        WebClient.create("http://localhost:7000").post()
             .uri("/members?isOauth=true")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(member)
@@ -80,7 +80,7 @@ public class AdapterImpl implements Adapter {
     public Integer requestLastMemberNo() {
         WebClient webClient
             = WebClient.builder()
-                .baseUrl("http://localhost:7072")
+                .baseUrl("http://localhost:7000")
                 .defaultHeader("Accept", MediaType.TEXT_PLAIN_VALUE)
                 .build();
 
@@ -94,10 +94,11 @@ public class AdapterImpl implements Adapter {
     }
 
     @Override
-    public Jwt requestJwt(SigninSuccessUserDetailsDto detailsDto) {
+    public JwtDto requestJwt(SigninSuccessUserDetailsDto detailsDto) {
         WebClient webClient
             = WebClient.builder()
-            .baseUrl("http://localhost:7071")
+//            .baseUrl("http://localhost:7000")
+            .baseUrl("http://192.168.0.2:7070")
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .build();
 
@@ -106,7 +107,7 @@ public class AdapterImpl implements Adapter {
             .bodyValue(detailsDto)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-            .bodyToMono(Jwt.class)
+            .bodyToMono(JwtDto.class)
             .blockOptional()
             .orElseThrow(NullResponseBodyException::new);
     }

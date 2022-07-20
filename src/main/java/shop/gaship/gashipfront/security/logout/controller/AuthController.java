@@ -1,10 +1,10 @@
-package shop.gaship.gashipfront.security.controller;
+package shop.gaship.gashipfront.security.logout.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import shop.gaship.gashipfront.security.service.AuthService;
+import shop.gaship.gashipfront.security.logout.service.AuthService;
 
 
 /**
@@ -23,15 +23,6 @@ public class AuthController {
     @GetMapping("/logout")
     public ResponseEntity<?> hi() {
         return authService.logout();
-    }
-
-    /**
-     * @return string
-     * @author 조재철
-     */
-    @GetMapping("/")
-    public String hello() {
-        return "hello";
     }
 }
 
