@@ -8,9 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.logout.adaptor.AuthAdaptor;
-import shop.gaship.gashipfront.security.basic.dto.JwtTokenDto;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
-import shop.gaship.gashipfront.util.WebClientUtil;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
  * @author 조재철

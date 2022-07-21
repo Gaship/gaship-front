@@ -1,10 +1,10 @@
-package shop.gaship.gashipfront.security.social.common.util;
+package shop.gaship.gashipfront.security.common.util;
 
 import java.util.function.Function;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import reactor.core.publisher.Mono;
-import shop.gaship.gashipfront.security.social.common.dto.ErrorResponse;
-import shop.gaship.gashipfront.security.social.common.exception.RequestFailureException;
+import shop.gaship.gashipfront.security.common.dto.ErrorResponse;
+import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
 
 /**
  * @author : 김보민

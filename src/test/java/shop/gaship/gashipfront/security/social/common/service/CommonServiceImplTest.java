@@ -20,9 +20,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
-import shop.gaship.gashipfront.security.social.common.service.impl.CommonServiceImpl;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.adapter.Adapter;
+import shop.gaship.gashipfront.security.common.service.CommonService;
+import shop.gaship.gashipfront.security.common.service.impl.CommonServiceImpl;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.common

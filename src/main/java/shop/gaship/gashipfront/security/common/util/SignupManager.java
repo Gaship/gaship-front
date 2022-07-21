@@ -1,12 +1,14 @@
-package shop.gaship.gashipfront.security.social.common.util;
+package shop.gaship.gashipfront.security.common.util;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
+import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
 /**
@@ -35,7 +37,14 @@ public class SignupManager {
         Member member;
 
         try {
-            member = memberService.getMemberByEmail(info.getEmail());
+//            member = memberService.getMemberByEmail(info.getEmail());
+            member = new Member();
+            member.setMemberNo(1);
+            member.setEmail(info.getEmail());
+            member.setPassword("1234");
+            List<String> authorities = new ArrayList<>();
+            authorities.add("USER");
+            member.setAuthorities(authorities);
         } catch (RequestFailureException e) {
             if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) throw e;
             return retryGetMember(info);

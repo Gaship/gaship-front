@@ -1,17 +1,17 @@
-package shop.gaship.gashipfront.security.social.common.adapter;
+package shop.gaship.gashipfront.security.common.adapter;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
-import shop.gaship.gashipfront.security.social.common.dto.SigninSuccessUserDetailsDto;
-import shop.gaship.gashipfront.security.social.common.util.ExceptionUtil;
-import shop.gaship.gashipfront.security.social.common.exception.NullResponseBodyException;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.SigninSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.common.util.ExceptionUtil;
 
 /**
  * Adapter interface의 구현체입니다.

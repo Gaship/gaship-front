@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.config;
 
+import lombok.Getter;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +23,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
  * @since 1.0
  */
 @Configuration
+@Getter
 public class RedisConfig implements BeanClassLoaderAware {
     @Value("${redis.host}")
     private String host;

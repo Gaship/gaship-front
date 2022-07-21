@@ -1,5 +1,6 @@
-package shop.gaship.gashipfront.security.social.common.dto;
+package shop.gaship.gashipfront.security.common.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class JwtDto {
+public class JwtDto implements Serializable {
     private String accessToken;
     private String refreshToken;
     private LocalDateTime accessTokenExpireDateTime;

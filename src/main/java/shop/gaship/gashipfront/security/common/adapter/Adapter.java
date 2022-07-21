@@ -1,10 +1,10 @@
-package shop.gaship.gashipfront.security.social.common.adapter;
+package shop.gaship.gashipfront.security.common.adapter;
 
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
-import shop.gaship.gashipfront.security.social.common.dto.SigninSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.SigninSuccessUserDetailsDto;
 
 /**
  * api서버에 요청을 처리하는 기능을 담당하는 interface입니다.

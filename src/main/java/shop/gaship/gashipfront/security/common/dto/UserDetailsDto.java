@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.common.dto;
+package shop.gaship.gashipfront.security.common.dto;
 
 import java.util.Collection;
 import java.util.Map;

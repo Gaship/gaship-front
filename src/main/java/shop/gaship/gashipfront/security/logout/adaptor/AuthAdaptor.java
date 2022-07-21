@@ -1,8 +1,7 @@
 package shop.gaship.gashipfront.security.logout.adaptor;
 
 import org.springframework.http.ResponseEntity;
-import shop.gaship.gashipfront.security.basic.dto.JwtTokenDto;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
  * @author 조재철

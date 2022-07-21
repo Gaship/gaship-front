@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
-import shop.gaship.gashipfront.security.social.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.social.common.service.CommonService;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
+import shop.gaship.gashipfront.security.common.service.CommonService;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 
 /**
@@ -45,5 +45,6 @@ public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         HttpSession session = request.getSession();
         session.setAttribute("accessToken", jwt.getAccessToken());
         session.setAttribute("refreshToken", jwt.getRefreshToken());
+        session.setAttribute("jwt", jwt);
     }
 }

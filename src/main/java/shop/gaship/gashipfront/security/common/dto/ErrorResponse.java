@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.common.dto;
+package shop.gaship.gashipfront.security.common.dto;
 
 /**
  * api 서버에서 예외가 발생해서 넘어온 경우 body의 값을 받을 dto 입니다.

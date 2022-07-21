@@ -15,14 +15,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
+import shop.gaship.gashipfront.security.common.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dance.service.NaverLoginService;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.social.common.exception.CsrfProtectedException;
-import shop.gaship.gashipfront.security.social.common.exception.RequestFailureException;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
+import shop.gaship.gashipfront.security.common.exception.CsrfProtectedException;
+import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
 
 
 /**

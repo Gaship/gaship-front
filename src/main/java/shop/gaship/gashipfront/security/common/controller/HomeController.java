@@ -1,11 +1,11 @@
-package shop.gaship.gashipfront.security.social.common.controller;
+package shop.gaship.gashipfront.security.common.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import shop.gaship.gashipfront.security.social.common.dto.UserDetailsDto;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 
 /**
  * /, all, manager 등 간단한 테스트를 위해서 만들어놓은 url입니다.

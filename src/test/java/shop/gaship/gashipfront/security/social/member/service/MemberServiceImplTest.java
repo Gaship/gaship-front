@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
+import shop.gaship.gashipfront.security.common.adapter.Adapter;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.member.service.impl.MemberServiceImpl;
 

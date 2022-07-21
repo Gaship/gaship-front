@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.logout.adaptor.AuthAdaptor;
 import shop.gaship.gashipfront.security.logout.service.AuthService;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
  * The type Auth service.

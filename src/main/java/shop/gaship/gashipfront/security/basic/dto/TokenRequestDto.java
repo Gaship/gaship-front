@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Getter
 @AllArgsConstructor
 public class TokenRequestDto {
-    private final Long identifyNo;
+    private final Integer memberNo;
     private final String email;
     private final Collection<? extends GrantedAuthority> authorities;
 }

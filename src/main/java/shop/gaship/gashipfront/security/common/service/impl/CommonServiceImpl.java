@@ -1,12 +1,12 @@
-package shop.gaship.gashipfront.security.social.common.service.impl;
+package shop.gaship.gashipfront.security.common.service.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.security.social.common.adapter.Adapter;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
-import shop.gaship.gashipfront.security.social.common.dto.SigninSuccessUserDetailsDto;
-import shop.gaship.gashipfront.security.social.common.service.CommonService;
+import shop.gaship.gashipfront.security.common.adapter.Adapter;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.SigninSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.common.service.CommonService;
 
 /**
  * CommonService 구현체

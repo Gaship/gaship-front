@@ -1,7 +1,7 @@
-package shop.gaship.gashipfront.security.social.common.service;
+package shop.gaship.gashipfront.security.common.service;
 
 import java.util.List;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
  * 다른 controller에서도 공통으로 사용할만한 기능들을 모아놓는 service입니다.

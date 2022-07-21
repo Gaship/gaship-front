@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.common.exception;
+package shop.gaship.gashipfront.security.common.exception;
 
 /**
  * ResponseEntity를 받았을때 body에 ErrorResponse타입이 있는데 값은 null인경우에 발생시키는 예외입니다.

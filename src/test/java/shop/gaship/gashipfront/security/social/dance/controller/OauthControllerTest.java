@@ -15,12 +15,12 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.gaship.gashipfront.config.SecurityConfig;
-import shop.gaship.gashipfront.security.social.common.service.CommonService;
+import shop.gaship.gashipfront.security.common.service.CommonService;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.dance.service.NaverLoginService;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 

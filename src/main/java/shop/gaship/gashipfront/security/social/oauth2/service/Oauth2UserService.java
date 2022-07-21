@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.security.social.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.social.common.util.SignupManager;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
+import shop.gaship.gashipfront.security.common.util.SignupManager;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
@@ -37,6 +37,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         SignupManager signupManager = new SignupManager(memberService);
 //        Member member = signupManager.getMember(email);
 //         서버 구동을 통한 test시에 필요한 dummy data
+
         Member member = new Member();
         member.setMemberNo(1);
         member.setEmail(email);
@@ -44,6 +45,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         List<String> authorities = new ArrayList<>();
         authorities.add("USER");
         member.setAuthorities(authorities);
+
 
         return new UserDetailsDto(email, member.getPassword(), member.getAuthorities().stream()
             .map(i -> new SimpleGrantedAuthority("ROLE_" + i))

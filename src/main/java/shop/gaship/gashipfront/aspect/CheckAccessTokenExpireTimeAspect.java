@@ -31,8 +31,6 @@ public class CheckAccessTokenExpireTimeAspect {
         LocalDate refreshTokenExpireTime = LocalDate.now().plusDays(1);
         LocalDate accessTokenExpireTime = LocalDate.now().plusDays(1);
 
-        if (!accessTokenExpireTime.isBefore(LocalDate.now()))
-
         if (!accessTokenExpireTime.isBefore(LocalDate.now())) {
             WebClient webClient = WebClient.builder()
                 .baseUrl("http://localhost:7070")

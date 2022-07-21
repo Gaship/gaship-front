@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.social.common.exception;
+package shop.gaship.gashipfront.security.common.exception;
 
 import org.springframework.http.HttpStatus;
 

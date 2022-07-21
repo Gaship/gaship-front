@@ -11,14 +11,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import shop.gaship.gashipfront.security.social.common.service.CommonService;
+import shop.gaship.gashipfront.security.common.service.CommonService;
 import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.dance.dto.NaverAccessToken;
-import shop.gaship.gashipfront.security.social.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.dance.service.NaverLoginService;
-import shop.gaship.gashipfront.security.social.common.util.SignupManager;
+import shop.gaship.gashipfront.security.common.util.SignupManager;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
 /**
@@ -65,7 +66,7 @@ public class OauthController {
      * @return view name입니다.
      */
     @GetMapping("/login/naver/callback")
-    public String getAccessTokenAndAuthenticateNaver(String code, String parameterState, HttpSession session) {
+    public String getAccessTokenAndAuthenticateNaver(String code, @RequestParam(value = "state") String parameterState, HttpSession session) {
         String redisState = (String) session.getAttribute("state");
         NaverAccessToken naverAccessToken = naverLoginService.getAccessToken(code, parameterState, redisState);
 
@@ -76,11 +77,16 @@ public class OauthController {
 
         naverLoginService.setSecurityContext(member);
 
-        JwtDto jwt = commonService.getJWT(member.getMemberNo(), member.getAuthorities());
+
+        JwtDto jwt = new JwtDto();
+        jwt.setRefreshToken("this is refresh!!");
+        jwt.setAccessToken("this is access!!");
+//        JwtDto jwt = commonService.getJWT(member.getMemberNo(), member.getAuthorities());
         session.setAttribute("accessToken", jwt.getAccessToken());
         session.setAttribute("refreshToken", jwt.getRefreshToken());
-        session.setAttribute("accessTokenExpireDateTime", jwt.getAccessTokenExpireDateTime());
-        session.setAttribute("refreshTokenExpireDateTime", jwt.getRefreshTokenExpireDateTime());
+//        session.setAttribute("accessTokenExpireDateTime", jwt.getAccessTokenExpireDateTime());
+//        session.setAttribute("refreshTokenExpireDateTime", jwt.getRefreshTokenExpireDateTime());
+        session.setAttribute("jwt", jwt);
         return "all";
     }
 }
