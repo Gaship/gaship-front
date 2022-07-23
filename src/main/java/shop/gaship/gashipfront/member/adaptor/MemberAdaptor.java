@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
 import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
+import shop.gaship.gashipfront.member.dto.NicknamePresence;
 import shop.gaship.gashipfront.member.exception.RequestFailureException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
@@ -55,16 +56,27 @@ public class MemberAdaptor {
             .getBody();
     }
 
+    public NicknamePresence nicknameDuplicationCheckRequest(String nickname) {
+        return WebClient.create(gatewayBaseurl).get()
+            .uri("/check?nickname={nickname}", nickname)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .toEntity(NicknamePresence.class)
+            .blockOptional()
+            .orElseThrow(RequestFailureException::new)
+            .getBody();
+    }
+
     /**
-     * 닉네임을 통한 회원 존재여부를 확인하기위해 쇼핑몰 서버에 요청하는 메서드입니다.
+     * 닉네임을 통한 추천회원의 고유 번호를 확인하기위해 쇼핑몰 서버에 요청하는 메서드입니다.
      *
      * @param nickName : 확인할 닉네임입니다.
-     * @return MemberNumberPresence : 존재한다면 회원 고유번호가 담겨옵니다.
+     * @return 존재한다면 회원 고유번호가 담겨옵니다.
      * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
-    public MemberNumberPresence nicknameDuplicationCheckRequest(String nickName) {
+    public MemberNumberPresence recommendMemberNoFind(String nickName) {
         return WebClient.create(gatewayBaseurl).get()
-            .uri("/members/retrieve?email={nickname}", nickName)
+            .uri("/members/retrieve?nickname={nickname}", nickName)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(MemberNumberPresence.class)
