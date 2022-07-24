@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import javax.servlet.http.HttpSession;
 import org.assertj.core.util.Strings;
@@ -78,22 +79,22 @@ class NaverLoginServiceImplTest {
 
     @DisplayName("naver로 oauth 했을때 설정에서 불러온뒤 조합한 값들이 설정값과 같게 잘나온다.")
     @Test
-    void getUriForLoginPageRequest() throws UnsupportedEncodingException {
+    void getUriForLoginPageRequest() throws UnsupportedEncodingException, URISyntaxException {
         // when
         String fullUri = naverLoginService.getUriForLoginPageRequest();
 
         String[] parameter = fullUri.split("[?]")[1].split("&");
-        String apiUriForLogin = fullUri.split("[&]")[0];
+        String apiUriForLogin = fullUri.split("[?]")[0];
 
         String[] value = {
             "response_type=code",
             Strings.concat("client_id=", clientId),
-            Strings.concat("redirect_uri=", URLEncoder.encode(redirectUrl))
+            Strings.concat("redirect_uri=", URLEncoder.encode(redirectUrl, "UTF-8"))
         };
 
         // then
         assertThat(apiUriForLogin)
-            .isEqualTo(this.apiUrlForLogin);
+            .isEqualTo(Strings.concat("https://", this.apiUrlForLogin));
 
         for (int i = 0; i < value.length; i++) {
             assertThat(parameter[i])
@@ -104,7 +105,7 @@ class NaverLoginServiceImplTest {
 
     @DisplayName("처음 로그인요청 url을 redirect로 줄때 만든 state 값과 사용자 로그인완료후 redirect될때 state값이 같게 들어온 경우 문제없이 메서드 진행된다.")
     @Test
-    void getAccessToken_state_success() throws UnsupportedEncodingException {
+    void getAccessToken_state_success() throws UnsupportedEncodingException, URISyntaxException {
         // given
         String uri = naverLoginService.getUriForLoginPageRequest();
         String[] parameters = uri.split("&state=");
@@ -129,7 +130,7 @@ class NaverLoginServiceImplTest {
 
     @DisplayName("처음 로그인요청 url을 redirect로 줄때 만든 state값과 사용자 로그인완료후 redirect될때 state값이 다르게 들어온 경우 CsrfException이 발생한다.")
     @Test
-    void getAccessToken_state_fail() throws UnsupportedEncodingException {
+    void getAccessToken_state_fail() throws UnsupportedEncodingException, URISyntaxException {
         // given
         naverLoginService.getUriForLoginPageRequest();
 

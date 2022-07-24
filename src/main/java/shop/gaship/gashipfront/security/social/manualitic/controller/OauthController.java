@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.security.social.manualitic.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,7 @@ public class OauthController {
     @GetMapping("/login/naver")
     @ResponseBody
     public ResponseEntity<String> redirectUriForLoginPageRequestNaver(HttpSession session)
-        throws UnsupportedEncodingException {
+        throws UnsupportedEncodingException, URISyntaxException {
         HttpHeaders headers = new HttpHeaders();
         String uriForLoginPageRequest = naverLoginService.getUriForLoginPageRequest();
         String[] stateSplit = uriForLoginPageRequest.split("&state=");
