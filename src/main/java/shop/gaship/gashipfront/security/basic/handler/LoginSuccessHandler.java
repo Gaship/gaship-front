@@ -1,17 +1,19 @@
 package shop.gaship.gashipfront.security.basic.handler;
 
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.exceptions.NoResponseDataException;
 import shop.gaship.gashipfront.security.basic.dto.SignInUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
-import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 
 /**
  * 자사로그인 성공시 사용할 success handler입니다.
@@ -26,16 +28,18 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         SignInUserDetailsDto details =
             (SignInUserDetailsDto) authentication.getPrincipal();
 
-        TokenRequestDto tokenRequestDto =
-            new TokenRequestDto(
-                details.getMemberNo(),
-                details.getUsername(),
-                details.getAuthorities()
-            );
+        UserInfoForJwtRequestDto userInfo =
+            new UserInfoForJwtRequestDto();
 
-        JwtDto tokensResponse = WebClient.create("http://localhost:7070").post()
+        userInfo.setMemberNo(details.getMemberNo());
+        userInfo.setAuthorities(
+            details.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
+
+        JwtDto tokensResponse = WebClient.create("http://172.20.10.5:7070").post()
             .uri("/securities/issue-token")
-            .bodyValue(tokenRequestDto)
+            .bodyValue(userInfo)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(JwtDto.class)
@@ -45,7 +49,5 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
         HttpSession session = request.getSession();
         session.setAttribute("jwt", tokensResponse);
-        // TODO 값 잘 가져와지는지 역직렬화를 잘하는지 ?
-//        String access = session.getAttribute("jwt").getAccessToken();
     }
 }

@@ -1,44 +1,32 @@
 package shop.gaship.gashipfront.security.logout.adaptor.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import shop.gaship.gashipfront.security.logout.adaptor.AuthAdaptor;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.util.ExceptionUtil;
+import shop.gaship.gashipfront.security.logout.adaptor.AuthAdaptor;
 
 /**
  * @author 조재철
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class AuthAdaptorImpl implements AuthAdaptor {
+    private final WebClient webClient;
+
     @Override
-    public ResponseEntity<String> logout(JwtDto jwtDto) {
-        Map<String, List<String>> headers = new HashMap<>();
-        List<String> contentTypeValues = List.of(MediaType.APPLICATION_JSON.toString());
-        headers.put("X-AUTH-TOKEN",
-            List.of(jwtDto.getAccessToken(), jwtDto.getRefreshToken()));
-        headers.put("Content-type", contentTypeValues);
-
-        Map<String, String> body = new HashMap<>();
-
-        WebClient webClient = WebClient.builder()
-            .baseUrl("http://192.168.0.2:7070")
-            .build();
-
-//        return new WebClientUtil<String>()
-//            .post("http://192.168.0.2:7070",
-//                "/securities/logout",
-//                null,
-//                headers,
-//                body,
-//                String.class
-//            );
-
-        return webClient.post().uri("/securities/logout").retrieve().toEntity(String.class).block();
+    public void logout(Integer memberNo, JwtDto jwtDto) {
+        webClient.post().uri("/securities/logout")
+            .header("X-AUTH-ACCESS-TOKEN", jwtDto.getAccessToken())
+            .header("X-AUTH-REFRESH-TOKEN", jwtDto.getRefreshToken())
+            .bodyValue(memberNo)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .toEntity(void.class)
+            .blockOptional()
+            .orElseThrow();
     }
 }

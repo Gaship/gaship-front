@@ -1,0 +1,14 @@
+POST http://192.168.71.23:7070/securities/issue-token
+Content-Type: application/json
+Accept: application/json
+
+{
+  "memberNo" : 1,
+  "authorities" : ["ROLE_USER"]
+}
+
+###
+
+GET http://172.20.10.5:7070/members/retrieve/user-detail?email=example@nhn.com
+Content-Type: application/json
+Accept: application/json

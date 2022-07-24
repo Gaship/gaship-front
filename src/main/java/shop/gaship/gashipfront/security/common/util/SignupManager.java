@@ -1,13 +1,13 @@
 package shop.gaship.gashipfront.security.common.util;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
-import shop.gaship.gashipfront.security.social.dance.dto.userdata.NaverUserDataResponse;
+import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
@@ -17,12 +17,12 @@ import shop.gaship.gashipfront.security.social.member.service.MemberService;
  * @author : 최겸준
  * @since 1.0
  */
+@Component
 @RequiredArgsConstructor
 public class SignupManager {
     public static final Integer MONTH = 0;
     public static final Integer DAY = 1;
     public static final String SOCIAL_NICKNAME_PREFIX = "사용자";
-
     private final MemberService memberService;
 
     /**
@@ -34,21 +34,22 @@ public class SignupManager {
      */
     public Member getMember(NaverUserDataResponse info) throws
         RequestFailureException {
-        Member member;
+        Member member = null;
 
         try {
-//            member = memberService.getMemberByEmail(info.getEmail());
-            member = new Member();
-            member.setMemberNo(1);
-            member.setEmail(info.getEmail());
-            member.setPassword("1234");
-            List<String> authorities = new ArrayList<>();
-            authorities.add("USER");
-            member.setAuthorities(authorities);
+            member = memberService.getMemberByEmail(info.getEmail());
+//            member = new Member();
+//            member.setMemberNo(1);
+//            member.setEmail(info.getEmail());
+//            member.setPassword("1234");
+//            List<String> authorities = new ArrayList<>();
+//            authorities.add("USER");
+//            member.setAuthorities(authorities);
         } catch (RequestFailureException e) {
             if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) throw e;
             return retryGetMember(info);
         }
+
         return member;
     }
 
@@ -81,7 +82,8 @@ public class SignupManager {
     private Member retryGetMember(NaverUserDataResponse info) {
         String email = info.getEmail();
         Integer memberNo = getLastMemberNo();
-        Member member = buildMember(memberNo, info);
+        String rowNickName = Strings.concat(SOCIAL_NICKNAME_PREFIX, String.valueOf(memberNo));
+        Member member = buildMember(rowNickName, info);
         memberService.createMember(member);
         return memberService.getMemberByEmail(email);
     }
@@ -94,7 +96,8 @@ public class SignupManager {
      */
     private Member retryGetMember(String email) {
         Integer memberNo = getLastMemberNo();
-        Member member = buildMember(memberNo, email);
+        String rowNickName = Strings.concat(SOCIAL_NICKNAME_PREFIX, String.valueOf(memberNo));
+        Member member = buildMember(rowNickName, email);
         memberService.createMember(member);
         return memberService.getMemberByEmail(email);
     }
@@ -112,11 +115,11 @@ public class SignupManager {
     /**
      * 전달된 파라미터를 이용해서 가입시킬때 사용할 Member객체를 반환시키는 기능입니다.
      *
-     * @param memberNo 사용자라는 단어와 합쳐져서 닉네임이 될 숫자입니다.
+     * @param rowNickName 사용자라는 단어와 최근 가장 높은 번호를 가진 회원번호가 합쳐진 값입니다.
      * @param info member객체를 만들때 필요한 필드들을 가지는 객체입니다.
      * @return Member 생성한 객체를 반환합니다.
      */
-    private Member buildMember(Integer memberNo, NaverUserDataResponse info) {
+    private Member buildMember(String rowNickName, NaverUserDataResponse info) {
         Member member;
         String email = info.getEmail();
         String[] birthday = info.getBirthday().split("-");
@@ -127,10 +130,11 @@ public class SignupManager {
         member = Member.builder()
             .email(email)
             .password(email)
-            .nickName(Strings.concat(SOCIAL_NICKNAME_PREFIX, String.valueOf(memberNo)))
+            .nickName(Strings.concat(rowNickName,
+                RandomStringUtils.random(16, true, true)))
             .name(info.getName())
-            .gender(info.getGender())
-            .mobile(info.getMobile())
+            .gender(getGender(info))
+            .phoneNumber(info.getPhoneNumber())
             .birthDate(LocalDate.of(year, month, day))
             .build();
         return member;
@@ -139,23 +143,24 @@ public class SignupManager {
     /**
      * 전달된 파라미터를 이용해서 가입시킬때 사용할 Member객체를 반환시키는 기능입니다.
      *
-     * @param memberNo 사용자라는 단어와 합쳐져서 닉네임이 될 숫자입니다.
+     * @param rowNickName 사용자라는 단어와 최근 가장 높은 번호를 가진 회원번호가 합쳐진 값입니다.
      * @param email member객체를 만들때 필요한 email을 가지는 객체입니다.
      * @return Member 생성한 객체를 반환합니다.
      */
-    private Member buildMember(Integer memberNo, String email) {
+    private Member buildMember(String rowNickName, String email) {
         Member member;
 
         member = Member.builder()
             .email(email)
             .password(email)
-            .nickName(Strings.concat(SOCIAL_NICKNAME_PREFIX, String.valueOf(memberNo)))
+            .nickName(Strings.concat(rowNickName, RandomStringUtils.random(16, true, true)))
             .name(email)
             .build();
         return member;
     }
 
-
-
-
+    private String getGender(NaverUserDataResponse info) {
+        String gender = info.getGender();
+        return gender.equals("M") ? "남" : "여";
+    }
 }

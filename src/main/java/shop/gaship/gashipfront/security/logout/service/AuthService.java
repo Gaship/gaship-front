@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.security.logout.service;
 
-import org.springframework.http.ResponseEntity;
+import shop.gaship.gashipfront.security.basic.dto.SignInUserDetailsDto;
+import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
  * The interface Auth service.
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 public interface AuthService {
 
     /**
-     * @return response entity
      */
-    ResponseEntity<?> logout();
+    void logout(Integer memberNo, JwtDto jwt);
 }

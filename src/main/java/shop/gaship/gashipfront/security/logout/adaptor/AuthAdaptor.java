@@ -1,6 +1,5 @@
 package shop.gaship.gashipfront.security.logout.adaptor;
 
-import org.springframework.http.ResponseEntity;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
@@ -10,9 +9,11 @@ import shop.gaship.gashipfront.security.common.dto.JwtDto;
 public interface AuthAdaptor {
 
     /**
+     *
+     * @param userDetailsDto
      * @param jwtDto
-     * @return response entity
      * @author 조재철
      */
-    ResponseEntity<?> logout(JwtDto jwtDto);
+
+    void logout(Integer userDetailsDto, JwtDto jwtDto);
 }

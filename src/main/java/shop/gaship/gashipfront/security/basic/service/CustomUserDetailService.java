@@ -30,7 +30,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<String> contentTypeValues = List.of(MediaType.APPLICATION_JSON.toString());
 
-        return WebClient.create("http://localhost:7070").get()
+        SignInUserDetailsDto body = WebClient.create("http://172.20.10.5:7070").get()
             .uri("/members/retrieve/user-detail?email={email}", username)
             .headers(httpHeaders -> {
                 httpHeaders.put(HttpHeaders.CONTENT_TYPE, contentTypeValues);
@@ -40,8 +40,10 @@ public class CustomUserDetailService implements UserDetailsService {
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(SignInUserDetailsDto.class)
             .timeout(TIMEOUT)
-            .blockOptional()
-            .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
+            .block()
+//            .blockOptional()
+//            .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
             .getBody();
+        return body;
     }
 }

@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,10 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
-import shop.gaship.gashipfront.security.common.service.CommonService;
-import shop.gaship.gashipfront.security.social.oauth2.handler.Oauth2LoginSuccessHandler;
+import shop.gaship.gashipfront.security.common.service.AuthAPIService;
+import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSuccessHandler;
 
 /**
  * SpringSecurity에 관련한 전반적인 설정을 다루는 클래스입니다.
@@ -42,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .passwordParameter("pw")
             .defaultSuccessUrl("/all")
             .failureUrl("/login")
+            .successHandler(loginSuccessHandler())
             .and()
             .logout();
 
@@ -49,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginPage("/login")
             .defaultSuccessUrl("/all")
             .failureUrl("/login")
+            .successHandler(oauth2LoginSuccessHandler(null))
             .and();
 
         http.csrf().disable();
@@ -82,6 +86,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(CommonService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthAPIService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
+
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder().baseUrl("http://172.30.1.52:7070").defaultHeader("Accept",
+            MediaType.APPLICATION_JSON_VALUE).defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
+    }
 }
 

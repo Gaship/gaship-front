@@ -3,7 +3,7 @@ package shop.gaship.gashipfront.security.social.member.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.security.common.adapter.Adapter;
+import shop.gaship.gashipfront.security.common.adapter.shoppingmallapi.ShoppingMallAPIAdapter;
 import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.member.dto.Member;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
@@ -18,13 +18,14 @@ import shop.gaship.gashipfront.security.social.member.service.MemberService;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
-    private final Adapter adapter;
+    private final ShoppingMallAPIAdapter adapter;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public Member getMemberByEmail(String email) throws RequestFailureException {
         return adapter.requestMemberByEmail(email);
     }
+
     @Override
     public void createMember(Member member) {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
