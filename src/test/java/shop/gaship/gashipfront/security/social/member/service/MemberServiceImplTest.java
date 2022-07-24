@@ -19,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.security.common.adapter.shoppingmallapi.ShoppingMallAPIAdapter;
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
 import shop.gaship.gashipfront.security.social.member.service.impl.MemberServiceImpl;
 
 /**
@@ -44,7 +44,7 @@ class MemberServiceImplTest {
     void getMemberByEmail() {
         // given
         String email = "gbeovhsqhtka@naver.com";
-        Member member = new Member();
+        MemberDto member = new MemberDto();
         member.setEmail(email);
 
         ResponseEntity<Object> response
@@ -57,7 +57,7 @@ class MemberServiceImplTest {
             .willReturn(member);
 
         // when
-        Member actualMember = memberService.getMemberByEmail(email);
+        MemberDto actualMember = memberService.getMemberByEmail(email);
 
         // then
         assertThat(actualMember)
@@ -68,7 +68,7 @@ class MemberServiceImplTest {
     @Test
     void createMember() {
         // given
-        Member member = mock(Member.class);
+        MemberDto member = mock(MemberDto.class);
         given(member.getPassword()).willReturn("zzz");
         given(passwordEncoder.encode(anyString()))
             .willReturn("abcd");

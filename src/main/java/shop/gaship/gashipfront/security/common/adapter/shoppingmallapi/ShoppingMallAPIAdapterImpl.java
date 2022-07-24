@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
 import shop.gaship.gashipfront.security.common.util.ExceptionUtil;
 
 /**
@@ -29,12 +29,12 @@ public class ShoppingMallAPIAdapterImpl implements ShoppingMallAPIAdapter {
      * @author 최겸준
      */
     @Override
-    public Member requestMemberByEmail(String email) {
+    public MemberDto requestMemberByEmail(String email) {
         return webClient.get()
             .uri("/members/email/{email}", email)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-            .bodyToMono(Member.class)
+            .bodyToMono(MemberDto.class)
             .blockOptional()
             .orElseThrow(NullResponseBodyException::new);
     }
@@ -46,7 +46,7 @@ public class ShoppingMallAPIAdapterImpl implements ShoppingMallAPIAdapter {
      * @author 최겸준
      */
     @Override
-    public void requestCreateMember(Member member) {
+    public void requestCreateMember(MemberDto member) {
         webClient.post()
             .uri("/members?isOauth=true")
             .contentType(MediaType.APPLICATION_JSON)

@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
 import shop.gaship.gashipfront.security.social.member.service.MemberService;
 
 /**
@@ -33,7 +33,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> value = (Map<String, Object>) user.getAttributes().get("kakao_account");
         String email = (String) value.get("email");
         SignupManager signupManager = new SignupManager(memberService);
-        Member member = signupManager.getMember(email);
+        MemberDto member = signupManager.getMember(email);
 //         서버 구동을 통한 test시에 필요한 dummy data
 //        Member member = new Member();
 //        member.setMemberNo(1);

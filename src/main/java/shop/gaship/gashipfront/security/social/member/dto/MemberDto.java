@@ -19,10 +19,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class Member implements Serializable {
+public class MemberDto implements Serializable {
     private Integer memberNo;
     private String memberStatus;
 
@@ -41,6 +39,18 @@ public class Member implements Serializable {
     private LocalDateTime modifyDatetime;
     private Boolean social;
     private String encodedEmailForSearch;
+
+    @Builder
+    public MemberDto(String email, String password, String nickName, String name,
+                     String gender, String phoneNumber, LocalDate birthDate) {
+        this.email = email;
+        this.password = password;
+        this.nickName = nickName;
+        this.name = name;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
+    }
 
     public Boolean isSocial() {
         return social;

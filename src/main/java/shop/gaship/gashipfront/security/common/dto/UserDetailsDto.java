@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
 
 /**
  * Oauth2Login 또는 OauthDance를 이용한 작업을 수행할때 필요한 Dto 클래스입니다.
@@ -18,7 +18,7 @@ import shop.gaship.gashipfront.security.social.member.dto.Member;
  */
 @Getter
 public class UserDetailsDto extends User implements OAuth2User {
-    private Member member;
+    private MemberDto member;
     private String email;
     private Map<String, Object> attr;
 
@@ -32,7 +32,7 @@ public class UserDetailsDto extends User implements OAuth2User {
      * @param attr        userDetailsService에서 Oauth2User 객체를 super를 통해 만들고 난다음 getAttributes()로 받아낸 값입니다.
      */
     public UserDetailsDto(String username, String password,
-                          Collection<? extends GrantedAuthority> authorities, Member member, Map<String, Object> attr) {
+                          Collection<? extends GrantedAuthority> authorities, MemberDto member, Map<String, Object> attr) {
         this(username, password, authorities, member);
         this.attr = attr;
     }
@@ -46,7 +46,7 @@ public class UserDetailsDto extends User implements OAuth2User {
      * @param member      userDetailsService에서 DB의 Member입니다. 위의 3개의 변수 모두 member를 통해서 가져올수있지만 자주 사용하는 접근성이 있어서 필드로 따로 세팅했습니다.
      */
     public UserDetailsDto(String username, String password,
-                          Collection<? extends GrantedAuthority> authorities, Member member) {
+                          Collection<? extends GrantedAuthority> authorities, MemberDto member) {
         super(username, password, authorities);
         this.email = username;
         this.member = member;

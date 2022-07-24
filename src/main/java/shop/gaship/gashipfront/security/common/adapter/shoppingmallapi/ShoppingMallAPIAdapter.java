@@ -1,6 +1,6 @@
 package shop.gaship.gashipfront.security.common.adapter.shoppingmallapi;
 
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
 
 /**
  * api서버에 요청을 처리하는 기능을 담당하는 interface입니다.
@@ -16,7 +16,7 @@ public interface ShoppingMallAPIAdapter {
      * @return responseEntity
      * @author 최겸준
      */
-    Member requestMemberByEmail(String email);
+    MemberDto requestMemberByEmail(String email);
 
     /**
      * 멤버의 회원가입 요청을 담당하는 기능입니다.
@@ -24,7 +24,7 @@ public interface ShoppingMallAPIAdapter {
      * @param member 회원가입시 필요한 정보를 담고있는 Memeber객체입니다.
      * @author 최겸준
      */
-    void requestCreateMember(Member member);
+    void requestCreateMember(MemberDto member);
 
     /**
      * 멤버의 회원가입시 닉네임생성을 위해 최신 번호를 가져오는 기능입니다.

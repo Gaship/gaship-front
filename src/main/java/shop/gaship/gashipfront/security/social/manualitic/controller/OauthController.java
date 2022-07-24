@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import shop.gaship.gashipfront.security.common.service.AuthAPIService;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
-import shop.gaship.gashipfront.security.social.member.dto.Member;
+import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
@@ -78,7 +78,7 @@ public class OauthController {
 
         NaverUserData data = naverLoginService.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
         SignupManager signupManager = new SignupManager(memberService);
-        Member member = signupManager.getMember(data.getResponse());
+        MemberDto member = signupManager.getMember(data.getResponse());
 
         SecurityContextLoginManager.setSecurityContext(member);
         JwtDto jwt = commonService.getJWT(member.getMemberNo(), member.getAuthorities());
