@@ -22,6 +22,7 @@ class RedisConfigTest {
     @Autowired
     RedisConfig config;
 
+
     @Test
     void dataProtectionConfigTest() {
         assertThat(config.getHost())
