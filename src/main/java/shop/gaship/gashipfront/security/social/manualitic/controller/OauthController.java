@@ -35,10 +35,10 @@ import shop.gaship.gashipfront.security.social.util.SecurityContextLoginManager;
 @RequiredArgsConstructor
 @Slf4j
 public class OauthController {
+
     private final NaverLoginService naverLoginService;
     private final AuthAPIService authAPIService;
-    private final MemberService memberService;
-//    private final SignupManager signupManager;
+    private final SignupManager signupManager;
 
     /**
      * Naver로 로그인요청을 보낼 uri를 요청측에 반환해주는 기능입니다.
@@ -77,7 +77,6 @@ public class OauthController {
         NaverAccessToken naverAccessToken = naverLoginService.getAccessToken(code, paramState, redisState);
 
         NaverUserData data = naverLoginService.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
-        SignupManager signupManager = new SignupManager(memberService);
         MemberDto member = signupManager.getMember(data.getResponse());
 
         SecurityContextLoginManager.setSecurityContext(member);

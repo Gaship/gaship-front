@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.exceptions.NoResponseDataException;
-import shop.gaship.gashipfront.security.basic.dto.SignInUserDetailsDto;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
@@ -25,13 +25,13 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
-        SignInUserDetailsDto details =
-            (SignInUserDetailsDto) authentication.getPrincipal();
+        SignInSuccessUserDetailsDto details =
+            (SignInSuccessUserDetailsDto) authentication.getPrincipal();
 
         UserInfoForJwtRequestDto userInfo =
             new UserInfoForJwtRequestDto();
 
-        userInfo.setMemberNo(details.getMemberNo());
+        userInfo.setMemberNo(details.getMemberNo().intValue());
         userInfo.setAuthorities(
             details.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

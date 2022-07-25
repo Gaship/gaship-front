@@ -36,6 +36,8 @@ public class RedisConfig implements BeanClassLoaderAware {
     private int database;
     private ClassLoader classLoader;
 
+    private final Integer COOKIE_MAXAGE_30_MINUTES = 1800;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
         String secretHost = secureManagerConfig.findSecretDataFromSecureKeyManager(this.host);

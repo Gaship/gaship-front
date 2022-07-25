@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.gaship.gashipfront.config.SecurityConfig;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.util.SignupManager;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
@@ -68,7 +69,7 @@ class OauthControllerTest {
     private AuthAPIService authApiService;
 
     @MockBean
-    private MemberService memberService;
+    private SignupManager signupManager;
 
     @DisplayName("지정한 uri를 redirectUri로 잘맞게 response된다.")
     @Test
@@ -149,7 +150,7 @@ class OauthControllerTest {
         authorities.add("USER");
         member.setAuthorities(authorities);
 
-        given(memberService.getMemberByEmail(anyString()))
+        given(signupManager.getMember(any(NaverUserDataResponse.class)))
             .willReturn(member);
     }
 

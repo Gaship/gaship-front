@@ -53,8 +53,6 @@ public class NaverLoginServiceImpl implements NaverLoginService {
         throws UnsupportedEncodingException, URISyntaxException {
         BigInteger state = new BigInteger(130, new SecureRandom());
 
-//        StringBuilder uriForLoginPageRequest = new StringBuilder();
-
         URI uri = new URIBuilder()
             .setScheme("https")
             .setHost(apiUrlForLogin)
