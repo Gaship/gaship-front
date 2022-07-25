@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
 
 /**
@@ -22,7 +22,7 @@ import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
 
 @RequiredArgsConstructor
 public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
-    private final AuthAPIService commonService;
+    private final AuthApiService commonService;
 
     /**
      * 로그인 성공시 jwt 토큰을 생성하고 session 또는 redis session에 넣어주는 기능입니다.
@@ -38,7 +38,7 @@ public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         UserDetailsDto memberDto = (UserDetailsDto) authentication.getPrincipal();
         MemberDto member = memberDto.getMember();
 
-        JwtDto jwt = commonService.getJWT(member.getMemberNo(), member.getAuthorities());
+        JwtDto jwt = commonService.getJwt(member.getMemberNo(), member.getAuthorities());
         HttpSession session = request.getSession();
         session.setAttribute("jwt", jwt);
     }

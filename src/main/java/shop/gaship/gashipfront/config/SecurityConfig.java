@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSuccessHandler;
 
 /**
@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and();
 
         http.oauth2Login()
-            .loginPage("/login")
+            .loginPage()
             .defaultSuccessUrl("/")
             .failureUrl("/login")
             .successHandler(oauth2LoginSuccessHandler(null));
@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthAPIService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
 
     @Bean
     public WebClient webClient() {

@@ -63,4 +63,13 @@ public interface MemberAdapter {
      * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     MemberNumberPresence nicknameDuplicationCheckRequest(String nickName);
+
+    /**
+     * 닉네임을 통한 추천회원의 고유 번호를 확인하기위해 쇼핑몰 서버에 요청하는 메서드입니다.
+     *
+     * @param nickName : 확인할 닉네임입니다.
+     * @return 존재한다면 회원 고유번호가 담겨옵니다.
+     * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
+     */
+    MemberNumberPresence recommendMemberNoFind(String nickName);
 }

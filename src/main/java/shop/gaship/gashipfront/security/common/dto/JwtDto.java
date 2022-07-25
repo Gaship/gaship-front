@@ -3,8 +3,6 @@ package shop.gaship.gashipfront.security.common.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**

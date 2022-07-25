@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
-import shop.gaship.gashipfront.security.common.member.service.MemberService;
 import shop.gaship.gashipfront.security.social.util.SecurityContextLoginManager;
 
 /**
@@ -37,7 +36,7 @@ import shop.gaship.gashipfront.security.social.util.SecurityContextLoginManager;
 public class OauthController {
 
     private final NaverLoginService naverLoginService;
-    private final AuthAPIService authAPIService;
+    private final AuthApiService authAPIService;
     private final SignupManager signupManager;
 
     /**
@@ -80,7 +79,7 @@ public class OauthController {
         MemberDto member = signupManager.getMember(data.getResponse());
 
         SecurityContextLoginManager.setSecurityContext(member);
-        JwtDto jwt = authAPIService.getJWT(member.getMemberNo(), member.getAuthorities());
+        JwtDto jwt = authAPIService.getJwt(member.getMemberNo(), member.getAuthorities());
         session.setAttribute("jwt", jwt);
         return "all";
     }

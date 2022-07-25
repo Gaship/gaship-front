@@ -122,4 +122,16 @@ public class MemberAdapterImpl implements MemberAdapter {
             .orElseThrow(RequestFailureException::new)
             .getBody();
     }
+
+    @Override
+    public MemberNumberPresence recommendMemberNoFind(String nickName) {
+            return WebClient.create(serverConfig.getGatewayUrl()).get()
+                .uri("/members/retrieve?nickname={nickname}", nickName)
+                .retrieve()
+                .onStatus(HttpStatus::isError, shop.gaship.gashipfront.util.ExceptionUtil::createErrorMono)
+                .toEntity(MemberNumberPresence.class)
+                .blockOptional()
+                .orElseThrow(RequestFailureException::new)
+                .getBody();
+    }
 }

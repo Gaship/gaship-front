@@ -16,9 +16,9 @@ import org.springframework.test.context.TestPropertySource;
  */
 @SpringBootTest
 @TestPropertySource("classpath:application-dev.properties")
-public class RedisConfigTest {
+class RedisConfigTest {
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @DisplayName("레디스에 저장 및 조회가 가능하다.")
     @Test

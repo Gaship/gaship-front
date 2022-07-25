@@ -20,7 +20,7 @@
 //import org.springframework.http.HttpHeaders;
 //import org.springframework.http.MediaType;
 //import org.springframework.test.context.junit.jupiter.SpringExtension;
-//import shop.gaship.gashipfront.security.common.adapter.authapi.AuthAPIAdapter;
+//import shop.gaship.gashipfront.security.common.adapter.authapi.AuthApiAdapter;
 //import shop.gaship.gashipfront.security.common.service.JwtService;
 //import shop.gaship.gashipfront.security.common.service.impl.JwtServiceImpl;
 //import shop.gaship.gashipfront.security.common.dto.JwtDto;
@@ -44,7 +44,7 @@
 //    private JwtService commonService;
 //
 //    @MockBean
-//    private AuthAPIAdapter adapter;
+//    private AuthApiAdapter adapter;
 //
 //
 //    @DisplayName("식별번호와 권한을 파라미터로 jwt를 요청한 경우에 JwtTokenDto타입으로 잘 넘어온다.")
@@ -66,7 +66,7 @@
 //        given(adapter.requestJwt(any()))
 //            .willReturn(dummyToken);
 //        // when
-//        JwtDto token = commonService.getJWT(identifyNo, authorities);
+//        JwtDto token = commonService.getJwt(identifyNo, authorities);
 //
 //        // then
 //        verify(adapter).requestJwt(any());

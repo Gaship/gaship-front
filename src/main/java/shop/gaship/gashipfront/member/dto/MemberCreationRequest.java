@@ -67,4 +67,8 @@ public class MemberCreationRequest {
 
     @NotNull
     private Boolean isUniqueEmail;
+
+    public void changeHashedPassword(String hashedPassword) {
+        this.password = hashedPassword;
+    }
 }
