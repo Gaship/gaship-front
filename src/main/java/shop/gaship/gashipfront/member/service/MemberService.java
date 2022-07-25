@@ -3,8 +3,8 @@ package shop.gaship.gashipfront.member.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.member.adaptor.MemberAdaptor;
 import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
+import shop.gaship.gashipfront.security.common.member.adapter.MemberAdapter;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 
 /**
@@ -16,7 +16,7 @@ import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberAdaptor memberAdaptor;
+    private final MemberAdapter memberAdaptor;
     private final PasswordEncoder passwordEncoder;
 
     public boolean executeSignUp(MemberCreationRequest memberCreationRequest) {
@@ -33,7 +33,7 @@ public class MemberService {
 
     public boolean checkDuplicatedNickname(String nickname) {
         return memberAdaptor.nicknameDuplicationCheckRequest(nickname)
-            .getHasNickname();
+            .getMemberNo() != null;
     }
 
     public MemberNumberPresence findRecommendMemberNo(String nickname) {

@@ -7,20 +7,20 @@ import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
+import shop.gaship.gashipfront.security.common.gashipauth.adapter.impl.AuthApiAdapter;
 import shop.gaship.gashipfront.security.common.util.ExceptionUtil;
-import shop.gaship.gashipfront.security.common.gashipauth.adapter.impl.AuthAPIAdapter;
 
 /**
  * AuthAPIAdapter를 구현한 클래스입니다.
  *
  * @author 최겸준
  * @author 조재철
- * @see AuthAPIAdapter
+ * @see AuthApiAdapter
  * @since 1.0
  */
 @Component
 @RequiredArgsConstructor
-public class AuthAPIAdapterImpl implements AuthAPIAdapter {
+public class AuthApiAdapterImpl implements AuthApiAdapter {
     private final WebClient webClient;
 
     /**
@@ -48,6 +48,6 @@ public class AuthAPIAdapterImpl implements AuthAPIAdapter {
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(void.class)
             .blockOptional()
-            .orElseThrow();
+            .orElseThrow(NullResponseBodyException::new);
     }
 }

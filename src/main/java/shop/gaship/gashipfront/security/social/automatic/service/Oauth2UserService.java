@@ -34,18 +34,9 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         String email = (String) value.get("email");
         SignupManager signupManager = new SignupManager(memberService);
         MemberDto member = signupManager.getMember(email);
-//         서버 구동을 통한 test시에 필요한 dummy data
-//        Member member = new Member();
-//        member.setMemberNo(1);
-//        member.setEmail(email);
-//        member.setPassword("1234");
-//        List<String> authorities = new ArrayList<>();
-//        authorities.add("USER");
-//        member.setAuthorities(authorities);
-
 
         return new UserDetailsDto(email, member.getPassword(), member.getAuthorities().stream()
-            .map(i -> new SimpleGrantedAuthority(i))
+            .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList()), member, user.getAttributes());
     }
 }

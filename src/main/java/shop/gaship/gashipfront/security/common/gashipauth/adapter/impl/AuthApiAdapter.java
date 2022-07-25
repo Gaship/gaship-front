@@ -10,7 +10,7 @@ import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
  * @author 조재철
  * @since 1.0
  */
-public interface AuthAPIAdapter {
+public interface AuthApiAdapter {
 
     /**
      * gaship-auth API에 jwt 토큰을 요청하고 반환받는 기능입니다.

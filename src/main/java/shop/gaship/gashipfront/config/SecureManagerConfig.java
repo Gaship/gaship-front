@@ -26,7 +26,7 @@ public class SecureManagerConfig {
                 .uri("/keymanager/v1.0/appkey/{appkey}/secrets/{keyid}", appKey, keyId)
                 .retrieve()
                 .toEntity(SecureKeyResponse.class)
-                .timeout(Duration.ofSeconds(5))
+                .timeout(Duration.ofSeconds(20))
                 .blockOptional()
                 .orElseThrow(() -> new NoResponseDataException(errorMessage))
                 .getBody())

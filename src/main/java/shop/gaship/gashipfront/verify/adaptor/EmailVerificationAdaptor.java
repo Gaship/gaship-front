@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.member.exception.RequestFailureException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 import shop.gaship.gashipfront.verify.dto.RequestSuccessDto;
@@ -17,8 +18,8 @@ import shop.gaship.gashipfront.verify.dto.RequestSuccessDto;
 @Component
 @RequiredArgsConstructor
 public class EmailVerificationAdaptor {
-    private final String gatewayBaseurl;
 
+    private final ServerConfig serverConfig;
 
     /**
      * 회원가입을 위해서 이메일 인증을 요청하는 메서드입니다.
@@ -27,7 +28,7 @@ public class EmailVerificationAdaptor {
      * @return 이메일 인증이 정상적을 수신이 되면 RequestSuccessDto 객체가 반횐됩니다.
      */
     public RequestSuccessDto requestVerificationEmail(String address) {
-        return WebClient.create(gatewayBaseurl).get()
+        return WebClient.create(serverConfig.getGatewayUrl()).get()
             .uri("/securities/verify/email?address={address}", address)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -44,7 +45,7 @@ public class EmailVerificationAdaptor {
      * @return 이메일 인증이 완료가 되면 요청성공 객체를 반환한다.
      */
     public RequestSuccessDto verifyEmailByVerificationCode(String verificationCode) {
-        return WebClient.create(gatewayBaseurl).get()
+        return WebClient.create(serverConfig.getGatewayUrl()).get()
             .uri("/securities/verify/email/{verificationCode}", verificationCode)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -61,7 +62,7 @@ public class EmailVerificationAdaptor {
      * @return 이메일 인증이 완료가 되면 요청성공 객체를 반환한다.
      */
     public RequestSuccessDto checkEmailVerificationCode(String verificationCode) {
-        return WebClient.create(gatewayBaseurl).get()
+        return WebClient.create(serverConfig.getGatewayUrl()).get()
             .uri("/securities/verify?email={verificationCode}", verificationCode)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)

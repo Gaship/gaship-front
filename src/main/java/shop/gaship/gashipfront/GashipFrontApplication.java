@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
+ * 메인 실행부입니다.
+ *
  * @author 조재철
  * @since 1.0
  */

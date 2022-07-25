@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
-import shop.gaship.gashipfront.security.common.member.service.MemberService;
 import shop.gaship.gashipfront.security.social.util.SecurityContextLoginManager;
 
 /**
@@ -35,10 +34,10 @@ import shop.gaship.gashipfront.security.social.util.SecurityContextLoginManager;
 @RequiredArgsConstructor
 @Slf4j
 public class OauthController {
+
     private final NaverLoginService naverLoginService;
-    private final AuthAPIService authAPIService;
-    private final MemberService memberService;
-//    private final SignupManager signupManager;
+    private final AuthApiService authAPIService;
+    private final SignupManager signupManager;
 
     /**
      * Naver로 로그인요청을 보낼 uri를 요청측에 반환해주는 기능입니다.
@@ -77,11 +76,10 @@ public class OauthController {
         NaverAccessToken naverAccessToken = naverLoginService.getAccessToken(code, paramState, redisState);
 
         NaverUserData data = naverLoginService.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
-        SignupManager signupManager = new SignupManager(memberService);
         MemberDto member = signupManager.getMember(data.getResponse());
 
         SecurityContextLoginManager.setSecurityContext(member);
-        JwtDto jwt = authAPIService.getJWT(member.getMemberNo(), member.getAuthorities());
+        JwtDto jwt = authAPIService.getJwt(member.getMemberNo(), member.getAuthorities());
         session.setAttribute("jwt", jwt);
         return "all";
     }

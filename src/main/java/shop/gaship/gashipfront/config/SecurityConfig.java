@@ -1,15 +1,12 @@
 package shop.gaship.gashipfront.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,10 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSuccessHandler;
-import shop.gaship.gashipfront.security.CustomUserDetailService;
-import shop.gaship.gashipfront.security.handler.LoginSuccessHandler;
 
 /**
  * SpringSecurity에 관련한 전반적인 설정을 다루는 클래스입니다.
@@ -52,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and();
 
         http.oauth2Login()
-            .loginPage("/login")
+            .loginPage()
             .defaultSuccessUrl("/")
             .failureUrl("/login")
             .successHandler(oauth2LoginSuccessHandler(null));
@@ -88,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthAPIService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
 
     @Bean
     public WebClient webClient() {
