@@ -21,6 +21,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+
+    - name: assign NHN secure manager key to application.properties
+      run : echo ${{ secrets.NHN_SECURE_CLIENT_KEY }} >> ./src/main/resources/application.properties
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 

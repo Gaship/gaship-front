@@ -1,5 +1,11 @@
 package shop.gaship.gashipfront.config;
 
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -28,8 +34,15 @@ public class RedisConfig implements BeanClassLoaderAware {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
-        String secretHost = secureManagerConfig.findSecretDataFromSecureKeyManager(this.host);
-        String secretPassword = secureManagerConfig.findSecretDataFromSecureKeyManager(this.password);
+        String secretHost;
+        String secretPassword;
+        try {
+            secretHost = secureManagerConfig.findSecretDataFromSecureKeyManager(this.host);
+            secretPassword= secureManagerConfig.findSecretDataFromSecureKeyManager(this.password);
+        } catch (CertificateException | NoSuchAlgorithmException | KeyStoreException |
+            UnrecoverableKeyException | IOException | KeyManagementException e) {
+            throw new RuntimeException("Secure Manager Error");
+        }
 
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
         configuration.setHostName(secretHost);
