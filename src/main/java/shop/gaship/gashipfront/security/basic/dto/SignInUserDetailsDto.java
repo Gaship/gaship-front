@@ -3,6 +3,9 @@ package shop.gaship.gashipfront.security.dto;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @since 1.0
  */
 public class SignInSuccessUserDetailsDto implements UserDetails {
-    private Long identifyNo;
+    private Long memberNo;
     private String email;
     private String hashedPassword;
     private List<String> authorities;
@@ -57,7 +60,7 @@ public class SignInSuccessUserDetailsDto implements UserDetails {
         return true;
     }
 
-    public Long getIdentifyNo() {
-        return identifyNo;
+    public Long getMemberNo() {
+        return memberNo;
     }
 }

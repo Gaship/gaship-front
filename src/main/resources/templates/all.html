@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+this is all...
+
+<div sec:authorize="isAuthenticated()">
+    Only Authenticated user can see this Text
+    <span sec:authentication="principal.email"></span>
+</div>
+</body>
+</html>

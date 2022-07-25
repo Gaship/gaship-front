@@ -1,7 +1,6 @@
 package shop.gaship.gashipfront.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -11,13 +10,15 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0
  */
 @Configuration
+@ConfigurationProperties(prefix = "gaship-server")
 public class ServerConfig {
-    @Value("${gaship.server.gateway-url}")
-    private String gatewayBaseUrl;
+    private String gatewayUrl;
 
-    @Bean
-    public String gatewayBaseUrl() {
-        return this.gatewayBaseUrl;
+    public String getGatewayUrl() {
+        return gatewayUrl;
     }
 
+    public void setGatewayUrl(String gatewayUrl) {
+        this.gatewayUrl = gatewayUrl;
+    }
 }
