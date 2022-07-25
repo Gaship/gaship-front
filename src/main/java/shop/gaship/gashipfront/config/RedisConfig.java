@@ -1,7 +1,5 @@
 package shop.gaship.gashipfront.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
 import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,11 +9,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.jackson2.CoreJackson2Module;
-import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
@@ -36,7 +30,7 @@ public class RedisConfig implements BeanClassLoaderAware {
     private int database;
     private ClassLoader classLoader;
 
-    private final Integer COOKIE_MAXAGE_30_MINUTES = 1800;
+    private static final Integer THIRTEEN_MINUTES_SECONDS = 1800;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
@@ -69,7 +63,7 @@ public class RedisConfig implements BeanClassLoaderAware {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setCookieName("GASHIP_SESSIONID");
 
-        serializer.setCookieMaxAge(COOKIE_MAXAGE_30_MINUTES);   // 3일
+        serializer.setCookieMaxAge(THIRTEEN_MINUTES_SECONDS);   // 3일
         serializer.setCookiePath("/");
 
         return serializer;

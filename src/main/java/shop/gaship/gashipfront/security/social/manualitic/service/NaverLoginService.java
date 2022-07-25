@@ -2,7 +2,6 @@ package shop.gaship.gashipfront.security.social.manualitic.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import javax.servlet.http.HttpSession;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 

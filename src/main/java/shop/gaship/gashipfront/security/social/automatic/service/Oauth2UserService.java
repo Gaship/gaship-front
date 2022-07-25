@@ -36,7 +36,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         MemberDto member = signupManager.getMember(email);
 
         return new UserDetailsDto(email, member.getPassword(), member.getAuthorities().stream()
-            .map(i -> new SimpleGrantedAuthority(i))
+            .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList()), member, user.getAttributes());
     }
 }

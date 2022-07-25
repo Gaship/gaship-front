@@ -32,11 +32,10 @@ public class NaverAdapterImpl implements NaverAdapter {
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .build();
 
-        NaverAccessToken token = naverWebClient.get()
+        return naverWebClient.get()
             .retrieve()
             .bodyToMono(NaverAccessToken.class)
             .block();
-        return token;
     }
 
     /**
