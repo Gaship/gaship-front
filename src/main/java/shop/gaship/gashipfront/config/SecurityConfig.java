@@ -1,12 +1,15 @@
 package shop.gaship.gashipfront.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +19,8 @@ import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
 import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSuccessHandler;
+import shop.gaship.gashipfront.security.CustomUserDetailService;
+import shop.gaship.gashipfront.security.handler.LoginSuccessHandler;
 
 /**
  * SpringSecurity에 관련한 전반적인 설정을 다루는 클래스입니다.
@@ -31,29 +36,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            .antMatchers("/manager")
-            .hasRole("USER")
-            .antMatchers("/all")
-            .permitAll();
+        http
+            .authorizeRequests()
+            .antMatchers("/**")
+            .permitAll()
+            .and();
+
+        http.sessionManagement().disable();
 
         http.formLogin()
-            .loginPage("/login")
             .loginProcessingUrl("/loginAction")
-            .usernameParameter("id")
-            .passwordParameter("pw")
-            .defaultSuccessUrl("/all")
-            .failureUrl("/login")
             .successHandler(loginSuccessHandler())
-            .and()
-            .logout();
+            .successForwardUrl("/")
+            .failureUrl("/login")
+            .and();
 
         http.oauth2Login()
             .loginPage("/login")
-            .defaultSuccessUrl("/all")
+            .defaultSuccessUrl("/")
             .failureUrl("/login")
-            .successHandler(oauth2LoginSuccessHandler(null))
-            .and();
+            .successHandler(oauth2LoginSuccessHandler(null));
 
         http.csrf().disable();
         http.logout().disable();

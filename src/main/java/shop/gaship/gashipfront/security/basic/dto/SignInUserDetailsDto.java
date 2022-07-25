@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.basic.dto;
+package shop.gaship.gashipfront.security.dto;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,11 +10,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class SignInUserDetailsDto implements UserDetails {
-    private Integer memberNo;
+
+/**
+ * 회원의 로그인 성공시 담기는 데이터 객체입니다.
+ *
+ * @author : 김민수
+ * @since 1.0
+ */
+public class SignInSuccessUserDetailsDto implements UserDetails {
+    private Long memberNo;
     private String email;
     private String hashedPassword;
     private List<String> authorities;
@@ -54,5 +58,9 @@ public class SignInUserDetailsDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Long getMemberNo() {
+        return memberNo;
     }
 }
