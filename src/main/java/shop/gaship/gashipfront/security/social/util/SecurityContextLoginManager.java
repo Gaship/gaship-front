@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
+import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
 
 /**
  * spring security의 로직이 아닌 수동적인 회원가입이 필요할시를 대비하여 만들어둔 유틸클래스입니다.

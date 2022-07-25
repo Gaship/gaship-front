@@ -6,7 +6,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
+import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
 
 /**
  * Oauth2Login 또는 OauthDance를 이용한 작업을 수행할때 필요한 Dto 클래스입니다.

@@ -40,9 +40,8 @@ public class CustomUserDetailService implements UserDetailsService {
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(SignInUserDetailsDto.class)
             .timeout(TIMEOUT)
-            .block()
-//            .blockOptional()
-//            .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
+            .blockOptional()
+            .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
             .getBody();
         return body;
     }

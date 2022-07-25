@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipfront.security.common.adapter.oauth.NaverAdapter;
+import shop.gaship.gashipfront.security.social.manualitic.adapter.NaverAdapter;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;

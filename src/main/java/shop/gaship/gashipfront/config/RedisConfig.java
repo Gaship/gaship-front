@@ -20,6 +20,9 @@ import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 
 /**
+ * redis를 연결하기 위한 설정입니다.
+ *
+ * @author 최겸준
  * @author 조재철
  * @since 1.0
  */

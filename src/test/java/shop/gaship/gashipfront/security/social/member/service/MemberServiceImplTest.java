@@ -18,9 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipfront.security.common.adapter.shoppingmallapi.ShoppingMallAPIAdapter;
-import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.social.member.service.impl.MemberServiceImpl;
+import shop.gaship.gashipfront.security.common.member.adapter.MemberAdapter;
+import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.security.common.member.service.MemberService;
+import shop.gaship.gashipfront.security.common.member.service.impl.MemberServiceImpl;
 
 /**
  * @author : 최겸준
@@ -34,7 +35,7 @@ class MemberServiceImplTest {
     private MemberService memberService;
 
     @MockBean
-    private ShoppingMallAPIAdapter adapter;
+    private MemberAdapter adapter;
 
     @MockBean
     private PasswordEncoder passwordEncoder;
@@ -73,7 +74,6 @@ class MemberServiceImplTest {
         given(passwordEncoder.encode(anyString()))
             .willReturn("abcd");
 
-        // TODO : 왜쓰는거지
         doNothing().when(adapter).requestCreateMember(any());
 
         // when

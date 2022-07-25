@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
+import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
 
 /**
  * @author : 최겸준

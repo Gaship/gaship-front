@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
-import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.social.member.service.MemberService;
+import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.security.common.member.service.MemberService;
 
 /**
  * 회원가입이 필요한지 필요하지 않은지를 비교해서 회원가입되었다면 가입된 member를 반환하며 가입되지 않았다면 자동가입시키는 역할을 가지는 클래스입니다.
@@ -34,17 +34,11 @@ public class SignupManager {
      */
     public MemberDto getMember(NaverUserDataResponse info) throws
         RequestFailureException {
-        MemberDto member = null;
 
+        MemberDto member = null;
         try {
             member = memberService.getMemberByEmail(info.getEmail());
-//            member = new Member();
-//            member.setMemberNo(1);
-//            member.setEmail(info.getEmail());
-//            member.setPassword("1234");
-//            List<String> authorities = new ArrayList<>();
-//            authorities.add("USER");
-//            member.setAuthorities(authorities);
+
         } catch (RequestFailureException e) {
             if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) throw e;
             return retryGetMember(info);

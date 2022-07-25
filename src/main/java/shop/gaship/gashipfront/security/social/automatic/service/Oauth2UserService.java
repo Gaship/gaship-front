@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
-import shop.gaship.gashipfront.security.social.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.social.member.service.MemberService;
+import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.security.common.member.service.MemberService;
 
 /**
  * Oauth2를 이용한 로그인시에 사용되어질 class입니다.

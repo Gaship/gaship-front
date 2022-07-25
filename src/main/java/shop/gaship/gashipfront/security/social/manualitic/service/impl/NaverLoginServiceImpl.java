@@ -4,15 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.util.Objects;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.security.common.adapter.oauth.NaverAdapter;
+import shop.gaship.gashipfront.security.social.manualitic.adapter.NaverAdapter;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
@@ -65,14 +63,7 @@ public class NaverLoginServiceImpl implements NaverLoginService {
             .setParameter("redirect_uri", redirectUrl)
             .setParameter("state", state.toString())
             .build();
-//        uriForLoginPageRequest
-//            .append(apiUrlForLogin)
-//            .append("&client_id=").append(clientId)
-//            // TODO : 이거안해도 webclient에서 encode 들어가나? adapter에서 주는게 맞나?
-//            .append("&redirect_uri=").append(URLEncoder.encode(redirectUrl, "UTF-8"))
-//            .append("&state=").append(state.toString());
 
-//        return uriForLoginPageRequest.toString();
         return uri.toString();
     }
 
@@ -87,12 +78,6 @@ public class NaverLoginServiceImpl implements NaverLoginService {
             .setParameter("client_id", clientId)
             .setParameter("client_secret", clientSecret)
             .setParameter("code", code);
-//        StringBuilder uriForAccessToken = new StringBuilder();
-//        uriForAccessToken
-//            .append(apiUrlForAccessToken)
-//            .append("&client_id=").append(clientId)
-//            .append("&client_secret=").append(clientSecret)
-//            .append("&code=").append(code);
 
         return adapter.requestNaverAccessToken(uriBuilder.toString());
     }
