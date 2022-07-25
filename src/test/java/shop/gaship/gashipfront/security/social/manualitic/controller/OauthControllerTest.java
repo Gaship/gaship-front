@@ -15,7 +15,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.gaship.gashipfront.config.SecurityConfig;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
@@ -23,7 +23,6 @@ import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUser
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
 import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.common.member.service.MemberService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,7 +65,7 @@ class OauthControllerTest {
     private NaverLoginService naverLoginService;
 
     @MockBean
-    private AuthAPIService authApiService;
+    private AuthApiService authApiService;
 
     @MockBean
     private SignupManager signupManager;
@@ -154,11 +153,11 @@ class OauthControllerTest {
             .willReturn(member);
     }
 
-    private JwtDto givingJwt() throws Exception {
+    private JwtDto givingJwt() {
         JwtDto jwt = new JwtDto();
         jwt.setAccessToken("this is access!!");
         jwt.setRefreshToken("this is refresh!!");
-        given(authApiService.getJWT(any(), any()))
+        given(authApiService.getJwt(any(), any()))
             .willReturn(jwt);
         return jwt;
     }

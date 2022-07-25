@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 
 /**
  * 로그인 및 로그아웃요청을 처리하는 컨트롤러 클래스입니다.
@@ -21,7 +21,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final AuthAPIService authAPIService;
+    private final AuthApiService authAPIService;
 
     @GetMapping("/login")
     public String login() {

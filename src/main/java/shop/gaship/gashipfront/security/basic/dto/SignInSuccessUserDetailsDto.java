@@ -18,11 +18,16 @@ public class SignInSuccessUserDetailsDto implements UserDetails {
     private Long memberNo;
     private String email;
     private String hashedPassword;
+
+    private Boolean isSocial;
+
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    // 업데이트 하는 객체가 아닌, 로그인 사용자 정보를 주입받기 때문.
     private List<String> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities.stream()
+        return this.authorities.stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
@@ -59,5 +64,9 @@ public class SignInSuccessUserDetailsDto implements UserDetails {
 
     public Long getMemberNo() {
         return memberNo;
+    }
+
+    public Boolean isSocial() {
+        return isSocial;
     }
 }

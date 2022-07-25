@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
-import shop.gaship.gashipfront.security.common.gashipauth.service.AuthAPIService;
+import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSuccessHandler;
 
 /**
@@ -28,6 +28,7 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final String LOGIN_URI = "/login";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,13 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .loginProcessingUrl("/loginAction")
             .successHandler(loginSuccessHandler())
             .successForwardUrl("/")
-            .failureUrl("/login")
+            .failureUrl(LOGIN_URI)
             .and();
 
         http.oauth2Login()
-            .loginPage("/login")
+            .loginPage(LOGIN_URI)
             .defaultSuccessUrl("/")
-            .failureUrl("/login")
+            .failureUrl(LOGIN_URI)
             .successHandler(oauth2LoginSuccessHandler(null));
 
         http.csrf().disable();
@@ -65,11 +66,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationProvider authenticationProvider(
         CustomUserDetailService customUserDetailService) {
-        DaoAuthenticationProvider customDaoAuthenticationProvider = new DaoAuthenticationProvider();
-        customDaoAuthenticationProvider.setUserDetailsService(customUserDetailService);
-        customDaoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
 
-        return customDaoAuthenticationProvider;
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(customUserDetailService);
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        return daoAuthenticationProvider;
     }
 
     @Bean
@@ -83,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthAPIService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
 
     @Bean
     public WebClient webClient() {

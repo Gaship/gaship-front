@@ -6,14 +6,14 @@
       <OVERRIDDEN_METHODS>false</OVERRIDDEN_METHODS>
       <SPLITTED_CLASS_NAME>true</SPLITTED_CLASS_NAME>
       <LEVELS>
-        <LEVEL>TYPE</LEVEL>
-        <LEVEL>METHOD</LEVEL>
         <LEVEL>FIELD</LEVEL>
+        <LEVEL>METHOD</LEVEL>
+        <LEVEL>TYPE</LEVEL>
       </LEVELS>
       <VISIBILITIES>
         <VISIBILITY>PUBLIC</VISIBILITY>
-        <VISIBILITY>PROTECTED</VISIBILITY>
         <VISIBILITY>DEFAULT</VISIBILITY>
+        <VISIBILITY>PROTECTED</VISIBILITY>
       </VISIBILITIES>
     </GENERAL>
     <TEMPLATES>
@@ -148,9 +148,8 @@
         <METHOD>
           <KEY>.+</KEY>
           <VALUE>/**\n
-* @author 조재철\n
-&lt;#if element.typeParameters?has_content&gt;
-* \n
+ * ${name}&lt;#if isNotVoid&gt; ${return}&lt;/#if&gt;.\n
+&lt;#if element.typeParameters?has_content&gt;         * \n
 &lt;/#if&gt;
 &lt;#list element.typeParameters as typeParameter&gt;
          * @param &lt;${typeParameter.name}&gt; the type parameter\n
@@ -159,11 +158,11 @@
          *\n
 &lt;/#if&gt;
 &lt;#list element.parameterList.parameters as parameter&gt;
-         * @param ${paramNames[parameter.name]}\n
+         * @param ${parameter.name} the ${paramNames[parameter.name]}\n
 &lt;/#list&gt;
 &lt;#if isNotVoid&gt;
          *\n
-         * @return ${return}\n
+         * @return the ${return}\n
 &lt;/#if&gt;
 &lt;#if element.throwsList.referenceElements?has_content&gt;
          *\n
