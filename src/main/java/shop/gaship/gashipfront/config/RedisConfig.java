@@ -16,11 +16,15 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.web.http.CookieSerializer;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 
 /**
  * 인메모리 데이터베이스 레디스를 설정하기위한 클래스입니다.
  *
- * @author : 김민수
+ * @author 최겸준
+ * @author 조재철
+ * @author 김민수
  * @since 1.0
  */
 @Configuration
@@ -31,6 +35,8 @@ public class RedisConfig implements BeanClassLoaderAware {
     private String password;
     private int database;
     private ClassLoader classLoader;
+
+    private static final Integer THIRTEEN_MINUTES_SECONDS = 1800;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
@@ -65,6 +71,16 @@ public class RedisConfig implements BeanClassLoaderAware {
         return redisTemplate;
     }
 
+    @Bean
+    public CookieSerializer cookieSerializer() {
+        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
+        serializer.setCookieName("GASHIP_SESSIONID");
+
+        serializer.setCookieMaxAge(THIRTEEN_MINUTES_SECONDS);   // 3일
+        serializer.setCookiePath("/");
+
+        return serializer;
+    }
     public String getHost() {
         return host;
     }
