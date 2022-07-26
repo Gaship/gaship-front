@@ -1,10 +1,11 @@
 package shop.gaship.gashipfront.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,26 +26,28 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
  * @author 조재철
  * @since 1.0
  */
-@Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
+@Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URI = "/login";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests()
+        http.authorizeRequests()
             .antMatchers("/**")
             .permitAll()
             .and();
 
-        http.sessionManagement().disable();
+        http.sessionManagement()
+            .maximumSessions(1);
 
         http.formLogin()
+            .loginPage(LOGIN_URI)
             .loginProcessingUrl("/loginAction")
-            .successHandler(loginSuccessHandler())
-            .successForwardUrl("/")
+            .successHandler(loginSuccessHandler(null))
             .failureUrl(LOGIN_URI)
+            .usernameParameter("id")
+            .passwordParameter("pw")
             .and();
 
         http.oauth2Login()
@@ -52,9 +55,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .defaultSuccessUrl("/")
             .failureUrl(LOGIN_URI)
             .successHandler(oauth2LoginSuccessHandler(null));
-
+        http.oauth2Login().disable();
         http.csrf().disable();
         http.logout().disable();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider(null));
     }
 
     @Override
@@ -80,8 +88,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public LoginSuccessHandler loginSuccessHandler() {
-        return new LoginSuccessHandler();
+    public LoginSuccessHandler loginSuccessHandler(ServerConfig serverConfig) {
+        return new LoginSuccessHandler(serverConfig);
     }
 
     @Bean
