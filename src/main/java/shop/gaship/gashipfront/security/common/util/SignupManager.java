@@ -6,10 +6,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.common.member.service.MemberService;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.member.service.MemberService;
 
 /**
  * 회원가입이 필요한지 필요하지 않은지를 비교해서 회원가입되었다면 가입된 member를 반환하며 가입되지 않았다면 자동가입시키는 역할을 가지는 클래스입니다.
@@ -30,16 +30,16 @@ public class SignupManager {
      *
      * @param info 네이버에서 받은 유저정보가 있는 객체입니다.
      * @return Member 회원인 member객체를 요청한뒤 반환받은 member를 반환합니다.
-     * @throws RequestFailureException RequestFailureException중에서도 statusCodeValue가 400이 아니면 예외를 발생합니다. 이 경우는 회원이 존재하지않아서 발생한 경우가 아니라 API 서버의 문제인 경우입니다.
+     * @throws RequestFailureThrow RequestFailureException중에서도 statusCodeValue가 400이 아니면 예외를 발생합니다. 이 경우는 회원이 존재하지않아서 발생한 경우가 아니라 API 서버의 문제인 경우입니다.
      */
-    public MemberDto getMember(NaverUserDataResponse info) throws
-        RequestFailureException {
+    public MemberAllFieldDto getMember(NaverUserDataResponse info) throws
+        RequestFailureThrow {
 
-        MemberDto member = null;
+        MemberAllFieldDto member = null;
         try {
             member = memberService.getMemberByEmail(info.getEmail());
 
-        } catch (RequestFailureException e) {
+        } catch (RequestFailureThrow e) {
             if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) throw e;
             return retryGetMember(info);
         }
@@ -52,15 +52,15 @@ public class SignupManager {
      *
      * @param email 다른 Oauth에서 받은 email 정보입니다.
      * @return Member 회원인 member객체를 요청한뒤 반환받은 member를 반환합니다.
-     * @throws RequestFailureException RequestFailureException중에서도 statusCodeValue가 400이 아니면 예외를 발생합니다. 이 경우는 회원이 존재하지않아서 발생한 경우가 아니라 API 서버의 문제인 경우입니다.
+     * @throws RequestFailureThrow RequestFailureException중에서도 statusCodeValue가 400이 아니면 예외를 발생합니다. 이 경우는 회원이 존재하지않아서 발생한 경우가 아니라 API 서버의 문제인 경우입니다.
      */
-    public MemberDto getMember(String email) throws
-        RequestFailureException {
-        MemberDto member;
+    public MemberAllFieldDto getMember(String email) throws
+        RequestFailureThrow {
+        MemberAllFieldDto member;
 
         try {
             member = memberService.getMemberByEmail(email);
-        } catch (RequestFailureException e) {
+        } catch (RequestFailureThrow e) {
             if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) throw e;
             return retryGetMember(email);
         }
@@ -73,11 +73,11 @@ public class SignupManager {
      * @param info 네이버에서 받은 유저정보가 있는 객체입니다.
      * @return Member 회원인 member객체를 요청한뒤 반환받은 member를 반환합니다.
      */
-    private MemberDto retryGetMember(NaverUserDataResponse info) {
+    private MemberAllFieldDto retryGetMember(NaverUserDataResponse info) {
         String email = info.getEmail();
         Integer memberNo = getLastMemberNo();
         String rowNickName = Strings.concat(SOCIAL_NICKNAME_PREFIX, String.valueOf(memberNo));
-        MemberDto member = buildMember(rowNickName, info);
+        MemberAllFieldDto member = buildMember(rowNickName, info);
         memberService.createMember(member);
         return memberService.getMemberByEmail(email);
     }
@@ -88,10 +88,10 @@ public class SignupManager {
      * @param email 다른 Oauth에서 받은 email 정보입니다.
      * @return Member 회원인 member객체를 요청한뒤 반환받은 member를 반환합니다.
      */
-    private MemberDto retryGetMember(String email) {
+    private MemberAllFieldDto retryGetMember(String email) {
         Integer memberNo = getLastMemberNo();
         String rowNickName = Strings.concat(SOCIAL_NICKNAME_PREFIX, String.valueOf(memberNo));
-        MemberDto member = buildMember(rowNickName, email);
+        MemberAllFieldDto member = buildMember(rowNickName, email);
         memberService.createMember(member);
         return memberService.getMemberByEmail(email);
     }
@@ -113,15 +113,15 @@ public class SignupManager {
      * @param info member객체를 만들때 필요한 필드들을 가지는 객체입니다.
      * @return Member 생성한 객체를 반환합니다.
      */
-    private MemberDto buildMember(String rowNickName, NaverUserDataResponse info) {
-        MemberDto member;
+    private MemberAllFieldDto buildMember(String rowNickName, NaverUserDataResponse info) {
+        MemberAllFieldDto member;
         String email = info.getEmail();
         String[] birthday = info.getBirthday().split("-");
         Integer year = Integer.parseInt(info.getBirthyear());
         Integer month = Integer.parseInt(birthday[MONTH]);
         Integer day = Integer.parseInt(birthday[DAY]);
 
-        member = MemberDto.builder()
+        member = MemberAllFieldDto.builder()
             .email(email)
             .password(email)
             .nickName(Strings.concat(rowNickName,
@@ -141,10 +141,10 @@ public class SignupManager {
      * @param email member객체를 만들때 필요한 email을 가지는 객체입니다.
      * @return Member 생성한 객체를 반환합니다.
      */
-    private MemberDto buildMember(String rowNickName, String email) {
-        MemberDto member;
+    private MemberAllFieldDto buildMember(String rowNickName, String email) {
+        MemberAllFieldDto member;
 
-        member = MemberDto.builder()
+        member = MemberAllFieldDto.builder()
             .email(email)
             .password(email)
             .nickName(Strings.concat(rowNickName, RandomStringUtils.random(16, true, true)))

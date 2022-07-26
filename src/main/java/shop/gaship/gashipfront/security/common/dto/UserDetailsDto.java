@@ -7,7 +7,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
 /**
  * Oauth2Login 또는 OauthDance를 이용한 작업을 수행할때 필요한 Dto 클래스입니다.
@@ -19,8 +19,8 @@ import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
  */
 @Getter
 public class UserDetailsDto extends User implements OAuth2User {
-    private final MemberDto member;
-    private final String email;
+    private MemberAllFieldDto member;
+    private String email;
     private Map<String, Object> attr;
 
     /**
@@ -35,8 +35,7 @@ public class UserDetailsDto extends User implements OAuth2User {
      *                    getAttributes()로 받아낸 값입니다.
      */
     public UserDetailsDto(String username, String password,
-                          Collection<? extends GrantedAuthority> authorities, MemberDto member,
-                          Map<String, Object> attr) {
+                          Collection<? extends GrantedAuthority> authorities, MemberAllFieldDto member, Map<String, Object> attr) {
         this(username, password, authorities, member);
         this.attr = attr;
     }
@@ -51,7 +50,7 @@ public class UserDetailsDto extends User implements OAuth2User {
      *                    member를 통해서 가져올수있지만 자주 사용하는 접근성이 있어서 필드로 따로 세팅했습니다.
      */
     public UserDetailsDto(String username, String password,
-                          Collection<? extends GrantedAuthority> authorities, MemberDto member) {
+                          Collection<? extends GrantedAuthority> authorities, MemberAllFieldDto member) {
         super(username, password, authorities);
         this.email = username;
         this.member = member;

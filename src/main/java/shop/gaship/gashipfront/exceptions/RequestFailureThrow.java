@@ -1,20 +1,45 @@
 package shop.gaship.gashipfront.exceptions;
 
-import shop.gaship.gashipfront.message.ErrorResponse;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 /**
- * packageName    : shop.gaship.gashipfront.exceptions <br/>
- * fileName       : RequestFailureThrow<br/>
- * author         : 김보민<br/>
- * date           : 2022-07-14<br/>
- * description    : 서버에 보낸 요청이 실패했을때의 예외입니다.<br/>
- * ===========================================================<br/>
- * DATE              AUTHOR             NOTE                  <br/>
- * -----------------------------------------------------------<br/>
- * 2022-07-14        김보민       최초 생성<br/>
+ * API 서버에서 예외상황으로 넘어온경우에 발생시킬 예외클래스입니다.
+ *
+ * @author 김보민
+ * @author 최겸준
+ * @since 1.0
  */
-public class RequestFailureThrow extends Throwable {
-    public RequestFailureThrow(ErrorResponse errorResponse) {
-        super(errorResponse.getMessage());
+@NoArgsConstructor
+public class RequestFailureThrow extends RuntimeException {
+    private HttpStatus statusCode;
+
+    /**
+     * status code 비교가 필요없이 예외를 발생시키면 되는 경우에 message 파라미터 하나만 받아서 예외를 생성시키는 생성자입니다.
+     *
+     * @param message 예외 메세지를 저장합니다.
+     */
+    public RequestFailureThrow(String message) {
+        super(message);
+    }
+
+    /**
+     * status code 비교가 필요한경우 매개변수로 status 코드까지 받는 생성자입니다.
+     *
+     * @param message 예외 메세지를 저장합니다.
+     * @param statusCode 예외에 대한 상태코드를 저장합니다.
+     */
+    public RequestFailureThrow(String message, HttpStatus statusCode) {
+        super(message);
+        this.statusCode = statusCode;
+    }
+
+    /**
+     * statusCode를 반환하는 기능입니다. message는 부모클래스에서 getter기능을 제공합니다.
+     *
+     * @return Http Status 코드를 반환합니다.
+     */
+    public HttpStatus getStatusCode() {
+        return statusCode;
     }
 }

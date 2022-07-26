@@ -18,5 +18,13 @@ public interface AuthApiService {
      * @return 반환받을 Jwt dto 객체입니다.
      */
     JwtDto getJwt(Integer memberNo, List<String> authorities);
-    void logout(Integer memberNo, JwtDto jwt);
+
+    /**
+     * 로그아웃 기능입니다.
+     * 로그아웃시에 auth 서버에서 jwt에서 accessToken을 블랙리스트처리하고 refreshToken을 삭제해야하는데 그때 처리될수있도록 해당 인자들을 넘겨줍니다.
+     *
+     * @param memberNo 멤버의 고유번호입니다.
+     * @param jwtDto auth에서 로그인시 발급해준 토큰입니다.
+     */
+    void logout(Integer memberNo, JwtDto jwtDto);
 }

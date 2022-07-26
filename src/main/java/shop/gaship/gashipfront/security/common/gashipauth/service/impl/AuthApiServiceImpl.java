@@ -20,6 +20,9 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService
 public class AuthApiServiceImpl implements AuthApiService {
     private final AuthApiAdapter adapter;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public JwtDto getJwt(Integer memberNo, List<String> authorities) {
         UserInfoForJwtRequestDto detailsDto = new UserInfoForJwtRequestDto();
@@ -28,7 +31,9 @@ public class AuthApiServiceImpl implements AuthApiService {
 
         return adapter.requestJwt(detailsDto);
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void logout(Integer memberNo, JwtDto jwtDto) {
         adapter.requestLogout(memberNo, jwtDto);

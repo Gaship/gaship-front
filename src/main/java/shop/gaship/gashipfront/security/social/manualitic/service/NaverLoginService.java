@@ -16,7 +16,6 @@ public interface NaverLoginService {
     /**
      * 로그인을 요청하는 uri를 만들어서 반환하는 기능입니다. csrf 방어도 함께합니다.
      *
-     * @param session 생성한 state값을 저장하는 공간입니다.
      * @return 전체 uri입니다.
      * @throws UnsupportedEncodingException URLEncoder.encode시 발생할수 있는 예외입니다.
      */

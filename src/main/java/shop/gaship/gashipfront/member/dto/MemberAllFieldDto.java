@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.common.member.dto;
+package shop.gaship.gashipfront.member.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MemberDto implements Serializable {
+public class MemberAllFieldDto implements Serializable {
     private Integer memberNo;
     private String memberStatus;
 
@@ -39,8 +39,8 @@ public class MemberDto implements Serializable {
     private String encodedEmailForSearch;
 
     @Builder
-    public MemberDto(String email, String password, String nickName, String name,
-                     String gender, String phoneNumber, LocalDate birthDate) {
+    public MemberAllFieldDto(String email, String password, String nickName, String name,
+                             String gender, String phoneNumber, LocalDate birthDate) {
         this.email = email;
         this.password = password;
         this.nickName = nickName;

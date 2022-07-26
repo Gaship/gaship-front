@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
 /**
  * oauth2 기능을 통한 로그인 성공시에 기본적인 처리 및 jwt를 요청하고 session에 추가해주기 위한 클래스입니다.
@@ -36,7 +36,7 @@ public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         super.onAuthenticationSuccess(request, response, authentication);
 
         UserDetailsDto memberDto = (UserDetailsDto) authentication.getPrincipal();
-        MemberDto member = memberDto.getMember();
+        MemberAllFieldDto member = memberDto.getMember();
 
         JwtDto jwt = commonService.getJwt(member.getMemberNo(), member.getAuthorities());
         HttpSession session = request.getSession();

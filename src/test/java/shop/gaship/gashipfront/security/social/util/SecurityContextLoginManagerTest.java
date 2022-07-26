@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
 /**
  * @author : 최겸준
@@ -22,7 +22,7 @@ class SecurityContextLoginManagerTest {
     @Test
     void setSecurityContext() throws NoSuchAlgorithmException {
         // given
-        MemberDto member = new MemberDto();
+        MemberAllFieldDto member = new MemberAllFieldDto();
         member.setEmail("abc@naver.com");
         member.setPassword("1234");
 
