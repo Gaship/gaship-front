@@ -1,9 +1,10 @@
-package shop.gaship.gashipfront.security.social.manualitic.adapter;
+package shop.gaship.gashipfront.security.social.manualitic.adapter.impl;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipfront.security.social.manualitic.adapter.NaverAdapter;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 

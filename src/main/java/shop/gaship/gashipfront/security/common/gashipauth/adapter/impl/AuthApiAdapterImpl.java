@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.common.gashipauth.adapter;
+package shop.gaship.gashipfront.security.common.gashipauth.adapter.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
-import shop.gaship.gashipfront.security.common.gashipauth.adapter.impl.AuthApiAdapter;
+import shop.gaship.gashipfront.security.common.gashipauth.adapter.AuthApiAdapter;
 import shop.gaship.gashipfront.security.common.util.ExceptionUtil;
 
 /**

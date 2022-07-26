@@ -3,9 +3,9 @@ package shop.gaship.gashipfront.security.common.gashipauth.service.impl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.security.common.gashipauth.adapter.impl.AuthApiAdapter;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
+import shop.gaship.gashipfront.security.common.gashipauth.adapter.AuthApiAdapter;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 
 /**

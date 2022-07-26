@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.common.gashipauth.adapter.impl;
+package shop.gaship.gashipfront.security.common.gashipauth.adapter;
 
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
