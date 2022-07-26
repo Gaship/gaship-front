@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomEmployeeUserDetailService;
+import shop.gaship.gashipfront.security.repository.RedisCsrfRepository;
 
 /**
  * 설명작성란
@@ -26,6 +27,8 @@ import shop.gaship.gashipfront.security.basic.service.CustomEmployeeUserDetailSe
 public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final LoginSuccessHandler loginSuccessHandler;
+
+    private final RedisCsrfRepository redisCsrfRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,7 +46,9 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("pw")
                 .failureUrl("/manager-login")
             .and()
-            .csrf().disable()
+            .csrf()
+                .csrfTokenRepository(redisCsrfRepository)
+            .and()
             .httpBasic()
             .and()
             .requestMatchers()
