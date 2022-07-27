@@ -12,9 +12,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.gaship.gashipfront.config.SecurityConfig;
+import shop.gaship.gashipfront.config.SecurityEmployeeConfig;
+import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
@@ -52,11 +56,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         SecurityAutoConfiguration.class,
         OAuth2ClientAutoConfiguration.class,
         ThymeleafAutoConfiguration.class
+
     },
     excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class),
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityEmployeeConfig.class)
     }
 )
+@Import({ServerConfig.class, CustomUserDetailService.class})
 class OauthControllerTest {
     @Autowired
     private MockMvc mvc;
