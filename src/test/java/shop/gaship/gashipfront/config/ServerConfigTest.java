@@ -25,6 +25,6 @@ class ServerConfigTest {
     @Test
     void serverConfigTest() {
         assertThat(config.getGatewayUrl())
-            .isEqualTo("http://localhost:9090");
+            .isEqualTo("http://localhost:7070");
     }
 }

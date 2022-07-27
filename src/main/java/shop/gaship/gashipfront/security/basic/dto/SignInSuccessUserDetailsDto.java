@@ -3,6 +3,9 @@ package shop.gaship.gashipfront.security.basic.dto;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,11 +17,13 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author : 김민수
  * @since 1.0
  */
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class SignInSuccessUserDetailsDto implements UserDetails {
     private Long memberNo;
     private String email;
     private String hashedPassword;
-
     private Boolean isSocial;
 
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
