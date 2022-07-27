@@ -26,7 +26,7 @@ import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUser
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -147,7 +147,7 @@ class OauthControllerTest {
     }
 
     private void givingMember() {
-        MemberDto member = new MemberDto();
+        MemberAllFieldDto member = new MemberAllFieldDto();
         member.setEmail("abc@naver.com");
         member.setPassword("1234");
         member.setMemberNo(123412);
@@ -160,7 +160,7 @@ class OauthControllerTest {
             .willReturn(member);
     }
 
-    private JwtDto givingJwt() {
+    private JwtDto givingJwt() throws Exception {
         JwtDto jwt = new JwtDto();
         jwt.setAccessToken("this is access!!");
         jwt.setRefreshToken("this is refresh!!");

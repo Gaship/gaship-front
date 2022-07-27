@@ -18,10 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import shop.gaship.gashipfront.security.common.member.adapter.MemberAdapter;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.common.member.service.MemberService;
-import shop.gaship.gashipfront.security.common.member.service.impl.MemberServiceImpl;
+import shop.gaship.gashipfront.member.adapter.MemberAdapter;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.member.service.MemberService;
+import shop.gaship.gashipfront.member.service.impl.MemberServiceImpl;
 
 /**
  * @author : 최겸준
@@ -45,7 +45,7 @@ class MemberServiceImplTest {
     void getMemberByEmail() {
         // given
         String email = "gbeovhsqhtka@naver.com";
-        MemberDto member = new MemberDto();
+        MemberAllFieldDto member = new MemberAllFieldDto();
         member.setEmail(email);
 
         ResponseEntity<Object> response
@@ -58,7 +58,7 @@ class MemberServiceImplTest {
             .willReturn(member);
 
         // when
-        MemberDto actualMember = memberService.getMemberByEmail(email);
+        MemberAllFieldDto actualMember = memberService.getMemberByEmail(email);
 
         // then
         assertThat(actualMember)
@@ -69,7 +69,7 @@ class MemberServiceImplTest {
     @Test
     void createMember() {
         // given
-        MemberDto member = mock(MemberDto.class);
+        MemberAllFieldDto member = mock(MemberAllFieldDto.class);
         given(member.getPassword()).willReturn("zzz");
         given(passwordEncoder.encode(anyString()))
             .willReturn("abcd");

@@ -15,7 +15,7 @@ import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
 import shop.gaship.gashipfront.security.common.exception.CsrfProtectedException;
-import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 
 
 /**
@@ -83,7 +83,7 @@ public class NaverLoginServiceImpl implements NaverLoginService {
     @Override
     public NaverUserData getUserDataThroughAccessToken(String accessToken) {
         NaverUserData data = adapter.requestNaverUserData(apiUrlForUserData, accessToken);
-        if (!Objects.equals(data.getMessage(), "success")) throw new RequestFailureException("oauth request fail, message : " + data.getMessage());
+        if (!Objects.equals(data.getMessage(), "success")) throw new RequestFailureThrow("oauth request fail, message : " + data.getMessage());
         return data;
     }
 }

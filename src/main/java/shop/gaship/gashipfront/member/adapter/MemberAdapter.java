@@ -1,10 +1,10 @@
-package shop.gaship.gashipfront.security.common.member.adapter;
+package shop.gaship.gashipfront.member.adapter;
 
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
 import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
-import shop.gaship.gashipfront.member.exception.RequestFailureException;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
 /**
  * api서버에 요청을 처리하는 기능을 담당하는 interface입니다.
@@ -20,7 +20,7 @@ public interface MemberAdapter {
      * @return responseEntity
      * @author 최겸준
      */
-    MemberDto requestMemberByEmail(String email);
+    MemberAllFieldDto requestMemberByEmail(String email);
 
     /**
      * 멤버의 회원가입 요청을 담당하는 기능입니다.
@@ -28,7 +28,7 @@ public interface MemberAdapter {
      * @param member 회원가입시 필요한 정보를 담고있는 Memeber객체입니다.
      * @author 최겸준
      */
-    void requestCreateMember(MemberDto member);
+    void requestCreateMember(MemberAllFieldDto member);
 
     /**
      * 멤버의 회원가입시 닉네임생성을 위해 최신 번호를 가져오는 기능입니다.
@@ -42,7 +42,7 @@ public interface MemberAdapter {
      *
      * @param memberCreationRequest 쇼핑몰의 멤버로 가입할 정보입니다.
      * @return 회원가입이 정상적으로 완료시 true를 반환합니다.
-     * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
+     * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     boolean signUpRequest(MemberCreationRequest memberCreationRequest);
 
@@ -51,7 +51,7 @@ public interface MemberAdapter {
      *
      * @param email : 확인할 이메일
      * @return 이메일이 존재하는지에대한 결과를 담은 객체를 반환합니다.
-     * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
+     * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     EmailPresence emailDuplicationCheckRequest(String email);
 
@@ -60,7 +60,7 @@ public interface MemberAdapter {
      *
      * @param nickName : 확인할 닉네임입니다.
      * @return MemberNumberPresence : 존재한다면 회원 고유번호가 담겨옵니다.
-     * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
+     * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     MemberNumberPresence nicknameDuplicationCheckRequest(String nickName);
 
@@ -69,7 +69,7 @@ public interface MemberAdapter {
      *
      * @param nickName : 확인할 닉네임입니다.
      * @return 존재한다면 회원 고유번호가 담겨옵니다.
-     * @throws RequestFailureException 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
+     * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     MemberNumberPresence recommendMemberNoFind(String nickName);
 }

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
-import shop.gaship.gashipfront.member.exception.RequestFailureException;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 import shop.gaship.gashipfront.verify.dto.RequestSuccessDto;
 
@@ -34,7 +34,7 @@ public class EmailVerificationAdaptor {
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(RequestSuccessDto.class)
             .blockOptional()
-            .orElseThrow(RequestFailureException::new)
+            .orElseThrow(RequestFailureThrow::new)
             .getBody();
     }
 
@@ -51,7 +51,7 @@ public class EmailVerificationAdaptor {
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(RequestSuccessDto.class)
             .blockOptional()
-            .orElseThrow(RequestFailureException::new)
+            .orElseThrow(RequestFailureThrow::new)
             .getBody();
     }
 
@@ -68,7 +68,7 @@ public class EmailVerificationAdaptor {
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(RequestSuccessDto.class)
             .blockOptional()
-            .orElseThrow(RequestFailureException::new)
+            .orElseThrow(RequestFailureThrow::new)
             .getBody();
     }
 }

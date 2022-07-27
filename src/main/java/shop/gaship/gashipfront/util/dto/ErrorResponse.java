@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.common.dto;
+package shop.gaship.gashipfront.util.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,8 @@ import lombok.Setter;
 /**
  * api 서버에서 예외가 발생해서 넘어온 경우 body의 값을 받을 dto 입니다.
  *
- * @author : 최겸준
+ * @author 조재철
+ * @author 최겸준
  * @since 1.0
  */
 
@@ -26,11 +27,6 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    /**
-     * getter 입니다.
-     *
-     * @return String
-     */
     public String getMessage() {
         return message;
     }

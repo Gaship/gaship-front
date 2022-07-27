@@ -29,7 +29,7 @@ import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUser
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
 import shop.gaship.gashipfront.security.social.manualitic.service.impl.NaverLoginServiceImpl;
 import shop.gaship.gashipfront.security.common.exception.CsrfProtectedException;
-import shop.gaship.gashipfront.security.common.exception.RequestFailureException;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 
 /**
  * packageName    : shop.gaship.gashipfront.security.social.service.dance
@@ -192,7 +192,7 @@ class NaverLoginServiceImplTest {
 
         // when then
         assertThatThrownBy(() -> naverLoginService.getUserDataThroughAccessToken("accessToken"))
-            .isInstanceOf(RequestFailureException.class)
+            .isInstanceOf(RequestFailureThrow.class)
             .hasMessageContaining("message : ");
     }
 

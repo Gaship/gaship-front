@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.security.common.member.adapter;
+package shop.gaship.gashipfront.member.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
-import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
-import shop.gaship.gashipfront.member.exception.RequestFailureException;
+import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.common.util.ExceptionUtil;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
+import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
  * ShoppingMallAPIAdapter interface의 구현체입니다.
@@ -36,12 +36,12 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @author 최겸준
      */
     @Override
-    public MemberDto requestMemberByEmail(String email) {
+    public MemberAllFieldDto requestMemberByEmail(String email) {
         return webClient.get()
             .uri("/members/email/{email}", email)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-            .bodyToMono(MemberDto.class)
+            .bodyToMono(MemberAllFieldDto.class)
             .blockOptional()
             .orElseThrow(NullResponseBodyException::new);
     }
@@ -53,7 +53,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @author 최겸준
      */
     @Override
-    public void requestCreateMember(MemberDto member) {
+    public void requestCreateMember(MemberAllFieldDto member) {
         webClient.post()
             .uri("/members?isOauth=true")
             .contentType(MediaType.APPLICATION_JSON)
@@ -104,7 +104,7 @@ public class MemberAdapterImpl implements MemberAdapter {
             .onStatus(HttpStatus::isError, shop.gaship.gashipfront.util.ExceptionUtil::createErrorMono)
             .toEntity(EmailPresence.class)
             .blockOptional()
-            .orElseThrow(RequestFailureException::new)
+            .orElseThrow(RequestFailureThrow::new)
             .getBody();
     }
 
@@ -119,7 +119,7 @@ public class MemberAdapterImpl implements MemberAdapter {
             .onStatus(HttpStatus::isError, shop.gaship.gashipfront.util.ExceptionUtil::createErrorMono)
             .toEntity(MemberNumberPresence.class)
             .blockOptional()
-            .orElseThrow(RequestFailureException::new)
+            .orElseThrow(RequestFailureThrow::new)
             .getBody();
     }
 
@@ -131,7 +131,7 @@ public class MemberAdapterImpl implements MemberAdapter {
                 .onStatus(HttpStatus::isError, shop.gaship.gashipfront.util.ExceptionUtil::createErrorMono)
                 .toEntity(MemberNumberPresence.class)
                 .blockOptional()
-                .orElseThrow(RequestFailureException::new)
+                .orElseThrow(RequestFailureThrow::new)
                 .getBody();
     }
 }

@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
-import shop.gaship.gashipfront.security.common.member.dto.MemberDto;
-import shop.gaship.gashipfront.security.common.member.service.MemberService;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.member.service.MemberService;
 
 /**
  * Oauth2를 이용한 로그인시에 사용되어질 class입니다.
@@ -33,7 +33,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> value = (Map<String, Object>) user.getAttributes().get("kakao_account");
         String email = (String) value.get("email");
         SignupManager signupManager = new SignupManager(memberService);
-        MemberDto member = signupManager.getMember(email);
+        MemberAllFieldDto member = signupManager.getMember(email);
 
         return new UserDetailsDto(email, member.getPassword(), member.getAuthorities().stream()
             .map(SimpleGrantedAuthority::new)
