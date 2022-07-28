@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 import shop.gaship.gashipfront.employee.dto.request.EmployeeCreateRequestDto;
 import shop.gaship.gashipfront.employee.dto.request.EmployeeModifyRequestDto;
 import shop.gaship.gashipfront.employee.dto.response.EmployeeResponseDto;
-import shop.gaship.gashipfront.exceptions.RequestFailureException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
