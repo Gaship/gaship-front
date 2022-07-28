@@ -21,11 +21,11 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  * @since 1.0
  */
 @Component
-public class CategoryAdaptorImpl implements CategoryAdapter {
+public class CategoryAdapterImpl implements CategoryAdapter {
     @Value("${gaship-server.gateway-url}")
     private String gatewayUrl;
 
-    private static final String REQUEST_URI = "/category";
+    private static final String REQUEST_URI = "/api/category";
 
     private final WebClient webClient = WebClient.builder()
             .baseUrl(gatewayUrl)
