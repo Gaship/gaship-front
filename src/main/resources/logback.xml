@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!--    Properties Setting      -->
+    <property name="LOG_DIR" value=""/>
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>\
+    <property name="LOG_CONSOLE_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} - %msg%n"/>
+    <!--    /Properties Setting      -->
+
+    <!--    Appender Setting    -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_CONSOLE_PATTERN}}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append> <!-- append형식을 사용할 것인가? -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/debuglog-%d{yyyy-MM-dd}.%i.log</fileNamePattern> <!-- 파일 저장하는 곳, 이름 패턴 -->
+        </rollingPolicy>
+    </appender>
+    <!--    /Appender Setting    -->
+
+
+    <!--    Logging Setting    -->
+    <root>
+        <springProfile name="console-logging">
+            <appender-ref ref="CONSOLE"/>
+        </springProfile>
+
+        <springProfile name="file-logging">
+            <appender-ref ref="FILE"/>
+        </springProfile>
+    </root>
+    <!--    /Logging Setting    -->
+</configuration>
