@@ -66,6 +66,7 @@ public class EmployeeAdapter {
         return WebClient.create(baseurl.getGatewayUrl()).get()
             .uri(EMPLOYEE_BASE_URI + employeeNo)
             .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(EmployeeResponseDto.class);
     }
 
@@ -80,6 +81,7 @@ public class EmployeeAdapter {
                 .queryParam("page",pageRequest.getPageNumber())
                 .build())
             .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToFlux(EmployeeResponseDto.class);
     }
 }
