@@ -38,12 +38,14 @@ public class CheckAccessTokenExpireTimeAspect {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
-            webClient.post()
+            JwtDto newToken = webClient.post()
                 .uri(uriBuilder -> uriBuilder.path("/securities/issue-jwt").build())
                 .bodyValue(jwt)
                 .retrieve()
                 .toEntity(JwtDto.class)
-                .block();
+                .block().getBody();
+
+            session.setAttribute("jwt", newToken);
         }
     }
 }
