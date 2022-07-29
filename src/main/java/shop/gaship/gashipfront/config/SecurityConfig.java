@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.reactive.function.client.WebClient;
-import shop.gaship.gashipfront.security.repository.RedisCsrfRepository;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -33,8 +32,6 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URI = "/login";
-
-    private final RedisCsrfRepository redisCsrfRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -62,8 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .successHandler(oauth2LoginSuccessHandler(null));
 
         http.oauth2Login().disable();
-
-        http.csrf().csrfTokenRepository(redisCsrfRepository).and();
 
         http.logout().disable();
     }
