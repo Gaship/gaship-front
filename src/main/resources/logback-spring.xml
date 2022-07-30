@@ -18,7 +18,7 @@
         </encoder>
         <append>true</append> <!-- append형식을 사용할 것인가? -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_DIR}/debuglog-%d{yyyy-MM-dd}.%i.log</fileNamePattern> <!-- 파일 저장하는 곳, 이름 패턴 -->
+            <fileNamePattern>${LOG_DIR}/front-log-%d{yyyy-MM-dd}.%i.log</fileNamePattern> <!-- 파일 저장하는 곳, 이름 패턴 -->
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
