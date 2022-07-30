@@ -1,9 +1,11 @@
 package shop.gaship.gashipfront.cart.service.Impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 import shop.gaship.gashipfront.cart.service.CartService;
@@ -17,6 +19,9 @@ public class CartServiceImpl implements CartService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final HashOperations<String, String, Integer> hashOperations;
 
+    private static final Integer MINUSONE = -1;
+    private static final Integer PLUSONE = 1;
+    @Autowired
     public CartServiceImpl(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.hashOperations = redisTemplate.opsForHash();
@@ -31,7 +36,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void modifyProductQuantityFromCart(CartRequestDto request) {
+    public void modifyProductQuantityFromCart(CartModifyRequestDto request) {
         String cartKey = request.getCartId();
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
@@ -43,7 +48,7 @@ public class CartServiceImpl implements CartService {
         String cartKey = request.getCartId();
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
-        hashOperations.increment(cartKey, hashKey, 1);
+        hashOperations.increment(cartKey, hashKey, PLUSONE);
     }
 
     @Override
@@ -51,7 +56,7 @@ public class CartServiceImpl implements CartService {
         String cartKey = request.getCartId();
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
-        hashOperations.increment(cartKey, hashKey, -1);
+        hashOperations.increment(cartKey, hashKey, MINUSONE);
     }
 
     @Override

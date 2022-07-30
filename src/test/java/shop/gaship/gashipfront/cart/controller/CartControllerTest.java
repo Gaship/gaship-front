@@ -51,7 +51,7 @@ class CartControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @DisplayName("회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때(Success)")
+    @DisplayName("회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest() throws Exception {
         doNothing().when(cartService).addProductToCart(any());
@@ -71,6 +71,7 @@ class CartControllerTest {
         verify(cartService, times(1)).addProductToCart(any());
     }
 
+    @DisplayName("회원이 장바구니에서 상품에 수량을 기입했을때")
     @Test
     void modifyFromCartTest() throws Exception{
         doNothing().when(cartService).modifyProductQuantityFromCart(any());
@@ -89,10 +90,10 @@ class CartControllerTest {
 
         verify(cartService, times(1)).modifyProductQuantityFromCart(any());
     }
-
+    @DisplayName("회원이 장바구니에서 상품에서 +1 을 눌렀을 때")
     @Test
     void increaseProductQuantityFromCartTest() throws Exception{
-        doNothing().when(cartService).modifyProductQuantityFromCart(any());
+        doNothing().when(cartService).increaseProductQuantityFromCart(any());
         String body = objectMapper.writeValueAsString
                 (CartProductQuantityUpDownRequestDto.builder()
                 .cartId("1")
@@ -109,9 +110,10 @@ class CartControllerTest {
         verify(cartService, times(1)).increaseProductQuantityFromCart(any());
     }
 
+    @DisplayName("회원이 장바구니에서 상품에서 -1 을 눌렀을 때")
     @Test
     void decreaseProductQuantityFromCartTest() throws Exception{
-        doNothing().when(cartService).modifyProductQuantityFromCart(any());
+        doNothing().when(cartService).decreaseProductQuantityFromCart(any());
         String body = objectMapper.writeValueAsString
                 (CartProductQuantityUpDownRequestDto.builder()
                         .cartId("1")
@@ -128,9 +130,10 @@ class CartControllerTest {
         verify(cartService, times(1)).decreaseProductQuantityFromCart(any());
     }
 
+    @DisplayName("회원이 장바구니에서 상품을 삭제할 때")
     @Test
     void deleteFromCartTest() throws Exception{
-        doNothing().when(cartService).modifyProductQuantityFromCart(any());
+        doNothing().when(cartService).deleteProductFromCart(any());
         String body = objectMapper.writeValueAsString
                 (CartDeleteRequestDto.builder()
                         .cartId("1")

@@ -1,7 +1,7 @@
 package shop.gaship.gashipfront.cart.dto.request;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
  * @author 최정우
  * @since 1.0
  */
-@Data
+@Getter
 @Builder
 public class CartProductQuantityUpDownRequestDto {
     @Min(value = 0, message = "장바구니정보가 올바르지 않습니다.")

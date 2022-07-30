@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.cart.service;
 
 import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 
@@ -23,7 +24,7 @@ public interface CartService {
      *
      * @param request 변경하려는 대상의 정보가 담기는 객체입니다.
      */
-    void modifyProductQuantityFromCart(CartRequestDto request);
+    void modifyProductQuantityFromCart(CartModifyRequestDto request);
 
     /**
      * 장바구니에 담긴 상품의 수량을 +1 메서드입니다.

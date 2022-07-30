@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 import shop.gaship.gashipfront.cart.service.CartService;
@@ -43,7 +44,7 @@ public class CartController {
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
      */
     @PutMapping("/{cartsId}/products/{productsId}")
-    public ResponseEntity<Void> modifyFromCart(@RequestBody CartRequestDto request) {
+    public ResponseEntity<Void> modifyFromCart(@RequestBody CartModifyRequestDto request) {
         cartService.modifyProductQuantityFromCart(request);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -95,7 +96,7 @@ public class CartController {
     /**
      * 장바구니를 보여주는 컨트롤러 입니다.
      *
-     * @param
+     * @param cartId 조회하려는 장바구니의 id 값입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
      */
     @GetMapping("/{cartId}")
