@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.gaship.gashipfront.config.SecurityConfig;
-import shop.gaship.gashipfront.config.SecurityEmployeeConfig;
+//import shop.gaship.gashipfront.config.SecurityEmployeeConfig;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -60,7 +60,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     },
     excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class),
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityEmployeeConfig.class)
+//        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityEmployeeConfig.class)
     }
 )
 @Import({ServerConfig.class, CustomUserDetailService.class})
