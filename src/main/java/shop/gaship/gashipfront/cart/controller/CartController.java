@@ -41,6 +41,7 @@ public class CartController {
      * @param request 상품Id, 보증기간, 수량이 들어있습니다.
      * @param response 리스폰스 입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @PostMapping
     public ResponseEntity<Void> noneCookieAddToCart(@RequestBody CartRequestDto request,
@@ -62,6 +63,7 @@ public class CartController {
      *
      * @param request 상품Id, 보증기간, 수량이 들어있습니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @PostMapping("/{cartId}")
     public ResponseEntity<Void> addToCart(@RequestBody CartRequestDto request,
@@ -78,6 +80,7 @@ public class CartController {
      *
      * @param request 상품을 식별하기 위한 id 값과 보증기간 그리고 변경하길 원하는 제품의 최종 수량이 들어있습니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @PutMapping("/{cartId}/products/{productsId}")
     public ResponseEntity<Void> modifyFromCart(@RequestBody CartModifyRequestDto request,
@@ -94,6 +97,7 @@ public class CartController {
      *
      * @param request cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @PutMapping("/{cartId}/products/{productsId}/increase")
     public ResponseEntity<Void> increaseProductQuantityFromCart(@RequestBody CartProductQuantityUpDownRequestDto request,
@@ -110,6 +114,7 @@ public class CartController {
      *
      * @param request cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @PutMapping("/{cartId}/products/{productsId}/decrease")
     public ResponseEntity<Void> decreaseProductQuantityFromCart(@RequestBody CartProductQuantityUpDownRequestDto request,
@@ -126,6 +131,7 @@ public class CartController {
      *
      * @param request cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @DeleteMapping("/{cartId}/products/{productsId}")
     public ResponseEntity<Void> deleteFromCart(@RequestBody CartDeleteRequestDto request,
@@ -142,6 +148,7 @@ public class CartController {
      *
      * @param response 리스폰스 입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @GetMapping
     public ResponseEntity<Void> noneCartCookieGetProductsFromCart(HttpServletResponse response) {
@@ -157,6 +164,7 @@ public class CartController {
      *
      * @param cartId 조회하려는 장바구니의 id 값입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
+     * @author 최정우
      */
     @GetMapping("/{cartId}")
     public ResponseEntity<List<Objects>> getProductsFromCart(@PathVariable("cartId") String cartId) {
