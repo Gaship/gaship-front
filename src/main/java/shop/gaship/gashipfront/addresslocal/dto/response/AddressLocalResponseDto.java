@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.address.dto.response;
+package shop.gaship.gashipfront.addresslocal.dto.response;
 
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;

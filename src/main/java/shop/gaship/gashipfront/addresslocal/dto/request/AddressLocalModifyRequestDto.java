@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.address.dto.request;
+package shop.gaship.gashipfront.addresslocal.dto.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
