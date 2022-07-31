@@ -81,7 +81,7 @@ public class CartController {
      */
     @PutMapping("/{cartId}/products/{productsId}")
     public ResponseEntity<Void> modifyFromCart(@RequestBody CartModifyRequestDto request,
-                                               @PathVariable("cartId") String cartId) {
+                                               @PathVariable("cartId") String cartId) throws Exception {
         cartService.modifyProductQuantityFromCart(cartId, request);
 
         return ResponseEntity

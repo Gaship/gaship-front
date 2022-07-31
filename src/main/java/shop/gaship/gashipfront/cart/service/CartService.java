@@ -27,7 +27,7 @@ public interface CartService {
      *
      * @param request 변경하려는 대상의 정보가 담기는 객체입니다.
      */
-    void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request);
+    void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) throws Exception;
 
     /**
      * 장바구니에 담긴 상품의 수량을 +1 메서드입니다.

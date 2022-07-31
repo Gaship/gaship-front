@@ -64,7 +64,7 @@ public class CartServiceImpl implements CartService {
      */
     @Transactional
     @Override
-    public void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) {
+    public void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) throws Exception{
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
