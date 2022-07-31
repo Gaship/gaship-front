@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.dayLabor.dto;
+package shop.gaship.gashipfront.daylabor.dto;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.address.adpter;
+package shop.gaship.gashipfront.addresslocal.adpter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import shop.gaship.gashipfront.address.dto.request.AddressLocalModifyRequestDto;
-import shop.gaship.gashipfront.address.dto.response.AddressLocalResponseDto;
+import shop.gaship.gashipfront.addresslocal.dto.request.AddressLocalModifyRequestDto;
+import shop.gaship.gashipfront.addresslocal.dto.response.AddressLocalResponseDto;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 

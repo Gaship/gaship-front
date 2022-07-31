@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.dayLabor.adapter;
+package shop.gaship.gashipfront.daylabor.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import shop.gaship.gashipfront.config.ServerConfig;
-import shop.gaship.gashipfront.dayLabor.dto.DayLaborDto;
+import shop.gaship.gashipfront.daylabor.dto.DayLaborDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
