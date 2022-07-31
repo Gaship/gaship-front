@@ -1,6 +1,5 @@
 package shop.gaship.gashipfront.dayLabor.adapter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,6 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
 public class DayLaborAdapter {
 
     private final ServerConfig config;
-    private ObjectMapper objectMapper;
     private static final String DAY_LABOR_URI = "/api/dayLabors";
 
     /**
