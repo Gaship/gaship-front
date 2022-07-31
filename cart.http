@@ -3,8 +3,8 @@ POST http://localhost:8080/carts HTTP/1.1
 Content-Type: application/json
 
 {
-  "cartId": "2",
-  "productId": 14,
+  "cartId": "1",
+  "productId": 20,
   "carePeriod": 3,
   "quantity": 13
 }

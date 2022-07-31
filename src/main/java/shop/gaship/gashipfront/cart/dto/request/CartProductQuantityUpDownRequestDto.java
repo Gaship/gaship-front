@@ -13,9 +13,6 @@ import javax.validation.constraints.Min;
 @Getter
 @Builder
 public class CartProductQuantityUpDownRequestDto {
-    @Min(value = 0, message = "장바구니정보가 올바르지 않습니다.")
-    private final String cartId;
-
     @Min(value = 0, message = "상품정보가 올바르지 않습니다.")
     private final Integer productId;
 
