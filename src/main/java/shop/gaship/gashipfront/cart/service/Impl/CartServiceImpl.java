@@ -9,7 +9,9 @@ import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
+import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.exception.IllegalQuantityException;
+import shop.gaship.gashipfront.cart.exception.InvalidQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
 import java.util.List;
@@ -23,11 +25,10 @@ import java.util.Objects;
  */
 @Service
 public class CartServiceImpl implements CartService {
-    private final RedisTemplate<String, Object> redisTemplate;
-    private final HashOperations<String, String, Integer> hashOperations;
-
     private static final Integer PLUSONE = 1;
     private static final Integer MINUSONE = -1;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final HashOperations<String, String, Integer> hashOperations;
 
     @Autowired
     public CartServiceImpl(RedisTemplate<String, Object> redisTemplate) {
@@ -40,7 +41,7 @@ public class CartServiceImpl implements CartService {
      *
      * 장바구니에 상품을 추가하는 메서드 입니다.
      *
-     * @param cartId 장바구니 id 값입니다.
+     * @param cartId  장바구니 id 값입니다.
      * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간, 갯수)가 담겨 있습니다.
      */
     @Transactional
@@ -51,7 +52,7 @@ public class CartServiceImpl implements CartService {
         Integer quantity = request.getQuantity();
 
         hashOperations.increment(cartKey, request.getProductId().toString(), quantity);
-        hashOperations.put(cartKey, hashKey, quantity);
+        hashOperations.increment(cartKey, hashKey, quantity);
     }
 
     /**
@@ -59,20 +60,23 @@ public class CartServiceImpl implements CartService {
      *
      * 장바구니에 담긴 상품의 갯수를 변경하는 메서드 입니다.
      *
-     * @param cartId 장바구니 id 값입니다.
+     * @param cartId  장바구니 id 값입니다.
      * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간, 갯수)가 담겨 있습니다.
      */
     @Transactional
     @Override
-    public void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) throws Exception{
+    public void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) throws Exception {
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
         Integer originQuantity = hashOperations.get(cartKey, hashKey);
-        if (Objects.isNull(originQuantity)){
+        if (Objects.isNull(originQuantity)) {
             throw new IllegalQuantityException();
         }
-        hashOperations.increment(cartKey, request.getProductId().toString(), request.getQuantity()-originQuantity.longValue());
+        if (request.getQuantity() < 1){
+            throw new InvalidQuantityException();
+        }
+        hashOperations.increment(cartKey, request.getProductId().toString(), request.getQuantity() - originQuantity.longValue());
         hashOperations.put(cartKey, hashKey, request.getQuantity());
     }
 
@@ -81,7 +85,7 @@ public class CartServiceImpl implements CartService {
      *
      * 장바구니에 담긴 상품의 수량을 +1 하는 메서드입니다.
      *
-     * @param cartId 장바구니 id 값입니다.
+     * @param cartId  장바구니 id 값입니다.
      * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간)가 담겨 있습니다.
      */
     @Transactional
@@ -96,18 +100,22 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * 장바구니에 담긴 상품의 수량을 -1 하는 메서드입니다.
      *
-     * @param cartId 장바구니 id 값입니다.
+     * @param cartId  장바구니 id 값입니다.
      * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간)가 담겨 있습니다.
      */
     @Transactional
     @Override
-    public void decreaseProductQuantityFromCart(String cartId, CartProductQuantityUpDownRequestDto request) {
+    public void decreaseProductQuantityFromCart(String cartId, CartProductQuantityUpDownRequestDto request) throws CartProductAmountException {
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
+        Integer cartProductAmount = hashOperations.get(cartKey, hashKey);
 
+        if (cartProductAmount <= 1) {
+            throw new CartProductAmountException();
+        }
         hashOperations.increment(cartKey, request.getProductId().toString(), MINUSONE);
         hashOperations.increment(cartKey, hashKey, MINUSONE);
     }
@@ -117,17 +125,29 @@ public class CartServiceImpl implements CartService {
      *
      * 장바구니에 담긴 특정 상품을 삭제하는 메서드 입니다.
      *
-     * @param cartId 장바구니 id 값입니다.
+     * @param cartId  장바구니 id 값입니다.
      * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간)가 담겨 있습니다.
      */
     @Transactional
     @Override
-    public void deleteProductFromCart(String cartId, CartDeleteRequestDto request) {
+    public void deleteProductFromCart(String cartId, CartDeleteRequestDto request) throws Exception {
         String cartKey = cartId;
-        String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
+        String productId = request.getProductId().toString();
+        String hashKey = productId + "-" + request.getCarePeriod().toString();
 
-        hashOperations.increment(cartKey, request.getProductId().toString(), MINUSONE);
-        hashOperations.delete(cartKey, hashKey);
+        hashOperations.increment(cartKey, productId, MINUSONE);
+        hashOperations.increment(cartKey,hashKey,MINUSONE);
+        Integer productQuantity = hashOperations.get(cartKey,productId);
+        Integer productAndCarePeriodQuantity = hashOperations.get(cartKey, hashKey);
+        if (Objects.isNull(productQuantity) || Objects.isNull(productAndCarePeriodQuantity)) {
+            throw new IllegalQuantityException();
+        }
+        if(productQuantity < 1){
+            hashOperations.delete(cartKey,productId);
+        }
+        if(productAndCarePeriodQuantity < 1){
+            hashOperations.delete(cartKey,hashKey);
+        }
     }
 
     @Override

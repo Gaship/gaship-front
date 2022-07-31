@@ -118,7 +118,7 @@ public class CartController {
      */
     @PutMapping("/{cartId}/products/{productsId}/decrease")
     public ResponseEntity<Void> decreaseProductQuantityFromCart(@RequestBody CartProductQuantityUpDownRequestDto request,
-                                                                @PathVariable("cartId") String cartId) {
+                                                                @PathVariable("cartId") String cartId) throws Exception {
         cartService.decreaseProductQuantityFromCart(cartId, request);
 
         return ResponseEntity
@@ -135,7 +135,7 @@ public class CartController {
      */
     @DeleteMapping("/{cartId}/products/{productsId}")
     public ResponseEntity<Void> deleteFromCart(@RequestBody CartDeleteRequestDto request,
-                                               @PathVariable("cartId") String cartId) {
+                                               @PathVariable("cartId") String cartId) throws Exception {
         cartService.deleteProductFromCart(cartId, request);
         return ResponseEntity
                 .status(HttpStatus.OK)
