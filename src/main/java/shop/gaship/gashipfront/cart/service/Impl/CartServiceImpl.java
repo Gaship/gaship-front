@@ -14,7 +14,8 @@ import shop.gaship.gashipfront.cart.exception.IllegalQuantityException;
 import shop.gaship.gashipfront.cart.exception.InvalidQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * The type Cart service.
@@ -37,7 +38,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * 장바구니에 상품을 추가하는 메서드 입니다.
      *
      * @param cartId  장바구니 id 값입니다.
@@ -55,7 +56,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * 장바구니에 담긴 상품의 갯수를 변경하는 메서드 입니다.
      *
      * @param cartId  장바구니 id 값입니다.
@@ -67,7 +68,7 @@ public class CartServiceImpl implements CartService {
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
-        if (request.getQuantity() < 1){
+        if (request.getQuantity() < 1) {
             throw new InvalidQuantityException();
         }
         hashOperations.put(cartKey, hashKey, request.getQuantity());
@@ -75,7 +76,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * 장바구니에 담긴 상품의 수량을 +1 하는 메서드입니다.
      *
      * @param cartId  장바구니 id 값입니다.
@@ -113,7 +114,7 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     *
+     * <p>
      * 장바구니에 담긴 특정 상품을 삭제하는 메서드 입니다.
      *
      * @param cartId  장바구니 id 값입니다.
@@ -126,40 +127,37 @@ public class CartServiceImpl implements CartService {
         String productId = request.getProductId().toString();
         String hashKey = productId + "-" + request.getCarePeriod().toString();
 
-        hashOperations.increment(cartKey,hashKey,MINUSONE);
+        hashOperations.increment(cartKey, hashKey, MINUSONE);
         Integer productAndCarePeriodQuantity = hashOperations.get(cartKey, hashKey);
         if (Objects.isNull(productAndCarePeriodQuantity)) {
             throw new IllegalQuantityException();
         }
-        if(productAndCarePeriodQuantity < 1){
-            hashOperations.delete(cartKey,hashKey);
+        if (productAndCarePeriodQuantity < 1) {
+            hashOperations.delete(cartKey, hashKey);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param nonMemberCartId 비회원 때 부여되던 장바구니 id
-     * @param memberId 현재 나의 장바구니 id
-     */
-    @Transactional
-    @Override
-    public void mergeCart(String nonMemberCartId, Integer memberId) {
-        Map<String, Integer> map = hashOperations.entries(nonMemberCartId);
-        String key = String.valueOf(memberId);
-        mergeHashMap(key,map);
-        hashOperations.delete(nonMemberCartId);
-    }
-
-    /**
-     * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
-     *
-     * @param key 합병대상의 키
-     * @param map 합병할 map
-     */
-    private void mergeHashMap(String key, Map<String,Integer> map) {
-        map.forEach((key1, value) -> hashOperations.increment(key, key1, value));
-    }
+//    /**
+//     * @param nonMemberCartId 비회원 때 부여되던 장바구니 id
+//     * @param memberId        현재 나의 장바구니 id
+//     */
+//    @Transactional
+//    public void mergeCart(String nonMemberCartId, Integer memberId) {
+//        Map<String, Integer> map = hashOperations.entries(nonMemberCartId);
+//        String key = String.valueOf(memberId);
+//        mergeHashMap(key, map);
+//        hashOperations.delete(nonMemberCartId);
+//    }
+//
+//    /**
+//     * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
+//     *
+//     * @param key 합병대상의 키
+//     * @param map 합병할 map
+//     */
+//    private void mergeHashMap(String key, Map<String, Integer> map) {
+//        map.forEach((key1, value) -> hashOperations.increment(key, key1, value));
+//    }
 
     @Override
     public List<Objects> getProductsFromCart(String cartId) {
