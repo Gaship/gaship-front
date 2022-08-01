@@ -14,7 +14,6 @@ import shop.gaship.gashipfront.cart.service.CartService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -50,9 +49,9 @@ public class CartController {
                                           @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId,
                                           HttpServletResponse response) {
         cartId = assignCartId(nonMemberCartId, memberCartId);
-        if (Objects.isNull(cartId)){
+        if (Objects.isNull(cartId)) {
             cartId = UUID.randomUUID().toString();
-            response.addCookie(new Cookie(NON_MEMBER_CART_ID,cartId));
+            response.addCookie(new Cookie(NON_MEMBER_CART_ID, cartId));
         }
         cartService.addProductToCart(cartId, request);
 
@@ -64,7 +63,7 @@ public class CartController {
     /**
      * 장바구니 페이지에서 수량을 변경하는 컨트롤러입니다.
      *
-     * @param request 상품을 식별하기 위한 id 값과 보증기간 그리고 변경하길 원하는 제품의 최종 수량이 들어있습니다.
+     * @param request         상품을 식별하기 위한 id 값과 보증기간 그리고 변경하길 원하는 제품의 최종 수량이 들어있습니다.
      * @param nonMemberCartId 비회원 장바구니의 id 값 입니다.
      * @param memberCartId    회원 장바구니의 id 값 입니다.
      * @return
@@ -74,7 +73,7 @@ public class CartController {
     public ResponseEntity<Void> modifyFromCart(@RequestBody CartModifyRequestDto request,
                                                @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
                                                @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId) throws Exception {
-        cartId = assignCartId(nonMemberCartId,memberCartId);
+        cartId = assignCartId(nonMemberCartId, memberCartId);
         cartService.modifyProductQuantityFromCart(cartId, request);
 
         return ResponseEntity
@@ -85,7 +84,7 @@ public class CartController {
     /**
      * 장바구니 페이지에서 상품의 수량을  +1 하는 컨트롤러입니다.
      *
-     * @param request cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
+     * @param request         cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
      * @param nonMemberCartId 비회원 장바구니의 id 값 입니다.
      * @param memberCartId    회원 장바구니의 id 값 입니다.
      * @return 반환값은 Void 타입의 ResponseEntity 입니다.
@@ -95,7 +94,7 @@ public class CartController {
     public ResponseEntity<Void> increaseProductQuantityFromCart(@RequestBody CartProductQuantityUpDownRequestDto request,
                                                                 @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
                                                                 @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId) {
-        cartId = assignCartId(nonMemberCartId,memberCartId);
+        cartId = assignCartId(nonMemberCartId, memberCartId);
         cartService.increaseProductQuantityFromCart(cartId, request);
 
         return ResponseEntity
@@ -106,7 +105,7 @@ public class CartController {
     /**
      * 장바구니 페이지에서 상품의 수량을 -1 하는 컨트롤러입니다.
      *
-     * @param request cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
+     * @param request         cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
      * @param nonMemberCartId 비회원 장바구니의 id 값 입니다.
      * @param memberCartId    회원 장바구니의 id 값 입니다.
      * @return
@@ -116,7 +115,7 @@ public class CartController {
     public ResponseEntity<Void> decreaseProductQuantityFromCart(@RequestBody CartProductQuantityUpDownRequestDto request,
                                                                 @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
                                                                 @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId) throws Exception {
-        cartId = assignCartId(nonMemberCartId,memberCartId);
+        cartId = assignCartId(nonMemberCartId, memberCartId);
         cartService.decreaseProductQuantityFromCart(cartId, request);
 
         return ResponseEntity
@@ -127,7 +126,7 @@ public class CartController {
     /**
      * 장바구니 페이지에서 해당 상품을 삭제하는 컨트롤러 입니다.
      *
-     * @param request cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
+     * @param request         cartId 와 상품을 식별하기 위한 id 값과 보증기간이 있는 객체입니다.
      * @param nonMemberCartId 비회원 장바구니의 id 값 입니다.
      * @param memberCartId    회원 장바구니의 id 값 입니다.
      * @return
@@ -137,7 +136,7 @@ public class CartController {
     public ResponseEntity<Void> deleteFromCart(@RequestBody CartDeleteRequestDto request,
                                                @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
                                                @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId) throws Exception {
-        cartId = assignCartId(nonMemberCartId,memberCartId);
+        cartId = assignCartId(nonMemberCartId, memberCartId);
         cartService.deleteProductFromCart(cartId, request);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -149,8 +148,8 @@ public class CartController {
      *
      * @param nonMemberCartId 비회원 장바구니의 id 값 입니다.
      * @param memberCartId    회원 장바구니의 id 값 입니다.
-     * @param response 리스폰스 입니다.
-     * @param mv ModelAndView 입니다.
+     * @param response        리스폰스 입니다.
+     * @param mv              ModelAndView 입니다.
      * @return 모델앤 뷰를 반환합니다.
      * @author 최정우
      */
@@ -159,15 +158,27 @@ public class CartController {
                                             @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId,
                                             HttpServletResponse response,
                                             ModelAndView mv) {
-        cartId = assignCartId(nonMemberCartId,memberCartId);
-        if (Objects.isNull(cartId)){
+        cartId = assignCartId(nonMemberCartId, memberCartId);
+        if (Objects.isNull(cartId)) {
             cartId = UUID.randomUUID().toString();
-            response.addCookie(new Cookie(NON_MEMBER_CART_ID,cartId));
+            response.addCookie(new Cookie(NON_MEMBER_CART_ID, cartId));
         }
-         cartService.getProductsFromCart(cartId);
-        //todo: 반환값 모델에 넣기 어뎁터 보민이한테 물어보기
+        cartService.getProductsFromCart(cartId);
+        //todo: 반환값 모델에 넣기 어뎁터 호철이한테 물어보기
         mv.setViewName("/carts");
+
         return mv;
+    }
+
+    private String assignCartId(String nonMemberCartId, String memberCartId) {
+        if (Objects.isNull(nonMemberCartId) && Objects.isNull(memberCartId)) {
+            return null;
+        } else if (Objects.nonNull(nonMemberCartId)) {
+            cartId = nonMemberCartId;
+        } else {
+            cartId = memberCartId;
+        }
+        return cartId;
     }
 
 
@@ -198,14 +209,4 @@ public class CartController {
 //        return mv;
 //    }
 
-    private String assignCartId(String nonMemberCartId, String memberCartId) {
-        if (Objects.isNull(nonMemberCartId) && Objects.isNull(memberCartId)) {
-            return null;
-        } else if (Objects.nonNull(nonMemberCartId)) {
-            cartId = nonMemberCartId;
-        } else {
-            cartId = memberCartId;
-        }
-        return cartId;
-    }
 }
