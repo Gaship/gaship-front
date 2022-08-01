@@ -56,14 +56,6 @@ public interface CartService {
     void deleteProductFromCart(String cartId, CartDeleteRequestDto request) throws Exception;
 
     /**
-     * 비회원 떄 장바구니에 담은 물건들을 로그인 할 때 나의 장바구니에 넣는 메서드 입니다.
-     *
-     * @param nonMemberCartId 비회원일때 장바구니에 담은 물건들을 로그인 후 내 계정의 장바구니에 더하기 위해 사용하는 cookieId 값입니다.
-     * @author 최정우
-     */
-    void mergeCart(String nonMemberCartId,Integer memberId);
-
-    /**
      * 장바구니에 담긴 상품들의 정보를 얻는 메서드 입니다.
      *
      * @param cartId 삭제할 상품의 정보를 담은 객체입니다.
