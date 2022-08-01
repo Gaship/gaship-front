@@ -14,8 +14,7 @@ import shop.gaship.gashipfront.cart.exception.IllegalQuantityException;
 import shop.gaship.gashipfront.cart.exception.InvalidQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * The type Cart service.
@@ -51,7 +50,6 @@ public class CartServiceImpl implements CartService {
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
         Integer quantity = request.getQuantity();
 
-        hashOperations.increment(cartKey, request.getProductId().toString(), quantity);
         hashOperations.increment(cartKey, hashKey, quantity);
     }
 
@@ -69,14 +67,9 @@ public class CartServiceImpl implements CartService {
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
-        Integer originQuantity = hashOperations.get(cartKey, hashKey);
-        if (Objects.isNull(originQuantity)) {
-            throw new IllegalQuantityException();
-        }
         if (request.getQuantity() < 1){
             throw new InvalidQuantityException();
         }
-        hashOperations.increment(cartKey, request.getProductId().toString(), request.getQuantity() - originQuantity.longValue());
         hashOperations.put(cartKey, hashKey, request.getQuantity());
     }
 
@@ -94,7 +87,6 @@ public class CartServiceImpl implements CartService {
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
-        hashOperations.increment(cartKey, request.getProductId().toString(), PLUSONE);
         hashOperations.increment(cartKey, hashKey, PLUSONE);
     }
 
@@ -116,7 +108,6 @@ public class CartServiceImpl implements CartService {
         if (cartProductAmount <= 1) {
             throw new CartProductAmountException();
         }
-        hashOperations.increment(cartKey, request.getProductId().toString(), MINUSONE);
         hashOperations.increment(cartKey, hashKey, MINUSONE);
     }
 
@@ -135,19 +126,39 @@ public class CartServiceImpl implements CartService {
         String productId = request.getProductId().toString();
         String hashKey = productId + "-" + request.getCarePeriod().toString();
 
-        hashOperations.increment(cartKey, productId, MINUSONE);
         hashOperations.increment(cartKey,hashKey,MINUSONE);
-        Integer productQuantity = hashOperations.get(cartKey,productId);
         Integer productAndCarePeriodQuantity = hashOperations.get(cartKey, hashKey);
-        if (Objects.isNull(productQuantity) || Objects.isNull(productAndCarePeriodQuantity)) {
+        if (Objects.isNull(productAndCarePeriodQuantity)) {
             throw new IllegalQuantityException();
-        }
-        if(productQuantity < 1){
-            hashOperations.delete(cartKey,productId);
         }
         if(productAndCarePeriodQuantity < 1){
             hashOperations.delete(cartKey,hashKey);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param nonMemberCartId 비회원 때 부여되던 장바구니 id
+     * @param memberId 현재 나의 장바구니 id
+     */
+    @Transactional
+    @Override
+    public void mergeCart(String nonMemberCartId, Integer memberId) {
+        Map<String, Integer> map = hashOperations.entries(nonMemberCartId);
+        String key = String.valueOf(memberId);
+        mergeHashMap(key,map);
+        hashOperations.delete(nonMemberCartId);
+    }
+
+    /**
+     * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
+     *
+     * @param key 합병대상의 키
+     * @param map 합병할 map
+     */
+    private void mergeHashMap(String key, Map<String,Integer> map) {
+        map.forEach((key1, value) -> hashOperations.increment(key, key1, value));
     }
 
     @Override
