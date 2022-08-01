@@ -29,16 +29,19 @@ import static org.mockito.Mockito.*;
 @ExtendWith(value = SpringExtension.class)
 @Import(value = {CartServiceImpl.class})
 class CartServiceImplTest {
+    @MockBean
+    RedisTemplate<String, Object> redisTemplate;
+
+    @Mock
+    HashOperations<String, Object, Object> hashOperations;
+
+    @Autowired
+    private CartService cartService;
+
     private static final String CARTID = "1";
     private static final Integer PRODUCTID = 1;
     private static final Integer CAREPERIOD = 1;
     private static final Integer QUANTITY = 1;
-    @MockBean
-    RedisTemplate<String, Object> redisTemplate;
-    @Mock
-    HashOperations<String, Object, Object> hashOperations;
-    @Autowired
-    private CartService cartService;
 
     @BeforeEach
     void setUp() {
@@ -107,7 +110,7 @@ class CartServiceImplTest {
         assertThatThrownBy(() -> cartService.decreaseProductQuantityFromCart(CARTID, CartDummy.CartProductQuantityUpDownRequestDtoDummy(PRODUCTID, CAREPERIOD)))
                 .isInstanceOf(CartProductAmountException.class);
 
-        verify(hashOperations, never()).increment(CARTID, "1-1", -1);
+        verify(hashOperations, never()).increment(CARTID, PRODUCTID+"-"+CAREPERIOD, -1);
     }
 
     @DisplayName("장바구니 특정 상품 삭제 테스트")
@@ -116,7 +119,6 @@ class CartServiceImplTest {
         when(hashOperations.increment(CARTID, PRODUCTID + "-" + CAREPERIOD, -1)).thenReturn(-1L);
         when(hashOperations.get(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(100);
         when(hashOperations.delete(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(1L);
-
 
         cartService.deleteProductFromCart(CARTID, CartDummy.CartDeleteDtoDummy(PRODUCTID, CAREPERIOD));
 
