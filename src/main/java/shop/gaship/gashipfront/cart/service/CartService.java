@@ -56,6 +56,14 @@ public interface CartService {
     void deleteProductFromCart(String cartId, CartDeleteRequestDto request) throws Exception;
 
     /**
+     * 비회원의 장바구니 상품 목록을 회원의 장바구니에 옮기는 메서드 입니다.
+     *
+     * @param nonMemberCartId 비회원일 때의 장바구니 id
+     * @param memberId        회원일 때의 장바구니 id
+     */
+    void mergeCart(String nonMemberCartId, Integer memberId);
+
+    /**
      * 장바구니에 담긴 상품들의 정보를 얻는 메서드 입니다.
      *
      * @param cartId 삭제할 상품의 정보를 담은 객체입니다.

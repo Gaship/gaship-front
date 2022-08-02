@@ -15,6 +15,7 @@ import shop.gaship.gashipfront.cart.exception.InvalidQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -137,27 +138,30 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-//    /**
-//     * @param nonMemberCartId 비회원 때 부여되던 장바구니 id
-//     * @param memberId        현재 나의 장바구니 id
-//     */
-//    @Transactional
-//    public void mergeCart(String nonMemberCartId, Integer memberId) {
-//        Map<String, Integer> map = hashOperations.entries(nonMemberCartId);
-//        String key = String.valueOf(memberId);
-//        mergeHashMap(key, map);
-//        hashOperations.delete(nonMemberCartId);
-//    }
-//
-//    /**
-//     * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
-//     *
-//     * @param key 합병대상의 키
-//     * @param map 합병할 map
-//     */
-//    private void mergeHashMap(String key, Map<String, Integer> map) {
-//        map.forEach((key1, value) -> hashOperations.increment(key, key1, value));
-//    }
+    /**
+     * {@inheritDoc}
+     *
+     * @param nonMemberCartId 비회원 때 부여되던 장바구니 id
+     * @param memberId        현재 나의 장바구니 id
+     */
+    @Transactional
+    @Override
+    public void mergeCart(String nonMemberCartId, Integer memberId) {
+        Map<String, Integer> map = hashOperations.entries(nonMemberCartId);
+        String key = String.valueOf(memberId);
+        mergeHashMap(key, map);
+        hashOperations.delete(nonMemberCartId);
+    }
+
+    /**
+     * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
+     *
+     * @param key 합병대상의 키
+     * @param map 합병할 map
+     */
+    private void mergeHashMap(String key, Map<String, Integer> map) {
+        map.forEach((key1, value) -> hashOperations.increment(key, key1, value));
+    }
 
     @Override
     public List<Objects> getProductsFromCart(String cartId) {
