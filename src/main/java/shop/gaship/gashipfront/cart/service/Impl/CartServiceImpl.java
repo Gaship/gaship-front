@@ -17,12 +17,12 @@ import shop.gaship.gashipfront.cart.service.CartService;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- * The type Cart service.
- *
- * @author 최정우
- * @since 1.0
+ * {@inheritDoc}
+ * CartService 의 구현체입니다.
  */
 @Service
 public class CartServiceImpl implements CartService {
@@ -39,11 +39,6 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * 장바구니에 상품을 추가하는 메서드 입니다.
-     *
-     * @param cartId  장바구니 id 값입니다.
-     * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간, 갯수)가 담겨 있습니다.
      */
     @Transactional
     @Override
@@ -57,31 +52,18 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * 장바구니에 담긴 상품의 갯수를 변경하는 메서드 입니다.
-     *
-     * @param cartId  장바구니 id 값입니다.
-     * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간, 갯수)가 담겨 있습니다.
      */
     @Transactional
     @Override
-    public void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) throws Exception {
+    public void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) {
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
-        if (request.getQuantity() < 1) {
-            throw new InvalidQuantityException();
-        }
         hashOperations.put(cartKey, hashKey, request.getQuantity());
     }
 
     /**
      * {@inheritDoc}
-     * <p>
-     * 장바구니에 담긴 상품의 수량을 +1 하는 메서드입니다.
-     *
-     * @param cartId  장바구니 id 값입니다.
-     * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간)가 담겨 있습니다.
      */
     @Transactional
     @Override
@@ -94,11 +76,8 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * 장바구니에 담긴 상품의 수량을 -1 하는 메서드입니다.
      *
-     * @param cartId  장바구니 id 값입니다.
-     * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간)가 담겨 있습니다.
+     * @throws CartProductAmountException 담겨있는 상품의 갯수가 1이하이면 발생하는 오류
      */
     @Transactional
     @Override
@@ -115,11 +94,8 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * 장바구니에 담긴 특정 상품을 삭제하는 메서드 입니다.
      *
-     * @param cartId  장바구니 id 값입니다.
-     * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간)가 담겨 있습니다.
+     * @throws InvalidQuantityException 변경하려는 상품 수량이 1미만 이면 발생하는 오류
      */
     @Transactional
     @Override
@@ -140,11 +116,8 @@ public class CartServiceImpl implements CartService {
 
     /**
      * {@inheritDoc}
-     *
-     * @param nonMemberCartId 비회원 때 부여되던 장바구니 id
-     * @param memberId        현재 나의 장바구니 id
      */
-    @Transactional
+
     @Override
     public void mergeCart(String nonMemberCartId, Integer memberId) {
         Map<String, Integer> map = hashOperations.entries(nonMemberCartId);
@@ -155,16 +128,25 @@ public class CartServiceImpl implements CartService {
 
     /**
      * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
-     *
-     * @param key 합병대상의 키
-     * @param map 합병할 map
      */
     private void mergeHashMap(String key, Map<String, Integer> map) {
-        map.forEach((key1, value) -> hashOperations.increment(key, key1, value));
+        map.forEach((key1, value) -> hashOperations.putIfAbsent(key, key1, value));
     }
 
     @Override
-    public List<Objects> getProductsFromCart(String cartId) {
-        return null;
+    public List<Integer> getProductsFromCart(String cartId) {
+        return getDistinctIntProductId(cartId);
+    }
+
+    private List<Integer> getDistinctIntProductId(String cartId) {
+        Set<String> keys = hashOperations.keys(cartId);
+        return keys.stream()
+                .map(key -> key.substring(0, key.lastIndexOf("-")))
+                .distinct()
+                .map(Integer::valueOf)
+                .collect(Collectors.toList());
+
+
+
     }
 }
