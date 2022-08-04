@@ -14,10 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.reactive.function.client.WebClient;
-import shop.gaship.gashipfront.security.repository.RedisCsrfRepository;
+import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
+import shop.gaship.gashipfront.security.repository.RedisCsrfRepository;
 import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSuccessHandler;
 
 /**
@@ -47,19 +48,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .maximumSessions(1);
 
         http.formLogin()
-            .loginPage(LOGIN_URI)
-            .loginProcessingUrl("/loginAction")
-            .successHandler(loginSuccessHandler(null))
-            .failureUrl(LOGIN_URI)
-            .usernameParameter("id")
-            .passwordParameter("pw")
-            .and();
+                .loginPage(LOGIN_URI)
+                .loginProcessingUrl("/loginAction")
+                .successHandler(loginSuccessHandler(null, null))
+                .failureUrl(LOGIN_URI)
+                .usernameParameter("id")
+                .passwordParameter("pw")
+                .and();
 
         http.oauth2Login()
-            .loginPage(LOGIN_URI)
-            .defaultSuccessUrl("/")
-            .failureUrl(LOGIN_URI)
-            .successHandler(oauth2LoginSuccessHandler(null));
+                .loginPage(LOGIN_URI)
+                .defaultSuccessUrl("/")
+                .failureUrl(LOGIN_URI)
+                .successHandler(oauth2LoginSuccessHandler(null, null));
 
         http.oauth2Login().disable();
 
@@ -96,17 +97,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public LoginSuccessHandler loginSuccessHandler(ServerConfig serverConfig) {
-        return new LoginSuccessHandler(serverConfig);
+    public LoginSuccessHandler loginSuccessHandler(ServerConfig serverConfig, CartService cartService) {
+        return new LoginSuccessHandler(serverConfig, cartService);
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService, CartService cartService) {
+        return new Oauth2LoginSuccessHandler(commonService, cartService);
+    }
 
     @Bean
     public WebClient webClient() {
-        return WebClient.builder().baseUrl("http://172.30.1.52:7070").defaultHeader("Accept",
-            MediaType.APPLICATION_JSON_VALUE).defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
+        return WebClient.builder()
+                .baseUrl("http://172.30.1.52:7070")
+                .defaultHeader("Accept",
+                        MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                .build();
     }
 }
 
