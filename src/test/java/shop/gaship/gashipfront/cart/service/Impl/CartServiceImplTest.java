@@ -15,7 +15,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import shop.gaship.gashipfront.cart.dummy.CartDummy;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.exception.IllegalQuantityException;
-import shop.gaship.gashipfront.cart.exception.InvalidQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -67,17 +66,6 @@ class CartServiceImplTest {
         cartService.modifyProductQuantityFromCart(CARTID, CartDummy.CartModifyRequestDtoDummy(PRODUCTID, CAREPERIOD, QUANTITY));
 
         verify(hashOperations, times(1)).put(CARTID, PRODUCTID+"-"+CAREPERIOD, QUANTITY);
-    }
-
-    @DisplayName("장바구니 상품수량 변경 테스트(변경하려는 수량을 0 이하의 수량 선택(Fail))")
-    @Test
-    void modifyProductQuantityFromCartFailTest2() throws Exception {
-        doNothing().when(hashOperations).put(any(), any(), any());
-
-        assertThatThrownBy(() -> cartService.modifyProductQuantityFromCart(CARTID, CartDummy.CartModifyRequestDtoDummy(PRODUCTID, CAREPERIOD, 0)))
-                .isInstanceOf(InvalidQuantityException.class);
-
-        verify(hashOperations, never()).put(CARTID, PRODUCTID+"-"+CAREPERIOD, QUANTITY);
     }
 
     @DisplayName("장바구니 상품 수량 +1 테스트")

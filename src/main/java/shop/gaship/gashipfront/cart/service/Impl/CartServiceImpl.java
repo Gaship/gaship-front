@@ -11,7 +11,6 @@ import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequest
 import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.exception.IllegalQuantityException;
-import shop.gaship.gashipfront.cart.exception.InvalidQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
 import java.util.List;
@@ -95,7 +94,7 @@ public class CartServiceImpl implements CartService {
     /**
      * {@inheritDoc}
      *
-     * @throws InvalidQuantityException 변경하려는 상품 수량이 1미만 이면 발생하는 오류
+     * @throws IllegalQuantityException 조회한 상품이 null 이면 오류
      */
     @Transactional
     @Override
