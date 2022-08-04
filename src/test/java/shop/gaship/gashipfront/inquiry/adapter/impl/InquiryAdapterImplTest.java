@@ -26,11 +26,13 @@ import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
- * adapter를 이용한 실제 통신테스트
+ * adapter를 이용한 실제 통신테스트(커버리지를 올리기위한 테스트가 아닌 실제 api를 잘만들었는지 확인해보기 위한 테스트입니다.)
+ * gateway, shopping-mall 서버가 모두 켜져있을때 정상작동합니다.
  *
  * @author : 최겸준
  * @since 1.0
  */
+@Disabled("gateway, shopping-mall 서버가 모두 켜져있을때 정상작동합니다. 서버가 모두 돌아갈때 해당 disabled를 주석처리하고 테스트해주세요.")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class InquiryAdapterImplTest {
@@ -175,12 +177,8 @@ class InquiryAdapterImplTest {
             .isZero();
 
         InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 1번이 나온다(등록되어있을시)
-        assertThat(actual.getInquiryNo())
-            .isEqualTo(1);
-        assertThat(actual.getMemberNickname())
-            .isEqualTo("홍홍홍");
-        assertThat(actual.getTitle())
-            .isEqualTo("고객문의");
+        assertThat(actual)
+            .isNotNull();
     }
 
     @DisplayName("상품문의 목록조회가 예외없이 잘 요청된다.")
@@ -193,13 +191,9 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 2번이 나온다(등록되어있을시)
-        assertThat(actual.getInquiryNo())
-            .isEqualTo(3);
-        assertThat(actual.getMemberNickname())
-            .isEqualTo("홍홍홍");
-        assertThat(actual.getTitle())
-            .isEqualTo("상품문의");
+        InquiryListResponseDto actual = content.get(content.size() - 1);
+        assertThat(actual)
+            .isNotNull();
     }
 
     @DisplayName("답변대기중인 고객문의 목록을 불러온다.")
