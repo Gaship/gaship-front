@@ -4,9 +4,9 @@
 name: Java CI with Maven
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "development" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "development" ]
 
 jobs:
 
@@ -21,6 +21,13 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+
+    - name: assign NHN secure manager key to application.properties
+      shell : bash
+      run : |
+        echo ${{ secrets.NHN_SECURE_CLIENT_KEY }} >> ./src/main/resources/application.properties
+        cat ./src/main/resources/application.properties
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
@@ -46,4 +53,4 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script_stop: true
-        script: "./startup.sh"
+        script: "./front_startup.sh"
