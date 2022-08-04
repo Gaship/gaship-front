@@ -1,5 +1,7 @@
 package shop.gaship.gashipfront.security.common.login.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,7 +22,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
-
+    private static final String MEMBER_CART_ID = "MEMBERCARTID";
     private final AuthApiService authAPIService;
 
     /**
@@ -39,7 +41,7 @@ public class LoginController {
      * @param session redis에 저장된 jwt를 불러오기위해 사용합니다.
      */
     @GetMapping(value ="/logout")
-    public void logoutProcessing(HttpSession session) {
+    public void logoutProcessing(HttpSession session, HttpServletResponse response) {
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
         SecurityContext context = SecurityContextHolder.getContext();
@@ -48,5 +50,9 @@ public class LoginController {
         authAPIService.logout(memberNo, jwt);
 
         session.invalidate();
+
+        Cookie killCookie = new Cookie(MEMBER_CART_ID, null);
+        killCookie.setMaxAge(0);
+        response.addCookie(killCookie);
     }
 }
