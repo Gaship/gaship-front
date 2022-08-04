@@ -100,7 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public WebClient webClient() {
-        return WebClient.builder().baseUrl("http://172.30.1.52:7070").defaultHeader("Accept",
+        return WebClient.builder().baseUrl("http://localhost:7070").defaultHeader("Accept",
             MediaType.APPLICATION_JSON_VALUE).defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
     }
 }

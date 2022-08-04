@@ -2,7 +2,6 @@ package shop.gaship.gashipfront.inquiry.dto.response;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * 문의 상세조회시 body에 담아야할 정보들을 가지는 객체입니다.
@@ -10,24 +9,22 @@ import lombok.RequiredArgsConstructor;
  * @author 최겸준
  * @since 1.0
  */
-@RequiredArgsConstructor
-// TODO Getter 없어도 보내지는지 확인
 @Getter
 public class InquiryDetailsResponseDto {
-    private final Integer inquiryNo;
-    private final Integer productNo;
+    private Integer inquiryNo;
+    private Integer productNo;
 
-    private final String memberNickname;
-    private final String employeeName;
-    private final String processStatus;
-    private final String productName;
+    private String memberNickname;
+    private String employeeName;
+    private String processStatus;
+    private String productName;
 
-    private final String title;
-    private final String inquiryContent;
-    private final LocalDateTime registerDatetime;
+    private String title;
+    private String inquiryContent;
+    private LocalDateTime registerDatetime;
 
-    private final String answerContent;
-    private final LocalDateTime answerRegisterDatetime;
-    private final LocalDateTime answerModifyDatetime;
+    private String answerContent;
+    private LocalDateTime answerRegisterDatetime;
+    private LocalDateTime answerModifyDatetime;
 
 }
