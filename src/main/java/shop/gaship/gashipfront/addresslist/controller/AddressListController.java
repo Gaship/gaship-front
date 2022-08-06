@@ -51,7 +51,7 @@ public class AddressListController {
     }
 
     /**
-     * 배송지목록을 수정하고 배송지목록으로 돌아갑니다.
+     * 배송지목록을 삭제(상태변경)하고 배송지목록으로 돌아갑니다.
      *
      * @param addressListNo 수정할 배송지목록의 id 입니다.
      * @return 배송지목록 목록을 보여주는 페이지
@@ -67,6 +67,7 @@ public class AddressListController {
      * 배송지목록의 상세 페이지 입니다.
      *
      * @param addressListNo 조회하려는 배송지목록의 id 입니다.
+     * @param model 모델
      * @return 배송지목록 상세페이지
      * @author 최정우
      */
