@@ -18,7 +18,7 @@ import shop.gaship.gashipfront.addresslist.service.AddressListService;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member/{memberNo}/address-list")
+@RequestMapping("/members/{memberNo}/address-lists")
 public class AddressListController {
     private static final String DEFAULT_PATH = "addressLists";
     private final AddressListService addressListService;
@@ -34,7 +34,7 @@ public class AddressListController {
     public String addressListAdd(@RequestBody @Valid AddressListAddRequestDto request) {
         addressListService.addAddressList(request);
 
-        return "redirect:/" + DEFAULT_PATH;
+        return "redirect:/members/" + request.getMemberNo() + "/address-lists";
     }
 
     /**
@@ -47,7 +47,7 @@ public class AddressListController {
     @PutMapping("/{addressListNo}")
     public String addressListModify(@RequestBody @Valid AddressListModifyRequestDto request) {
         addressListService.modifyAddressList(request);
-        return "redirect:" + DEFAULT_PATH;
+        return "redirect:/members/" + request.getMemberNo() + "/address-lists";
     }
 
     /**
@@ -61,7 +61,7 @@ public class AddressListController {
     public String addressListRemove(@PathVariable Long memberNo,
                                     @PathVariable Long addressListNo) {
         addressListService.deleteAddressList(memberNo, addressListNo);
-        return "redirect:" + DEFAULT_PATH;
+        return "redirect:/members/" + memberNo + "/address-lists";
     }
 
     /**

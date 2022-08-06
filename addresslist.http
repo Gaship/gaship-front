@@ -1,0 +1,28 @@
+POST http://localhost:8080/members/21/address-lists HTTP/1.1
+Content-Type: application/json
+
+{
+  "addressLocalNo" : 1,
+  "memberNo" : 21,
+  "address" : "경기도",
+  "addressDetail" : "안양시 동안구 현대아파트 100층 엘레베이터 앞",
+  "zipCode" : "12345"
+}
+###
+PUT http://localhost:8080/members/21/address-lists/7 HTTP/1.1
+Content-Type: application/json
+
+{
+  "addressListNo" : 7,
+  "addressLocalNo" : 1,
+  "memberNo" : 21,
+  "address" : "한남동",
+  "addressDetail" : "펜트하우스 꼭대기",
+  "zipCode" : "17345"
+}
+###
+DELETE http://localhost:8080/members/21/address-lists/1 HTTP/1.1
+###
+GET http://localhost:8080/members/21/address-lists/4 HTTP/1.1
+###
+GET http://localhost:8080/members/21/address-lists?page=0&size=5 HTTP/1.1
