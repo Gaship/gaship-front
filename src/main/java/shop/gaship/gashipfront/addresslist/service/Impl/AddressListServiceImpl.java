@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.addresslist.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import shop.gaship.gashipfront.addresslist.adapter.AddressListAdapter;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
@@ -15,32 +16,48 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @author 최정우
  * @since 1.0
  */
-
 @Service
 @RequiredArgsConstructor
 public class AddressListServiceImpl implements AddressListService {
+    private final AddressListAdapter addressListAdapter;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addAddressList(AddressListAddRequestDto request) {
-
+        addressListAdapter.addAddressList(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyAddressList(AddressListModifyRequestDto request) {
-
+        addressListAdapter.modifyAddressList(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAddressList(Long addressListNo) {
-
+        addressListAdapter.deleteAddressList(addressListNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AddressListResponseDto findAddressList(Long addressListNo) {
-        return null;
+        return addressListAdapter.findAddressList(addressListNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<AddressListResponseDto> findAddressLists(String memberNo, Pageable pageable) {
-        return null;
+        return addressListAdapter.findAddressLists(memberNo, pageable);
     }
 }
