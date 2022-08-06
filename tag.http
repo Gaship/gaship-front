@@ -1,6 +1,19 @@
-POST http://localhost:8080/admins/1/tags HTTP/1.1
+POST http://localhost:8080/tags HTTP/1.1
 Content-Type: application/json
 
 {
-  "title": "고풍스러운"
+  "title" : "멋있는"
 }
+###
+PUT http://localhost:8080/tags/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "tagNo" : "1",
+  "title" : "ㅁㄴㅇㄹ"
+}
+###
+GET http://localhost:8080/tags/1 HTTP/1.1
+
+###
+GET http://localhost:8080/tags?page=1&size=5 HTTP/1.1
