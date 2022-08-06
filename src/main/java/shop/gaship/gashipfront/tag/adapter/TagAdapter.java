@@ -1,26 +1,50 @@
 package shop.gaship.gashipfront.tag.adapter;
 
 import org.springframework.data.domain.Pageable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import shop.gaship.gashipfront.dto.*;
-import shop.gaship.gashipfront.tag.dto.*;
+import shop.gaship.gashipfront.tag.dto.request.TagAddRequestDto;
+import shop.gaship.gashipfront.tag.dto.request.TagModifyRequestDto;
+import shop.gaship.gashipfront.tag.dto.response.TagResponseDto;
+import shop.gaship.gashipfront.util.dto.PageResponse;
+
 
 /**
- * packageName    : shop.gaship.gashipfront.repository
- * fileName       : TagRepository
- * author         : choijungwoo
- * date           : 2022/07/15
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2022/07/15        choijungwoo       최초 생성
+ * 태그 adapter 입니다.
+ *
+ * @author 최정우
+ * @since 1.0
  */
 public interface TagAdapter {
-    Mono<Void> addTag(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
-    void modifyTag(Integer adminId, TagModifyRequestDto tagModifyRequestDto);
-    void removeTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto);
-    Mono<TagResponseDto> findTag(Integer adminId, TagGetRequestDto tagGetRequestDto);
-    Flux<TagResponseDto> findTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable);
+    /**
+     * 태그를 등록하는 어뎁터입니다.
+     *
+     * @param request 등록하려는 태그의 정보가 들어있습니다.
+     * @author 최정우
+     */
+    void addTag(TagAddRequestDto request);
+
+    /**
+     * 태그를 수정하는 어뎁터입니다.
+     *
+     * @param request 수정하려는 태그의 정보가 들어있습니다.
+     * @author 최정우
+     */
+    void modifyTag(TagModifyRequestDto request);
+
+    /**
+     * 태그를 조회하는 어뎁터입니다.
+     *
+     * @param tagNo 조회하려는 태그의 no 값입니다.
+     * @return 하나의 태그의 정보를 반환합니다.
+     * @author 최정우
+     */
+    TagResponseDto findTag(Long tagNo);
+
+    /**
+     * 태그목록을 조회하는 어뎁터입니다.
+     *
+     * @param pageable 조회하려는 태그 페이지 번호와 사이즈가 담긴 객체입니다.
+     * @return 태그페이지 정보를 반환합니다.
+     * @author 최정우
+     */
+    PageResponse<TagResponseDto> findTags(Pageable pageable);
 }
