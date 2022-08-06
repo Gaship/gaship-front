@@ -43,7 +43,8 @@ public class AddressListAdapterImpl implements AddressListAdapter {
     @Override
     public void modifyAddressList(AddressListModifyRequestDto request) {
         webClient.put()
-                .uri("/api/members/{memberNo}/addressLists/{addressListNo}", request.getMemberNo(), request.getAddressListNo())
+                .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
+                        request.getMemberNo(), request.getAddressListNo())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -55,7 +56,8 @@ public class AddressListAdapterImpl implements AddressListAdapter {
     @Override
     public void deleteAddressList(Long memberNo, Long addressListNo) {
         webClient.delete()
-                .uri("/api/members/{memberNo}/addressLists/{addressListNo}", memberNo, addressListNo)
+                .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
+                        memberNo, addressListNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .toEntity(void.class)
@@ -65,7 +67,8 @@ public class AddressListAdapterImpl implements AddressListAdapter {
     @Override
     public AddressListResponseDto findAddressList(Long memberNo, Long addressListNo) {
         return webClient.get()
-                .uri("/api/members/{memberNo}/addressLists/{addressListNo}", memberNo, addressListNo)
+                .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
+                        memberNo, addressListNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(AddressListResponseDto.class)

@@ -3,7 +3,8 @@ package shop.gaship.gashipfront.addresslist.dto.request;
 import lombok.Getter;
 
 /**
- * 배송지목록 수정을 위한 dto
+ * 배송지목록 수정을 위한 dto.
+ *
  * @author 최정우
  * @since 1.0
  */

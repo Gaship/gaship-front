@@ -8,7 +8,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * 배송지목록 어뎁터 인터페이스입니다.
- * 
+ *
  * @author 최정우
  * @since 1.0
  */
