@@ -1,63 +1,47 @@
 package shop.gaship.gashipfront.tag.service;
 
 import org.springframework.data.domain.Pageable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import shop.gaship.gashipfront.dto.*;
-import shop.gaship.gashipfront.tag.dto.*;
+import shop.gaship.gashipfront.tag.dto.request.TagAddRequestDto;
+import shop.gaship.gashipfront.tag.dto.request.TagModifyRequestDto;
+import shop.gaship.gashipfront.tag.dto.response.TagResponseDto;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
- * packageName    : shop.gaship.gashipfront.service
- * fileName       : TagService
- * author         : choijungwoo
- * date           : 2022/07/15
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 2022/07/15        choijungwoo       최초 생성
+ * 태그 관련 비즈니스 로직 처리 인터페이스입니다.
+ *
+ * @author 최정우
+ * @since 1.0
  */
 public interface TagService {
     /**
-     * Add tag.
+     * 태그를 등록할 때 실행됩니다.
      *
-     * @param adminId               the admin id
-     * @param tagRegisterRequestDto the tag register request dto
+     * @param request 등록하려는 태그 정보
+     * @author 최정우
      */
-    void addTag(Integer adminId, TagRegisterRequestDto tagRegisterRequestDto);
+    void addTag(TagAddRequestDto request);
 
     /**
-     * Modify tag.
+     * 태그를 수정할 때 실행됩니다.
      *
-     * @param adminId             the admin id
-     * @param tagModifyRequestDto the tag modify request dto
+     * @param request 수정하려는 태그 정보
+     * @author 최정우
      */
-    void modifyTag(Integer adminId, TagModifyRequestDto tagModifyRequestDto);
+    void modifyTag(TagModifyRequestDto request);
 
     /**
-     * Remove tag.
+     * 태그를 수정할 때 정보를 불러오기 위해 실행됩니다.
      *
-     * @param adminId             the admin id
-     * @param tagDeleteRequestDto the tag delete request dto
+     * @param tagNo 등록하려는 태그 정보
+     * @author 최정우
      */
-    void removeTag(Integer adminId, TagDeleteRequestDto tagDeleteRequestDto);
+    TagResponseDto findTag(Long tagNo);
 
     /**
-     * Find tag mono.
+     * 태그를 조회할 때 사용됩니다.
      *
-     * @param adminId          the admin id
-     * @param tagGetRequestDto the tag get request dto
-     * @return the mono
+     * @param pageable 조회하려는 페이지번호와 사이즈
+     * @author 최정우
      */
-    Mono<TagResponseDto> findTag(Integer adminId, TagGetRequestDto tagGetRequestDto);
-
-    /**
-     * Find tags flux.
-     *
-     * @param adminId          the admin id
-     * @param tagGetRequestDto the tag get request dto
-     * @param pageable         the pageable
-     * @return the flux
-     */
-    Flux<TagResponseDto> findTags(Integer adminId, TagGetRequestDto tagGetRequestDto, Pageable pageable);
+    PageResponse<TagResponseDto> findTags(Pageable pageable);
 }
