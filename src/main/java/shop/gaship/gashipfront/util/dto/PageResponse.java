@@ -2,6 +2,12 @@ package shop.gaship.gashipfront.util.dto;
 
 import java.util.List;
 import lombok.Getter;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 목록 조회 반환 타입으로 사용되는 page 정보와 data 를 담은 Data Transfer Object.
