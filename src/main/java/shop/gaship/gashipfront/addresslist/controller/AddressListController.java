@@ -81,6 +81,7 @@ public class AddressListController {
     /**
      * 배송지목록을 수정하고 배송지목록으로 돌아갑니다.
      *
+     * @param memberNo 조회하려는 회원 id 입니다.
      * @param pageable 조회하려는 페이지 번호와 사이즈가 담겨져있는 객체
      * @param model    모델
      * @return 배송지목록 목록을 보여주는 페이지
@@ -88,9 +89,10 @@ public class AddressListController {
      */
     @GetMapping
     @ResponseBody
-    public String addressLists(Pageable pageable,
+    public String addressLists(@PathVariable String memberNo,
+                               Pageable pageable,
                                Model model) {
-        model.addAttribute("response", addressListService.findAddressLists(pageable));
+        model.addAttribute("response", addressListService.findAddressLists(memberNo, pageable));
         return DEFAULT_PATH;
     }
 }

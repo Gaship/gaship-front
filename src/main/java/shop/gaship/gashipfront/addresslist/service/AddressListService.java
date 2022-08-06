@@ -3,6 +3,8 @@ package shop.gaship.gashipfront.addresslist.service;
 import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestDto;
+import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * @author 최정우
@@ -15,7 +17,7 @@ public interface AddressListService {
 
     void deleteAddressList(Long addressListNo);
 
-    Object findAddressList(Long addressListNo);
+    AddressListResponseDto findAddressList(Long addressListNo);
 
-    Object findAddressLists(Pageable pageable);
+    PageResponse<AddressListResponseDto> findAddressLists(String memberNo, Pageable pageable);
 }
