@@ -176,7 +176,7 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 1번이 나온다(등록되어있을시)
+        InquiryListResponseDto actual = content.get(0);
         assertThat(actual)
             .isNotNull();
     }
@@ -191,7 +191,7 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1);
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
         assertThat(actual)
             .isNotNull();
     }
@@ -213,13 +213,9 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 1번이 나온다(등록되어있을시)
-        assertThat(actual.getInquiryNo())
-            .isEqualTo(1);
-        assertThat(actual.getMemberNickname())
-            .isEqualTo("홍홍홍");
-        assertThat(actual.getTitle())
-            .isEqualTo("고객문의");
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
+        assertThat(actual)
+            .isNotNull();
 
         content.stream().forEach(c -> {
             assertThat(c.getProcessStatus())
@@ -244,13 +240,9 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 1번이 나온다(등록되어있을시)
-        assertThat(actual.getInquiryNo())
-            .isEqualTo(1);
-        assertThat(actual.getMemberNickname())
-            .isEqualTo("홍홍홍");
-        assertThat(actual.getTitle())
-            .isEqualTo("고객문의");
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
+        assertThat(actual)
+            .isNotNull();
 
         content.stream().forEach(c -> {
             assertThat(c.getProcessStatus())
@@ -268,6 +260,10 @@ class InquiryAdapterImplTest {
 
         assertThat(pageResponse.getPage())
             .isZero();
+
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
+        assertThat(actual)
+            .isNotNull();
 
         content.stream().forEach(c -> {
             assertThat(c.getProcessStatus())
