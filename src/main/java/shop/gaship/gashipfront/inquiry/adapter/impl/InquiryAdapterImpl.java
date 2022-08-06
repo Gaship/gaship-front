@@ -101,7 +101,12 @@ public class InquiryAdapterImpl implements InquiryAdapter {
      */
     @Override
     public PageResponse<InquiryListResponseDto> customerInquiryList(Pageable pageable) {
-        return webClient.get().uri("/api/inquiries/customer-inquiries").retrieve()
+
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/customer-inquiries")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build())
+            .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -113,7 +118,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     @Override
     public PageResponse<InquiryListResponseDto> productInquiryList(Pageable pageable) {
 
-        return webClient.get().uri("/api/inquiries/product-inquiries").retrieve()
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/product-inquiries")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build()).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -125,7 +133,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     @Override
     public PageResponse<InquiryListResponseDto> customerInquiryStatusHoldList(Pageable pageable) {
 
-        return webClient.get().uri("/api/inquiries/customer-inquiries/status-hold").retrieve()
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/customer-inquiries/status-hold")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build()).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -138,7 +149,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     public PageResponse<InquiryListResponseDto> customerInquiryStatusCompleteList(
         Pageable pageable) {
 
-        return webClient.get().uri("/api/inquiries/customer-inquiries/status-complete").retrieve()
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/customer-inquiries/status-complete")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build()).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -150,7 +164,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     @Override
     public PageResponse<InquiryListResponseDto> productInquiryStatusHoldList(Pageable pageable) {
 
-        return webClient.get().uri("/api/inquiries/product-inquiries/status-hold").retrieve()
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/product-inquiries/status-hold")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build()).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -163,7 +180,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     public PageResponse<InquiryListResponseDto> productInquiryStatusCompleteList(
         Pageable pageable) {
 
-        return webClient.get().uri("/api/inquiries/product-inquiries/status-complete").retrieve()
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/product-inquiries/status-complete")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build()).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -176,7 +196,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     public PageResponse<InquiryListResponseDto> customerInquiryMemberList(Pageable pageable,
                                                                           Integer memberNo) {
 
-        return webClient.get().uri("/api/inquiries/member/{memberNo}/customer-inquiries", memberNo)
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/member/{memberNo}/customer-inquiries")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build(memberNo))
             .retrieve().onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -189,7 +212,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     public PageResponse<InquiryListResponseDto> productInquiryMemberList(Pageable pageable,
                                                                          Integer memberNo) {
 
-        return webClient.get().uri("/api/inquiries/member/{memberNo}/product-inquiries", memberNo)
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/member/{memberNo}/product-inquiries")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build(memberNo))
             .retrieve().onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
@@ -202,7 +228,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     public PageResponse<InquiryListResponseDto> productInquiryProductList(Pageable pageable,
                                                                           Integer productNo) {
 
-        return webClient.get().uri("/api/inquiries/product/{productNo}", productNo).retrieve()
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/product/{productNo}")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build(productNo)).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);
