@@ -32,7 +32,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @author : 최겸준
  * @since 1.0
  */
-@Disabled("gateway, shopping-mall 서버가 모두 켜져있을때 정상작동합니다. 서버가 모두 돌아갈때 해당 disabled를 주석처리하고 테스트해주세요.")
+//@Disabled("gateway, shopping-mall 서버가 모두 켜져있을때 정상작동합니다. 서버가 모두 돌아갈때 해당 disabled를 주석처리하고 테스트해주세요.")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class InquiryAdapterImplTest {
@@ -176,7 +176,7 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 1번이 나온다(등록되어있을시)
+        InquiryListResponseDto actual = content.get(0);
         assertThat(actual)
             .isNotNull();
     }
@@ -191,7 +191,7 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1);
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
         assertThat(actual)
             .isNotNull();
     }
@@ -213,13 +213,9 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 1번이 나온다(등록되어있을시)
-        assertThat(actual.getInquiryNo())
-            .isEqualTo(1);
-        assertThat(actual.getMemberNickname())
-            .isEqualTo("홍홍홍");
-        assertThat(actual.getTitle())
-            .isEqualTo("고객문의");
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
+        assertThat(actual)
+            .isNotNull();
 
         content.stream().forEach(c -> {
             assertThat(c.getProcessStatus())
@@ -244,13 +240,9 @@ class InquiryAdapterImplTest {
         assertThat(pageResponse.getPage())
             .isZero();
 
-        InquiryListResponseDto actual = content.get(content.size() - 1); // 이러면 항상 1번이 나온다(등록되어있을시)
-        assertThat(actual.getInquiryNo())
-            .isEqualTo(1);
-        assertThat(actual.getMemberNickname())
-            .isEqualTo("홍홍홍");
-        assertThat(actual.getTitle())
-            .isEqualTo("고객문의");
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
+        assertThat(actual)
+            .isNotNull();
 
         content.stream().forEach(c -> {
             assertThat(c.getProcessStatus())
@@ -268,6 +260,10 @@ class InquiryAdapterImplTest {
 
         assertThat(pageResponse.getPage())
             .isZero();
+
+        InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
+        assertThat(actual)
+            .isNotNull();
 
         content.stream().forEach(c -> {
             assertThat(c.getProcessStatus())
