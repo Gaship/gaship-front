@@ -18,7 +18,7 @@ import shop.gaship.gashipfront.addresslist.service.AddressListService;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("member/{memberNo}/address-list")
+@RequestMapping("/member/{memberNo}/address-list")
 public class AddressListController {
     private static final String DEFAULT_PATH = "addressLists";
     private final AddressListService addressListService;
@@ -58,8 +58,9 @@ public class AddressListController {
      * @author 최정우
      */
     @DeleteMapping("/{addressListNo}")
-    public String addressListRemove(@PathVariable Long addressListNo) {
-        addressListService.deleteAddressList(addressListNo);
+    public String addressListRemove(@PathVariable Long memberNo,
+                                    @PathVariable Long addressListNo) {
+        addressListService.deleteAddressList(memberNo, addressListNo);
         return "redirect:" + DEFAULT_PATH;
     }
 
@@ -73,9 +74,10 @@ public class AddressListController {
      */
     @GetMapping("/{addressListNo}")
     @ResponseBody
-    public String addressListDetails(@PathVariable Long addressListNo,
+    public String addressListDetails(@PathVariable Long memberNo,
+                                     @PathVariable Long addressListNo,
                                      Model model) {
-        model.addAttribute("response", addressListService.findAddressList(addressListNo));
+        model.addAttribute("response", addressListService.findAddressList(memberNo, addressListNo));
         return "addressListInfo";
     }
 
@@ -90,7 +92,7 @@ public class AddressListController {
      */
     @GetMapping
     @ResponseBody
-    public String addressLists(@PathVariable String memberNo,
+    public String addressLists(@PathVariable Long memberNo,
                                Pageable pageable,
                                Model model) {
         model.addAttribute("response", addressListService.findAddressLists(memberNo, pageable));
