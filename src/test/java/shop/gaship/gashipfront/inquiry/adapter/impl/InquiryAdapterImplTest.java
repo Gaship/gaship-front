@@ -32,7 +32,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @author : 최겸준
  * @since 1.0
  */
-//@Disabled("gateway, shopping-mall 서버가 모두 켜져있을때 정상작동합니다. 서버가 모두 돌아갈때 해당 disabled를 주석처리하고 테스트해주세요.")
+@Disabled("gateway, shopping-mall 서버가 모두 켜져있을때 정상작동합니다. 서버가 모두 돌아갈때 해당 disabled를 주석처리하고 테스트해주세요.")
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class InquiryAdapterImplTest {
