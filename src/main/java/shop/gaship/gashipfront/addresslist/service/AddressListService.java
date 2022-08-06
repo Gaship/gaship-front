@@ -15,9 +15,9 @@ public interface AddressListService {
 
     void modifyAddressList(AddressListModifyRequestDto request);
 
-    void deleteAddressList(Long addressListNo);
+    void deleteAddressList(Long memberNo, Long addressListNo);
 
-    AddressListResponseDto findAddressList(Long addressListNo);
+    AddressListResponseDto findAddressList(Long memberNo, Long addressListNo);
 
-    PageResponse<AddressListResponseDto> findAddressLists(String memberNo, Pageable pageable);
+    PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable);
 }
