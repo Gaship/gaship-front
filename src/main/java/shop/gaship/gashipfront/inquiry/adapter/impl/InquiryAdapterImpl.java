@@ -88,7 +88,9 @@ public class InquiryAdapterImpl implements InquiryAdapter {
      */
     @Override
     public InquiryDetailsResponseDto inquiryDetails(Integer inquiryNo) {
-        return webClient.get().uri("/api/inquiries/{inquiryNo}", 1).retrieve()
+
+        return webClient.get().uri("/api/inquiries/{inquiryNo}", 1)
+            .accept(MediaType.APPLICATION_JSON).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(InquiryDetailsResponseDto.class).blockOptional()
             .orElseThrow(NullResponseBodyException::new);
