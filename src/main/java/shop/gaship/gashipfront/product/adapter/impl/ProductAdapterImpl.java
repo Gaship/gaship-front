@@ -27,14 +27,12 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  */
 @Component
 public class ProductAdapterImpl implements ProductAdapter {
+    private static final String REQUEST_URI = "/api/products";
     @Value("${gaship-server.gateway-url}")
     private String gatewayUrl;
-
-    private static final String REQUEST_URI = "/api/products";
-
     private final WebClient webClient = WebClient.builder()
-            .baseUrl(gatewayUrl)
-            .build();
+        .baseUrl(gatewayUrl)
+        .build();
 
     /**
      * {@inheritDoc}
@@ -46,11 +44,11 @@ public class ProductAdapterImpl implements ProductAdapter {
         builder.part("createRequest", createRequest, MediaType.APPLICATION_JSON);
 
         webClient.post()
-                .uri(REQUEST_URI)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .bodyValue(builder.build())
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .uri(REQUEST_URI)
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .bodyValue(builder.build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
     }
 
     /**
@@ -63,11 +61,11 @@ public class ProductAdapterImpl implements ProductAdapter {
         builder.part("modifyRequest", modifyRequest, MediaType.APPLICATION_JSON);
 
         webClient.put()
-                .uri(REQUEST_URI + "/{productNo}", modifyRequest.getNo())
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .bodyValue(builder.build())
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .uri(REQUEST_URI + "/{productNo}", modifyRequest.getNo())
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .bodyValue(builder.build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
     }
 
     /**
@@ -76,11 +74,11 @@ public class ProductAdapterImpl implements ProductAdapter {
     @Override
     public void salesStatusModify(SalesStatusModifyRequestDto modifyRequest) {
         webClient.put()
-                .uri(REQUEST_URI + "/{productNo}/salesStatus", modifyRequest.getProductNo())
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(modifyRequest)
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .uri(REQUEST_URI + "/{productNo}/salesStatus", modifyRequest.getProductNo())
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(modifyRequest)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
     }
 
     /**
@@ -90,17 +88,18 @@ public class ProductAdapterImpl implements ProductAdapter {
     public PageResponse<ProductAllInfoResponseDto> productListSearchCode(String productCode,
                                                                          Pageable pageable) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(REQUEST_URI + "/code")
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .build())
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(
-                        new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {}
-                )
-                .block();
+            .uri(uriBuilder -> uriBuilder
+                .path(REQUEST_URI + "/code")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                }
+            )
+            .block();
     }
 
     /**
@@ -109,11 +108,11 @@ public class ProductAdapterImpl implements ProductAdapter {
     @Override
     public ProductAllInfoResponseDto productDetails(Integer productNo) {
         return webClient.get()
-                .uri(REQUEST_URI + "/{productNo}", productNo)
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(ProductAllInfoResponseDto.class)
-                .block();
+            .uri(REQUEST_URI + "/{productNo}", productNo)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(ProductAllInfoResponseDto.class)
+            .block();
     }
 
     /**
@@ -123,17 +122,18 @@ public class ProductAdapterImpl implements ProductAdapter {
     public PageResponse<ProductAllInfoResponseDto> productListSearchStatusCode(String statusName,
                                                                                Pageable pageable) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(REQUEST_URI + "/statusCode")
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .build())
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(
-                        new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {}
-                )
-                .block();
+            .uri(uriBuilder -> uriBuilder
+                .path(REQUEST_URI + "/statusCode")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                }
+            )
+            .block();
     }
 
     /**
@@ -143,19 +143,20 @@ public class ProductAdapterImpl implements ProductAdapter {
     public PageResponse<ProductAllInfoResponseDto> productAmountList(Long minAmount, Long maxAmount,
                                                                      Pageable pageable) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(REQUEST_URI + "/price")
-                        .queryParam("min", minAmount)
-                        .queryParam("max", maxAmount)
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .build())
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(
-                        new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {}
-                )
-                .block();
+            .uri(uriBuilder -> uriBuilder
+                .path(REQUEST_URI + "/price")
+                .queryParam("min", minAmount)
+                .queryParam("max", maxAmount)
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                }
+            )
+            .block();
     }
 
     /**
@@ -165,17 +166,18 @@ public class ProductAdapterImpl implements ProductAdapter {
     public PageResponse<ProductAllInfoResponseDto> productCategoryList(Integer categoryNo,
                                                                        Pageable pageable) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(REQUEST_URI + "/category/{categoryNo}")
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .build(categoryNo))
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(
-                        new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {}
-                )
-                .block();
+            .uri(uriBuilder -> uriBuilder
+                .path(REQUEST_URI + "/category/{categoryNo}")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build(categoryNo))
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                }
+            )
+            .block();
     }
 
     /**
@@ -184,17 +186,18 @@ public class ProductAdapterImpl implements ProductAdapter {
     @Override
     public PageResponse<ProductAllInfoResponseDto> productNameList(String name, Pageable pageable) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(REQUEST_URI + "/name")
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .build())
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(
-                        new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {}
-                )
-                .block();
+            .uri(uriBuilder -> uriBuilder
+                .path(REQUEST_URI + "/name")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                }
+            )
+            .block();
     }
 
     /**
@@ -203,16 +206,36 @@ public class ProductAdapterImpl implements ProductAdapter {
     @Override
     public PageResponse<ProductAllInfoResponseDto> productListAll(Pageable pageable) {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(REQUEST_URI)
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .build())
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(
-                        new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {}
-                )
-                .block();
+            .uri(uriBuilder -> uriBuilder
+                .path(REQUEST_URI)
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                }
+            )
+            .block();
+    }
+
+    @Override
+    public PageResponse<ProductAllInfoResponseDto> productNosList(List<Integer> productNos,
+                                                                  Pageable pageable) {
+        return webClient.get()
+            .uri(uriBuilder -> uriBuilder
+                .path(REQUEST_URI + "/productNos")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .queryParam("productNos", productNos)
+                .build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                }
+            )
+            .block();
     }
 }

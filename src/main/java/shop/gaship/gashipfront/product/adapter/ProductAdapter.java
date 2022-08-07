@@ -104,4 +104,6 @@ public interface ProductAdapter {
      * @return 페이지 객체
      */
     PageResponse<ProductAllInfoResponseDto> productListAll(Pageable pageable);
+
+    PageResponse<ProductAllInfoResponseDto> productNosList(List<Integer> productNos, Pageable pageable);
 }
