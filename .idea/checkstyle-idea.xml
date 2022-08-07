@@ -5,14 +5,14 @@
     <scanScope>JavaOnly</scanScope>
     <option name="thirdPartyClasspath" />
     <option name="activeLocationIds">
-      <option value="e8a310e9-7821-4469-9c1d-5376c8a1667a" />
+      <option value="af7fe274-1ca2-47cb-b873-bba8bfcca700" />
     </option>
     <option name="locations">
       <list>
         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
-        <ConfigurationLocation id="e8a310e9-7821-4469-9c1d-5376c8a1667a" type="LOCAL_FILE" scope="All" description="Gaship Style ">
-          $USER_HOME$/3.개발환경/workspace/google_checks.xml
+        <ConfigurationLocation id="af7fe274-1ca2-47cb-b873-bba8bfcca700" type="LOCAL_FILE" scope="All" description="gaship">
+          $USER_HOME$/IdeaProjects/conventions/googleModifiedConvention.xml
           <option name="properties">
             <map>
               <entry key="org.checkstyle.google.suppressionfilter.config" value="" />
