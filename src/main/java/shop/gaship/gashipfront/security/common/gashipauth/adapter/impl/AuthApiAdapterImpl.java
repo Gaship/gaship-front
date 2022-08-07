@@ -8,7 +8,6 @@ import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.security.common.gashipauth.adapter.AuthApiAdapter;
-import shop.gaship.gashipfront.security.common.gashipauth.exception.LogoutFailureException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
@@ -51,7 +50,6 @@ public class AuthApiAdapterImpl implements AuthApiAdapter {
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(void.class)
-            .blockOptional()
-            .orElseThrow(LogoutFailureException::new);
+            .block();
     }
 }

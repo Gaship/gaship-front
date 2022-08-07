@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.security.common.util;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -127,8 +128,18 @@ public class SignupManager {
         int month = Integer.parseInt(birthday[MONTH]);
         int day = Integer.parseInt(birthday[DAY]);
 
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$%^&*";
+        String randomNickname = RandomStringUtils.random(
+            10,
+            0,
+            characters.length(),
+            false,
+            false,
+            characters.toCharArray(),
+            new SecureRandom());
+
         member = MemberAllFieldDto.builder().email(email).password(email)
-            .nickName(Strings.concat(rowNickName, RandomStringUtils.random(16, true, true)))
+            .nickName(Strings.concat(rowNickName, randomNickname))
             .name(info.getName()).gender(getGender(info)).phoneNumber(info.getPhoneNumber())
             .birthDate(LocalDate.of(year, month, day)).build();
         return member;
@@ -143,10 +154,21 @@ public class SignupManager {
      */
     private MemberAllFieldDto buildMember(String rowNickName, String email) {
         MemberAllFieldDto member;
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@$%^&*";
+        String randomNickname = RandomStringUtils.random(
+            10,
+            0,
+            characters.length(),
+            false,
+            false,
+            characters.toCharArray(),
+            new SecureRandom());
+
 
         member = MemberAllFieldDto.builder().email(email).password(email)
-            .nickName(Strings.concat(rowNickName, RandomStringUtils.random(16, true, true)))
-            .name(email).build();
+            .nickName(Strings.concat(rowNickName, randomNickname))
+            .name(email)
+            .build();
         return member;
     }
 
