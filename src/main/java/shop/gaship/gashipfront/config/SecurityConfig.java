@@ -27,7 +27,7 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
  * @author 조재철
  * @since 1.0
  */
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Order(1)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

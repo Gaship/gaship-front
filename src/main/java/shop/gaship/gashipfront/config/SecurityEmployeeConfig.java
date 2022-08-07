@@ -20,7 +20,7 @@ import shop.gaship.gashipfront.security.basic.service.CustomEmployeeUserDetailSe
  * @author 김민수
  * @since 1.0
  */
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
