@@ -96,12 +96,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) { return new Oauth2LoginSuccessHandler(commonService); }
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) {
+        return new Oauth2LoginSuccessHandler(commonService);
+    }
 
     @Bean
-    public WebClient webClient() {
-        return WebClient.builder().baseUrl("http://localhost:7070").defaultHeader("Accept",
-            MediaType.APPLICATION_JSON_VALUE).defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
+    public WebClient webClient(ServerConfig serverConfig) {
+        return WebClient.builder()
+            .baseUrl(serverConfig.getGatewayUrl())
+            .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
     }
 }
 

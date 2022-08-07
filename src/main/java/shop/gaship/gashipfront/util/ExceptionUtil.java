@@ -21,13 +21,17 @@ public class ExceptionUtil {
 
 
     /**
-     * @param clientResponse
-     * @return
-     * @author
+     * clientResponse 객체를 이용하여 Flux 객체를 받은뒤 Flux error로 만들어 상위 subscriber에게 알려 cancel 요청에 사용합니다.
+     * errorMessage와 statusCode를 받아서 차후 statusCode를 처리할상황에서 함께 사용할수 있습니다.
+     *
+     * @param clientResponse 넘어온 예외에 대한 정보를 가지고 있는 객체입니다.
+     * @return Flux&lt;? extends Throwable&gt; Throwable을 상속하는 객체 모두를 대상으로 Flux error로 만듭니다.
+     * @author 김민수
      */
     public static Flux<? extends Throwable> createErrorFlux(ClientResponse clientResponse) {
         return clientResponse.bodyToFlux(ErrorResponse.class).flatMap(
-            errorResponse -> Flux.error(new RequestFailureThrow(errorResponse.getMessage(), clientResponse.statusCode())));
+            errorResponse -> Flux.error(
+                new RequestFailureThrow(errorResponse.getMessage(), clientResponse.statusCode())));
     }
 
     /**
@@ -35,13 +39,13 @@ public class ExceptionUtil {
      * errorMessage와 statusCode를 받아서 차후 statusCode를 처리할상황에서 함께 사용할수 있습니다.
      *
      * @param clientResponse 넘어온 예외에 대한 정보를 가지고 있는 객체입니다.
-     * @return Mono<? extends Throwable> Mono로서 바디값으로 Throwable을 확장하고있는 객체들을 가집니다.
+     * @return Mono &lt;? extends Throwable&gt; Mono로서 바디값으로 Throwable을 확장하고있는 객체들을 가집니다.
      * @author 최겸준
      */
     public static Mono<? extends Throwable> createErrorMono(ClientResponse clientResponse) {
-        Function<ErrorResponse, Mono<? extends Throwable>> errorResponseMonoFunction
-            = errorResponse
-            -> Mono.error(new RequestFailureThrow(errorResponse.getMessage(), clientResponse.statusCode()));
+        Function<ErrorResponse, Mono<? extends Throwable>> errorResponseMonoFunction =
+            errorResponse -> Mono.error(
+                new RequestFailureThrow(errorResponse.getMessage(), clientResponse.statusCode()));
 
         return clientResponse.bodyToMono(ErrorResponse.class)
             .flatMap(errorResponseMonoFunction);

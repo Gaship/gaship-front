@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.tag.adapter.Impl;
+package shop.gaship.gashipfront.tag.adapter.impl;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;

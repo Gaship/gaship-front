@@ -9,7 +9,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.adapter.AuthApiAdapter
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 
 /**
- * CommonService 구현체
+ * CommonService의 구현체입니다.
  *
  * @author : 최겸준
  * @see AuthApiService
@@ -31,6 +31,7 @@ public class AuthApiServiceImpl implements AuthApiService {
 
         return adapter.requestJwt(detailsDto);
     }
+
     /**
      * {@inheritDoc}
      */
