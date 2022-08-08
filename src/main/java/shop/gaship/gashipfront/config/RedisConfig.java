@@ -18,6 +18,7 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
+import shop.gaship.gashipfront.exceptions.NotFoundDataProtectionReposeData;
 
 /**
  * 인메모리 데이터베이스 레디스를 설정하기위한 클래스입니다.
@@ -44,10 +45,10 @@ public class RedisConfig implements BeanClassLoaderAware {
         String secretPassword;
         try {
             secretHost = secureManagerConfig.findSecretDataFromSecureKeyManager(this.host);
-            secretPassword= secureManagerConfig.findSecretDataFromSecureKeyManager(this.password);
-        } catch (CertificateException | NoSuchAlgorithmException | KeyStoreException |
-            UnrecoverableKeyException | IOException | KeyManagementException e) {
-            throw new RuntimeException("Secure Manager Error");
+            secretPassword = secureManagerConfig.findSecretDataFromSecureKeyManager(this.password);
+        } catch (CertificateException | NoSuchAlgorithmException | KeyStoreException
+                 | UnrecoverableKeyException | IOException | KeyManagementException e) {
+            throw new NotFoundDataProtectionReposeData("Secure Manager Error");
         }
 
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
@@ -60,6 +61,7 @@ public class RedisConfig implements BeanClassLoaderAware {
     }
 
     @Bean
+    @SuppressWarnings("java:S1452") // 레디스의 key value의 타입을 자유롭게 지정하기위함.
     public RedisTemplate<?, ?> redisTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory(null));
@@ -81,6 +83,7 @@ public class RedisConfig implements BeanClassLoaderAware {
 
         return serializer;
     }
+
     public String getHost() {
         return host;
     }

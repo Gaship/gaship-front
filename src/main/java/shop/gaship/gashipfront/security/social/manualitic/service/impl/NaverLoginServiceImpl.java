@@ -10,12 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
+import shop.gaship.gashipfront.security.common.exception.CsrfProtectedException;
 import shop.gaship.gashipfront.security.social.manualitic.adapter.NaverAdapter;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
-import shop.gaship.gashipfront.security.common.exception.CsrfProtectedException;
-import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 
 
 /**
@@ -67,7 +67,9 @@ public class NaverLoginServiceImpl implements NaverLoginService {
 
     @Override
     public NaverAccessToken getAccessToken(String code, String parameterState, String redisState) {
-        if (!Objects.equals(parameterState, redisState)) throw new CsrfProtectedException("csrf protect");
+        if (!Objects.equals(parameterState, redisState)) {
+            throw new CsrfProtectedException("csrf protect");
+        }
 
         URIBuilder uriBuilder = new URIBuilder()
             .setScheme("https")
@@ -83,7 +85,9 @@ public class NaverLoginServiceImpl implements NaverLoginService {
     @Override
     public NaverUserData getUserDataThroughAccessToken(String accessToken) {
         NaverUserData data = adapter.requestNaverUserData(apiUrlForUserData, accessToken);
-        if (!Objects.equals(data.getMessage(), "success")) throw new RequestFailureThrow("oauth request fail, message : " + data.getMessage());
+        if (!Objects.equals(data.getMessage(), "success")) {
+            throw new RequestFailureThrow("oauth request fail, message : " + data.getMessage());
+        }
         return data;
     }
 }

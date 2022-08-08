@@ -2,20 +2,21 @@ package shop.gaship.gashipfront.member.adapter;
 
 import java.util.Map;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
 import shop.gaship.gashipfront.member.dto.FindMemberEmailRequest;
 import shop.gaship.gashipfront.member.dto.FindMemberEmailResponse;
-import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
+import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 import shop.gaship.gashipfront.member.dto.ReissuePasswordRequest;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
-import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
-import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
@@ -27,16 +28,12 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class MemberAdapterImpl implements MemberAdapter {
     private final ServerConfig serverConfig;
     private final WebClient webClient;
 
-    public MemberAdapterImpl(ServerConfig serverConfig, WebClient webClient) {
-        this.serverConfig = serverConfig;
-        this.webClient = webClient;
-    }
     //TODO :URI 고쳐야해
-
     /**
      * gaship-shopping-mall api에 email을 통해서 member를 요청하는 기능입니다.
      *
@@ -54,7 +51,8 @@ public class MemberAdapterImpl implements MemberAdapter {
             .blockOptional()
             .orElseThrow(NullResponseBodyException::new);
     }
-//TODO :URI 고쳐야해
+
+    //TODO :URI 고쳐야해
     /**
      * 멤버의 회원가입 요청을 담당하는 기능입니다.
      *
@@ -72,7 +70,8 @@ public class MemberAdapterImpl implements MemberAdapter {
             .toEntity(void.class)
             .block();
     }
-//TODO :URI 고쳐야해
+
+    //TODO :URI 고쳐야해
     /**
      * 멤버의 회원가입시 닉네임생성을 위해 최신 번호를 가져오는 기능입니다.
      *
@@ -88,17 +87,22 @@ public class MemberAdapterImpl implements MemberAdapter {
             .blockOptional()
             .orElseThrow(NullResponseBodyException::new);
     }
-//TODO :URI 고쳐야해
+
+    //TODO :URI 고쳐야해
+    /**
+     *
+     *{@inheritDoc}
+     */
     @Override
     public MemberNumberPresence recommendMemberNoFind(String nickName) {
-            return WebClient.create(serverConfig.getGatewayUrl()).get()
-                .uri("/api/members/retrieve?nickname={nickname}", nickName)
-                .retrieve()
-                .onStatus(HttpStatus::isError, shop.gaship.gashipfront.util.ExceptionUtil::createErrorMono)
-                .toEntity(MemberNumberPresence.class)
-                .blockOptional()
-                .orElseThrow(RequestFailureThrow::new)
-                .getBody();
+        return WebClient.create(serverConfig.getGatewayUrl()).get()
+            .uri("/api/members/retrieve?nickname={nickname}", nickName)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .toEntity(MemberNumberPresence.class)
+            .blockOptional()
+            .orElseThrow(RequestFailureThrow::new)
+            .getBody();
     }
 
     /**
@@ -124,6 +128,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @return 이메일이 존재하는지에대한 결과를 담은 객체를 반환합니다.
      * @throws shop.gaship.gashipfront.exceptions.RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
+    @Override
     public EmailPresence emailDuplicationCheckRequest(String email) {
         return WebClient.create(serverConfig.getGatewayUrl()).get()
             .uri("/api/members/check-email?email={email}", email)
@@ -142,6 +147,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @return MemberNumberPresence : 존재한다면 회원 고유번호가 담겨옵니다.
      * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
+    @Override
     public MemberNumberPresence nicknameDuplicationCheckRequest(String nickName) {
         return WebClient.create(serverConfig.getGatewayUrl()).get()
             .uri("/api/members/check-nickname?nickanme={nickname}", nickName)

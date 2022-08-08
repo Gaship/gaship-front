@@ -3,7 +3,13 @@ package shop.gaship.gashipfront.tag.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import shop.gaship.gashipfront.tag.dto.request.TagAddRequestDto;
 import shop.gaship.gashipfront.tag.dto.request.TagModifyRequestDto;
 import shop.gaship.gashipfront.tag.service.TagService;
@@ -20,7 +26,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/tags")
 public class TagController {
-    private static final String DEFAULT_PATH = "/tags";
     private final TagService tagService;
 
     /**
@@ -34,7 +39,7 @@ public class TagController {
     public String tagAdd(@RequestBody @Valid TagAddRequestDto request) {
         tagService.addTag(request);
 
-        return "redirect:" + DEFAULT_PATH;
+        return "redirect:/tags";
     }
 
     /**
@@ -47,7 +52,7 @@ public class TagController {
     @PutMapping("/{tagNo}")
     public String tagModify(@RequestBody @Valid TagModifyRequestDto request) {
         tagService.modifyTag(request);
-        return "redirect:" + DEFAULT_PATH;
+        return "redirect:/tags";
     }
 
     /**

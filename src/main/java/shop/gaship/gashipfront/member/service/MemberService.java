@@ -1,6 +1,5 @@
 package shop.gaship.gashipfront.member.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;

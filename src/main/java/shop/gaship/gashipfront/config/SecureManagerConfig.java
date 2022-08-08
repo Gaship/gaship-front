@@ -48,17 +48,17 @@ public class SecureManagerConfig {
         sslContextBuilder.loadKeyMaterial(clientStore, localKey.toCharArray());
         sslContextBuilder.loadTrustMaterial(new TrustSelfSignedStrategy());
 
-        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContextBuilder.build());
+        SSLConnectionSocketFactory sslConnectionSocketFactory =
+            new SSLConnectionSocketFactory(sslContextBuilder.build());
         CloseableHttpClient httpClient = HttpClients.custom()
             .setSSLSocketFactory(sslConnectionSocketFactory)
             .build();
-        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        HttpComponentsClientHttpRequestFactory requestFactory =
+            new HttpComponentsClientHttpRequestFactory(httpClient);
 
         return Objects.requireNonNull(new RestTemplate(requestFactory)
                 .getForEntity(url + "/keymanager/v1.0/appkey/{appkey}/secrets/{keyid}",
-                    SecureKeyResponse.class
-                    , appKey,
-                    keyId)
+                    SecureKeyResponse.class, appKey, keyId)
                 .getBody())
             .getBody()
             .getSecret();

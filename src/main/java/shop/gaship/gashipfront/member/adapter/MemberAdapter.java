@@ -2,9 +2,9 @@ package shop.gaship.gashipfront.member.adapter;
 
 import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
+import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
-import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
 /**
  * api서버에 요청을 처리하는 기능을 담당하는 interface입니다.

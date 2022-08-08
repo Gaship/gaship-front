@@ -30,7 +30,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
-        SignInSuccessUserDetailsDto details = (SignInSuccessUserDetailsDto) authentication.getPrincipal();
+        SignInSuccessUserDetailsDto details =
+            (SignInSuccessUserDetailsDto) authentication.getPrincipal();
 
         TokenRequestDto tokenRequestDto =
             new TokenRequestDto(
