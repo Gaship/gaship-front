@@ -45,7 +45,7 @@ jobs:
         script: "./ready_server1.sh"
         
     - name: Sleep for 60 seconds
-      uses: jakejarvis/wait-action@v0.0.1
+      uses: jakejarvis/wait-action@master
       with:
         time: '60s'
     
@@ -73,7 +73,7 @@ jobs:
 
       ### phase 2
     - name: Sleep for 40 seconds
-      uses: jakejarvis/wait-action@v0.0.1
+      uses: jakejarvis/wait-action@master
       with:
         time: '40s'
 
@@ -90,7 +90,7 @@ jobs:
         
         
     - name: Sleep for 60 seconds
-      uses: jakejarvis/wait-action@v0.0.1
+      uses: jakejarvis/wait-action@master
       with:
         time: '60s'
         
