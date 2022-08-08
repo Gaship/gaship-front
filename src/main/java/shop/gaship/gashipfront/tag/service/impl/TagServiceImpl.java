@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.tag.service.impl;
+package shop.gaship.gashipfront.tag.service.Impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
