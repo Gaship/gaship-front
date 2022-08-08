@@ -69,6 +69,16 @@ jobs:
         port: ${{ secrets.FRONT1_SSH_PORT }}
         script_stop: true
         script: "./deploy_comp1.sh"
+        
+    - name : excute service (server1)
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.FRONT1_SSH_IP }}
+        username: ${{ secrets.FRONT1_SSH_ID }}
+        key: ${{ secrets.FRONT1_SSH_KEY }}
+        port: ${{ secrets.FRONT1_SSH_PORT }}
+        script_stop: true
+        script: "./startup.sh"
 
 
       ### phase 2
@@ -106,7 +116,6 @@ jobs:
         target: "~/"
         rm: false
         
-        
     - name : complete server2 deployment (excute shell script)
       uses: appleboy/ssh-action@master
       with:
@@ -116,3 +125,13 @@ jobs:
         port: ${{ secrets.FRONT2_SSH_PORT }}
         script_stop: true
         script: "./deploy_comp2.sh"
+        
+    - name : excute service (server2)
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.FRONT2_SSH_IP }}
+        username: ${{ secrets.FRONT2_SSH_ID }}
+        key: ${{ secrets.FRONT2_SSH_KEY }}
+        port: ${{ secrets.FRONT2_SSH_PORT }}
+        script_stop: true
+        script: "./startup.sh"
