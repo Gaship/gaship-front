@@ -1,10 +1,10 @@
 package shop.gaship.gashipfront.tag.adapter;
 
-import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.tag.dto.request.TagAddRequestDto;
 import shop.gaship.gashipfront.tag.dto.request.TagModifyRequestDto;
 import shop.gaship.gashipfront.tag.dto.response.TagResponseDto;
-import shop.gaship.gashipfront.util.dto.PageResponse;
+
+import java.util.List;
 
 
 /**
@@ -42,9 +42,8 @@ public interface TagAdapter {
     /**
      * 태그목록을 조회하는 어뎁터입니다.
      *
-     * @param pageable 조회하려는 태그 페이지 번호와 사이즈가 담긴 객체입니다.
      * @return 태그페이지 정보를 반환합니다.
      * @author 최정우
      */
-    PageResponse<TagResponseDto> findTags(Pageable pageable);
+    List<TagResponseDto> findTags();
 }

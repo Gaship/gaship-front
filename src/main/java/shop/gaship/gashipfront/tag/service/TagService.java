@@ -1,10 +1,10 @@
 package shop.gaship.gashipfront.tag.service;
 
-import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.tag.dto.request.TagAddRequestDto;
 import shop.gaship.gashipfront.tag.dto.request.TagModifyRequestDto;
 import shop.gaship.gashipfront.tag.dto.response.TagResponseDto;
-import shop.gaship.gashipfront.util.dto.PageResponse;
+
+import java.util.List;
 
 /**
  * 태그 관련 비즈니스 로직 처리 인터페이스입니다.
@@ -40,8 +40,7 @@ public interface TagService {
     /**
      * 태그를 조회할 때 사용됩니다.
      *
-     * @param pageable 조회하려는 페이지번호와 사이즈
      * @author 최정우
      */
-    PageResponse<TagResponseDto> findTags(Pageable pageable);
+    List<TagResponseDto> findTags();
 }

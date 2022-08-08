@@ -1,7 +1,6 @@
 package shop.gaship.gashipfront.tag.adapter.Impl;
 
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,8 @@ import shop.gaship.gashipfront.tag.dto.request.TagAddRequestDto;
 import shop.gaship.gashipfront.tag.dto.request.TagModifyRequestDto;
 import shop.gaship.gashipfront.tag.dto.response.TagResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
-import shop.gaship.gashipfront.util.dto.PageResponse;
+
+import java.util.List;
 
 /**
  * 태그 어뎁터 구현체입니다.
@@ -63,15 +63,12 @@ public class TagAdapterImpl implements TagAdapter {
     }
 
     @Override
-    public PageResponse<TagResponseDto> findTags(Pageable pageable) {
+    public List<TagResponseDto> findTags() {
         return webClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/api/tags")
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .build())
+                .uri("/api/tags")
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(new ParameterizedTypeReference<PageResponse<TagResponseDto>>() {
+                .bodyToMono(new ParameterizedTypeReference<List<TagResponseDto>>() {
                 })
                 .blockOptional().orElseThrow(NullResponseBodyException::new);
     }

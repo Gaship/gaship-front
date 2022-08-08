@@ -1,14 +1,14 @@
 package shop.gaship.gashipfront.tag.service.Impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.tag.adapter.TagAdapter;
 import shop.gaship.gashipfront.tag.dto.request.TagAddRequestDto;
 import shop.gaship.gashipfront.tag.dto.request.TagModifyRequestDto;
 import shop.gaship.gashipfront.tag.dto.response.TagResponseDto;
 import shop.gaship.gashipfront.tag.service.TagService;
-import shop.gaship.gashipfront.util.dto.PageResponse;
+
+import java.util.List;
 
 /**
  * 태그 관련 비즈니스 로직 구현 클래스입니다.
@@ -49,7 +49,7 @@ public class TagServiceImpl implements TagService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<TagResponseDto> findTags(Pageable pageable) {
-        return tagAdapter.findTags(pageable);
+    public List<TagResponseDto> findTags() {
+        return tagAdapter.findTags();
     }
 }
