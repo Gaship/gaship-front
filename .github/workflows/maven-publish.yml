@@ -60,6 +60,21 @@ jobs:
         target: "~/"
         rm: false
         
+    - name : excute service (server1)
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.FRONT1_SSH_IP }}
+        username: ${{ secrets.FRONT1_SSH_ID }}
+        key: ${{ secrets.FRONT1_SSH_KEY }}
+        port: ${{ secrets.FRONT1_SSH_PORT }}
+        script_stop: true
+        script: "./startup.sh"
+        
+    - name: Sleep for 40 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '40s'
+        
     - name : complete server1 deployment (excute shell script)
       uses: appleboy/ssh-action@master
       with:
@@ -70,23 +85,8 @@ jobs:
         script_stop: true
         script: "./deploy_comp1.sh"
         
-    - name : excute service (server1)
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.FRONT1_SSH_IP }}
-        username: ${{ secrets.FRONT1_SSH_ID }}
-        key: ${{ secrets.FRONT1_SSH_KEY }}
-        port: ${{ secrets.FRONT1_SSH_PORT }}
-        script_stop: true
-        script: "./startup.sh"
-
 
       ### phase 2
-    - name: Sleep for 40 seconds
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '40s'
-
 
     - name : ready for deploy seconds server (excute shell script)
       uses: appleboy/ssh-action@master
@@ -104,7 +104,6 @@ jobs:
       with:
         time: '60s'
         
-    
     - name : upload file
       uses: appleboy/scp-action@master
       with:
@@ -116,6 +115,21 @@ jobs:
         target: "~/"
         rm: false
         
+    - name : excute service (server2)
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.FRONT2_SSH_IP }}
+        username: ${{ secrets.FRONT2_SSH_ID }}
+        key: ${{ secrets.FRONT2_SSH_KEY }}
+        port: ${{ secrets.FRONT2_SSH_PORT }}
+        script_stop: true
+        script: "./startup.sh"
+        
+    - name: Sleep for 40 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '40s'
+
     - name : complete server2 deployment (excute shell script)
       uses: appleboy/ssh-action@master
       with:
@@ -126,12 +140,3 @@ jobs:
         script_stop: true
         script: "./deploy_comp2.sh"
         
-    - name : excute service (server2)
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.FRONT2_SSH_IP }}
-        username: ${{ secrets.FRONT2_SSH_ID }}
-        key: ${{ secrets.FRONT2_SSH_KEY }}
-        port: ${{ secrets.FRONT2_SSH_PORT }}
-        script_stop: true
-        script: "./startup.sh"
