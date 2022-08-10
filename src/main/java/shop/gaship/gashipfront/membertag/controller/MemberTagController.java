@@ -1,5 +1,7 @@
 package shop.gaship.gashipfront.membertag.controller;
 
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +11,6 @@ import shop.gaship.gashipfront.membertag.dto.request.MemberTagRequestDto;
 import shop.gaship.gashipfront.membertag.dto.response.MemberTagCoreResponseDto;
 import shop.gaship.gashipfront.membertag.service.MemberTagService;
 
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 회원태그 관련 요청을 처리합니다.
