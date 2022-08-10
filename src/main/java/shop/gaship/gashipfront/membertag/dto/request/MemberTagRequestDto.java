@@ -1,11 +1,11 @@
 package shop.gaship.gashipfront.membertag.dto.request;
 
-import lombok.Getter;
 
+import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
+import lombok.Getter;
 
 /**
  * 회원이 설정하기 원하는 태그들의 id 값을 담기 위한 requestDto 입니다.
