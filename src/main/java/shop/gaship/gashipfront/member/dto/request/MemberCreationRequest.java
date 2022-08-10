@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.member.dto;
+package shop.gaship.gashipfront.member.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;

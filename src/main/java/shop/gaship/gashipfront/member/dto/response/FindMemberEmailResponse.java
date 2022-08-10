@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.member.dto;
+package shop.gaship.gashipfront.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
