@@ -8,7 +8,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.membertag.adapter.MemberTagAdapter;
 import shop.gaship.gashipfront.membertag.dto.request.MemberTagRequestDto;
 import shop.gaship.gashipfront.membertag.dto.response.MemberTagResponseDto;
-import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 import java.util.List;
@@ -43,7 +42,9 @@ public class MemberTagAdapterImpl implements MemberTagAdapter {
                 .uri("/api/members/{memberNo}/member-tag", memberNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(new ParameterizedTypeReference<List<MemberTagResponseDto>>() {})
-                .blockOptional().orElseThrow(NullResponseBodyException::new);
+                .bodyToFlux(new ParameterizedTypeReference<MemberTagResponseDto>() {
+                })
+                .collectList()
+                .block();
     }
 }
