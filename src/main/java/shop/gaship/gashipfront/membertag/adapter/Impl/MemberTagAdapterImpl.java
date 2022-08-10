@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.membertag.adapter.Impl;
 
+import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,9 +11,9 @@ import shop.gaship.gashipfront.membertag.dto.request.MemberTagRequestDto;
 import shop.gaship.gashipfront.membertag.dto.response.MemberTagResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
-import java.util.List;
-
 /**
+ * 회원 태그 어뎁터 서비스 구현체.
+ *
  * @author 최정우
  * @since 1.0
  */
