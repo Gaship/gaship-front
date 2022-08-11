@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.member.service.MemberService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -36,7 +37,7 @@ public class MemberController {
      * @return 멤버의 정보를 보여주는 페이지
      * @author 최정우
      */
-    @PutMapping("members/{memberNo}")
+    @PutMapping("/members/{memberNo}")
     public String memberModify(
             @ModelAttribute @Valid MemberModifyRequestDto request,
             @PathVariable Integer memberNo,
@@ -57,16 +58,16 @@ public class MemberController {
      * @return 멤버 전용 회원 개인정보 페이지
      * @author 최정우
      */
-    @PutMapping("members/{memberNo}/role")
-    public String memberModifyByAdmin(
-            @ModelAttribute MemberModifyByAdminDto request,
+    @PutMapping("/admin/members/{memberNo}")
+    public String memberModifyByAdmins(
+            @ModelAttribute @Valid MemberModifyByAdminDto request,
             @PathVariable Integer memberNo,
             RedirectAttributes redirectAttributes) {
         memberService.modifyMemberByAdmin(request);
         redirectAttributes.addAttribute(MEM_NO, memberNo);
         redirectAttributes.addAttribute(STATUS, true);
 
-        return "redirect:/members/{memberNo}/role";
+        return "redirect:/members/{memberNo}";
     }
 
     /**
@@ -77,7 +78,7 @@ public class MemberController {
      * @return 홈페이지.
      * @author 최정우
      */
-    @DeleteMapping("members/{memberNo}")
+    @DeleteMapping("/members/{memberNo}")
     public String memberRemove(
             @PathVariable Integer memberNo,
             RedirectAttributes redirectAttributes) {
@@ -96,7 +97,7 @@ public class MemberController {
      * @return 회원정보 상세 페이지
      * @author 최정우
      */
-    @GetMapping("members/{memberNo}")
+    @GetMapping("/members/{memberNo}")
     public String memberDetails(
             @PathVariable Integer memberNo,
             RedirectAttributes redirectAttributes,
@@ -118,12 +119,12 @@ public class MemberController {
      * @return 관리자 전용 회원정보 상세 페이지
      * @author 최정우
      */
-    @GetMapping("members/{memberNo}/role")
+    @GetMapping("/admin/members/{memberNo}")
     public String memberDetailsByAdmin(
             @PathVariable Integer memberNo,
             RedirectAttributes redirectAttributes,
             Model model) {
-        MemberResponseDto dto = memberService.findMember(memberNo);
+        MemberResponseByAdminDto dto = memberService.findMemberByAdmin(memberNo);
         model.addAttribute(RESPONSE, dto);
         redirectAttributes.addAttribute(MEM_NO, memberNo);
         redirectAttributes.addAttribute(STATUS, true);
@@ -138,12 +139,12 @@ public class MemberController {
      * @return 태그 목록과 자신이 선택한 태그를 보여주는 페이지
      * @author 최정우
      */
-    @GetMapping("members/role")
+    @GetMapping("/admin/members")
     public String memberList(
             RedirectAttributes redirectAttributes,
             Pageable pageable,
             Model model) {
-        PageResponse<MemberResponseDto> dto = memberService.findMembers(pageable);
+        PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(pageable);
         model.addAttribute(RESPONSE, dto);
         redirectAttributes.addAttribute(STATUS, true);
 
