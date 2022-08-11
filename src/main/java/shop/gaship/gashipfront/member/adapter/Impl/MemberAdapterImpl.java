@@ -1,23 +1,27 @@
-package shop.gaship.gashipfront.member.adapter;
+package shop.gaship.gashipfront.member.adapter.Impl;
 
 import java.util.Map;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
+import shop.gaship.gashipfront.member.adapter.MemberAdapter;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
-import shop.gaship.gashipfront.member.dto.FindMemberEmailRequest;
-import shop.gaship.gashipfront.member.dto.FindMemberEmailResponse;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
-import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
-import shop.gaship.gashipfront.member.dto.ReissuePasswordRequest;
+import shop.gaship.gashipfront.member.dto.request.*;
+import shop.gaship.gashipfront.member.dto.response.FindMemberEmailResponse;
+import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
+import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * ShoppingMallAPIAdapter interface의 구현체입니다.
@@ -204,5 +208,86 @@ public class MemberAdapterImpl implements MemberAdapter {
             .toString();
 
         return Boolean.parseBoolean(result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMember(MemberModifyRequestDto request) {
+        webClient.put().uri("/api/members/{memberNo}", request.getMemberNo())
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .toEntity(void.class)
+                .block();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberByAdmin(MemberModifyByAdminDto request) {
+        webClient.put().uri("/api/admin/members/{memberNo}", request.getMemberNo())
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .toEntity(void.class)
+                .block();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeMember(Integer memberNo) {
+        webClient.delete().uri("/api/members/{memberNo}", memberNo)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .toEntity(void.class)
+                .block();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberResponseDto findMember(Integer memberNo) {
+        return webClient.get().uri("/api/members/{memberNo}", memberNo)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(MemberResponseDto.class)
+                .blockOptional()
+                .orElseThrow(NullResponseBodyException::new);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberResponseByAdminDto findMemberByAdmin(Integer memberNo) {
+        return webClient.get().uri("/api/admin/members/{memberNo}", memberNo)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(MemberResponseByAdminDto.class)
+                .blockOptional()
+                .orElseThrow(NullResponseBodyException::new);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<MemberResponseByAdminDto> findMembers(Pageable pageable) {
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/admin/members")
+                        .queryParam("page", pageable.getPageNumber())
+                        .queryParam("size", pageable.getPageSize())
+                        .build())
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(new ParameterizedTypeReference<PageResponse<MemberResponseByAdminDto>>() {
+                }).blockOptional().orElseThrow(NullResponseBodyException::new);
     }
 }
