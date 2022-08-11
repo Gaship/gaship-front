@@ -1,14 +1,21 @@
 package shop.gaship.gashipfront.member.service;
 
+import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
-import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
+import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
+import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
+import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
+import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * 회원가입을 위한 service레이어의 클래스입니다.
  *
  * @author 최겸준
  * @author 김민수
+ * @author 최정우
  * @since 1.0
  */
 public interface MemberService {
@@ -45,4 +52,55 @@ public interface MemberService {
     boolean checkDuplicatedNickname(String nickname);
 
     MemberNumberPresence findRecommendMemberNo(String nickname);
+
+    /**
+     * 회원이 회원의 정보를 수정하는 메서드.
+     *
+     * @param request 수정하려는 정보가 담긴 dto
+     * @author 최정우
+     */
+    void modifyMember(MemberModifyRequestDto request);
+
+    /**
+     * 관리자가 회원의 상태를 수정하는 메서드.
+     *
+     * @param request 수정하려는 정보가 담긴 dto
+     * @author 최정우
+     */
+    void modifyMemberByAdmin(MemberModifyByAdminDto request);
+
+    /**
+     * 관리자가 회원의 정보를 삭제하는 메서드.
+     *
+     * @param memberNo 회원의 id
+     * @author 최정우
+     */
+    void removeMember(Integer memberNo);
+
+    /**
+     * 회원이 회원의 정보를 조회하는 메서드.
+     *
+     * @param memberNo 회원의 id
+     * @return 회원의 정보를 리턴합니다.
+     * @author 최정우
+     */
+    MemberResponseDto findMember(Integer memberNo);
+
+    /**
+     * 관리자가 회원의 리스트를 조회하는 메서드.
+     *
+     * @param pageable 페이지의 번호와 사이즈가 담겨있는 객체
+     * @return 회원의 정보들을 리턴합니다.
+     * @author 최정우
+     */
+    PageResponse<MemberResponseByAdminDto> findMembers(Pageable pageable);
+
+    /**
+     * 관리자가 회원의 정보를 조회하는 메서드.
+     *
+     * @param memberNo 회원의 id
+     * @return 회원의 정보를 리턴합니다.
+     * @author 최정우
+     */
+    MemberResponseByAdminDto findMemberByAdmin(Integer memberNo);
 }

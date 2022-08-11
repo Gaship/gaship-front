@@ -1,0 +1,25 @@
+### 수정 o
+PUT http://localhost:8080/members/13 HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+memberNo=13&
+password=password!1&
+phoneNumber=01012341234&
+name=예시이름&
+nickname=examplenickname&
+gender=남
+### 관리자에 의한 수정(csrfx 떄문에 통과 x 게이트에선 o)
+PUT http://localhost:8080/admin/members/14 HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+memberNo=14&
+status=휴면
+### 삭제 o
+DELETE http://localhost:8080/members/15 HTTP/1.1
+### 단건 조회 o
+GET http://localhost:8080/members/13 HTTP/1.1
+### 관리자 단건 조회 o
+GET http://localhost:8080/admin/members/13 HTTP/1.1
+### 관리자 다건 조회 o
+GET http://localhost:8080/admin/members?page=5&size=1 HTTP/1.1
+###
