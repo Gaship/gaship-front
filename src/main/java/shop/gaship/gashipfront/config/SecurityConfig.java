@@ -28,12 +28,14 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
  * @author 조재철
  * @since 1.0
  */
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @Order(1)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CartService cartService;
     private static final String LOGIN_URI = "/login";
+
+//    private final RedisCsrfRepository redisCsrfRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -61,6 +63,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(oauth2LoginSuccessHandler(null, null));
 
         http.oauth2Login().disable();
+
+//        http.csrf().csrfTokenRepository(redisCsrfRepository).and();
 
         http.logout().disable();
     }
@@ -103,13 +107,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public WebClient webClient() {
+    public WebClient webClient(ServerConfig serverConfig) {
         return WebClient.builder()
-                .baseUrl("http://172.30.1.52:7070")
-                .defaultHeader("Accept",
-                        MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .build();
+            .baseUrl(serverConfig.getGatewayUrl())
+            .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
     }
 }
 

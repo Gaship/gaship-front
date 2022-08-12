@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,21 +35,24 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<String> contentTypeValues = List.of(MediaType.APPLICATION_JSON.toString());
 
-        SignInSuccessUserDetailsDto userDetails = WebClient.create("http://localhost:7070").get()
-            .uri("/members/retrieve/user-detail?email={email}", username)
-            .headers(httpHeaders -> {
-                httpHeaders.put(HttpHeaders.CONTENT_TYPE, contentTypeValues);
-                httpHeaders.put(HttpHeaders.ACCEPT, contentTypeValues);
-            })
-            .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-            .toEntity(SignInSuccessUserDetailsDto.class)
-            .timeout(TIMEOUT)
-            .blockOptional()
-            .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
-            .getBody();
+        ResponseEntity<SignInSuccessUserDetailsDto> userDetailsResponse =
+            WebClient.create("http://localhost:7070").get()
+                .uri("/members/retrieve/user-detail?email={email}", username)
+                .headers(httpHeaders -> {
+                    httpHeaders.put(HttpHeaders.CONTENT_TYPE, contentTypeValues);
+                    httpHeaders.put(HttpHeaders.ACCEPT, contentTypeValues);
+                })
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .toEntity(SignInSuccessUserDetailsDto.class)
+                .timeout(TIMEOUT)
+                .blockOptional()
+                .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE));
 
-        if (Objects.requireNonNull(userDetails).isSocial()) {
+        SignInSuccessUserDetailsDto userDetails = userDetailsResponse.getBody();
+        boolean isSocialMember = Objects.requireNonNull(userDetails).isSocial();
+
+        if (isSocialMember) {
             throw new LoginDenyException(SOCIAL_LOGIN_DENY_MESSAGE);
         }
 

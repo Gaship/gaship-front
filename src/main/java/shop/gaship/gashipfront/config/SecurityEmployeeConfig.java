@@ -13,31 +13,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomEmployeeUserDetailService;
-import shop.gaship.gashipfront.security.repository.RedisCsrfRepository;
 
 /**
- * 설명작성란
+ * 직원들의 로그인을 위한 Security config입니다.
  *
  * @author 김민수
  * @since 1.0
  */
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final LoginSuccessHandler loginSuccessHandler;
 
-    private final RedisCsrfRepository redisCsrfRepository;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.sessionManagement()
-            .maximumSessions(1);
+        http.sessionManagement().maximumSessions(1);
 
-        http
-            .formLogin()
+        http.formLogin()
                 .defaultSuccessUrl("/")
                 .loginPage("/manager/login")
                 .loginProcessingUrl("/manager/login")
@@ -46,16 +41,12 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("pw")
                 .failureUrl("/manager-login")
             .and()
-            .csrf()
-                .csrfTokenRepository(redisCsrfRepository)
-            .and()
             .httpBasic()
             .and()
-            .requestMatchers()
-            .antMatchers("/admin/**")
-            .antMatchers("/manager/**")
-            .and()
-        ;
+                .requestMatchers()
+                    .antMatchers("/admin/**")
+                    .antMatchers("/manager/**")
+            .and();
     }
 
     @Override
@@ -63,6 +54,12 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider(null));
     }
 
+    /**
+     * 직원들의 로그인에 대한 Provider 설정하는 스프링 빈입니다.
+     *
+     * @param customUserDetailService 쇼핑몰 서버에서 직원의 로그인에 필요한 정보를 가져오는 Service입니다.
+     * @return 로그인의 시도
+     */
     @Bean
     public AuthenticationProvider authenticationProvider(
         CustomEmployeeUserDetailService customUserDetailService) {

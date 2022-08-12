@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 
 /**
+ * 임시 메인 컨트롤러입니다.
+ *
  * @author : 최겸준
  * @since 1.0
  */
@@ -19,7 +21,8 @@ public class HomeController {
     }
 
     @GetMapping("/all")
-    public String all(@AuthenticationPrincipal UserDetailsDto userDetailsDto, HttpServletRequest request) {
+    public String all(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                      HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         session.setAttribute("jordan", "ggoo");
         return "all";

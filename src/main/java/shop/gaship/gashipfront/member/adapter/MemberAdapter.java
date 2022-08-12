@@ -1,10 +1,16 @@
 package shop.gaship.gashipfront.member.adapter;
 
+import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
-import shop.gaship.gashipfront.member.dto.MemberCreationRequest;
-import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
+import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
+import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
+import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
+import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * api서버에 요청을 처리하는 기능을 담당하는 interface입니다.
@@ -72,4 +78,50 @@ public interface MemberAdapter {
      * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     MemberNumberPresence recommendMemberNoFind(String nickName);
+
+    /**
+     * 회원이 회원의 정보수정을 서버에 요청하는 메서드.
+     *
+     * @param request 수정하려는 정보가 담긴 dto
+     * @author 최정우
+     */
+    void modifyMember(MemberModifyRequestDto request);
+
+    /**
+     * 관리자가 회원의 상태수정을 서버에 요청하는 메서드.
+     *
+     * @param request 수정하려는 정보가 담긴 dto
+     * @author 최정우
+     */
+    void modifyMemberByAdmin(MemberModifyByAdminDto request);
+
+    /**
+     * 회원이 회원 탈퇴를 서버에 요청하는 메서드.
+     *
+     * @param memberNo 회원 id
+     * @author 최정우
+     */
+    void removeMember(Integer memberNo);
+
+    /**
+     * 회원의 정보조회를 서버에 요청하는 메서드.
+     *
+     * @param memberNo 회원의 id
+     * @return 회원의 정보를 리턴합니다.
+     * @author 최정우
+     */
+    MemberResponseDto findMember(Integer memberNo);
+
+    /**
+     * 회원 리스트 조회를 서버에 요청하는 메서드.
+     *
+     * @param pageable 페이지의 번호와 사이즈가 담겨있는 객체
+     * @return 회원리스트를 리턴합니다.
+     * @author 최정우
+     */
+    PageResponse<MemberResponseByAdminDto> findMembers(Pageable pageable);
+
+
+    MemberResponseByAdminDto findMemberByAdmin(Integer memberNo);
+
 }
