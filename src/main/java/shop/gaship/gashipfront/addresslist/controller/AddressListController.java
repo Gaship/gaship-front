@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestDto;
 import shop.gaship.gashipfront.addresslist.service.AddressListService;
@@ -31,10 +32,12 @@ public class AddressListController {
      * @author 최정우
      */
     @PostMapping
-    public String addressListAdd(@RequestBody @Valid AddressListAddRequestDto request) {
+    public String addressListAdd(@ModelAttribute @Valid AddressListAddRequestDto request,
+                                 RedirectAttributes redirectAttributes) {
         addressListService.addAddressList(request);
+        redirectAttributes.addAttribute("memberNo", request.getMemberNo());
 
-        return "redirect:/members/" + request.getMemberNo() + "/address-lists";
+        return "redirect:/members/{memberNo}/address-lists";
     }
 
     /**
@@ -45,9 +48,12 @@ public class AddressListController {
      * @author 최정우
      */
     @PutMapping("/{addressListNo}")
-    public String addressListModify(@RequestBody @Valid AddressListModifyRequestDto request) {
+    public String addressListModify(@ModelAttribute AddressListModifyRequestDto request,
+                                    RedirectAttributes redirectAttributes) {
         addressListService.modifyAddressList(request);
-        return "redirect:/members/" + request.getMemberNo() + "/address-lists";
+        redirectAttributes.addAttribute("memberNo", request.getMemberNo());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/members/{memberNo}/address-lists";
     }
 
     /**
@@ -59,9 +65,12 @@ public class AddressListController {
      */
     @DeleteMapping("/{addressListNo}")
     public String addressListRemove(@PathVariable Long memberNo,
-                                    @PathVariable Long addressListNo) {
+                                    @PathVariable Long addressListNo,
+                                    RedirectAttributes redirectAttributes) {
+        redirectAttributes.addAttribute("memberNo", memberNo);
+        redirectAttributes.addAttribute("status", true);
         addressListService.deleteAddressList(memberNo, addressListNo);
-        return "redirect:/members/" + memberNo + "/address-lists";
+        return "redirect:/members/{memberNo}/address-lists";
     }
 
     /**
@@ -73,10 +82,12 @@ public class AddressListController {
      * @author 최정우
      */
     @GetMapping("/{addressListNo}")
-    @ResponseBody
     public String addressListDetails(@PathVariable Long memberNo,
                                      @PathVariable Long addressListNo,
+                                     RedirectAttributes redirectAttributes,
                                      Model model) {
+        redirectAttributes.addAttribute("memberNo", memberNo);
+        redirectAttributes.addAttribute("status", true);
         model.addAttribute("response", addressListService.findAddressList(memberNo, addressListNo));
         return "addressListInfo";
     }
@@ -91,10 +102,12 @@ public class AddressListController {
      * @author 최정우
      */
     @GetMapping
-    @ResponseBody
     public String addressLists(@PathVariable Long memberNo,
                                Pageable pageable,
+                               RedirectAttributes redirectAttributes,
                                Model model) {
+        redirectAttributes.addAttribute("memberNo", memberNo);
+        redirectAttributes.addAttribute("status", true);
         model.addAttribute("response", addressListService.findAddressLists(memberNo, pageable));
         return DEFAULT_PATH;
     }
