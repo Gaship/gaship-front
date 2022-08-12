@@ -1,10 +1,9 @@
 package shop.gaship.gashipfront.cart.dummy;
 
 import lombok.EqualsAndHashCode;
-import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 
 /**
  * @author 최정우
@@ -20,8 +19,8 @@ public class CartDummy {
                 .build();
     }
 
-    public static CartModifyRequestDto CartModifyRequestDtoDummy(Integer productId, Integer carePeriod, Integer quantity) {
-        return CartModifyRequestDto.builder()
+    public static CartProductModifyRequestDto CartModifyRequestDtoDummy(Integer productId, Integer carePeriod, Integer quantity) {
+        return CartProductModifyRequestDto.builder()
                 .productId(productId)
                 .carePeriod(carePeriod)
                 .quantity(quantity)
@@ -35,8 +34,8 @@ public class CartDummy {
                 .build();
     }
 
-    public static CartDeleteRequestDto CartDeleteDtoDummy(Integer productId, Integer carePeriod) {
-        return CartDeleteRequestDto.builder()
+    public static CartProductDeleteRequestDto CartDeleteDtoDummy(Integer productId, Integer carePeriod) {
+        return CartProductDeleteRequestDto.builder()
                 .productId(productId)
                 .carePeriod(carePeriod)
                 .build();

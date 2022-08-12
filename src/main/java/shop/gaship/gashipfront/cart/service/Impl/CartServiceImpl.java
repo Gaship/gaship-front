@@ -5,10 +5,9 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.exception.IllegalQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
@@ -54,7 +53,7 @@ public class CartServiceImpl implements CartService {
      */
     @Transactional
     @Override
-    public void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) {
+    public void modifyProductQuantityFromCart(String cartId, CartProductModifyRequestDto request) {
         String cartKey = cartId;
         String hashKey = request.getProductId().toString() + "-" + request.getCarePeriod().toString();
 
@@ -98,7 +97,7 @@ public class CartServiceImpl implements CartService {
      */
     @Transactional
     @Override
-    public void deleteProductFromCart(String cartId, CartDeleteRequestDto request) throws Exception {
+    public void deleteProductFromCart(String cartId, CartProductDeleteRequestDto request) throws Exception {
         String cartKey = cartId;
         String productId = request.getProductId().toString();
         String hashKey = productId + "-" + request.getCarePeriod().toString();

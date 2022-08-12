@@ -6,10 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import shop.gaship.gashipfront.cart.dto.request.CartProductAddRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 import shop.gaship.gashipfront.cart.service.CartService;
 
 import javax.servlet.http.Cookie;
@@ -27,8 +28,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/carts")
 public class CartController {
-    private static final String NON_MEMBER_CART_ID = "NONMEMBERCARTID";
-    private static final String MEMBER_CART_ID = "MEMBERCARTID";
+    private static final String NON_MEMBER_CART_ID = "NMCARTID";
+    private static final String MEMBER_CART_ID = "MCARTID";
     private final CartService cartService;
     private String cartId;
 
@@ -44,20 +45,20 @@ public class CartController {
      * @author 최정우
      */
     @PostMapping
-    public ResponseEntity<Void> addToCart(@RequestBody CartRequestDto request,
-                                          @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
-                                          @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId,
-                                          HttpServletResponse response) {
+    public String addToCart(@RequestBody CartProductAddRequestDto request,
+                            @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
+                            @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId,
+                            HttpServletResponse response,
+                            RedirectAttributes attributes) {
         cartId = assignCartId(nonMemberCartId, memberCartId);
         if (Objects.isNull(cartId)) {
             cartId = UUID.randomUUID().toString();
             response.addCookie(new Cookie(NON_MEMBER_CART_ID, cartId));
         }
         cartService.addProductToCart(cartId, request);
+        attributes.addAttribute("status",true);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .build();
+        return "redirect:/cart";
     }
 
     /**
@@ -70,7 +71,7 @@ public class CartController {
      * @author 최정우
      */
     @PutMapping("/products")
-    public ResponseEntity<Void> modifyFromCart(@RequestBody CartModifyRequestDto request,
+    public ResponseEntity<Void> modifyFromCart(@RequestBody CartProductModifyRequestDto request,
                                                @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
                                                @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId) throws Exception {
         cartId = assignCartId(nonMemberCartId, memberCartId);
@@ -134,7 +135,7 @@ public class CartController {
      * @author 최정우
      */
     @DeleteMapping("/products/delete")
-    public ResponseEntity<Void> deleteFromCart(@RequestBody CartDeleteRequestDto request,
+    public ResponseEntity<Void> deleteFromCart(@RequestBody CartProductDeleteRequestDto request,
                                                @CookieValue(value = NON_MEMBER_CART_ID, required = false) String nonMemberCartId,
                                                @CookieValue(value = MEMBER_CART_ID, required = false) String memberCartId) throws Exception {
         cartId = assignCartId(nonMemberCartId, memberCartId);
@@ -166,7 +167,7 @@ public class CartController {
         }
         model.addAttribute(cartService.getProductsFromCart(cartId));
 
-        return "/carts";
+        return "carts";
     }
 
     private String assignCartId(String nonMemberCartId, String memberCartId) {

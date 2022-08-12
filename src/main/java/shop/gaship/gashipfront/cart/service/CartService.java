@@ -1,9 +1,9 @@
 package shop.gaship.gashipfront.cart.service;
 
-import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartModifyRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductAddRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface CartService {
      * @param request 등록에 사용되는 정보 객체입니다.
      * @author 최정우
      */
-    void addProductToCart(String cartId, CartRequestDto request);
+    void addProductToCart(String cartId, CartProductAddRequestDto request);
 
     /**
      * 장바구니에 담긴 상품의 수량을 변경하는 메서드입니다.
@@ -27,7 +27,7 @@ public interface CartService {
      * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간, 갯수)가 담겨 있습니다.
      * @author 최정우
      */
-    void modifyProductQuantityFromCart(String cartId, CartModifyRequestDto request) throws Exception;
+    void modifyProductQuantityFromCart(String cartId, CartProductModifyRequestDto request) throws Exception;
 
     /**
      * 장바구니에 담긴 상품의 수량을 +1 메서드입니다.
@@ -51,7 +51,7 @@ public interface CartService {
      * @param request 삭제할 상품의 정보를 담은 객체입니다.
      * @author 최정우
      */
-    void deleteProductFromCart(String cartId, CartDeleteRequestDto request) throws Exception;
+    void deleteProductFromCart(String cartId, CartProductDeleteRequestDto request) throws Exception;
 
     /**
      * 비회원의 장바구니 상품 목록을 회원의 장바구니에 옮기는 메서드 입니다.

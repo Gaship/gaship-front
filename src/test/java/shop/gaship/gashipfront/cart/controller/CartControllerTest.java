@@ -13,9 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import shop.gaship.gashipfront.cart.dto.request.CartDeleteRequestDto;
+import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartRequestDto;
 import shop.gaship.gashipfront.cart.dummy.CartDummy;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.config.SecurityConfig;
@@ -240,7 +239,7 @@ class CartControllerTest {
     void deleteFromCartTest1() throws Exception {
         doNothing().when(cartService).deleteProductFromCart(any(), any());
         String body = objectMapper.writeValueAsString
-                (CartDeleteRequestDto.builder()
+                (CartProductDeleteRequestDto.builder()
                         .productId(15)
                         .carePeriod(3)
                         .build());
@@ -260,7 +259,7 @@ class CartControllerTest {
     void deleteFromCartTest2() throws Exception {
         doNothing().when(cartService).deleteProductFromCart(any(), any());
         String body = objectMapper.writeValueAsString
-                (CartDeleteRequestDto.builder()
+                (CartProductDeleteRequestDto.builder()
                         .productId(15)
                         .carePeriod(3)
                         .build());
