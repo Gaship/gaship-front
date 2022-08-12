@@ -23,18 +23,18 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @Component
 public class AddressListAdapterImpl implements AddressListAdapter {
     private static final String BASE_URL = "http://localhost:7070";
-    private static final String ADDRESS_LIST_BASE_URL = "/api/members/{memberNo}/addressLists";
-    private static final String ADDRESS_LIST_SPECIFIC_URL = "/{addressListNo}";
-
 
     private final WebClient webClient = WebClient.builder()
             .baseUrl(BASE_URL)
             .build();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addAddressList(AddressListAddRequestDto request) {
         webClient.post()
-                .uri(ADDRESS_LIST_BASE_URL, request.getMemberNo())
+                .uri("/api/members/{memberNo}/addressLists", request.getMemberNo())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -43,11 +43,16 @@ public class AddressListAdapterImpl implements AddressListAdapter {
                 .block();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyAddressList(AddressListModifyRequestDto request) {
+        Integer memberNo = request.getMemberNo();
+        Integer addressListNo = request.getAddressListNo();
         webClient.put()
-                .uri(ADDRESS_LIST_BASE_URL + ADDRESS_LIST_SPECIFIC_URL,
-                        request.getMemberNo(), request.getAddressListNo())
+                .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
+                        memberNo, addressListNo)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -56,10 +61,13 @@ public class AddressListAdapterImpl implements AddressListAdapter {
                 .block();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteAddressList(Long memberNo, Long addressListNo) {
         webClient.delete()
-                .uri(ADDRESS_LIST_BASE_URL + ADDRESS_LIST_SPECIFIC_URL,
+                .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -67,10 +75,13 @@ public class AddressListAdapterImpl implements AddressListAdapter {
                 .block();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AddressListResponseDto findAddressList(Long memberNo, Long addressListNo) {
         return webClient.get()
-                .uri(ADDRESS_LIST_BASE_URL + ADDRESS_LIST_SPECIFIC_URL,
+                .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -78,10 +89,13 @@ public class AddressListAdapterImpl implements AddressListAdapter {
                 .blockOptional().orElseThrow(NullResponseBodyException::new);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable) {
         return webClient.get()
-                .uri(ADDRESS_LIST_BASE_URL, memberNo)
+                .uri("/api/members/{memberNo}/addressLists", memberNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(new ParameterizedTypeReference<PageResponse<AddressListResponseDto>>() {
