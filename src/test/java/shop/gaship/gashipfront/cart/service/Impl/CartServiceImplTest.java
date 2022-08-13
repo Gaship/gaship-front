@@ -14,7 +14,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import shop.gaship.gashipfront.cart.dummy.CartDummy;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
-import shop.gaship.gashipfront.cart.exception.IllegalQuantityException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -37,25 +36,10 @@ class CartServiceImplTest {
     @Autowired
     private CartService cartService;
 
-    private static final String CARTID = "1";
-    private static final Integer PRODUCTID = 1;
-    private static final Integer CAREPERIOD = 1;
-    private static final Integer QUANTITY = 1;
-
     @BeforeEach
     void setUp() {
         when(redisTemplate.opsForHash()).thenReturn(hashOperations);
         ReflectionTestUtils.setField(cartService, "hashOperations", hashOperations);
-    }
-
-    @DisplayName("장바구니 상품 추가 메서드 테스트")
-    @Test
-    void addProductToCartTest() {
-        when(hashOperations.increment(CARTID, PRODUCTID+"-"+CAREPERIOD, QUANTITY)).thenReturn(Long.valueOf(QUANTITY));
-
-        cartService.addProductToCart(CARTID, CartDummy.CartRequestDtoDummy(PRODUCTID, CAREPERIOD, QUANTITY));
-
-        verify(hashOperations, times(1)).increment(CARTID, PRODUCTID + "-" + CAREPERIOD, QUANTITY);
     }
 
     @DisplayName("장바구니 상품수량 변경 테스트")
@@ -63,89 +47,47 @@ class CartServiceImplTest {
     void modifyProductQuantityFromCartTest() throws Exception {
         doNothing().when(hashOperations).put(any(), any(), any());
 
-        cartService.modifyProductQuantityFromCart(CARTID, CartDummy.CartModifyRequestDtoDummy(PRODUCTID, CAREPERIOD, QUANTITY));
+        cartService.modifyProductQuantityFromCart("1", CartDummy.cartProductModifyRequestDto(1, 1));
 
-        verify(hashOperations, times(1)).put(CARTID, PRODUCTID+"-"+CAREPERIOD, QUANTITY);
+        verify(hashOperations, times(1)).put("1", 1, 1);
     }
 
-    @DisplayName("장바구니 상품 수량 +1 테스트")
+    @DisplayName("장바구니 상품수량 변경 테스트(수량이 1 개 미만(Fail))")
     @Test
-    void increaseProductQuantityFromCartTest() {
-        when(hashOperations.increment(anyString(), anyString(), anyInt())).thenReturn(1L);
+    void modifyProductQuantityFromCartTestFail() throws CartProductAmountException {
+        doNothing().when(hashOperations).put(any(), any(), any());
 
-        cartService.increaseProductQuantityFromCart(CARTID, CartDummy.CartProductQuantityUpDownRequestDtoDummy(PRODUCTID, CAREPERIOD));
-
-        verify(hashOperations, times(1)).increment(CARTID, PRODUCTID+"-"+CAREPERIOD, QUANTITY);
-    }
-
-    @DisplayName("장바구니 상품 수량 -1 테스트")
-    @Test
-    void decreaseProductQuantityFromCartTest() throws Exception {
-        when(hashOperations.increment(anyString(), anyString(), anyInt())).thenReturn(1L);
-        when(hashOperations.get(anyString(), anyString())).thenReturn(3);
-
-        cartService.decreaseProductQuantityFromCart(CARTID, CartDummy.CartProductQuantityUpDownRequestDtoDummy(PRODUCTID, CAREPERIOD));
-
-        verify(hashOperations, times(1)).increment(CARTID, PRODUCTID+"-"+CAREPERIOD, -1);
-    }
-
-    @DisplayName("장바구니 상품 수량 -1 테스트(수량을 빼려했더니 1 이하의 숫자임(Fail))")
-    @Test
-    void decreaseProductQuantityFromCartFailTest() throws Exception {
-        when(hashOperations.increment(anyString(), anyString(), anyInt())).thenReturn(1L);
-        when(hashOperations.get(anyString(), anyString())).thenReturn(1);
-
-        assertThatThrownBy(() -> cartService.decreaseProductQuantityFromCart(CARTID, CartDummy.CartProductQuantityUpDownRequestDtoDummy(PRODUCTID, CAREPERIOD)))
+        assertThatThrownBy(()-> cartService.modifyProductQuantityFromCart("1", CartDummy.cartProductModifyRequestDto(1, 11)))
                 .isInstanceOf(CartProductAmountException.class);
 
-        verify(hashOperations, never()).increment(CARTID, PRODUCTID+"-"+CAREPERIOD, -1);
+        verify(hashOperations, never()).put("1", 1, 1);
+    }
+
+    @DisplayName("장바구니 상품수량 변경 테스트(수량이 1 개 미만(Fail))")
+    @Test
+    void modifyProductQuantityFromCartTestFail2() {
+        doNothing().when(hashOperations).put(any(), any(), any());
+
+        assertThatThrownBy(()-> cartService.modifyProductQuantityFromCart("1", CartDummy.cartProductModifyRequestDto(1, 0)))
+                .isInstanceOf(CartProductAmountException.class);
+
+        verify(hashOperations, never()).put("1", 1, 1);
     }
 
     @DisplayName("장바구니 특정 상품 삭제 테스트")
     @Test
     void deleteProductFromCartTest1() throws Exception {
-        when(hashOperations.increment(CARTID, PRODUCTID + "-" + CAREPERIOD, -1)).thenReturn(-1L);
-        when(hashOperations.get(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(100);
-        when(hashOperations.delete(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(1L);
+        when(hashOperations.delete("1", 1)).thenReturn(1L);
 
-        cartService.deleteProductFromCart(CARTID, CartDummy.CartDeleteDtoDummy(PRODUCTID, CAREPERIOD));
+        cartService.deleteProductFromCart("1", CartDummy.cartProductDeleteRequestDto(1));
 
-        verify(hashOperations, times(1)).increment(CARTID, PRODUCTID+"-"+CAREPERIOD, -1);
-        verify(hashOperations, times(1)).get(CARTID, PRODUCTID + "-" + CAREPERIOD);
-        verify(hashOperations, never()).delete(CARTID, PRODUCTID + "-" + CAREPERIOD);
-    }
-
-    @DisplayName("장바구니 특정 상품 삭제 테스트, 상품이 레디스에서 삭제")
-    @Test
-    void deleteProductFromCartTest2() throws Exception {
-        when(hashOperations.increment(CARTID, PRODUCTID + "-" + CAREPERIOD, -1)).thenReturn(-1L);
-        when(hashOperations.get(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(0);
-        when(hashOperations.delete(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(1L);
-
-        cartService.deleteProductFromCart(CARTID, CartDummy.CartDeleteDtoDummy(PRODUCTID, CAREPERIOD));
-
-        verify(hashOperations, times(1)).increment(CARTID, PRODUCTID+"-"+CAREPERIOD, -1);
-        verify(hashOperations, times(1)).get(CARTID, PRODUCTID + "-" + CAREPERIOD);
-        verify(hashOperations, times(1)).delete(CARTID, PRODUCTID + "-" + CAREPERIOD);
-    }
-
-    @DisplayName("장바구니 특정 상품 삭제 테스트 (해당 상품을 키값으로 조회했지만 null(Fail))")
-    @Test
-    void deleteProductFromCartTest4() throws Exception {
-        when(hashOperations.increment(CARTID, PRODUCTID + "-" + CAREPERIOD, -1)).thenReturn(-1L);
-        when(hashOperations.get(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(null);
-        when(hashOperations.delete(CARTID, PRODUCTID + "-" + CAREPERIOD)).thenReturn(1L);
-
-        assertThatThrownBy(()-> cartService.deleteProductFromCart(CARTID, CartDummy.CartDeleteDtoDummy(PRODUCTID, CAREPERIOD)))
-                .isInstanceOf(IllegalQuantityException.class);
-
-        verify(hashOperations, times(1)).increment(CARTID, PRODUCTID+"-"+CAREPERIOD, -1);
-        verify(hashOperations, times(1)).get(CARTID, PRODUCTID + "-" + CAREPERIOD);
-        verify(hashOperations, never()).delete(CARTID, PRODUCTID + "-" + CAREPERIOD);
+        verify(hashOperations, times(1)).delete("1", 1);
     }
 
     @DisplayName("장바구니 조회 테스트")
     @Test
     void getProductsFromCartTest() {
     }
+
+
 }
