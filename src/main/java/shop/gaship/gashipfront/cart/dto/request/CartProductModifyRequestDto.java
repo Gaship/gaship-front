@@ -1,9 +1,9 @@
 package shop.gaship.gashipfront.cart.dto.request;
 
-import lombok.Getter;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import lombok.Getter;
+
 
 /**
  * 장바구니에 담긴 물품의 수량변경정보를 담은 dto 입니다.
@@ -13,9 +13,6 @@ import javax.validation.constraints.Min;
  */
 @Getter
 public class CartProductModifyRequestDto {
-    @Min(value = 1, message = "회원 id 는 1 이상이어야합니다.")
-    private Integer userId;
-
     @Min(value = 1, message = "상품 id 는 1 이상이어야합니다.")
     private Integer productId;
 
