@@ -1,43 +1,26 @@
 package shop.gaship.gashipfront.cart.dummy;
 
-import lombok.EqualsAndHashCode;
+import org.springframework.test.util.ReflectionTestUtils;
 import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
 
 /**
  * @author 최정우
  * @since 1.0
  */
-@EqualsAndHashCode
 public class CartDummy {
-    public static CartRequestDto CartRequestDtoDummy(Integer productId, Integer carePeriod, Integer quantity) {
-        return CartRequestDto.builder()
-                .productId(productId)
-                .carePeriod(carePeriod)
-                .quantity(quantity)
-                .build();
+    public static CartProductDeleteRequestDto cartProductDeleteRequestDto(Integer productId) {
+        CartProductDeleteRequestDto dto = new CartProductDeleteRequestDto();
+        ReflectionTestUtils.setField(dto, "productId", productId);
+
+        return dto;
     }
 
-    public static CartProductModifyRequestDto CartModifyRequestDtoDummy(Integer productId, Integer carePeriod, Integer quantity) {
-        return CartProductModifyRequestDto.builder()
-                .productId(productId)
-                .carePeriod(carePeriod)
-                .quantity(quantity)
-                .build();
-    }
+    public static CartProductModifyRequestDto cartProductModifyRequestDto(Integer productId, Integer quantity) {
+        CartProductModifyRequestDto dto = new CartProductModifyRequestDto();
+        ReflectionTestUtils.setField(dto, "productId", productId);
+        ReflectionTestUtils.setField(dto, "quantity", quantity);
 
-    public static CartProductQuantityUpDownRequestDto CartProductQuantityUpDownRequestDtoDummy(Integer productId, Integer carePeriod) {
-        return CartProductQuantityUpDownRequestDto.builder()
-                .productId(productId)
-                .carePeriod(carePeriod)
-                .build();
-    }
-
-    public static CartProductDeleteRequestDto CartDeleteDtoDummy(Integer productId, Integer carePeriod) {
-        return CartProductDeleteRequestDto.builder()
-                .productId(productId)
-                .carePeriod(carePeriod)
-                .build();
+        return dto;
     }
 }
