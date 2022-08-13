@@ -90,6 +90,7 @@ public class ProductAdapterImpl implements ProductAdapter {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path(REQUEST_URI + "/code")
+                .queryParam("code", productCode)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .build())
@@ -124,6 +125,7 @@ public class ProductAdapterImpl implements ProductAdapter {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path(REQUEST_URI + "/statusCode")
+                .queryParam("statusName", statusName)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .build())
