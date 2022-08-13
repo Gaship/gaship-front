@@ -13,14 +13,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
-import shop.gaship.gashipfront.cart.dto.request.CartProductQuantityUpDownRequestDto;
 import shop.gaship.gashipfront.cart.dummy.CartDummy;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.config.SecurityConfig;
 import shop.gaship.gashipfront.config.SecurityEmployeeConfig;
 
 import javax.servlet.http.Cookie;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,91 +44,75 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityEmployeeConfig.class)
         })
 class CartControllerTest {
+    private static final String CART_ID = "CID";
     @MockBean
     CartService cartService;
-
     @Autowired
     MockMvc mockMvc;
-
     @Autowired
     ObjectMapper objectMapper;
 
-    private static final String NON_MEMBER_CART_ID = "NONMEMBERCARTID";
-    private static final String MEMBER_CART_ID = "MEMBERCARTID";
-    
     @DisplayName("쿠키가 없는 방문자가 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest1() throws Exception {
-        doNothing().when(cartService).addProductToCart(any(), any());
-        String body = objectMapper.writeValueAsString(CartRequestDto.builder()
-                .productId(15)
-                .carePeriod(3)
-                .quantity(2)
-                .build());
+        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(11);
+        String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 11));
 
-        mockMvc.perform(post("/carts")
+        mockMvc.perform(post("/carts/add-product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(cookie().exists(NON_MEMBER_CART_ID));
+                .andExpect(status().isOk())
+                .andExpect(cookie().exists(CART_ID));
 
 
-        verify(cartService, times(1)).addProductToCart(anyString(), any(CartRequestDto.class));
+        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
     }
 
     @DisplayName("쿠키가 있는 비회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest2() throws Exception {
-        doNothing().when(cartService).addProductToCart(any(), any());
-        String body = objectMapper.writeValueAsString(CartRequestDto.builder()
-                .productId(15)
-                .carePeriod(3)
-                .quantity(2)
-                .build());
+        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(1);
+        String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 1));
 
-        mockMvc.perform(post("/carts")
+        mockMvc.perform(post("/carts/add-product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-                        .cookie(new Cookie(NON_MEMBER_CART_ID, UUID.randomUUID().toString()))
+                        .cookie(new Cookie(CART_ID, UUID.randomUUID().toString()))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(cookie().doesNotExist(NON_MEMBER_CART_ID));
+                .andExpect(status().isOk())
+                .andExpect(cookie().doesNotExist(CART_ID));
 
-        verify(cartService, times(1)).addProductToCart(anyString(), any(CartRequestDto.class));
+        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
     }
 
     @DisplayName("쿠키가 있는 회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest3() throws Exception {
-        doNothing().when(cartService).addProductToCart(any(), any());
-        String body = objectMapper.writeValueAsString(CartRequestDto.builder()
-                .productId(15)
-                .carePeriod(3)
-                .quantity(2)
-                .build());
+        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(1);
+        String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 1));
 
-        mockMvc.perform(post("/carts")
+        mockMvc.perform(post("/carts/add-product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-                        .cookie(new Cookie(MEMBER_CART_ID, "3"))
+                        .cookie(new Cookie(CART_ID, "3"))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(cookie().doesNotExist(NON_MEMBER_CART_ID));
+                .andExpect(status().isOk())
+                .andExpect(cookie().doesNotExist(CART_ID));
 
-        verify(cartService, times(1)).addProductToCart(anyString(), any(CartRequestDto.class));
+        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
     }
 
     @DisplayName("비회원이 장바구니에서 상품에 수량 변경")
     @Test
     void modifyFromCartTest1() throws Exception {
-        doNothing().when(cartService).modifyProductQuantityFromCart(any(), any());
-        String body = objectMapper.writeValueAsString(CartDummy.CartModifyRequestDtoDummy(15, 3, 21));
+        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(1);
+        String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(3, 21));
 
-        mockMvc.perform(put("/carts/products")
+        mockMvc.perform(put("/carts/modify-quantity")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-                        .cookie(new Cookie(NON_MEMBER_CART_ID, UUID.randomUUID().toString()))
+                        .cookie(new Cookie(CART_ID, UUID.randomUUID().toString()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -139,115 +122,29 @@ class CartControllerTest {
     @DisplayName("회원이 장바구니에서 상품에 수량 변경")
     @Test
     void modifyFromCartTes2t() throws Exception {
-        doNothing().when(cartService).modifyProductQuantityFromCart(any(), any());
-        String body = objectMapper.writeValueAsString(CartDummy.CartModifyRequestDtoDummy(15, 3, 21));
+        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(7);
+        String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(3, 7));
 
-        mockMvc.perform(put("/carts/products")
+        mockMvc.perform(put("/carts/modify-quantity")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-                        .cookie(new Cookie(MEMBER_CART_ID, "3"))
+                        .cookie(new Cookie(CART_ID, "3"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
     }
 
-
-    @DisplayName("비회원이 장바구니에서 상품에서 +1 을 눌렀을 때")
-    @Test
-    void increaseProductQuantityFromCartTest1() throws Exception {
-        doNothing().when(cartService).increaseProductQuantityFromCart(any(), any());
-        String body = objectMapper.writeValueAsString
-                (CartProductQuantityUpDownRequestDto.builder()
-                        .productId(15)
-                        .carePeriod(3)
-                        .build());
-
-        mockMvc.perform(put("/carts/products/increase")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(NON_MEMBER_CART_ID, UUID.randomUUID().toString()))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        verify(cartService, times(1)).increaseProductQuantityFromCart(anyString(), any());
-    }
-
-    @DisplayName("회원이 장바구니에서 상품에서 +1 을 눌렀을 때")
-    @Test
-    void increaseProductQuantityFromCartTest2() throws Exception {
-        doNothing().when(cartService).increaseProductQuantityFromCart(any(), any());
-        String body = objectMapper.writeValueAsString
-                (CartProductQuantityUpDownRequestDto.builder()
-                        .productId(15)
-                        .carePeriod(3)
-                        .build());
-
-        mockMvc.perform(put("/carts/products/increase")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(MEMBER_CART_ID, "3"))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        verify(cartService, times(1)).increaseProductQuantityFromCart(anyString(), any());
-    }
-
-    @DisplayName("비회원이 장바구니에서 상품에서 -1 을 눌렀을 때")
-    @Test
-    void decreaseProductQuantityFromCartTest1() throws Exception {
-        doNothing().when(cartService).decreaseProductQuantityFromCart(any(), any());
-        String body = objectMapper.writeValueAsString
-                (CartProductQuantityUpDownRequestDto.builder()
-                        .productId(15)
-                        .carePeriod(3)
-                        .build());
-
-        mockMvc.perform(put("/carts/products/decrease")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(NON_MEMBER_CART_ID, UUID.randomUUID().toString()))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        verify(cartService, times(1)).decreaseProductQuantityFromCart(anyString(), any());
-    }
-
-    @DisplayName("회원이 장바구니에서 상품에서 -1 을 눌렀을 때")
-    @Test
-    void decreaseProductQuantityFromCartTest2() throws Exception {
-        doNothing().when(cartService).decreaseProductQuantityFromCart(any(), any());
-        String body = objectMapper.writeValueAsString
-                (CartProductQuantityUpDownRequestDto.builder()
-                        .productId(15)
-                        .carePeriod(3)
-                        .build());
-
-        mockMvc.perform(put("/carts/products/decrease")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(MEMBER_CART_ID,"3"))
-                        .accept(MediaType.APPLICATION_JSON))
-
-                .andExpect(status().isOk());
-
-        verify(cartService, times(1)).decreaseProductQuantityFromCart(anyString(), any());
-    }
-
     @DisplayName("비회원이 장바구니에서 상품을 삭제할 때")
     @Test
     void deleteFromCartTest1() throws Exception {
         doNothing().when(cartService).deleteProductFromCart(any(), any());
-        String body = objectMapper.writeValueAsString
-                (CartProductDeleteRequestDto.builder()
-                        .productId(15)
-                        .carePeriod(3)
-                        .build());
+        String body = objectMapper.writeValueAsString(CartDummy.cartProductDeleteRequestDto(1));
 
-        mockMvc.perform(delete("/carts/products/delete")
+        mockMvc.perform(delete("/carts/delete-product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-                        .cookie(new Cookie(NON_MEMBER_CART_ID, UUID.randomUUID().toString()))
+                        .cookie(new Cookie(CART_ID, UUID.randomUUID().toString()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -258,24 +155,40 @@ class CartControllerTest {
     @Test
     void deleteFromCartTest2() throws Exception {
         doNothing().when(cartService).deleteProductFromCart(any(), any());
-        String body = objectMapper.writeValueAsString
-                (CartProductDeleteRequestDto.builder()
-                        .productId(15)
-                        .carePeriod(3)
-                        .build());
+        String body = objectMapper.writeValueAsString(CartDummy.cartProductDeleteRequestDto(1));
 
-        mockMvc.perform(delete("/carts/products/delete")
+        mockMvc.perform(delete("/carts/delete-product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-                        .cookie(new Cookie(MEMBER_CART_ID, "3"))
+                        .cookie(new Cookie(CART_ID, "3"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(cartService, times(1)).deleteProductFromCart(anyString(), any());
     }
 
+    @DisplayName("쿠키가 있는 방문자가 상품목록을 조회")
     @Test
-    void getProductsFromCartTest() {
+    void getProductsFromCartTest() throws Exception {
+        when(cartService.getProductsFromCart(any())).thenReturn(List.of(1));
+
+        mockMvc.perform(get("/carts/")
+                        .cookie(new Cookie(CART_ID, "3"))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(cartService, times(1)).getProductsFromCart(anyString());
     }
 
+    @DisplayName("쿠키가 없는 방문자가 상품목록을 조회")
+    @Test
+    void getProductsFromCartTest2() throws Exception {
+        when(cartService.getProductsFromCart(any())).thenReturn(null);
+
+        mockMvc.perform(get("/carts/")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(cartService, never()).getProductsFromCart(anyString());
+    }
 }
