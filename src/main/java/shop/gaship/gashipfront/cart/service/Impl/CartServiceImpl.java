@@ -1,8 +1,7 @@
 package shop.gaship.gashipfront.cart.service.Impl;
 
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -12,9 +11,12 @@ import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 
 /**
- * {@inheritDoc}
  * CartService 의 구현체입니다.
  */
 @Service
@@ -48,7 +50,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public void deleteProductFromCart(String cartNo, CartProductDeleteRequestDto request) {
-        hashOperations.delete(cartNo, request.getProductId());
+        hashOperations.delete(cartNo, request.getProductId().toString());
     }
 
     /**
@@ -70,8 +72,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Integer> getProductsFromCart(String cartId) {
+    public List<Integer> getProductsFromCart(String cartId, Pageable pageable) {
         Map<Integer, Integer> products = hashOperations.entries(cartId);
+        ArrayList<Integer> arrayList = new ArrayList<>(products.keySet());
         return null;
     }
 
