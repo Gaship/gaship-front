@@ -1,56 +1,29 @@
 ### 장바구니에 상품을 추가하는 메서드 입니다.
-POST http://localhost:8080/carts HTTP/1.1
+POST http://localhost:8080/carts/add-product HTTP/1.1
 Content-Type: application/json
 
 {
   "productId": 20,
-  "carePeriod": 3,
-  "quantity": 13
-}
-### cartId 쿠키를 가진 방문자의 장바구니에 상품을 추가하는 메서드 입니다.
-POST http://localhost:8080/carts/42d78ee7-dd14-4921-86fb-e65f521ddc0b HTTP/1.1
-Content-Type: application/json
-
-{
-  "productId": 20,
-  "carePeriod": 1,
-  "quantity": 11
+  "quantity": 5
 }
 ### 장바구니에 담긴 상품의 수량을 변경하는 메서드 입니다.
-PUT http://localhost:8080/carts/42d78ee7-dd14-4921-86fb-e65f521ddc0b/products/1 HTTP/1.1
+PUT http://localhost:8080/carts/modify-quantity HTTP/1.1
 Content-Type: application/json
+Cookie: CID=132
 
 {
-  "productId": 20,
-  "carePeriod": 3,
-  "quantity": 1
-}
-### 장바구니에 담긴 상품의 수량을 +1하는 메서드 입니다.
-PUT http://localhost:8080/carts/42d78ee7-dd14-4921-86fb-e65f521ddc0b/products/1/increase HTTP/1.1
-Content-Type: application/json
-
-{
-  "productId": 20,
-  "carePeriod": 3
-}
-### 장바구니에 담긴 상품의 수량을 -1하는 메서드 입니다.
-PUT http://localhost:8080/carts/42d78ee7-dd14-4921-86fb-e65f521ddc0b/products/1/decrease HTTP/1.1
-Content-Type: application/json
-
-{
-  "productId": 20,
-  "carePeriod": 3
+  "productId": 5,
+  "quantity": 8
 }
 ### 장바구니에 담긴 상품을 삭제하는 메서드 입니다.
-DELETE http://localhost:8080/carts/42d78ee7-dd14-4921-86fb-e65f521ddc0b/products/1 HTTP/1.1
+DELETE http://localhost:8080/carts/delete-product HTTP/1.1
 Content-Type: application/json
+Cookie: CID=132
 
 {
-  "productId": 20,
-  "carePeriod": 3
+  "productId": "20"
 }
 ###
 GET http://localhost:8080/carts HTTP/1.1
-
 ###
 GET http://localhost:8080/carts/1 HTTP/1.1
