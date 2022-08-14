@@ -1,5 +1,10 @@
 package shop.gaship.gashipfront.cart.service.Impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.HashOperations;
@@ -11,18 +16,15 @@ import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 
 /**
+ * {@inheritDoc}
  * CartService 의 구현체입니다.
  */
 @Service
 public class CartServiceImpl implements CartService {
     private final RedisTemplate<String, Object> redisTemplate;
-    private final HashOperations<String, Integer, Integer> hashOperations;
+    private final HashOperations<String, Object, Object> hashOperations;
 
     @Autowired
     public CartServiceImpl(RedisTemplate<String, Object> redisTemplate) {
@@ -50,7 +52,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     @Override
     public void deleteProductFromCart(String cartNo, CartProductDeleteRequestDto request) {
-        hashOperations.delete(cartNo, request.getProductId().toString());
+        hashOperations.delete(cartNo, request.getProductId());
     }
 
     /**
@@ -58,7 +60,7 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void mergeCart(String nonMemberCartId, Integer memberId) {
-        Map<Integer, Integer> map = hashOperations.entries(nonMemberCartId);
+        Map<Object, Object> map = hashOperations.entries(nonMemberCartId);
         String key = String.valueOf(memberId);
         mergeHashMap(key, map);
         hashOperations.delete(nonMemberCartId);
@@ -67,14 +69,15 @@ public class CartServiceImpl implements CartService {
     /**
      * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
      */
-    private void mergeHashMap(String key, Map<Integer, Integer> map) {
+    private void mergeHashMap(String key, Map<Object, Object> map) {
         map.forEach((key1, value) -> hashOperations.putIfAbsent(key, key1, value));
     }
 
     @Override
     public List<Integer> getProductsFromCart(String cartId, Pageable pageable) {
-        Map<Integer, Integer> products = hashOperations.entries(cartId);
-        ArrayList<Integer> arrayList = new ArrayList<>(products.keySet());
+        Map<Object, Object> products = hashOperations.entries(cartId);
+        ArrayList<Object> arrayList = new ArrayList<>(products.keySet());
+        arrayList.stream().map(Integer.class::cast).collect(Collectors.toList());
         return null;
     }
 
