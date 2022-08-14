@@ -129,7 +129,7 @@ public class MemberController {
         redirectAttributes.addAttribute(MEM_NO, memberNo);
         redirectAttributes.addAttribute(STATUS, true);
 
-        return "memberInfoAdmin";
+        return "admin/memberInfoAdmin";
     }
 
     /**
@@ -148,6 +148,6 @@ public class MemberController {
         model.addAttribute(RESPONSE, dto);
         redirectAttributes.addAttribute(STATUS, true);
 
-        return "memberList";
+        return "admin/memberList";
     }
 }
