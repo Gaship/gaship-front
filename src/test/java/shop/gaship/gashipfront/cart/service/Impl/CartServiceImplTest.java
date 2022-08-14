@@ -52,7 +52,7 @@ class CartServiceImplTest {
         verify(hashOperations, times(1)).put("1", 1, 1);
     }
 
-    @DisplayName("장바구니 상품수량 변경 테스트(수량이 1 개 미만(Fail))")
+    @DisplayName("장바구니 상품수량 변경 테스트(수량이 10 개 초과(Fail))")
     @Test
     void modifyProductQuantityFromCartTestFail() throws CartProductAmountException {
         doNothing().when(hashOperations).put(any(), any(), any());
