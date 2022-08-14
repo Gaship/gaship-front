@@ -22,7 +22,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
-    private static final String MEMBER_CART_ID = "MEMBERCARTID";
+    private static final String CART_ID = "CID";
     private final AuthApiService authAPIService;
 
     /**
@@ -51,7 +51,7 @@ public class LoginController {
 
         session.invalidate();
 
-        Cookie killCookie = new Cookie(MEMBER_CART_ID, null);
+        Cookie killCookie = new Cookie(CART_ID, null);
         killCookie.setMaxAge(0);
         response.addCookie(killCookie);
     }
