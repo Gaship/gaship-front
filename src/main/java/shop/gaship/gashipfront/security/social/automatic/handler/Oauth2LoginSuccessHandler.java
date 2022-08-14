@@ -30,8 +30,7 @@ import java.util.Optional;
 public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     private final AuthApiService commonService;
     private final CartService cartService;
-    private static final String NON_MEMBER_CART_ID = "NONMEMBERCARTID";
-    private static final String MEMBER_CART_ID = "MEMBERCARTID";
+    private static final String CART_ID = "CID";
 
     /**
      * 로그인 성공시 jwt 토큰을 생성하고 session 또는 redis session에 넣어주는 기능입니다.
@@ -53,15 +52,13 @@ public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
         // 비회원일 떄 쓰던 장바구니 쿠키 값을 찾아서
         Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(NON_MEMBER_CART_ID))
+                .filter(cookie -> cookie.getName().equals(CART_ID))
                 .findFirst();
         // 찾은 쿠키값이 존재하면 비회원 때 담은 상품들을 회원의 장바구니에 넣는다.
         nonMemberCookie.ifPresent(cookie -> cartService.mergeCart(cookie.getValue(), member.getMemberNo()));
-        // 비회원때 쓰던 장바구니 쿠키를 없앤다.
-        Cookie killCookie = new Cookie(NON_MEMBER_CART_ID, null);
-        killCookie.setMaxAge(0);
-        response.addCookie(killCookie);
-        //회원에게 장바구니 쿠키를 지급한다.
-        response.addCookie(new Cookie(MEMBER_CART_ID, member.getMemberNo().toString()));
+        //장바구니의 쿠키값을 회원의 id 로 바꿔준다.
+        Cookie cookie = new Cookie(CART_ID, member.getMemberNo().toString());
+        cookie.setMaxAge(60 * 60 * 24 * 100);
+        response.addCookie(cookie);
     }
 }
