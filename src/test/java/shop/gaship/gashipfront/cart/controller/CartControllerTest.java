@@ -170,25 +170,25 @@ class CartControllerTest {
     @DisplayName("쿠키가 있는 방문자가 상품목록을 조회")
     @Test
     void getProductsFromCartTest() throws Exception {
-        when(cartService.getProductsFromCart(any(),any())).thenReturn(List.of(1));
+        when(cartService.getProductsFromCart(any())).thenReturn(null);
 
         mockMvc.perform(get("/carts/")
                         .cookie(new Cookie(CART_ID, "3"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(cartService, times(1)).getProductsFromCart(anyString(),any());
+        verify(cartService, times(1)).getProductsFromCart(anyString());
     }
 
     @DisplayName("쿠키가 없는 방문자가 상품목록을 조회")
     @Test
     void getProductsFromCartTest2() throws Exception {
-        when(cartService.getProductsFromCart(any(),any())).thenReturn(null);
+        when(cartService.getProductsFromCart(any())).thenReturn(null);
 
         mockMvc.perform(get("/carts/")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(cartService, never()).getProductsFromCart(anyString(),any());
+        verify(cartService, never()).getProductsFromCart(anyString());
     }
 }
