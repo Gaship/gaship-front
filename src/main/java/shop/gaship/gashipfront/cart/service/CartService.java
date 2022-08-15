@@ -1,11 +1,11 @@
 package shop.gaship.gashipfront.cart.service;
 
 import java.util.List;
-
-import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
+import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
+
 
 
 /**
@@ -51,6 +51,6 @@ public interface CartService {
      * @return 장바구니 상품 리스트를 반환합니다.
      * @author 최정우
      */
-    List<Integer> getProductsFromCart(String cartId, Pageable pageable);
+    List<ProductResponseDto> getProductsFromCart(String cartId);
 
 }
