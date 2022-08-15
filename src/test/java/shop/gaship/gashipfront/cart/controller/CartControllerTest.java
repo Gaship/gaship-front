@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.dummy.CartDummy;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.config.SecurityConfig;
@@ -170,7 +171,16 @@ class CartControllerTest {
     @DisplayName("쿠키가 있는 방문자가 상품목록을 조회")
     @Test
     void getProductsFromCartTest() throws Exception {
-        when(cartService.getProductsFromCart(any())).thenReturn(null);
+        when(cartService.getProductsFromCart(any())).thenReturn(
+                List.of(ProductResponseDto.builder()
+                        .productNo(1)
+                        .productName("1")
+                        .amount(1L)
+                        .installationCost(0L)
+                        .orderQuantity(1)
+                        .quantity(1)
+                        .filePaths(List.of("1"))
+                        .build()));
 
         mockMvc.perform(get("/carts/")
                         .cookie(new Cookie(CART_ID, "3"))
@@ -183,7 +193,16 @@ class CartControllerTest {
     @DisplayName("쿠키가 없는 방문자가 상품목록을 조회")
     @Test
     void getProductsFromCartTest2() throws Exception {
-        when(cartService.getProductsFromCart(any())).thenReturn(null);
+        when(cartService.getProductsFromCart(any())).thenReturn(
+                List.of(ProductResponseDto.builder()
+                                .productNo(1)
+                                .productName("1")
+                                .amount(1L)
+                                .installationCost(0L)
+                                .orderQuantity(1)
+                                .quantity(1)
+                                .filePaths(List.of("1"))
+                        .build()));
 
         mockMvc.perform(get("/carts/")
                         .accept(MediaType.APPLICATION_JSON))
