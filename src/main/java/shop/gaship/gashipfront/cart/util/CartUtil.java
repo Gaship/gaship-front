@@ -15,6 +15,11 @@ import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
  * @since 1.0
  */
 public class CartUtil {
+    /**
+     * 유틸 클래스 추가 생성 불가처리.
+     */
+    private CartUtil() {
+    }
 
     /**
      * 상품 정보 반환값에 주문 수량을 추가하는 로직 입니다.
