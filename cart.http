@@ -12,7 +12,7 @@ Content-Type: application/json
 Cookie: CID=132
 
 {
-  "productId": 5,
+  "productId": 62,
   "quantity": 8
 }
 ### 장바구니에 담긴 상품을 삭제하는 메서드 입니다.
@@ -21,9 +21,9 @@ Content-Type: application/json
 Cookie: CID=132
 
 {
-  "productId": "20"
+  "productId": 5
 }
 ###
 GET http://localhost:8080/carts HTTP/1.1
+Cookie: CID=132
 ###
-GET http://localhost:8080/carts/1 HTTP/1.1
