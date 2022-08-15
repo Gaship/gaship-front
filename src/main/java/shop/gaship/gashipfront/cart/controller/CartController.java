@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -106,14 +105,13 @@ public class CartController {
     @GetMapping
     public String getProductsFromCart(@CookieValue(value = CART_ID, required = false) String cartId,
                                       HttpServletResponse response,
-                                      Pageable pageable,
                                       Model model) {
         if (Objects.isNull(cartId)) {
             String newCartId = UUID.randomUUID().toString();
             response.addCookie(new Cookie(CART_ID, newCartId));
             return "carts";
         }
-        model.addAttribute(cartService.getProductsFromCart(cartId, pageable));
+        model.addAttribute(cartService.getProductsFromCart(cartId));
 
         return "carts";
     }
