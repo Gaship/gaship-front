@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
@@ -33,7 +33,7 @@ public class CartServiceImpl implements CartService {
     /**
      * 생성자 주입.
      *
-     * @param redisTemplate redisTemplate
+     * @param redisTemplate  redisTemplate
      * @param productAdapter 상품 어뎁터
      */
     @Autowired
@@ -47,10 +47,10 @@ public class CartServiceImpl implements CartService {
     /**
      * {@inheritDoc}
      */
-    @Transactional
     @Override
     public Integer modifyProductQuantityFromCart(
             String cartNo, CartProductModifyRequestDto request) throws CartProductAmountException {
+        redisTemplate.expire(cartNo, 101, TimeUnit.DAYS);
         if (request.getQuantity() > 10 || request.getQuantity() < 1) {
             throw new CartProductAmountException();
         }
@@ -61,7 +61,6 @@ public class CartServiceImpl implements CartService {
     /**
      * {@inheritDoc}
      */
-    @Transactional
     @Override
     public void deleteProductFromCart(String cartNo, CartProductDeleteRequestDto request) {
         hashOperations.delete(cartNo, request.getProductId().toString());
@@ -71,11 +70,11 @@ public class CartServiceImpl implements CartService {
      * {@inheritDoc}
      */
     @Override
-    public void mergeCart(String nonMemberCartId, Integer memberId) {
-        Map<Object, Object> map = hashOperations.entries(nonMemberCartId);
+    public void mergeCart(String cartId, Integer memberId) {
+        Map<Object, Object> map = hashOperations.entries(cartId);
         String key = String.valueOf(memberId);
         mergeHashMap(key, map);
-        hashOperations.delete(nonMemberCartId);
+        hashOperations.delete(cartId);
     }
 
     /**
@@ -87,6 +86,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<ProductResponseDto> getProductsFromCart(String cartId) {
+        redisTemplate.expire(cartId, 101, TimeUnit.DAYS);
         Map<Integer, Integer> integerMap = new HashMap<>();
         hashOperations.entries(cartId)
                 .forEach((k, v) -> integerMap.put(
