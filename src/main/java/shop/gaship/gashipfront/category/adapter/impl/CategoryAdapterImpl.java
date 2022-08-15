@@ -1,10 +1,8 @@
 package shop.gaship.gashipfront.category.adapter.impl;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.category.adapter.CategoryAdapter;
@@ -21,23 +19,16 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class CategoryAdapterImpl implements CategoryAdapter {
-    @Value("${gaship-server.gateway-url}")
-    private String gatewayUrl;
-
-    private static final String REQUEST_URI = "/api/category";
-
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl(gatewayUrl)
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .build();
+    private final WebClient webClient;
     /**
      * {@inheritDoc}
      */
     @Override
     public void categoryAdd(CategoryCreateRequestDto createRequest) {
         webClient.post()
-                .uri(REQUEST_URI)
+                .uri("/api/categories")
                 .bodyValue(createRequest)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
@@ -49,7 +40,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     @Override
     public void categoryModify(CategoryModifyRequestDto modifyRequest) {
         webClient.put()
-                .uri(REQUEST_URI + "/{categoryNo}", modifyRequest.getNo())
+                .uri("/api/categories/{categoryNo}", modifyRequest.getNo())
                 .bodyValue(modifyRequest)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
@@ -61,7 +52,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     @Override
     public CategoryResponseDto categoryDetails(Integer categoryNo) {
         return webClient.get()
-                .uri(REQUEST_URI + "/{categoryNo}", categoryNo)
+                .uri("/api/categories/{categoryNo}", categoryNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(CategoryResponseDto.class)
@@ -74,7 +65,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     @Override
     public List<CategoryResponseDto> categoryList() {
         return webClient.get()
-                .uri(REQUEST_URI)
+                .uri("/api/categories")
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToFlux(CategoryResponseDto.class)
@@ -88,7 +79,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     @Override
     public List<CategoryResponseDto> lowerCategoryList(Integer categoryNo) {
         return webClient.get()
-                .uri(REQUEST_URI + "/{categoryNo}/lower", categoryNo)
+                .uri("/api/categories/{categoryNo}/lower", categoryNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToFlux(CategoryResponseDto.class)
@@ -102,7 +93,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     @Override
     public void categoryRemove(Integer categoryNo) {
         webClient.delete()
-                .uri(REQUEST_URI + "/{categoryNo}", categoryNo)
+                .uri("/api/categories/{categoryNo}", categoryNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
     }
