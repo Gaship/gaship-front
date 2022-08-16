@@ -1,0 +1,29 @@
+### 장바구니에 상품을 추가하는 메서드 입니다.
+POST http://localhost:8080/carts/add-product HTTP/1.1
+Content-Type: application/json
+
+{
+  "productId": 20,
+  "quantity": 5
+}
+### 장바구니에 담긴 상품의 수량을 변경하는 메서드 입니다.
+PUT http://localhost:8080/carts/modify-quantity HTTP/1.1
+Content-Type: application/json
+Cookie: CID=132
+
+{
+  "productId": 62,
+  "quantity": 8
+}
+### 장바구니에 담긴 상품을 삭제하는 메서드 입니다.
+DELETE http://localhost:8080/carts/delete-product HTTP/1.1
+Content-Type: application/json
+Cookie: CID=132
+
+{
+  "productId": 5
+}
+###
+GET http://localhost:8080/carts HTTP/1.1
+Cookie: CID=132
+###

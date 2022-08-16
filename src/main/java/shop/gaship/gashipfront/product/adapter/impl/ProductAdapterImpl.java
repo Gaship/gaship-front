@@ -223,19 +223,16 @@ public class ProductAdapterImpl implements ProductAdapter {
     }
 
     @Override
-    public PageResponse<ProductAllInfoResponseDto> productNosList(List<Integer> productNos,
-                                                                  Pageable pageable) {
+    public List<ProductAllInfoResponseDto> productNosList(List<Integer> productNos) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
-                .path(REQUEST_URI + "/productNos")
-                .queryParam("page", pageable.getPageNumber())
-                .queryParam("size", pageable.getPageSize())
+                .path(REQUEST_URI)
                 .queryParam("productNos", productNos)
                 .build())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(
-                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                new ParameterizedTypeReference<List<ProductAllInfoResponseDto>>() {
                 }
             )
             .block();

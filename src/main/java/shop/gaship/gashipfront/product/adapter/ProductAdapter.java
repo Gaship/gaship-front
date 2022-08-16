@@ -105,5 +105,5 @@ public interface ProductAdapter {
      */
     PageResponse<ProductAllInfoResponseDto> productListAll(Pageable pageable);
 
-    PageResponse<ProductAllInfoResponseDto> productNosList(List<Integer> productNos, Pageable pageable);
+    List<ProductAllInfoResponseDto> productNosList(List<Integer> productNos);
 }
