@@ -56,8 +56,12 @@ public class CartController {
             response.addCookie(new Cookie(CART_ID, newCartId));
             cartId = newCartId;
         }
+        Integer orderQuantity = cartService.modifyProductQuantityFromCart(cartId, request);
+        if (orderQuantity == 0) {
+            attributes.addAttribute("cartMax", true);
+        }
         attributes.addAttribute("status", true);
-        return cartService.modifyProductQuantityFromCart(cartId, request);
+        return orderQuantity;
     }
 
     /**
