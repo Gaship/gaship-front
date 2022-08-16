@@ -15,6 +15,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.config.SecurityConfig;
 import shop.gaship.gashipfront.config.SecurityEmployeeConfig;
 import shop.gaship.gashipfront.config.ServerConfig;
@@ -28,10 +29,13 @@ import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.social.manualitic.service.NaverLoginService;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
+import javax.servlet.http.Cookie;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -77,6 +81,9 @@ class OauthControllerTest {
     @MockBean
     private SignupManager signupManager;
 
+    @MockBean
+    private CartService cartService;
+
     @DisplayName("지정한 uri를 redirectUri로 잘맞게 response된다.")
     @Test
     void redirectUriForLoginPageRequestNaver() throws Exception {
@@ -99,6 +106,7 @@ class OauthControllerTest {
         givingNaverUserData();
         givingMember();
         JwtDto jwt = givingJwt();
+        Cookie cookie1 = new Cookie("CID", "123");
 
         // when then
         MockHttpSession session = new MockHttpSession();
@@ -106,7 +114,8 @@ class OauthControllerTest {
 
         mvc.perform(get("/securities/login/naver/callback").session(session)
                 .param("code", "1234")
-                .param("state", "1234"))
+                .param("state", "1234")
+                .cookie(cookie1))
             .andExpect(status().isOk())
             .andExpect(view().name("all"));
 
