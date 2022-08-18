@@ -15,10 +15,10 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
  */
 @Controller
 public class HomeController {
-    @GetMapping("/")
-    public String home() {
-        return "showHome";
-    }
+//    @GetMapping("/")
+//    public String home() {
+//        return "index";
+//    }
 
     @GetMapping("/all")
     public String all(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
