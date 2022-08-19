@@ -1,7 +1,10 @@
 package shop.gaship.gashipfront.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * 프론트 서버 운영에 대한 전반적인 설정입니다.
@@ -20,5 +23,13 @@ public class ServerConfig {
 
     public void setGatewayUrl(String gatewayUrl) {
         this.gatewayUrl = gatewayUrl;
+    }
+
+    @Bean
+    public WebClient webClient(ServerConfig serverConfig) {
+        return WebClient.builder()
+            .baseUrl(serverConfig.getGatewayUrl())
+            .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
     }
 }

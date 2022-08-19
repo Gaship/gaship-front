@@ -12,13 +12,14 @@ import lombok.Getter;
  */
 @Getter
 public class PageResponse<T> {
+
     private List<T> content;
-    private int totalPage;
-    private int page;
-    private int size;
-    private int start;
-    private int end;
-    private boolean prev;
+
+    private int totalPages;
+
+    private int number;
+
+    private boolean previous;
+
     private boolean next;
-    private List<Integer> pageList;
 }

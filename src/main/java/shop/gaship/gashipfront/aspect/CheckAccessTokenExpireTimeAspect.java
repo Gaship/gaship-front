@@ -1,12 +1,18 @@
 package shop.gaship.gashipfront.aspect;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -28,6 +34,9 @@ import shop.gaship.gashipfront.security.common.dto.JwtDto;
 @RequiredArgsConstructor
 public class CheckAccessTokenExpireTimeAspect {
     private final ServerConfig serverConfig;
+    private final WebClient webClient;
+    private final RedisTemplate redisTemplate;
+    private final Integer EXPIRE_TIME_THIRTY_MINUTE = 30;
 
     @Before("@annotation(shop.gaship.gashipfront.aspect.annotation.JwtExpiredCheck)")
     public void checkExpireTime() {
@@ -38,13 +47,8 @@ public class CheckAccessTokenExpireTimeAspect {
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
         if (!jwt.getAccessTokenExpireDateTime().isBefore(LocalDateTime.now())) {
-            WebClient webClient = WebClient.builder()
-                .baseUrl(serverConfig.getGatewayUrl())
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-
             JwtDto newToken = webClient.post()
-                .uri(uriBuilder -> uriBuilder.path("/securities/issue-jwt").build())
+                .uri(uriBuilder -> uriBuilder.path("/securities/reissue-jwt").build())
                 .bodyValue(jwt)
                 .retrieve()
                 .toEntity(JwtDto.class)
