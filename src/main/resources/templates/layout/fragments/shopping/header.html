@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="header-fragment">
+    <div id="preloder" style="display: none;">
+        <div class="loader" style="display: none;"></div>
+    </div>
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="#"><img src="/img/logo.svg" alt=""></a>
+        </div>
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+                <li class="active"><a href="">쇼핑몰 홈</a></li>
+                <li><a href="">상품 전체</a></li>
+            </ul>
+        </nav>
+        <div id="mobile-menu-wrap">
+        </div>
+        <div class="humberger__menu__contact">
+            <ul>
+                <li>https://github.com/Gaship</li>
+                <li>전 상품 무료배송!</li>
+            </ul>
+        </div>
+    </div>
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="/"><img src="/img/logo.svg" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <nav class="header__menu">
+                        <ul>
+                            <li><a href="/">쇼핑몰 홈</a></li>
+                            <li class="active"><a href="">상품전체</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="header__cart col-lg-4 ">
+                    <div class="header__top__right">
+                        <div class="header__top__right__social">
+                            <a href="#"><i class="fa fa-shopping-bag"></i></a>
+                        </div>
+                        <div class="header__top__right__language">
+                            <div>한국어</div>
+                            <span class="arrow_carrot-down"></span>
+                            <ul>
+                                <li><a href="#">한국어</a></li>
+                                <li><a href="#">English</a></li>
+                            </ul>
+                        </div>
+                        <div class="header__top__right__auth">
+                            <a href="/login"><i class="fa fa-user"></i> 로그인</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+</th:block>
+</html>
