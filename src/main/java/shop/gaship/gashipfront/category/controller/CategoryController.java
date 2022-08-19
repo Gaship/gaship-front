@@ -17,9 +17,4 @@ import shop.gaship.gashipfront.category.service.CategoryService;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @GetMapping("/categories")
-    public String categoryList(Model model) {
-        model.addAttribute("categories", categoryService.findCategories());
-        return "";
-    }
 }
