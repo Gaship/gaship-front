@@ -173,7 +173,7 @@ class InquiryAdapterImplTest {
         PageResponse<InquiryListResponseDto> pageResponse = inquiryAdapter.customerInquiryList(PageRequest.of(0, 5));
         List<InquiryListResponseDto> content = pageResponse.getContent();
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         InquiryListResponseDto actual = content.get(0);
@@ -188,7 +188,7 @@ class InquiryAdapterImplTest {
         PageResponse<InquiryListResponseDto> pageResponse = inquiryAdapter.productInquiryList(PageRequest.of(0, 5));
         List<InquiryListResponseDto> content = pageResponse.getContent();
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
@@ -210,7 +210,7 @@ class InquiryAdapterImplTest {
         PageResponse<InquiryListResponseDto> pageResponse = inquiryAdapter.customerInquiryStatusHoldList(PageRequest.of(0, 5));
         List<InquiryListResponseDto> content = pageResponse.getContent();
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
@@ -237,7 +237,7 @@ class InquiryAdapterImplTest {
         PageResponse<InquiryListResponseDto> pageResponse = inquiryAdapter.customerInquiryStatusCompleteList(PageRequest.of(0, 5));
         List<InquiryListResponseDto> content = pageResponse.getContent();
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
@@ -258,7 +258,7 @@ class InquiryAdapterImplTest {
         PageResponse<InquiryListResponseDto> pageResponse = inquiryAdapter.productInquiryStatusHoldList(PageRequest.of(0, 5));
         List<InquiryListResponseDto> content = pageResponse.getContent();
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         InquiryListResponseDto actual = content.get(0); // 이러면 항상 1번이 나온다(등록되어있을시)
@@ -288,7 +288,7 @@ class InquiryAdapterImplTest {
         PageResponse<InquiryListResponseDto> pageResponse = inquiryAdapter.productInquiryStatusCompleteList(PageRequest.of(0, 5));
         List<InquiryListResponseDto> content = pageResponse.getContent();
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         content.stream().forEach(c -> {
@@ -305,7 +305,7 @@ class InquiryAdapterImplTest {
 
         InquiryDetailsResponseDto inquiryDetails = inquiryAdapter.inquiryDetails(TEST_NO);
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         content.stream().forEach(c -> {
@@ -325,7 +325,7 @@ class InquiryAdapterImplTest {
 
         InquiryDetailsResponseDto inquiryDetails = inquiryAdapter.inquiryDetails(content.get(0).getInquiryNo());
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
 
         content.stream().forEach(c -> {
@@ -345,7 +345,7 @@ class InquiryAdapterImplTest {
 
         InquiryDetailsResponseDto inquiryDetails = inquiryAdapter.inquiryDetails(content.get(0).getInquiryNo());
 
-        assertThat(pageResponse.getPage())
+        assertThat(pageResponse.getNumber())
             .isZero();
         
         content.stream().forEach(c -> {

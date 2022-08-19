@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.security.social.automatic.handler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import shop.gaship.gashipfront.cart.service.CartService;

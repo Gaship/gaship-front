@@ -10,8 +10,7 @@ import shop.gaship.gashipfront.util.dto.ErrorResponse;
 /**
  * 모든 예외를 RequestFailureException으로 처리하는 클래스입니다.
  *
- * @author 김보민
- * @author 최겸준
+ * @author 김보민, 최겸준, 김민수
  * @since 1.0
  */
 public class ExceptionUtil {
@@ -39,8 +38,8 @@ public class ExceptionUtil {
      * errorMessage와 statusCode를 받아서 차후 statusCode를 처리할상황에서 함께 사용할수 있습니다.
      *
      * @param clientResponse 넘어온 예외에 대한 정보를 가지고 있는 객체입니다.
-     * @return Mono &lt;? extends Throwable&gt; Mono로서 바디값으로 Throwable을 확장하고있는 객체들을 가집니다.
-     * @author 최겸준
+     * @return Mono로서 바디값으로 Throwable을 확장하고있는 객체들을 가집니다.
+     * @author 김보민, 최겸준
      */
     public static Mono<? extends Throwable> createErrorMono(ClientResponse clientResponse) {
         Function<ErrorResponse, Mono<? extends Throwable>> errorResponseMonoFunction =
