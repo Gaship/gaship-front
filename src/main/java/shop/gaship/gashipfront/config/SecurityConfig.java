@@ -35,8 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CartService cartService;
     private static final String LOGIN_URI = "/login";
 
-//    private final RedisCsrfRepository redisCsrfRepository;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -49,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage(LOGIN_URI)
-                .loginProcessingUrl("/loginAction")
+                .loginProcessingUrl(LOGIN_URI)
                 .successHandler(loginSuccessHandler(null, null))
                 .failureUrl(LOGIN_URI)
                 .usernameParameter("id")
@@ -61,10 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .failureUrl(LOGIN_URI)
                 .successHandler(oauth2LoginSuccessHandler(null, null));
-
-        http.oauth2Login().disable();
-
-//        http.csrf().csrfTokenRepository(redisCsrfRepository).and();
 
         http.logout().disable();
     }
@@ -97,12 +91,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public LoginSuccessHandler loginSuccessHandler(ServerConfig serverConfig, CartService cartService) {
+    public LoginSuccessHandler loginSuccessHandler(
+        ServerConfig serverConfig, CartService cartService) {
         return new LoginSuccessHandler(serverConfig, cartService);
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService, CartService cartService) {
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(
+        AuthApiService commonService, CartService cartService) {
         return new Oauth2LoginSuccessHandler(commonService, cartService);
     }
 

@@ -23,7 +23,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService
 @RequiredArgsConstructor
 public class LoginController {
     private static final String CART_ID = "CID";
-    private final AuthApiService authAPIService;
+    private final AuthApiService authApiService;
 
     /**
      * 로그인 요청을 담당하는 기능입니다.
@@ -32,7 +32,7 @@ public class LoginController {
      */
     @GetMapping("/login")
     public String login() {
-        return "showLoginForm";
+        return "login/loginForm";
     }
 
     /**
@@ -40,14 +40,14 @@ public class LoginController {
      *
      * @param session redis에 저장된 jwt를 불러오기위해 사용합니다.
      */
-    @GetMapping(value ="/logout")
+    @GetMapping("/logout")
     public void logoutProcessing(HttpSession session, HttpServletResponse response) {
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
         SecurityContext context = SecurityContextHolder.getContext();
         UserDetailsDto user = (UserDetailsDto) context.getAuthentication().getPrincipal();
         Integer memberNo = user.getMember().getMemberNo();
-        authAPIService.logout(memberNo, jwt);
+        authApiService.logout(memberNo, jwt);
 
         session.invalidate();
 
