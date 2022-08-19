@@ -23,7 +23,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     @Override
     public ProductReviewResponseDto productReviewDetails(Integer orderProductNo) {
         return webClient.get()
-                .uri("/api/reviews/{orderProdcutNo}", orderProductNo)
+                .uri("/api/reviews/{orderProductNo}", orderProductNo)
                 .retrieve()
                 .bodyToMono(ProductReviewResponseDto.class)
                 .block();
