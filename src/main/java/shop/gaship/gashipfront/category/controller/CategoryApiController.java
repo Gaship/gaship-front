@@ -2,12 +2,9 @@ package shop.gaship.gashipfront.category.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import shop.gaship.gashipfront.category.adapter.CategoryAdapter;
 import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 import shop.gaship.gashipfront.category.service.CategoryService;
 
