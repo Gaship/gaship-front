@@ -1,14 +1,14 @@
 package shop.gaship.gashipfront.addresslocal.adpter;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
 import shop.gaship.gashipfront.addresslocal.dto.request.AddressLocalModifyRequestDto;
 import shop.gaship.gashipfront.addresslocal.dto.response.AddressLocalResponseDto;
-import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.response.PageResponse;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
@@ -19,11 +19,12 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  */
 
 @Component
-@RequiredArgsConstructor
 public class AddressLocalAdapter {
 
     private static final String ADDRESS_LOCALS = "/api/addressLocals";
-    private final ServerConfig config;
+
+    @Value("${gaship-server.gateway-url}")
+    private String gateWayUrl;
 
     /**
      * 지역의 배달가능여부를 수정하기위한 메서드입니다.
@@ -32,7 +33,7 @@ public class AddressLocalAdapter {
      * @return 정상적으로 완료시 true 를 반환합니다.
      */
     public boolean modifyAddressIsDelivery(AddressLocalModifyRequestDto dto) {
-        WebClient.create(config.getGatewayUrl())
+        WebClient.create(gateWayUrl)
             .put()
             .uri(ADDRESS_LOCALS)
             .bodyValue(dto)
@@ -48,8 +49,8 @@ public class AddressLocalAdapter {
      * @param pageable 페이징 정보가 들어갑니다.
      * @return 지역 정보들이 반환됩니다.
      */
-    public Flux<AddressLocalResponseDto> addressLocalList(String address, Pageable pageable) {
-        return WebClient.create(config.getGatewayUrl())
+    public PageResponse<AddressLocalResponseDto> addressLocalList(String address, Pageable pageable) {
+        return WebClient.create(gateWayUrl)
             .get()
             .uri(uriBuilder -> uriBuilder.path(ADDRESS_LOCALS)
                 .queryParam("address", address)
@@ -58,7 +59,10 @@ public class AddressLocalAdapter {
                 .build())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-            .bodyToFlux(AddressLocalResponseDto.class);
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<AddressLocalResponseDto>>() {
+                }
+            ).block();
     }
 }
 
