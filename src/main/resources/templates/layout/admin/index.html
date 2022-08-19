@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/admin/layout}">
+<head>
+  <title>메인페이지</title>
+</head>
+  <th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+      <!-- Page Heading -->
+      <h1 class="h3 mb-2 text-gray-800">관리자메인페이지</h1>
+
+      <!-- Content Row -->
+      <div class="row">
+
+        <div class="col-xl-8 col-lg-7">
+
+          <!-- Area Chart -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                <canvas id="myAreaChart" style="display: block; height: 320px; width: 381px;" width="762" height="640" class="chartjs-render-monitor"></canvas>
+              </div>
+              <hr>
+              매월 매출이 감소하고있어....(라는 생각이 들게 월매출 차트를 만들어주세요.)
+            </div>
+          </div>
+
+          <!-- Bar Chart -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-bar"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                <canvas id="myBarChart" width="762" height="640" style="display: block; height: 320px; width: 381px;" class="chartjs-render-monitor"></canvas>
+              </div>
+              <hr>
+              광복절에는 많이 팔았구만(라는 생각이 드는 일별 매출 차트를 만들어주세요)
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </th:block>
+  <th:block layout:fragment="content-js">
+    <script th:src="@{/index/index.js}"></script>
+  </th:block>
+</html>

@@ -39,7 +39,7 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler)
                 .usernameParameter("id")
                 .passwordParameter("pw")
-                .failureUrl("/manager-login")
+                .failureUrl("/manager/login")
             .and()
             .httpBasic()
             .and()
@@ -47,6 +47,12 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/admin/**")
                     .antMatchers("/manager/**")
             .and();
+
+        http.logout()
+                .logoutUrl("/manager/logout")
+                .logoutSuccessUrl("/manager/login");
+
+        http.csrf();
     }
 
     @Override

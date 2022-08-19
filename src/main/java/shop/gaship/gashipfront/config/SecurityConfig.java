@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.oauth2Login().disable();
 
-//        http.csrf().csrfTokenRepository(redisCsrfRepository).and();
+        http.csrf();
 
         http.logout().disable();
     }

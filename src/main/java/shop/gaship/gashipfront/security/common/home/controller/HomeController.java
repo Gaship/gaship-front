@@ -15,10 +15,6 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
  */
 @Controller
 public class HomeController {
-//    @GetMapping("/")
-//    public String home() {
-//        return "index";
-//    }
 
     @GetMapping("/all")
     public String all(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
@@ -30,7 +26,7 @@ public class HomeController {
 
     @GetMapping("/manager")
     public String manager() {
-        return "manager";
+        return "layout/admin/index";
     }
 
     @GetMapping("/admin")

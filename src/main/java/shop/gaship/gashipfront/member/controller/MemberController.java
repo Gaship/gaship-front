@@ -58,7 +58,7 @@ public class MemberController {
      * @return 멤버 전용 회원 개인정보 페이지
      * @author 최정우
      */
-    @PutMapping("/admin/members/{memberNo}")
+    @PutMapping("/admin/members/update/{memberNo}")
     public String memberModifyByAdmins(
             @ModelAttribute @Valid MemberModifyByAdminDto request,
             @PathVariable Integer memberNo,
@@ -129,25 +129,22 @@ public class MemberController {
         redirectAttributes.addAttribute(MEM_NO, memberNo);
         redirectAttributes.addAttribute(STATUS, true);
 
-        return "memberInfoAdmin";
+        return "layout/admin/member";
     }
 
     /**
      * 회원 목록 상세페이지.
      *
-     * @param redirectAttributes redirectAttributes
      * @return 태그 목록과 자신이 선택한 태그를 보여주는 페이지
      * @author 최정우
      */
     @GetMapping("/admin/members")
     public String memberList(
-            RedirectAttributes redirectAttributes,
             Pageable pageable,
             Model model) {
         PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(pageable);
         model.addAttribute(RESPONSE, dto);
-        redirectAttributes.addAttribute(STATUS, true);
 
-        return "memberList";
+        return "layout/admin/memberList";
     }
 }

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
@@ -54,5 +55,24 @@ public class LoginController {
         Cookie killCookie = new Cookie(CART_ID, null);
         killCookie.setMaxAge(0);
         response.addCookie(killCookie);
+    }
+
+    /**
+     * 로그인 요청을 담당하는 기능입니다.
+     *
+     * @return 로그인 폼 화면으로 이동할수 있도록 showLoginForm을 반환합니다.
+     */
+    @GetMapping("/manager/login")
+    public String managerLogin(HttpSession session,
+                               Model model) {
+        return "layout/admin/login";
+    }
+
+    /**
+     * 로그아웃 요청을 담당하는 기능입니다.
+     */
+    @GetMapping(value ="/manager/logout")
+    public String managerLogoutProcessing() {
+        return "redirect:/manager/login";
     }
 }
