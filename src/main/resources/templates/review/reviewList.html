@@ -1,8 +1,40 @@
-<div class="review_container">
-    <div class="review" th:each="review : ${reviews.content}">
-        <img th:unless="${#lists.isEmpty(review.filePaths)}" th:src="${review.filePaths.get(0)}"/>
-        <span th:text="${review.title}"></span>
-        <span th:text="${review.content}"></span>
-        <span th:text="${review.starScore}"></span>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="/css/review/review.css">
+<div class="container">
+    <div class="row">
+        <div class="col-md-8" th:each="review : ${reviews.content}">
+            <div class="media g-mb-30 media-comment">
+                <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
+                    <img class="img-thumbnail" th:unless="${#lists.isEmpty(review.filePaths)}" th:src="${review.filePaths.get(0)}"/>
+
+                    <div class="g-mb-15">
+                        <h5 class="h5 g-color-gray-dark-v1 mb-0" th:text="${review.title}"></h5>
+                        <span class="g-color-gray-dark-v4 g-font-size-12" th:text="${review.writerNickname}"></span>
+                        <span class="g-color-gray-dark-v4 g-font-size-12" th:text="${review.registerDateTime}"></span>
+                    </div>
+
+                    <p th:text="${review.content}"></p>
+
+                    <ul class="list-inline d-sm-flex my-0">
+                        <li class="list-inline-item g-mr-20">
+                            <i class="fa fa-star g-pos-rel g-top-1 g-mr-3"></i>
+                            <span th:text="${review.starScore}"></span>
+                        </li>
+                        <br/>
+                        <li class="list-inline-item ml-auto">
+                            <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#!">
+                                수정
+                            </a>
+                        </li>
+                        <li class="list-inline-item ml-auto">
+                            <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" href="#!">
+                                삭제
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
