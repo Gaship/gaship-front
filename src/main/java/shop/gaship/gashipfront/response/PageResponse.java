@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,10 +16,11 @@ import org.springframework.data.domain.Pageable;
  * @since 1.0
  */
 @Getter
+@NoArgsConstructor
 public class PageResponse<T> {
-    private final List<T> content;
+    private List<T> content;
     //총 페이지 번호
-    private final int totalPage;
+    private int totalPage;
     //현재 페이지 번호
     private int page;
     //목록 사이즈

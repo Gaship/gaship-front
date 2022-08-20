@@ -10,5 +10,6 @@ import shop.gaship.gashipfront.response.PageResponse;
  * @since 1.0
  */
 public interface ProductReviewService {
-    PageResponse<ProductReviewResponseDto> findMemberProductReviews(Integer memberNo);
+    PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo);
+    PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo);
 }

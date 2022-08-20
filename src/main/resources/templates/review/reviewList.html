@@ -1,0 +1,8 @@
+<div class="review_container">
+    <div class="review" th:each="review : ${reviews.content}">
+        <img th:unless="${#lists.isEmpty(review.filePaths)}" th:src="${review.filePaths.get(0)}"/>
+        <span th:text="${review.title}"></span>
+        <span th:text="${review.content}"></span>
+        <span th:text="${review.starScore}"></span>
+    </div>
+</div>
