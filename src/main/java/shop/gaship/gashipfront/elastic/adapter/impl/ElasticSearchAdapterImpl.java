@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.elastic.adapter.impl;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -15,25 +16,26 @@ import shop.gaship.gashipfront.elastic.dto.response.SearchResponseDto;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class ElasticSearchAdapterImpl implements SearchAdapter {
-    private WebClient webClient;
+    private final WebClient webClient;
 
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<SearchResponseDto> searchName(String name){
-       return webClient.get()
+    public List<SearchResponseDto> searchName(String name) {
+        return webClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path("/api/search")
-                .queryParam("productName",name)
+                .queryParam("productName", name)
                 .build())
             .retrieve()
             .bodyToMono(
                 new ParameterizedTypeReference<List<SearchResponseDto>>() {
-                }
-            ).block();
+                })
+            .block();
     }
 
     /**
@@ -44,12 +46,12 @@ public class ElasticSearchAdapterImpl implements SearchAdapter {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
                 .path("/api/search")
-                .queryParam("productCode",code)
+                .queryParam("productCode", code)
                 .build())
             .retrieve()
             .bodyToMono(
                 new ParameterizedTypeReference<List<SearchResponseDto>>() {
-                }
-            ).block();
+                })
+            .block();
     }
 }

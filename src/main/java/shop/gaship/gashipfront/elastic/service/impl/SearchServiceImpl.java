@@ -1,6 +1,10 @@
 package shop.gaship.gashipfront.elastic.service.impl;
 
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import shop.gaship.gashipfront.elastic.adapter.SearchAdapter;
+import shop.gaship.gashipfront.elastic.dto.response.SearchResponseDto;
 import shop.gaship.gashipfront.elastic.service.SearchService;
 
 /**
@@ -12,5 +16,12 @@ import shop.gaship.gashipfront.elastic.service.SearchService;
  */
 
 @Service
+@RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
+    private final SearchAdapter searchAdapter;
+
+    @Override
+    public List<SearchResponseDto> searchProductKeyword(String productKeyword) {
+        return searchAdapter.searchName(productKeyword);
+    }
 }
