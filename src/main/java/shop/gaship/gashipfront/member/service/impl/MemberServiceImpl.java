@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.member.adapter.MemberAdapter;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
-import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
+import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
@@ -45,10 +45,10 @@ public class MemberServiceImpl implements MemberService {
         return memberAdapter.requestLastMemberNo();
     }
 
+    @Override
     public boolean executeSignUp(MemberCreationRequest memberCreationRequest) {
         String hashedPassword = passwordEncoder.encode(memberCreationRequest.getPassword());
         memberCreationRequest.changeHashedPassword(hashedPassword);
-
 
         return memberAdapter.signUpRequest(memberCreationRequest);
     }

@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.member.adapter.Impl;
+package shop.gaship.gashipfront.member.adapter.impl;
 
 import java.util.Map;
 import java.util.Objects;
@@ -15,7 +15,11 @@ import shop.gaship.gashipfront.member.adapter.MemberAdapter;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
-import shop.gaship.gashipfront.member.dto.request.*;
+import shop.gaship.gashipfront.member.dto.request.FindMemberEmailRequest;
+import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
+import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
+import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
 import shop.gaship.gashipfront.member.dto.response.FindMemberEmailResponse;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
@@ -121,7 +125,10 @@ public class MemberAdapterImpl implements MemberAdapter {
             .uri("/api/members/sign-up")
             .bodyValue(memberCreationRequest)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .toEntity(Void.class)
+            .block();
+
         return true;
     }
 
@@ -287,7 +294,8 @@ public class MemberAdapterImpl implements MemberAdapter {
                         .build())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .bodyToMono(new ParameterizedTypeReference<PageResponse<MemberResponseByAdminDto>>() {
-                }).blockOptional().orElseThrow(NullResponseBodyException::new);
+                .bodyToMono(
+                    new ParameterizedTypeReference<PageResponse<MemberResponseByAdminDto>>() {})
+            .blockOptional().orElseThrow(NullResponseBodyException::new);
     }
 }

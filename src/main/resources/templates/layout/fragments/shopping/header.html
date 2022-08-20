@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment="header-fragment">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<sec:th:block th:fragment="header-fragment">
     <div id="preloder" style="display: none;">
         <div class="loader" style="display: none;"></div>
     </div>
@@ -35,8 +35,8 @@
                 <div class="col-lg-5">
                     <nav class="header__menu">
                         <ul>
-                            <li><a href="/">쇼핑몰 홈</a></li>
-                            <li class="active"><a href="">상품전체</a></li>
+                            <li><a href="/" class="active">쇼핑몰 홈</a></li>
+                            <li><a href="">상품전체</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -53,8 +53,16 @@
                                 <li><a href="#">English</a></li>
                             </ul>
                         </div>
-                        <div class="header__top__right__auth">
-                            <a href="/login"><i class="fa fa-user"></i> 로그인</a>
+                        <div class="header__top__right__auth w-50">
+                            <th:block sec:authorize="hasRole('ROLE_ANONYMOUS')"><a href="/login"><i class="fa fa-user"></i> 로그인</a></th:block>
+                            <div class="row justify-content-around">
+                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER')">
+                                <a th:href="@{'/members/' + ${#authentication.getPrincipal().getMemberNo()}}"><i class="fa fa-user"></i>마이페이지</a>
+                            </th:block>
+                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER')">
+                                <a th:href="@{/logout}">로그아웃</a>
+                            </th:block>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -64,5 +72,5 @@
             </div>
         </div>
     </header>
-</th:block>
+</sec:th:block>
 </html>

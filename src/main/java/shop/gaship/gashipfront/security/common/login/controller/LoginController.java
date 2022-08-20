@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -39,14 +40,23 @@ public class LoginController {
      * 로그아웃 요청을 담당하는 기능입니다.
      *
      * @param session redis에 저장된 jwt를 불러오기위해 사용합니다.
+     * @return 홈페이지 뷰입니다.
      */
     @GetMapping("/logout")
-    public void logoutProcessing(HttpSession session, HttpServletResponse response) {
+    public String logoutProcessing(HttpSession session, HttpServletResponse response) {
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
         SecurityContext context = SecurityContextHolder.getContext();
-        UserDetailsDto user = (UserDetailsDto) context.getAuthentication().getPrincipal();
-        Integer memberNo = user.getMember().getMemberNo();
+        Integer memberNo = null;
+        if (context.getAuthentication().getPrincipal() instanceof SignInSuccessUserDetailsDto) {
+            memberNo = ((SignInSuccessUserDetailsDto) context.getAuthentication().getPrincipal())
+                .getMemberNo().intValue();
+        }
+
+        if (context.getAuthentication().getPrincipal() instanceof UserDetailsDto) {
+            memberNo = ((UserDetailsDto) context.getAuthentication().getPrincipal())
+                .getMember().getMemberNo();
+        }
         authApiService.logout(memberNo, jwt);
 
         session.invalidate();
@@ -54,5 +64,7 @@ public class LoginController {
         Cookie killCookie = new Cookie(CART_ID, null);
         killCookie.setMaxAge(0);
         response.addCookie(killCookie);
+
+        return "redirect:/";
     }
 }
