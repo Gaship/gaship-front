@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * 상품평 조회 응답 dto입니다.
@@ -23,4 +24,7 @@ public class ProductReviewResponseDto {
     private LocalDateTime registerDateTime;
     private LocalDateTime modifyDateTime;
     private List<Integer> fileNos;
+
+    @Setter
+    private List<String> filePaths;
 }
