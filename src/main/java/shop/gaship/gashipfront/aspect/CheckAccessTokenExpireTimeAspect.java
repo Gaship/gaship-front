@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.aspect;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -13,8 +14,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipfront.aspect.dto.ReissueJwtRequestDto;
+import shop.gaship.gashipfront.aspect.exception.RefreshTokenExpiredException;
 import shop.gaship.gashipfront.aspect.exception.TokenResponseException;
 import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
@@ -37,15 +41,26 @@ public class CheckAccessTokenExpireTimeAspect {
         HttpSession session = req.getSession(true);
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
+        if (!jwt.getRefreshTokenExpireDateTime().isBefore(LocalDateTime.now())) {
+            throw new RefreshTokenExpiredException();
+        }
+
         if (!jwt.getAccessTokenExpireDateTime().isBefore(LocalDateTime.now())) {
+            TokenRequestDto tokenRequestDto = (TokenRequestDto) session.getAttribute("memberInfo");
+
+            ReissueJwtRequestDto reissueJwtRequestDto = new ReissueJwtRequestDto();
+            reissueJwtRequestDto.setRefreshToken(jwt.getRefreshToken());
+            reissueJwtRequestDto.setMemberNo(tokenRequestDto.getMemberNo());
+            reissueJwtRequestDto.setAuthorities((List<String>) tokenRequestDto.getAuthorities());
+
             WebClient webClient = WebClient.builder()
                 .baseUrl(serverConfig.getGatewayUrl())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
             JwtDto newToken = webClient.post()
-                .uri(uriBuilder -> uriBuilder.path("/securities/issue-jwt").build())
-                .bodyValue(jwt)
+                .uri(uriBuilder -> uriBuilder.path("/securities/reissue-jwt").build())
+                .bodyValue(reissueJwtRequestDto)
                 .retrieve()
                 .toEntity(JwtDto.class)
                 .blockOptional()
