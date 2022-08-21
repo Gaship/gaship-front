@@ -70,6 +70,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         nonMemberCookie.ifPresent(cookie -> cartService.mergeCart(cookie.getValue(), memberNo));
         Cookie cookie = new Cookie(CART_ID, memberNo.toString());
         cookie.setMaxAge(60 * 60 * 24 * 100);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
         response.addCookie(cookie);
     }
 }

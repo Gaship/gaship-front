@@ -63,8 +63,7 @@ public class LoginController {
      * @return 로그인 폼 화면으로 이동할수 있도록 showLoginForm을 반환합니다.
      */
     @GetMapping("/manager/login")
-    public String managerLogin(HttpSession session,
-                               Model model) {
+    public String managerLogin() {
         return "layout/admin/login";
     }
 

@@ -145,6 +145,6 @@ public class MemberController {
         PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(pageable);
         model.addAttribute(RESPONSE, dto);
 
-        return "layout/admin/memberList";
+        return "layout/admin/member/memberList";
     }
 }
