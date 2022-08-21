@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
+import shop.gaship.gashipfront.cart.exception.CartMaxLimitException;
+import shop.gaship.gashipfront.cart.exception.CartMergeException;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.cart.util.CartUtil;
@@ -21,7 +23,6 @@ import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 
 
 /**
- * {@inheritDoc}
  * CartService 의 구현체입니다.
  */
 @Service
@@ -55,7 +56,7 @@ public class CartServiceImpl implements CartService {
             throw new CartProductAmountException();
         }
         if (hashOperations.size(cartNo) > (10L)) {
-            return 0;
+            throw new CartMaxLimitException();
         }
         hashOperations.put(cartNo, request.getProductId().toString(), request.getQuantity());
         return request.getQuantity();
@@ -76,6 +77,10 @@ public class CartServiceImpl implements CartService {
     public void mergeCart(String cartId, Integer memberId) {
         Map<Object, Object> map = hashOperations.entries(cartId);
         String key = String.valueOf(memberId);
+
+        if (hashOperations.size(key) + hashOperations.size(cartId) > (10L)) {
+            throw new CartMergeException();
+        }
         mergeHashMap(key, map);
         hashOperations.delete(cartId);
     }

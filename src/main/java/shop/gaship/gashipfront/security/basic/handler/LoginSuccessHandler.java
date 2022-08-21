@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.security.basic.handler;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import shop.gaship.gashipfront.exceptions.NoResponseDataException;
 import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
+import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
@@ -35,7 +37,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
+                                        Authentication authentication) throws IOException {
         SignInSuccessUserDetailsDto details =
             (SignInSuccessUserDetailsDto) authentication.getPrincipal();
 
@@ -59,9 +61,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             .getBody();
 
         HttpSession session = request.getSession();
+        session.setAttribute("memberInfo", tokenRequestDto);
         session.setAttribute("jwt", tokensResponse);
 
-        Integer memberNo = ((SignInSuccessUserDetailsDto) authentication.getPrincipal()).getMemberNo().intValue();
+        Integer memberNo = ((SignInSuccessUserDetailsDto) authentication.getPrincipal())
+            .getMemberNo().intValue();
         // 비회원일 때 쓰던 장바구니 쿠키 값을 찾아서
         Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(CART_ID))
@@ -73,5 +77,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         response.addCookie(cookie);
+
+        response.sendRedirect("/");
     }
 }

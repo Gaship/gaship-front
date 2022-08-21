@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -24,7 +25,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService
 @RequiredArgsConstructor
 public class LoginController {
     private static final String CART_ID = "CID";
-    private final AuthApiService authAPIService;
+    private final AuthApiService authApiService;
 
     /**
      * 로그인 요청을 담당하는 기능입니다.
@@ -33,28 +34,39 @@ public class LoginController {
      */
     @GetMapping("/login")
     public String login() {
-        return "showLoginForm";
+        return "login/loginForm";
     }
 
     /**
      * 로그아웃 요청을 담당하는 기능입니다.
      *
      * @param session redis에 저장된 jwt를 불러오기위해 사용합니다.
+     * @return 홈페이지 뷰입니다.
      */
-    @GetMapping(value ="/logout")
-    public void logoutProcessing(HttpSession session, HttpServletResponse response) {
+    @GetMapping("/logout")
+    public String logoutProcessing(HttpSession session, HttpServletResponse response) {
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
         SecurityContext context = SecurityContextHolder.getContext();
-        UserDetailsDto user = (UserDetailsDto) context.getAuthentication().getPrincipal();
-        Integer memberNo = user.getMember().getMemberNo();
-        authAPIService.logout(memberNo, jwt);
+        Integer memberNo = null;
+        if (context.getAuthentication().getPrincipal() instanceof SignInSuccessUserDetailsDto) {
+            memberNo = ((SignInSuccessUserDetailsDto) context.getAuthentication().getPrincipal())
+                .getMemberNo().intValue();
+        }
+
+        if (context.getAuthentication().getPrincipal() instanceof UserDetailsDto) {
+            memberNo = ((UserDetailsDto) context.getAuthentication().getPrincipal())
+                .getMember().getMemberNo();
+        }
+        authApiService.logout(memberNo, jwt);
 
         session.invalidate();
 
         Cookie killCookie = new Cookie(CART_ID, null);
         killCookie.setMaxAge(0);
         response.addCookie(killCookie);
+
+        return "redirect:/";
     }
 
     /**

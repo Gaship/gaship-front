@@ -10894,77 +10894,77 @@ form.user .btn-user {
   padding: 0.75rem 1rem;
 }
 
-.btn-google {
+.btn-kakao {
   color: #fff;
-  background-color: #ea4335;
+  background-color: #f9e000;
   border-color: #fff;
 }
 
-.btn-google:hover {
+.btn-kakao:hover {
   color: #fff;
-  background-color: #e12717;
+  background-color: #ffd400;
   border-color: #e6e6e6;
 }
 
-.btn-google:focus, .btn-google.focus {
+.btn-kakao:focus, .btn-kakao.focus {
   color: #fff;
-  background-color: #e12717;
+  background-color: #ffc900;
   border-color: #e6e6e6;
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 }
 
-.btn-google.disabled, .btn-google:disabled {
+.btn-kakao.disabled, .btn-kakao:disabled {
   color: #fff;
-  background-color: #ea4335;
+  background-color: #95999c;
   border-color: #fff;
 }
 
-.btn-google:not(:disabled):not(.disabled):active, .btn-google:not(:disabled):not(.disabled).active,
-.show > .btn-google.dropdown-toggle {
+.btn-kakao:not(:disabled):not(.disabled):active, .btn-kakao:not(:disabled):not(.disabled).active,
+.show > .btn-kakao.dropdown-toggle {
   color: #fff;
-  background-color: #d62516;
+  background-color: #f9e000;
   border-color: #dfdfdf;
 }
 
-.btn-google:not(:disabled):not(.disabled):active:focus, .btn-google:not(:disabled):not(.disabled).active:focus,
-.show > .btn-google.dropdown-toggle:focus {
+.btn-kakao:not(:disabled):not(.disabled):active:focus, .btn-kakao:not(:disabled):not(.disabled).active:focus,
+.show > .btn-kakao.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 }
 
-.btn-facebook {
+.btn-naver {
   color: #fff;
-  background-color: #3b5998;
+  background-color: #3CC032;
   border-color: #fff;
 }
 
-.btn-facebook:hover {
+.btn-naver:hover {
   color: #fff;
-  background-color: #30497c;
+  background-color: #1e7e34;
   border-color: #e6e6e6;
 }
 
-.btn-facebook:focus, .btn-facebook.focus {
+.btn-naver:focus, .btn-naver.focus {
   color: #fff;
-  background-color: #30497c;
+  background-color: #0b2e13;
   border-color: #e6e6e6;
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 }
 
-.btn-facebook.disabled, .btn-facebook:disabled {
+.btn-naver.disabled, .btn-naver:disabled {
   color: #fff;
-  background-color: #3b5998;
+  background-color: #95999c;
   border-color: #fff;
 }
 
-.btn-facebook:not(:disabled):not(.disabled):active, .btn-facebook:not(:disabled):not(.disabled).active,
-.show > .btn-facebook.dropdown-toggle {
+.btn-naver:not(:disabled):not(.disabled):active, .btn-naver:not(:disabled):not(.disabled).active,
+.show > .btn-naver.dropdown-toggle {
   color: #fff;
-  background-color: #2d4373;
+  background-color: #3CC032;
   border-color: #dfdfdf;
 }
 
-.btn-facebook:not(:disabled):not(.disabled):active:focus, .btn-facebook:not(:disabled):not(.disabled).active:focus,
-.show > .btn-facebook.dropdown-toggle:focus {
+.btn-naver:not(:disabled):not(.disabled):active:focus, .btn-naver:not(:disabled):not(.disabled).active:focus,
+.show > .btn-naver.dropdown-toggle:focus {
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 }
 

@@ -7,7 +7,7 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
-import shop.gaship.gashipfront.response.PageResponse;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * 상품 어댑터 인터페이스입니다.

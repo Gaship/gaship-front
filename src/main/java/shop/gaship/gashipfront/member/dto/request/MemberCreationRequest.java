@@ -1,6 +1,5 @@
 package shop.gaship.gashipfront.member.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 회원가입을 하기위한 가입 정보 dto입니다.
@@ -47,7 +47,7 @@ public class MemberCreationRequest {
     )
     private String name;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @NotBlank
