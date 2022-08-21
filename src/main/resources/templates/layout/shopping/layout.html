@@ -6,17 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="/fragments/js/shopping/menu.js"></script>
     <script src="/fragments/js/shopping/search.js"></script>
-    <th:block th:replace="/layout/fragments/shopping/bootstrap :: bootstrap-fragment"></th:block>
+    <th:block th:replace="layout/fragments/shopping/bootstrap :: bootstrap-fragment"></th:block>
 </head>
 <body>
 <div class="overflow-hidden">
-    <th:block th:replace="/layout/fragments/shopping/header :: header-fragment"></th:block>
-    <th:block th:replace="/layout/fragments/shopping/navigation :: nav-fragment"></th:block>
+    <th:block th:replace="layout/fragments/shopping/header :: header-fragment"></th:block>
+    <th:block th:replace="layout/fragments/shopping/navigation :: nav-fragment"></th:block>
     <th:block layout:fragment="content"></th:block>
-    <th:block th:replace="/layout/fragments/shopping/footer :: footer-fragment"></th:block>
+    <th:block th:replace="layout/fragments/shopping/footer :: footer-fragment"></th:block>
 </div>
 <!--<th:block th:replace="/layout/fragments/shopping/footer :: footer-fragment"></th:block>-->
-<th:block th:replace="/layout/fragments/shopping/script :: script-fragment"></th:block>
+<th:block th:replace="layout/fragments/shopping/script :: script-fragment"></th:block>
 <th:block layout:fragment="content-js"></th:block>
 </body>
 </html>
