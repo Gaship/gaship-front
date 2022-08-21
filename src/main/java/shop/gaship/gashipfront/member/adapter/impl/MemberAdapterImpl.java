@@ -52,7 +52,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public MemberAllFieldDto requestMemberByEmail(String email) {
         return webClient.get()
-            .uri("/members/email/{email}", email)
+            .uri("/api/members/email/{email}", email)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(MemberAllFieldDto.class)
@@ -70,7 +70,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public void requestCreateMember(MemberAllFieldDto member) {
         webClient.post()
-            .uri("/members?isOauth=true")
+            .uri("/api/members?isOauth=true")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(member)
             .retrieve()
@@ -88,7 +88,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public Integer requestLastMemberNo() {
         return webClient.get()
-            .uri("/members/lastNo")
+            .uri("/api/members/lastNo")
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(Integer.class)
