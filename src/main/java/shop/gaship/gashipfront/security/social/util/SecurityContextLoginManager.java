@@ -13,7 +13,7 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 /**
  * spring security의 로직이 아닌 수동적인 회원가입이 필요할시를 대비하여 만들어둔 유틸클래스입니다.
  *
- * @author : 최겸준
+ * @author 최겸준
  * @since 1.0
  */
 public class SecurityContextLoginManager {

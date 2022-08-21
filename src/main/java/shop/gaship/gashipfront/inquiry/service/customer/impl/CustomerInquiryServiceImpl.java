@@ -12,7 +12,7 @@ import shop.gaship.gashipfront.inquiry.service.customer.CustomerInquiryService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
- * CustomerInquiryService를 구현한 클래스입니다.
+ * CustomerInquiryService 를 구현한 클래스입니다.
  *
  * @author 최겸준
  * @see shop.gaship.gashipfront.inquiry.service.customer.CustomerInquiryService
@@ -55,8 +55,8 @@ public class CustomerInquiryServiceImpl implements CustomerInquiryService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<InquiryListResponseDto> findInquiriesByMemberNo(Pageable pageable,
-                                                                        Integer memberNo) {
+    public PageResponse<InquiryListResponseDto> findCustomerInquiriesByMemberNo(Pageable pageable,
+                                                                                Integer memberNo) {
         return inquiryAdapter.customerInquiryMemberList(pageable, memberNo);
     }
 }

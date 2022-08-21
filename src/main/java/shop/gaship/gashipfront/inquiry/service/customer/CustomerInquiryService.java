@@ -13,7 +13,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public interface CustomerInquiryService {
 
     /**
-     * 아무 조건없이 모든 고객문의를(목록) 조회하기 위한 기능입니다.
+     * 아무 조건없이 모든 고객문의 목록을 조회하기 위한 기능입니다.
      *
      * @param pageable 페이징 처리를 위한 파라미터입니다.
      * @return PageResponse 객체를 반환합니다.
@@ -22,7 +22,7 @@ public interface CustomerInquiryService {
     PageResponse<InquiryListResponseDto> findCustomerInquiries(Pageable pageable);
 
     /**
-     * 답변대기상태인 고객문의를 찾는 기능입니다.
+     * 답변대기상태인 고객문의 목록을 찾는 기능입니다.
      *
      * @param pageable       페이징 처리를 위해 사용합니다.
      * @return PageResponse 객체를 반환합니다.
@@ -31,7 +31,7 @@ public interface CustomerInquiryService {
     PageResponse<InquiryListResponseDto> findCustomerInquiriesStatusHold(Pageable pageable);
 
     /**
-     * 답변완료상태인 고객문의를 찾는 기능입니다.
+     * 답변완료상태인 고객문의 목록을 찾는 기능입니다.
      *
      * @param pageable       페이징 처리를 위해 사용합니다.
      * @return PageResponse 객체를 반환합니다.
@@ -40,12 +40,12 @@ public interface CustomerInquiryService {
     PageResponse<InquiryListResponseDto> findCustomerInquiriesStatusComplete(Pageable pageable);
 
     /**
-     * 특정회원번호를 기준으로 고객문의를 찾는 기능입니다.
+     * 특정회원번호를 기준으로 고객문의 목록을 찾는 기능입니다.
      *
      * @param pageable  페이징 처리를 위해 사용합니다.
      * @param memberNo  기준이 될 회원의 번호입니다.
      * @return PageResponse 객체를 반환합니다.
      * @author 최겸준
      */
-    PageResponse<InquiryListResponseDto> findInquiriesByMemberNo(Pageable pageable, Integer memberNo);
+    PageResponse<InquiryListResponseDto> findCustomerInquiriesByMemberNo(Pageable pageable, Integer memberNo);
 }

@@ -17,7 +17,7 @@ import shop.gaship.gashipfront.security.common.util.SignupManager;
 /**
  * Oauth2를 이용한 로그인시에 사용되어질 class입니다.
  *
- * @author : 최겸준
+ * @author 최겸준
  * @see org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
  * @since 1.0
  */

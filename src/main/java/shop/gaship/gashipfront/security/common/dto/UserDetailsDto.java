@@ -21,6 +21,7 @@ import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 public class UserDetailsDto extends User implements OAuth2User {
     private static final long serialVersionUID = 1905122041950251207L;
     private final MemberAllFieldDto member;
+    private final Integer memberNo;
     private final String email;
     private Map<String, Object> attr;
 
@@ -57,6 +58,7 @@ public class UserDetailsDto extends User implements OAuth2User {
         super(username, password, authorities);
         this.email = username;
         this.member = member;
+        this.memberNo = member.getMemberNo();
     }
 
 

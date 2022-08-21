@@ -15,7 +15,7 @@ import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUser
 /**
  * 회원가입이 필요한지 필요하지 않은지를 비교해서 회원가입되었다면 가입된 member를 반환하며 가입되지 않았다면 자동가입시키는 역할을 가지는 클래스입니다.
  *
- * @author : 최겸준
+ * @author 최겸준
  * @since 1.0
  */
 @Component
