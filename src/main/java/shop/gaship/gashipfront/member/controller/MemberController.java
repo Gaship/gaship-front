@@ -5,8 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
@@ -27,6 +33,31 @@ public class MemberController {
     private static final String RESPONSE = "response";
     private static final String MEM_NO = "response";
     private static final String STATUS = "response";
+
+    /**
+     * 회원가입 페이지를 보여주는 컨트롤러.
+     *
+     * @return 회원가입 페이지 뷰
+     * @author 김민수
+     */
+    @GetMapping("/members/create")
+    public String memberSignup() {
+        return "/member/signUpForm";
+    }
+
+    /**
+     * 회원가입을 실행 요청을 받는 메서드입니다.
+     *
+     * @param memberCreationRequest 회원가입 양식객체입니다.
+     * @return 홈으로 리다이렉션합니다.
+     */
+    @PostMapping("/members/create")
+    public String doSignUp(@Valid MemberCreationRequest memberCreationRequest) {
+        memberService.executeSignUp(memberCreationRequest);
+
+        return "redirect:/";
+    }
+
 
     /**
      * 멤버의 개인정보를 수정하는 컨트롤러.
@@ -85,7 +116,7 @@ public class MemberController {
         memberService.removeMember(memberNo);
         redirectAttributes.addAttribute(STATUS, true);
 
-        return "showHome";
+        return "redirect:/";
     }
 
     /**

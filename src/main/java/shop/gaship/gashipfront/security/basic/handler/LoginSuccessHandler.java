@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.security.basic.handler;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
+                                        Authentication authentication) throws IOException {
         SignInSuccessUserDetailsDto details =
             (SignInSuccessUserDetailsDto) authentication.getPrincipal();
 
@@ -61,7 +62,8 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         HttpSession session = request.getSession();
         session.setAttribute("jwt", tokensResponse);
 
-        Integer memberNo = ((SignInSuccessUserDetailsDto) authentication.getPrincipal()).getMemberNo().intValue();
+        Integer memberNo = ((SignInSuccessUserDetailsDto) authentication.getPrincipal())
+            .getMemberNo().intValue();
         // 비회원일 때 쓰던 장바구니 쿠키 값을 찾아서
         Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(CART_ID))
@@ -71,5 +73,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         Cookie cookie = new Cookie(CART_ID, memberNo.toString());
         cookie.setMaxAge(60 * 60 * 24 * 100);
         response.addCookie(cookie);
+
+        response.sendRedirect("/");
     }
 }
