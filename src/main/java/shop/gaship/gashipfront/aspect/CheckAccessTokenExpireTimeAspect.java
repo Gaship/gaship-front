@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -18,6 +19,7 @@ import shop.gaship.gashipfront.aspect.dto.ReissueJwtRequestDto;
 import shop.gaship.gashipfront.aspect.exception.RefreshTokenExpiredException;
 import shop.gaship.gashipfront.aspect.exception.TokenResponseException;
 import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
@@ -46,6 +48,10 @@ public class CheckAccessTokenExpireTimeAspect {
         }
 
         if (!jwt.getAccessTokenExpireDateTime().isBefore(LocalDateTime.now())) {
+
+            SignInSuccessUserDetailsDto signInSuccessUserDetailsDto =
+                (SignInSuccessUserDetailsDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
             TokenRequestDto tokenRequestDto = (TokenRequestDto) session.getAttribute("memberInfo");
 
             ReissueJwtRequestDto reissueJwtRequestDto = new ReissueJwtRequestDto();
