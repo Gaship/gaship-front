@@ -1,6 +1,9 @@
 package shop.gaship.gashipfront.security.basic.dto;
 
 import java.util.Collection;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,7 +14,13 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class TokenRequestDto {
+
+    @NotNull(message = "회원번호는 필수 입니다.")
     private final Integer memberNo;
+
+    @NotBlank(message = "이메일은 필수 정보 입니다.")
     private final String email;
+
+    @Size(min = 1, max = 1, message = "하나의 권한만 가져야 합니다.")
     private final Collection<String> authorities;
 }
