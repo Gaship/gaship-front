@@ -1,13 +1,17 @@
 package shop.gaship.gashipfront.aspect;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,6 +38,9 @@ import shop.gaship.gashipfront.security.common.dto.JwtDto;
 @RequiredArgsConstructor
 public class CheckAccessTokenExpireTimeAspect {
     private final ServerConfig serverConfig;
+    private final WebClient webClient;
+    private final RedisTemplate redisTemplate;
+    private final Integer EXPIRE_TIME_THIRTY_MINUTE = 30;
 
     @Before("@annotation(shop.gaship.gashipfront.aspect.annotation.JwtExpiredCheck)")
     public void checkExpireTime() {

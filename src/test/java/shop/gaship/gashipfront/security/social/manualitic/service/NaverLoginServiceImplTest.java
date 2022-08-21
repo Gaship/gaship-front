@@ -12,17 +12,22 @@ import java.net.URLEncoder;
 import javax.servlet.http.HttpSession;
 import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import shop.gaship.gashipfront.config.OauthConfig;
+import shop.gaship.gashipfront.config.RedisConfig;
+import shop.gaship.gashipfront.config.SecureManagerConfig;
 import shop.gaship.gashipfront.security.social.manualitic.adapter.NaverAdapter;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
@@ -44,11 +49,9 @@ import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
  */
 
 @ExtendWith(SpringExtension.class)
-@Import(NaverLoginServiceImpl.class)
+@Import({NaverLoginServiceImpl.class})
+@EnableConfigurationProperties(value = {OauthConfig.class, SecureManagerConfig.class})
 @TestPropertySource("classpath:application.properties")
-//@ActiveProfiles(
-//    value = {"dev"}
-//)
 class NaverLoginServiceImplTest {
     @Autowired
     private NaverLoginService naverLoginService;
@@ -68,14 +71,21 @@ class NaverLoginServiceImplTest {
         session.invalidate();
     }
 
-    @Value("${naver-client-id}")
+    @Autowired
+    private OauthConfig oauthConfig;
+
     private String clientId;
 
-    @Value("${naver-redirect-url}")
     private String redirectUrl;
 
-    @Value("${naver-api-url-login}")
     private String apiUrlForLogin;
+
+    @BeforeEach
+    void before() {
+        clientId = oauthConfig.getNaverClientId();
+        redirectUrl = oauthConfig.getNaverRedirectUrl();
+        apiUrlForLogin = oauthConfig.getNaverApiUrlLogin();
+    }
 
     @DisplayName("naver로 oauth 했을때 설정에서 불러온뒤 조합한 값들이 설정값과 같게 잘나온다.")
     @Test
