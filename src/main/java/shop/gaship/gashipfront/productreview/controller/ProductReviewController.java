@@ -36,6 +36,12 @@ public class ProductReviewController {
         return "review/reviewModifyForm";
     }
 
+    @GetMapping("/reviews/{orderProductNo}/remove")
+    public String getReviewRemove(@PathVariable Integer orderProductNo) {
+        productReviewService.removeReview(orderProductNo);
+        return "redirect:/";
+    }
+
     @PostMapping("/reviews/{orderProductNo}/add")
     public String addProductReview(@ModelAttribute ProductReviewRequestDto createRequest,
                                    MultipartFile multipartFile) {

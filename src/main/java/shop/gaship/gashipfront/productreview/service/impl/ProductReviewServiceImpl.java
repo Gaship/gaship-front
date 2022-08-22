@@ -35,6 +35,11 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     @Override
+    public void removeReview(Integer orderProductNo) {
+        productReviewAdapter.productReviewRemove(orderProductNo);
+    }
+
+    @Override
     public ProductReviewResponseDto findReview(Integer orderProductNo) {
         return productReviewAdapter.productReviewDetails(orderProductNo);
     }
