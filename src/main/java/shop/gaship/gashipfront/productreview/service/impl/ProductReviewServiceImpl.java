@@ -30,6 +30,16 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     @Override
+    public void modifyReview(MultipartFile multipartFile, ProductReviewRequestDto modifyRequest) {
+        productReviewAdapter.productReviewModify(multipartFile, modifyRequest);
+    }
+
+    @Override
+    public ProductReviewResponseDto findReview(Integer orderProductNo) {
+        return productReviewAdapter.productReviewDetails(orderProductNo);
+    }
+
+    @Override
     public PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo) {
         PageResponse<ProductReviewResponseDto> reviews =
                 productReviewAdapter.productReviewListByProduct(productNo);

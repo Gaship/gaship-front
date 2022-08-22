@@ -22,17 +22,31 @@ import shop.gaship.gashipfront.productreview.service.ProductReviewService;
 public class ProductReviewController {
     private final ProductReviewService productReviewService;
 
-    @GetMapping("/reviews/{orderProductNo}")
+    @GetMapping("/reviews/{orderProductNo}/add")
     public String getReviewAddForm(@PathVariable Integer orderProductNo,
                                    Model model) {
         model.addAttribute("orderProductNo", orderProductNo);
         return "review/reviewAddForm";
     }
 
-    @PostMapping("/reviews/{orderProductNo}")
+    @GetMapping("/reviews/{orderProductNo}/modify")
+    public String getReviewModifyForm(@PathVariable Integer orderProductNo,
+                                      Model model) {
+        model.addAttribute("review", productReviewService.findReview(orderProductNo));
+        return "review/reviewModifyForm";
+    }
+
+    @PostMapping("/reviews/{orderProductNo}/add")
     public String addProductReview(@ModelAttribute ProductReviewRequestDto createRequest,
                                    MultipartFile multipartFile) {
         productReviewService.addReview(multipartFile, createRequest);
+        return "redirect:/";
+    }
+
+    @PostMapping("/reviews/{orderProductNo}/modify")
+    public String modifyProductReview(@ModelAttribute ProductReviewRequestDto modifyRequest,
+                                      MultipartFile multipartFile) {
+        productReviewService.modifyReview(multipartFile, modifyRequest);
         return "redirect:/";
     }
 

@@ -49,6 +49,25 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     }
 
     @Override
+    public void productReviewModify(MultipartFile multipartFile,
+                                    ProductReviewRequestDto modifyRequest) {
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+
+        builder.part("image", multipartFile.getResource(),
+                parseMediaType(Objects.requireNonNull(multipartFile.getContentType())));
+        builder.part("modifyRequest", modifyRequest, MediaType.APPLICATION_JSON);
+
+        webClient.put()
+                .uri("/api/reviews/{orderProductNo}", modifyRequest.getOrderProductNo())
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(Void.class)
+                .block();
+    }
+
+    @Override
     public ProductReviewResponseDto productReviewDetails(Integer orderProductNo) {
         return webClient.get()
                 .uri("/api/reviews/{orderProductNo}", orderProductNo)
