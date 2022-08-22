@@ -65,8 +65,11 @@ public class MemberController {
             String errorMessage = "본인 확인 이메일 인증을 완료 후 회원가입을 진행해주십시오.";
             throw new SignUpDenyException(errorMessage);
         }
-        memberService.checkApprovedEmail(signUpVerifiedCookie.getValue());
 
+        String verifyCode = signUpVerifiedCookie.getValue();
+        memberService.checkApprovedEmail(verifyCode);
+
+        memberCreationRequest.setVerifyCode(verifyCode);
         memberService.executeSignUp(memberCreationRequest);
 
         return "redirect:/";

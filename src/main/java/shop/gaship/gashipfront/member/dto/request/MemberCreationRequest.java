@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -60,6 +61,9 @@ public class MemberCreationRequest {
     @NotBlank
     @Length(max = 1)
     private String gender;
+
+    @Setter
+    private String verifyCode;
 
     public void changeHashedPassword(String hashedPassword) {
         this.password = hashedPassword;
