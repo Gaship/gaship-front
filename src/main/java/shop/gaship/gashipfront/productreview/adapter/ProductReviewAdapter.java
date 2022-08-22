@@ -14,6 +14,8 @@ import shop.gaship.gashipfront.response.PageResponse;
 public interface ProductReviewAdapter {
     void productReviewAdd(MultipartFile multipartFile, ProductReviewRequestDto createRequest);
 
+    void productReviewModify(MultipartFile multipartFile, ProductReviewRequestDto modifyRequest);
+
     ProductReviewResponseDto productReviewDetails(Integer orderProductNo);
 
     PageResponse<ProductReviewResponseDto> productReviewList();

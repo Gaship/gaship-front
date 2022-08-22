@@ -13,6 +13,8 @@ import shop.gaship.gashipfront.response.PageResponse;
  */
 public interface ProductReviewService {
     void addReview(MultipartFile multipartFile, ProductReviewRequestDto createRequest);
+    void modifyReview(MultipartFile multipartFile, ProductReviewRequestDto modifyRequest);
+    ProductReviewResponseDto findReview(Integer orderProductNo);
     PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo);
     PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo);
 }
