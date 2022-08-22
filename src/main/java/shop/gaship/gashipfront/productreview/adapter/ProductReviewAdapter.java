@@ -16,6 +16,8 @@ public interface ProductReviewAdapter {
 
     void productReviewModify(MultipartFile multipartFile, ProductReviewRequestDto modifyRequest);
 
+    void productReviewRemove(Integer orderProductNo);
+
     ProductReviewResponseDto productReviewDetails(Integer orderProductNo);
 
     PageResponse<ProductReviewResponseDto> productReviewList();

@@ -68,6 +68,16 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     }
 
     @Override
+    public void productReviewRemove(Integer orderProductNo) {
+        webClient.delete()
+                .uri("/api/reviews/{orderProductNo}", orderProductNo)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(Void.class)
+                .block();
+    }
+
+    @Override
     public ProductReviewResponseDto productReviewDetails(Integer orderProductNo) {
         return webClient.get()
                 .uri("/api/reviews/{orderProductNo}", orderProductNo)
