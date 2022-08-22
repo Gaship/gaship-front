@@ -76,7 +76,7 @@ public class LoginController {
      */
     @GetMapping("/manager/login")
     public String managerLogin() {
-        return "layout/admin/login";
+        return "login/adminLogin";
     }
 
     /**

@@ -38,13 +38,13 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">관리자 로그인</h1>
                                 </div>
-                                <form class="user" action="/manager/login" method="post">
+                                <form class="user" th:action="@{/manager/login}" method="post">
                                     <input type="hidden" name="${ _csrf.parameterName }" value="a06cb28a-c929-49b7-b7af-376f8bf16034">
                                     <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" id="id" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                                        <input type="email" class="form-control form-control-user" name="id" id="id" aria-describedby="emailHelp" placeholder="Enter Email Address...">
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control form-control-user" id="pw" placeholder="Password">
+                                        <input type="password" class="form-control form-control-user" name="pw" id="pw" placeholder="Password">
                                     </div>
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox small">
@@ -55,7 +55,6 @@
                                         Login
                                     </button>
                                 </form>
-                                <hr>
                             </div>
                         </div>
                     </div>

@@ -53,7 +53,7 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
 
         http.logout()
                 .logoutUrl("/manager/logout")
-                .logoutSuccessUrl("/manager/login");
+                .logoutSuccessUrl("/");
 
         http.csrf();
     }
