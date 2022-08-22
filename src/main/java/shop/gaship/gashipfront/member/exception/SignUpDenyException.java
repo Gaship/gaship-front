@@ -1,7 +1,7 @@
 package shop.gaship.gashipfront.member.exception;
 
 /**
- * 설명작성란
+ * 회원가입 거부발생시 일어나는 예외입니다.
  *
  * @author 김민수
  * @since 1.0
