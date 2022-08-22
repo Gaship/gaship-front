@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.member.service.impl;
 
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +14,7 @@ import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
+import shop.gaship.gashipfront.member.exception.SignUpDenyException;
 import shop.gaship.gashipfront.member.service.MemberService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -36,6 +38,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void createMember(MemberAllFieldDto member) {
+
+
         member.setPassword(passwordEncoder.encode(member.getPassword()));
         memberAdapter.requestCreateMember(member);
     }
@@ -105,6 +109,31 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseByAdminDto findMemberByAdmin(Integer memberNo) {
         return memberAdapter.findMemberByAdmin(memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param verifyCode 인증코드입니다.
+     */
+    @Override
+    public void requestApproveEmailVerification(String verifyCode) {
+        String message = memberAdapter.approveVerifyCode(verifyCode).getRequestStatus();
+        if(Objects.equals(message, "success")) {
+            String errorMessage = "이메일 인증에 실패했습니다.";
+            throw new SignUpDenyException(errorMessage);
+        }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param verifyCode 인증코드입니다.
+     */
+    @Override
+    public void checkApprovedEmail(String verifyCode) {
+        memberAdapter.checkApprovedVerification(verifyCode);
     }
 
     /**

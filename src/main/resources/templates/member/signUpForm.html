@@ -2,6 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/fragments/css/sb-admin-2.css}">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/signUp/js/signUp.js}"></script>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -23,7 +25,7 @@
                         <form class="user" method="post" th:action="@{/members/create}">
                             <div class="form-group row justify-content-end">
                                 <input type="email" name="email" class="w-100 form-control form-control-user" placeholder="이메일">
-                                <input type="button" class="w-25 mt-2 btn btn-primary btn-user btn-block" value="이메일 인증">
+                                <input type="button" class="w-25 mt-2 btn btn-primary btn-user btn-block email-verify" value="이메일 인증">
                             </div>
                             <div class="form-group row justify-content-end">
                                 <input type="text" name="nickName" class="w-100 form-control form-control-user" placeholder="닉네임">
@@ -48,10 +50,7 @@
                             <div class="form-group row justify-content-end">
                                 <input type="text" name="gender" class="w-100 form-control form-control-user" placeholder="성별">
                             </div>
-                            <input type="hidden" name="isVerifiedEmail" class="btn btn-primary btn-user btn-block" value="true">
-                            <input type="hidden" name="isUniqueEmail" class="btn btn-primary btn-user btn-block" value="true">
                             <input type="submit" class="btn btn-primary btn-user btn-block" value="회원가입">
-
                             <hr>
                             <a href="index.html" class="btn btn-naver btn-user btn-block">
                                 네이버로 회원가입하기

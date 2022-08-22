@@ -3,7 +3,6 @@ package shop.gaship.gashipfront.member.dto.request;
 import java.time.LocalDate;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,12 +60,6 @@ public class MemberCreationRequest {
     @NotBlank
     @Length(max = 1)
     private String gender;
-
-    @NotNull
-    private Boolean isVerifiedEmail;
-
-    @NotNull
-    private Boolean isUniqueEmail;
 
     public void changeHashedPassword(String hashedPassword) {
         this.password = hashedPassword;
