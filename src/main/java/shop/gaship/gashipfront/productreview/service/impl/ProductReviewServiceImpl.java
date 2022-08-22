@@ -3,9 +3,11 @@ package shop.gaship.gashipfront.productreview.service.impl;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.productreview.adapter.ProductReviewAdapter;
+import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
 import shop.gaship.gashipfront.productreview.service.ProductReviewService;
 import shop.gaship.gashipfront.response.PageResponse;
@@ -21,6 +23,11 @@ import shop.gaship.gashipfront.response.PageResponse;
 public class ProductReviewServiceImpl implements ProductReviewService {
     private final ProductReviewAdapter productReviewAdapter;
     private final ServerConfig serverConfig;
+
+    @Override
+    public void addReview(MultipartFile multipartFile, ProductReviewRequestDto createRequest) {
+        productReviewAdapter.productReviewAdd(multipartFile, createRequest);
+    }
 
     @Override
     public PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo) {

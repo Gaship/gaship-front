@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
+import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.service.ProductReviewService;
 
 /**
@@ -17,6 +21,20 @@ import shop.gaship.gashipfront.productreview.service.ProductReviewService;
 @RequiredArgsConstructor
 public class ProductReviewController {
     private final ProductReviewService productReviewService;
+
+    @GetMapping("/reviews/{orderProductNo}")
+    public String getReviewAddForm(@PathVariable Integer orderProductNo,
+                                   Model model) {
+        model.addAttribute("orderProductNo", orderProductNo);
+        return "review/reviewAddForm";
+    }
+
+    @PostMapping("/reviews/{orderProductNo}")
+    public String addProductReview(@ModelAttribute ProductReviewRequestDto createRequest,
+                                   MultipartFile multipartFile) {
+        productReviewService.addReview(multipartFile, createRequest);
+        return "redirect:/";
+    }
 
     @GetMapping("/products/{productNo}/reviews")
     public String getProductReviews(@PathVariable Integer productNo,
