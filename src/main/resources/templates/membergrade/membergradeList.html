@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <title>회원 등급 관리</title>
     <script th:src="@{/membergrade/js/membergrade.js}"></script>
 </head>
@@ -27,21 +29,7 @@
             <th style="border: solid black">삭제</th>
         </tr>
         </thead>
-        <tbody>
-        <tr th:each="memberGrade:${memberGrades}">
-            <td id="nameTd" th:text="${memberGrade.name}" style="border: solid gray"></td>
-            <td id="accumulateAmountTd" th:text="${memberGrade.accumulateAmount}" style="border: solid gray"></td>
-            <td style="border: solid gray">
-    <!--            <a th:href="@{'/member-grades/modify/'+${memberGrade.no}}">수정</a>-->
-                <button id="modifyBtn">수정</button>
-            </td>
-            <td style="border: solid gray">
-                <form method="get" th:action="@{'/member-grades/'+${memberGrade.no}+'/delete'}">
-                    <input type="submit" value="삭제"/>
-                    <input type="hidden" name="_method" value="delete">
-                </form>
-            </td>
-        </tr>
+        <tbody id="memberGradeTBody">
         </tbody>
     </table>
 </body>

@@ -15,7 +15,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public interface MemberGradeAdapter {
     void addMemberGrade(MemberGradeAddRequestDto requestDto);
     void modifyMemberGrade(Integer memberGradeNo, MemberGradeModifyRequestDto requestDto);
-    void deleteAddressList(Integer memberGradeNo);
+    void deleteMemberGrade(Integer memberGradeNo);
     MemberGradeResponseDto findMemberGrade(Integer memberGradeNo);
     PageResponse<MemberGradeResponseDto> findMemberGradeList(Pageable pageable);
 }

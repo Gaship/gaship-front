@@ -50,7 +50,7 @@ public class MemberGradeAdapterImpl implements MemberGradeAdapter {
     }
 
     @Override
-    public void deleteAddressList(Integer memberGradeNo) {
+    public void deleteMemberGrade(Integer memberGradeNo) {
         webClient.delete()
                 .uri(MEMBER_GRADE_PATH + "/" + memberGradeNo)
                 .retrieve()

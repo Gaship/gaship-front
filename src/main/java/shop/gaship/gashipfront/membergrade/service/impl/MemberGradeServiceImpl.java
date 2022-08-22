@@ -38,6 +38,6 @@ public class MemberGradeServiceImpl implements MemberGradeService {
 
     @Override
     public void deleteMemberGrade(Integer memberGradeNo) {
-        memberGradeAdapter.deleteAddressList(memberGradeNo);
+        memberGradeAdapter.deleteMemberGrade(memberGradeNo);
     }
 }
