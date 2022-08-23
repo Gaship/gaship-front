@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.productreview.adapter;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
@@ -22,7 +23,9 @@ public interface ProductReviewAdapter {
 
     PageResponse<ProductReviewResponseDto> productReviewList();
 
-    PageResponse<ProductReviewResponseDto> productReviewListByProduct(Integer productNo);
+    PageResponse<ProductReviewResponseDto> productReviewListByProduct(Integer productNo,
+                                                                      Pageable pageable);
 
-    PageResponse<ProductReviewResponseDto> productReviewListByMember(Integer memberNo);
+    PageResponse<ProductReviewResponseDto> productReviewListByMember(Integer memberNo,
+                                                                     Pageable pageable);
 }

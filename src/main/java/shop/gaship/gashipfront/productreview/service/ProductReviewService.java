@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.productreview.service;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
@@ -16,6 +17,7 @@ public interface ProductReviewService {
     void modifyReview(MultipartFile multipartFile, ProductReviewRequestDto modifyRequest);
     void removeReview(Integer orderProductNo);
     ProductReviewResponseDto findReview(Integer orderProductNo);
-    PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo);
-    PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo);
+    PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo,
+                                                                Pageable pageable);
+    PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo, Pageable pageable);
 }
