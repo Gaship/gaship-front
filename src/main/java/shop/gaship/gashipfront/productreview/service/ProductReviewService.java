@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
-import shop.gaship.gashipfront.response.PageResponse;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * 상품평 서비스입니다.

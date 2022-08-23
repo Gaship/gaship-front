@@ -11,7 +11,7 @@ import shop.gaship.gashipfront.productreview.adapter.ProductReviewAdapter;
 import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
 import shop.gaship.gashipfront.productreview.service.ProductReviewService;
-import shop.gaship.gashipfront.response.PageResponse;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * 상품평 서비스 구현체 입니다.

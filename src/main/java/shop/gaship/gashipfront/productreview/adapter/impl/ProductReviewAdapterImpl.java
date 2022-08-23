@@ -16,8 +16,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.productreview.adapter.ProductReviewAdapter;
 import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
-import shop.gaship.gashipfront.response.PageResponse;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
  * 상품평 어댑터 구현체입니다.
