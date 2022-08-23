@@ -1,10 +1,7 @@
 package shop.gaship.gashipfront.cart.controller;
 
-import java.util.Objects;
-import java.util.UUID;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -21,6 +18,10 @@ import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.service.CartService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
+import java.util.UUID;
 
 
 /**
@@ -32,6 +33,7 @@ import shop.gaship.gashipfront.cart.service.CartService;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/carts")
+@Slf4j
 public class CartController {
     private static final String CART_ID = "CID";
     private final CartService cartService;
@@ -73,6 +75,7 @@ public class CartController {
             @RequestBody CartProductModifyRequestDto request,
             @CookieValue(value = CART_ID) String cartId)
             throws CartProductAmountException {
+        log.info("컨트롤러 호출 테스트");
         return cartService.modifyProductQuantityFromCart(cartId, request);
     }
 
@@ -103,6 +106,7 @@ public class CartController {
      * @author 최정우
      */
     @GetMapping
+    @ResponseBody
     public String getProductsFromCart(@CookieValue(value = CART_ID, required = false) String cartId,
                                       HttpServletResponse response,
                                       Model model) {
@@ -113,6 +117,6 @@ public class CartController {
         }
         model.addAttribute(cartService.getProductsFromCart(cartId));
 
-        return "carts";
+        return "/shopping/carts";
     }
 }
