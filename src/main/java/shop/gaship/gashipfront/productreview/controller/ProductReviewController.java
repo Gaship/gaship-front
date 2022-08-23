@@ -1,6 +1,9 @@
 package shop.gaship.gashipfront.productreview.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,52 +27,61 @@ public class ProductReviewController {
 
     @GetMapping("/reviews/{orderProductNo}/add")
     public String getReviewAddForm(@PathVariable Integer orderProductNo,
+                                   HttpServletRequest request,
                                    Model model) {
+        request.getSession().setAttribute("redirectUri", request.getHeader("Referer"));
         model.addAttribute("orderProductNo", orderProductNo);
         return "review/reviewAddForm";
     }
 
     @GetMapping("/reviews/{orderProductNo}/modify")
     public String getReviewModifyForm(@PathVariable Integer orderProductNo,
+                                      HttpServletRequest request,
                                       Model model) {
+        request.getSession().setAttribute("redirectUri", request.getHeader("Referer"));
         model.addAttribute("review", productReviewService.findReview(orderProductNo));
         return "review/reviewModifyForm";
     }
 
     @GetMapping("/reviews/{orderProductNo}/remove")
-    public String getReviewRemove(@PathVariable Integer orderProductNo) {
+    public String getReviewRemove(@PathVariable Integer orderProductNo,
+                                  HttpServletRequest request) {
         productReviewService.removeReview(orderProductNo);
-        return "redirect:/";
+        return "redirect:" + request.getHeader("Referer");
     }
 
     @PostMapping("/reviews/{orderProductNo}/add")
     public String addProductReview(@ModelAttribute ProductReviewRequestDto createRequest,
+                                   HttpSession session,
                                    MultipartFile multipartFile) {
         productReviewService.addReview(multipartFile, createRequest);
-        return "redirect:/";
+        return "redirect:" + session.getAttribute("redirectUri");
     }
 
     @PostMapping("/reviews/{orderProductNo}/modify")
     public String modifyProductReview(@ModelAttribute ProductReviewRequestDto modifyRequest,
+                                      HttpSession session,
                                       MultipartFile multipartFile) {
         productReviewService.modifyReview(multipartFile, modifyRequest);
-        return "redirect:/";
+        return "redirect:" + session.getAttribute("redirectUri");
     }
 
     @GetMapping("/products/{productNo}/reviews")
     public String getProductReviews(@PathVariable Integer productNo,
-                                   Model model) {
+                                    Pageable pageable,
+                                    Model model) {
         model.addAttribute("reviews",
-                productReviewService.findReviewsByProduct(productNo));
+                productReviewService.findReviewsByProduct(productNo, pageable));
 
         return "review/reviewList";
     }
 
     @GetMapping("/members/{memberNo}/reviews")
     public String getMemberReviews(@PathVariable Integer memberNo,
+                                   Pageable pageable,
                                    Model model) {
         model.addAttribute("reviews",
-                productReviewService.findReviewsByMember(memberNo));
+                productReviewService.findReviewsByMember(memberNo, pageable));
 
         return "review/reviewList";
     }

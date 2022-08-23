@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.parseMediaType;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
@@ -29,6 +30,7 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
 @RequiredArgsConstructor
 public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     private final WebClient webClient;
+    private static final String REVIEW_URI = "/api/reviews/{orderProductNo}";
 
     @Override
     public void productReviewAdd(MultipartFile multipartFile, ProductReviewRequestDto createRequest) {
@@ -58,7 +60,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
         builder.part("modifyRequest", modifyRequest, MediaType.APPLICATION_JSON);
 
         webClient.put()
-                .uri("/api/reviews/{orderProductNo}", modifyRequest.getOrderProductNo())
+                .uri(REVIEW_URI, modifyRequest.getOrderProductNo())
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
@@ -70,7 +72,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     @Override
     public void productReviewRemove(Integer orderProductNo) {
         webClient.delete()
-                .uri("/api/reviews/{orderProductNo}", orderProductNo)
+                .uri(REVIEW_URI, orderProductNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(Void.class)
@@ -80,7 +82,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     @Override
     public ProductReviewResponseDto productReviewDetails(Integer orderProductNo) {
         return webClient.get()
-                .uri("/api/reviews/{orderProductNo}", orderProductNo)
+                .uri(REVIEW_URI, orderProductNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(ProductReviewResponseDto.class)
@@ -99,9 +101,11 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     }
 
     @Override
-    public PageResponse<ProductReviewResponseDto> productReviewListByProduct(Integer productNo) {
+    public PageResponse<ProductReviewResponseDto> productReviewListByProduct(Integer productNo,
+                                                                             Pageable pageable) {
         return webClient.get()
-                .uri("/api/products/{productNo}/reviews", productNo)
+                .uri("/api/products/{productNo}/reviews?page={page}&size={size}",
+                        productNo, pageable.getPageNumber(), pageable.getPageSize())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(
@@ -110,9 +114,11 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     }
 
     @Override
-    public PageResponse<ProductReviewResponseDto> productReviewListByMember(Integer memberNo) {
+    public PageResponse<ProductReviewResponseDto> productReviewListByMember(Integer memberNo,
+                                                                            Pageable pageable) {
         return webClient.get()
-                .uri("/api/members/{memberNo}/reviews", memberNo)
+                .uri("/api/members/{memberNo}/reviews?page={page}&size={size}",
+                        memberNo, pageable.getPageNumber(), pageable.getPageSize())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(

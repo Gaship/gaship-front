@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.productreview.service.impl;
 
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -45,9 +46,10 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     @Override
-    public PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo) {
+    public PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo,
+                                                                       Pageable pageable) {
         PageResponse<ProductReviewResponseDto> reviews =
-                productReviewAdapter.productReviewListByProduct(productNo);
+                productReviewAdapter.productReviewListByProduct(productNo, pageable);
 
         reviews.getContent().forEach(review -> review.setFilePaths(review.getFileNos().stream()
                 .map(this::getFilePath)
@@ -57,9 +59,10 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     @Override
-    public PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo) {
+    public PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo,
+                                                                      Pageable pageable) {
         PageResponse<ProductReviewResponseDto> reviews =
-                productReviewAdapter.productReviewListByMember(memberNo);
+                productReviewAdapter.productReviewListByMember(memberNo, pageable);
 
         reviews.getContent().forEach(review -> review.setFilePaths(review.getFileNos().stream()
                 .map(this::getFilePath)
