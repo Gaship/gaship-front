@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.membergrade.service;
 
 import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.membergrade.dto.request.MemberGradeAddRequestDto;
+import shop.gaship.gashipfront.membergrade.dto.request.MemberGradeModifyRequestDto;
 import shop.gaship.gashipfront.membergrade.dto.response.MemberGradeResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -19,4 +20,6 @@ public interface MemberGradeService {
     PageResponse<MemberGradeResponseDto> findMemberGrades(Pageable pageable);
 
     void deleteMemberGrade(Integer memberGradeNo);
+
+    void updateMemberGrade(Integer memberGradeNo, MemberGradeModifyRequestDto requestDto);
 }

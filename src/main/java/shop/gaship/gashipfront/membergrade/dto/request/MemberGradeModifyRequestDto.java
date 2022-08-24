@@ -10,8 +10,6 @@ import lombok.Getter;
  */
 @Getter
 public class MemberGradeModifyRequestDto {
-    private Integer no;
     private String name;
     private Long accumulateAmount;
-    private Boolean isDefault;
 }

@@ -31,15 +31,7 @@ public class MemberGradeController {
     }
 
     @GetMapping
-    public String memberGradeList(Model model, Pageable pageable) {
-        PageResponse<MemberGradeResponseDto> memberGradeResponses
-                = memberGradeService.findMemberGrades(pageable);
-        model.addAttribute("memberGrades",
-                memberGradeResponses.getContent());
-        model.addAttribute("totalPages",
-                memberGradeResponses.getTotalPages());
-        model.addAttribute("page", pageable.getPageNumber());
-        model.addAttribute("size", pageable.getPageSize());
+    public String memberGradeList() {
 
         return "/membergrade/membergradeList";
     }

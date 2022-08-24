@@ -33,10 +33,14 @@ const pageHelper = {
 
 window.addEventListener("load", () => {
     init();
+    drawPage();
+})
+
+function drawPage() {
     getMemberGradeData(firstPage, pageSize)
         .then(getMemberGradeDataPage)
         .then(setEvent);
-})
+}
 
 function init() {
     memberGradeTableBody = document.getElementById("memberGradeTBody");
@@ -63,6 +67,7 @@ function getMemberGradeDataPage(memberGradeList) {
 }
 
 async function drawContent() {
+    clearMemberGradeTBody();
     pageHelper.pageItems.forEach(item => {
         const trTemplate =
             `
@@ -85,7 +90,7 @@ function setEvent() {
         console.log(deleteBtn.value);
         deleteBtn.addEventListener("click",e => {
                 deleteMemberGrade(deleteBtn.value)
-                    .then();
+                    .then(drawPage);
             }
         )
     })
@@ -95,19 +100,25 @@ function setEvent() {
         const memberGradeNo = updateBtn.value;
         const name = document.getElementById(memberGradeNo + "-name");
         const accumulateAmount = document.getElementById(memberGradeNo + "-accumulateAmount");
-        const nameInputTemplate = `
-        <input type="text" value="${name.innerText}"/>
+
+        const saveBtnTemplate = `
+        <button value="${memberGradeNo}" onclick="updateMember(this)">저장</button>
         `
+
         updateBtn.addEventListener("click", e => {
-            name.innerHTML=nameInputTemplate;
+            name.innerHTML = modifyInputTemplate(name.innerText, memberGradeNo, '-name');
+            accumulateAmount.innerHTML = modifyInputTemplate(accumulateAmount.innerText, memberGradeNo, '-accumulateAmount')
+            updateBtn.outerHTML = saveBtnTemplate;
         })
     })
 }
-const inputTemplate = (innerText) => {
+
+const modifyInputTemplate = (innerText, memberGradeNo, prefix) => {
     return `
-        <input type="text" value="${innerText}"/>
+        <input id="${memberGradeNo+prefix}Input" type="text" value="${innerText}"/>
         `
 }
+
 
 async function deleteMemberGrade(memberGradeNo) {
     const request = {
@@ -117,6 +128,36 @@ async function deleteMemberGrade(memberGradeNo) {
             "Content-Type": "application/json",
             tokenHeader:token
         },
+    };
+
+    await fetch("/front/member-grades/" + memberGradeNo, request);
+}
+
+function updateMember(eventTarget) {
+    const memberGradeNo = eventTarget.value;
+    const nameInputValue = document.getElementById(memberGradeNo + '-nameInput').value;
+    const accumulateAmountInputValue = document.getElementById(memberGradeNo + '-accumulateAmountInput').value;
+
+    updateMemberGrade(memberGradeNo, nameInputValue, accumulateAmountInputValue)
+        .then(drawPage);
+}
+
+function clearMemberGradeTBody() {
+    memberGradeTableBody.innerHTML = "";
+}
+
+async function updateMemberGrade(memberGradeNo, name, accumulateAmount) {
+    const request = {
+        credentials: "include",
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            tokenHeader:token
+        },
+        body: JSON.stringify({
+            "name":name,
+            "accumulateAmount":accumulateAmount
+        })
     };
 
     await fetch("/front/member-grades/" + memberGradeNo, request);

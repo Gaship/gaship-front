@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.membergrade.adapter.MemberGradeAdapter;
 import shop.gaship.gashipfront.membergrade.dto.request.MemberGradeAddRequestDto;
+import shop.gaship.gashipfront.membergrade.dto.request.MemberGradeModifyRequestDto;
 import shop.gaship.gashipfront.membergrade.dto.response.MemberGradeResponseDto;
 import shop.gaship.gashipfront.membergrade.service.MemberGradeService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -39,5 +40,11 @@ public class MemberGradeServiceImpl implements MemberGradeService {
     @Override
     public void deleteMemberGrade(Integer memberGradeNo) {
         memberGradeAdapter.deleteMemberGrade(memberGradeNo);
+    }
+
+    @Override
+    public void updateMemberGrade(Integer memberGradeNo,
+                                  MemberGradeModifyRequestDto requestDto) {
+        memberGradeAdapter.modifyMemberGrade(memberGradeNo, requestDto);
     }
 }
