@@ -103,4 +103,18 @@ public interface MemberService {
      * @author 최정우
      */
     MemberResponseByAdminDto findMemberByAdmin(Integer memberNo);
+
+    /**
+     * 이메일인증을 허가요청을 하는 메서드입니다.
+     *
+     * @param verifyCode 인증코드입니다.
+     */
+    void requestApproveEmailVerification(String verifyCode);
+
+    /**
+     * 이메일인증을 확인하는 메서드입니다.
+     *
+     * @param verifyCode 인증코드입니다.
+     */
+    void checkApprovedEmail(String verifyCode);
 }

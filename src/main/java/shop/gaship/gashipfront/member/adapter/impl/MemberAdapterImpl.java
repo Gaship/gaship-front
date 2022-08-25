@@ -20,6 +20,9 @@ import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
 import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
+import shop.gaship.gashipfront.member.dto.request.VerificationCodeDto;
+import shop.gaship.gashipfront.member.dto.request.VerificationSuccessDto;
+import shop.gaship.gashipfront.member.dto.request.VerifiedCheckDto;
 import shop.gaship.gashipfront.member.dto.response.FindMemberEmailResponse;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
@@ -41,7 +44,6 @@ public class MemberAdapterImpl implements MemberAdapter {
     private final ServerConfig serverConfig;
     private final WebClient webClient;
 
-    //TODO :URI 고쳐야해
     /**
      * gaship-shopping-mall api에 email을 통해서 member를 요청하는 기능입니다.
      *
@@ -52,7 +54,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public MemberAllFieldDto requestMemberByEmail(String email) {
         return webClient.get()
-            .uri("/members/email/{email}", email)
+            .uri("/api/members/email/{email}", email)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(MemberAllFieldDto.class)
@@ -60,7 +62,6 @@ public class MemberAdapterImpl implements MemberAdapter {
             .orElseThrow(NullResponseBodyException::new);
     }
 
-    //TODO :URI 고쳐야해
     /**
      * 멤버의 회원가입 요청을 담당하는 기능입니다.
      *
@@ -70,7 +71,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public void requestCreateMember(MemberAllFieldDto member) {
         webClient.post()
-            .uri("/members?isOauth=true")
+            .uri("/api/members/sign-up/oauth")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(member)
             .retrieve()
@@ -79,7 +80,6 @@ public class MemberAdapterImpl implements MemberAdapter {
             .block();
     }
 
-    //TODO :URI 고쳐야해
     /**
      * 멤버의 회원가입시 닉네임생성을 위해 최신 번호를 가져오는 기능입니다.
      *
@@ -88,7 +88,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public Integer requestLastMemberNo() {
         return webClient.get()
-            .uri("/members/lastNo")
+            .uri("/api/members/last-no")
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(Integer.class)
@@ -96,7 +96,6 @@ public class MemberAdapterImpl implements MemberAdapter {
             .orElseThrow(NullResponseBodyException::new);
     }
 
-    //TODO :URI 고쳐야해
     /**
      *
      *{@inheritDoc}
@@ -281,6 +280,36 @@ public class MemberAdapterImpl implements MemberAdapter {
                 .bodyToMono(MemberResponseByAdminDto.class)
                 .blockOptional()
                 .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public VerificationCodeDto verifySignUpIdentify(String email) {
+        return webClient.get().uri("/securities/verify/email?address={email}", email)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(VerificationCodeDto.class)
+            .blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public VerificationSuccessDto approveVerifyCode(String verifyCode) {
+        return webClient.put().uri("/securities/verify/email/{verifyCode}", verifyCode)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(VerificationSuccessDto.class)
+            .blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public VerifiedCheckDto checkApprovedVerification(String verifyCode) {
+        return webClient.get().uri("/securities/verify/email/{verifyCode}", verifyCode)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(VerifiedCheckDto.class)
+            .blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
     }
 
     /**

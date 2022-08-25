@@ -8,9 +8,14 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ReflectionUtils;
 
 /**
  *
@@ -20,22 +25,26 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConfigurationProperties(prefix = "oauth")
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class OauthConfig {
-
+    private final SecureManagerConfig secureManagerConfig;
     private String naverClientId;
     private String naverClientSecret;
     private String naverRedirectUrl;
     private String naverApiUrlLogin;
-    private String naverApiUrlAcesstoken;
+    private String naverApiUrlAccesstoken;
     private String naverApiUrlUserData;
 
-    public OauthConfig(SecureManagerConfig secureManagerConfig)
+    @Bean
+    public InitializingBean oauthConfigInitializer() {
+        return this::setSecret;
+    }
+
+    public void setSecret()
         throws UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException,
         KeyStoreException, IOException, KeyManagementException {
-
         this.naverClientId = secureManagerConfig.findSecretDataFromSecureKeyManager(this.naverClientId);
         this.naverClientSecret = secureManagerConfig.findSecretDataFromSecureKeyManager(this.naverClientSecret);
     }
