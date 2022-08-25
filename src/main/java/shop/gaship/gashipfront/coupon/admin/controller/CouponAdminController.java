@@ -60,11 +60,16 @@ public class CouponAdminController {
         return "redirect:/admin/coupons/coupon-type";
     }
 
+    @GetMapping("/coupon-type/recommend-member-coupon")
+    public String recommendCouponTypeModify() {
+        return "coupon/admin/modifyRecommendCouponType";
+    }
+
     @PutMapping("/coupon-type/recommend-member-coupon")
     public String recommendMemberCouponTypeModify(@Valid CouponTypeCreationDto couponTypeCreationDto) {
         couponAdminService.modifyRecommendMemberCoupon(couponTypeCreationDto);
 
-        return "coupon/admin/couponTypeList";
+        return "redirect:/admin/coupons/coupon-type";
     }
 
     @PatchMapping("/coupon-type/{couponTypeNo}/stop-generation-issue")
@@ -75,10 +80,8 @@ public class CouponAdminController {
     }
 
     @DeleteMapping("/coupon-type/{couponTypeNo}")
-    public String couponTypeDelete(@PathVariable(value = "couponTypeNo") Integer couponTypeNo) {
+    public void couponTypeDelete(@PathVariable(value = "couponTypeNo") Integer couponTypeNo) {
         couponAdminService.deleteCouponType(couponTypeNo);
-
-        return "coupon/admin/couponTypeList";
     }
 
     @GetMapping("/coupon-type")
@@ -86,7 +89,7 @@ public class CouponAdminController {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse = couponAdminService.findCouponTypeList(pageable);
 
         model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
-        log.error("couponTypeList Result : {}", couponTypeDtoPageResponse.getContent().get(0).getIsStopGenerationIssue());
+
         return "coupon/admin/couponTypeList";
     }
 
@@ -124,6 +127,16 @@ public class CouponAdminController {
     public String couponTypeFixedRateList(Pageable pageable, Model model) {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse =
             couponAdminService.findCouponTypeFixedRateList(pageable);
+
+        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+
+        return "coupon/admin/couponTypeList";
+    }
+
+    @GetMapping("/coupon-type/recommend")
+    public String couponTypeRecommendList(Pageable pageable, Model model) {
+        PageResponse<CouponTypeDto> couponTypeDtoPageResponse =
+            couponAdminService.findCouponTypeRecommend(pageable);
 
         model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
 

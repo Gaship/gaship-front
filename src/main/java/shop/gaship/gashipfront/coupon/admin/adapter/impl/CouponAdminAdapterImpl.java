@@ -49,7 +49,7 @@ public class CouponAdminAdapterImpl implements CouponAdminAdapter {
     @Override
     public void modifyRecommendMemberCoupon(CouponTypeCreationDto couponTypeConvertDto) {
         webClient.put()
-                 .uri(COUPON_TYPE_PREFIX_URL + "/recomment-member-coupon")
+                 .uri(COUPON_TYPE_PREFIX_URL + "/recommend-member-coupon")
                  .bodyValue(couponTypeConvertDto)
                  .retrieve()
                  .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -60,7 +60,7 @@ public class CouponAdminAdapterImpl implements CouponAdminAdapter {
     @Override
     public void modifyCouponTypeStopGenerationIssue(Integer couponTypeNo) {
         webClient.patch()
-                 .uri(COUPON_TYPE_PREFIX_URL + "/" + couponTypeNo + "/recomment-member-coupon")
+                 .uri(COUPON_TYPE_PREFIX_URL + "/" + couponTypeNo + "/recommend-member-coupon")
                  .retrieve()
                  .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                  .toEntity(Void.class)
@@ -130,6 +130,19 @@ public class CouponAdminAdapterImpl implements CouponAdminAdapter {
     public PageResponse<CouponTypeDto> findCouponTypeFixedRateList(Pageable pageable) {
         return webClient.get()
                         .uri(COUPON_TYPE_PREFIX_URL + "/fixed-rate?page=" + pageable.getPageNumber() + "&size="
+                            + pageable.getPageSize())
+                        .retrieve()
+                        .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                        .bodyToMono(new ParameterizedTypeReference<PageResponse<CouponTypeDto>>() {
+                        })
+                        .blockOptional().orElseThrow(NullResponseBodyException::new);
+
+    }
+
+    @Override
+    public PageResponse<CouponTypeDto> findCouponTypeRecommendList(Pageable pageable) {
+        return webClient.get()
+                        .uri(COUPON_TYPE_PREFIX_URL + "/recommend?page=" + pageable.getPageNumber() + "&size="
                             + pageable.getPageSize())
                         .retrieve()
                         .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)

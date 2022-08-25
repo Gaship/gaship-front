@@ -30,4 +30,6 @@ public interface CouponAdminAdapter {
     PageResponse<CouponTypeDto> findCouponTypeFixedAmountList(Pageable pageable);
 
     PageResponse<CouponTypeDto> findCouponTypeFixedRateList(Pageable pageable);
+
+    PageResponse<CouponTypeDto> findCouponTypeRecommendList(Pageable pageable);
 }

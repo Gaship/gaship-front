@@ -82,4 +82,12 @@ public class CouponAdminServiceImpl implements CouponAdminService {
 
         return couponTypeFixedRateList;
     }
+
+    @Override
+    public PageResponse<CouponTypeDto> findCouponTypeRecommend(Pageable pageable) {
+        PageResponse<CouponTypeDto> couponTypeRecommendList =
+            couponAdminAdapter.findCouponTypeRecommendList(pageable);
+
+        return couponTypeRecommendList;
+    }
 }
