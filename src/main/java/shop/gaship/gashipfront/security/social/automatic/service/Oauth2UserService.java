@@ -17,13 +17,14 @@ import shop.gaship.gashipfront.security.common.util.SignupManager;
 /**
  * Oauth2를 이용한 로그인시에 사용되어질 class입니다.
  *
- * @author : 최겸준
+ * @author 최겸준
  * @see org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
  * @since 1.0
  */
 @Service
 @RequiredArgsConstructor
 public class Oauth2UserService extends DefaultOAuth2UserService {
+    private static final String SOCIAL_PASSWORD = "비밀번호가 없는 소셜회원입니다.";
     private final MemberService memberService;
 
     @Override
@@ -35,7 +36,7 @@ public class Oauth2UserService extends DefaultOAuth2UserService {
         SignupManager signupManager = new SignupManager(memberService);
         MemberAllFieldDto member = signupManager.getMember(email);
 
-        return new UserDetailsDto(email, member.getPassword(), member.getAuthorities().stream()
+        return new UserDetailsDto(email, SOCIAL_PASSWORD, member.getAuthorities().stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList()), member, user.getAttributes());
     }
