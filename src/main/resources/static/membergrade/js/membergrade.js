@@ -52,8 +52,8 @@ function drawMemberGradeSection() {
 
 function init() {
     memberGradeTableBody = document.getElementById("memberGradeTBody");
-    token = document.querySelector('meta[name="_csrf"]').textContent;
-    tokenHeader = document.querySelector('meta[name="_csrf_header"]').textContent;
+    token = document.getElementById("_csrf").textContent;
+    tokenHeader = document.getElementById('_csrf_header').textContent;
 }
 
 async function getMemberGradeData(page, size) {
@@ -134,7 +134,6 @@ const modifyInputTemplate = (innerText, memberGradeNo, prefix) => {
 
 async function deleteMemberGrade(memberGradeNo) {
     const request = {
-        credentials: "include",
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -155,12 +154,12 @@ function updateMember(eventTarget) {
 }
 
 function clearMemberGradeTBody() {
+    memberGradeTableBody = document.getElementById("memberGradeTBody");
     memberGradeTableBody.innerHTML = "";
 }
 
 async function updateMemberGrade(memberGradeNo, name, accumulateAmount) {
     const request = {
-        credentials: "include",
         method: "PUT",
         headers: {
             "Content-Type": "application/json",

@@ -4,8 +4,8 @@
       layout:decorate="~{layout/admin/layout}">
 <head>
     <meta charset="UTF-8">
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <meta name="_csrf" id="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" id="_csrf_header" content="${_csrf.headerName}"/>
     <script th:src="@{/membergrade/js/membergrade.js}"></script>
     <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
 </head>
@@ -27,7 +27,7 @@
             <label>
                 <h5 style="font-weight: bolder">새로운 회원등급 등록</h5>
             </label>
-            <form style="display: flex" method="post" th:action="@{'/member-grades'}">
+            <form style="display: flex" th:method="post" th:action="@{/admin/member-grades}">
                 <div>
                     <div style="display: flex">
                         <input style="width: 280px" type="text" class="form-control" name="name" placeholder="회원등급명을 입력하세요.">

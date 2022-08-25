@@ -1,15 +1,15 @@
 package shop.gaship.gashipfront.membergrade.controller;
 
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import shop.gaship.gashipfront.membergrade.dto.request.MemberGradeAddRequestDto;
-import shop.gaship.gashipfront.membergrade.dto.response.MemberGradeResponseDto;
 import shop.gaship.gashipfront.membergrade.service.MemberGradeService;
-import shop.gaship.gashipfront.util.dto.PageResponse;
+import javax.validation.Valid;
+
 
 /**
  *
@@ -19,7 +19,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member-grades")
+@RequestMapping("/admin/member-grades")
 public class MemberGradeController {
     private final MemberGradeService memberGradeService;
 
@@ -33,7 +33,7 @@ public class MemberGradeController {
     @GetMapping
     public String memberGradeList() {
 
-        return "/membergrade/membergradeList";
+        return "membergrade/membergradeList";
     }
 
     @GetMapping("/{memberGradeNo}/delete")
