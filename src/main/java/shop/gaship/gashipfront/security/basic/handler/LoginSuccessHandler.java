@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.security.basic.handler;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
@@ -41,13 +42,14 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         SignInSuccessUserDetailsDto details =
             (SignInSuccessUserDetailsDto) authentication.getPrincipal();
 
+        List<String> userAuthorities = details.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
         TokenRequestDto tokenRequestDto =
             new TokenRequestDto(
                 details.getMemberNo().intValue(),
                 details.getUsername(),
-                details.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList())
+                userAuthorities
             );
 
         JwtDto tokensResponse = WebClient.create(serverConfig.getGatewayUrl()).post()
@@ -72,9 +74,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
                 .findFirst();
         // 찾은 쿠키값이 존재하면 비회원 때 담은 상품들을 회원의 장바구니에 넣는다.
         nonMemberCookie.ifPresent(cookie -> cartService.mergeCart(cookie.getValue(), memberNo));
-        Cookie cookie = new Cookie(CART_ID, memberNo.toString());
-        cookie.setMaxAge(60 * 60 * 24 * 100);
-        response.addCookie(cookie);
+
+        if (userAuthorities.contains("ROLE_ADMIN") || userAuthorities.contains("ROLE_MANAGER")) {
+            response.sendRedirect("/manager");
+            return;
+        }
 
         response.sendRedirect("/");
     }

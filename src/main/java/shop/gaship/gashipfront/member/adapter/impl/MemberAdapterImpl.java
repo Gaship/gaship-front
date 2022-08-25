@@ -20,6 +20,9 @@ import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
 import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
+import shop.gaship.gashipfront.member.dto.request.VerificationCodeDto;
+import shop.gaship.gashipfront.member.dto.request.VerificationSuccessDto;
+import shop.gaship.gashipfront.member.dto.request.VerifiedCheckDto;
 import shop.gaship.gashipfront.member.dto.response.FindMemberEmailResponse;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
@@ -281,6 +284,36 @@ public class MemberAdapterImpl implements MemberAdapter {
                 .bodyToMono(MemberResponseByAdminDto.class)
                 .blockOptional()
                 .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public VerificationCodeDto verifySignUpIdentify(String email) {
+        return webClient.get().uri("/securities/verify/email?address={email}", email)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(VerificationCodeDto.class)
+            .blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public VerificationSuccessDto approveVerifyCode(String verifyCode) {
+        return webClient.put().uri("/securities/verify/email/{verifyCode}", verifyCode)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(VerificationSuccessDto.class)
+            .blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public VerifiedCheckDto checkApprovedVerification(String verifyCode) {
+        return webClient.get().uri("/securities/verify/email/{verifyCode}", verifyCode)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(VerifiedCheckDto.class)
+            .blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
     }
 
     /**
