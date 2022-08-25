@@ -8,6 +8,9 @@ import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.request.VerificationCodeDto;
+import shop.gaship.gashipfront.member.dto.request.VerificationSuccessDto;
+import shop.gaship.gashipfront.member.dto.request.VerifiedCheckDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -124,4 +127,10 @@ public interface MemberAdapter {
 
     MemberResponseByAdminDto findMemberByAdmin(Integer memberNo);
 
+    VerificationCodeDto verifySignUpIdentify(String email);
+
+    VerificationSuccessDto approveVerifyCode(String verifyCode);
+
+    VerifiedCheckDto checkApprovedVerification(String verifyCode);
 }
+

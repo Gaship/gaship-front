@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="nav-fragment">
+    <section class="hero hero-normal">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="hero__categories">
+                        <div class="hero__categories__all font-weight-light">
+                            <i class="fa fa-bars"></i>
+                            <span>상품 카테고리</span>
+                        </div>
+                        <ul class="categories">
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="hero__search w-100 vh-100 position-absolute pr-4">
+                        <div class="hero__search__form position-relative w-100 search-wrapper">
+                            <form action="#" class="">
+                                <input class="search-box" type="text" placeholder="상품을 검색해보세요.">
+                                <button type="submit" class="site-btn">SEARCH</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</th:block>
+</html>

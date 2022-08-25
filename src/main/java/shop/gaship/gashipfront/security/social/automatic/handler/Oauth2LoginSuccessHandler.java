@@ -24,6 +24,7 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -76,7 +77,16 @@ public class Oauth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             .collect(Collectors.toList());
 
         JwtDto jwt = commonService.getJwt(memberDto.getMemberNo(), authorityList);
+        TokenRequestDto tokenRequestDto =
+            new TokenRequestDto(
+                member.getMemberNo(),
+                member.getName(),
+                member.getAuthorities()
+            );
+
+        JwtDto jwt = commonService.getJwt(member.getMemberNo(), member.getAuthorities());
         HttpSession session = request.getSession();
+        session.setAttribute("memberInfo", tokenRequestDto);
         session.setAttribute("jwt", jwt);
     }
 }

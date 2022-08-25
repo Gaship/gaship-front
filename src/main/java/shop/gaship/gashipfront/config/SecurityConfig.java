@@ -22,11 +22,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
-import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
@@ -43,7 +38,7 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
  * @since 1.0
  */
 @EnableWebSecurity
-@Order(1)
+@Order(2)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URI = "/login";
@@ -115,8 +110,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) {
-        return new Oauth2LoginSuccessHandler(commonService);
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService, CartService cartService) {
+        return new Oauth2LoginSuccessHandler(commonService, cartService);
     }
 }
 

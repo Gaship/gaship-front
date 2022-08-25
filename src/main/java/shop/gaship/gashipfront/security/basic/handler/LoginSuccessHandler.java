@@ -35,17 +35,18 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
+                                        Authentication authentication) throws IOException {
         SignInSuccessUserDetailsDto details =
             (SignInSuccessUserDetailsDto) authentication.getPrincipal();
 
+        List<String> userAuthorities = details.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .collect(Collectors.toList());
         TokenRequestDto tokenRequestDto =
             new TokenRequestDto(
                 details.getMemberNo().intValue(),
                 details.getUsername(),
-                details.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList())
+                userAuthorities
             );
 
         JwtDto tokensResponse = WebClient.create(serverConfig.getGatewayUrl()).post()
@@ -59,6 +60,23 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
             .getBody();
 
         HttpSession session = request.getSession();
+        session.setAttribute("memberInfo", tokenRequestDto);
         session.setAttribute("jwt", tokensResponse);
+
+        Integer memberNo = ((SignInSuccessUserDetailsDto) authentication.getPrincipal())
+            .getMemberNo().intValue();
+        // 비회원일 때 쓰던 장바구니 쿠키 값을 찾아서
+        Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(CART_ID))
+                .findFirst();
+        // 찾은 쿠키값이 존재하면 비회원 때 담은 상품들을 회원의 장바구니에 넣는다.
+        nonMemberCookie.ifPresent(cookie -> cartService.mergeCart(cookie.getValue(), memberNo));
+
+        if (userAuthorities.contains("ROLE_ADMIN") || userAuthorities.contains("ROLE_MANAGER")) {
+            response.sendRedirect("/manager");
+            return;
+        }
+
+        response.sendRedirect("/");
     }
 }

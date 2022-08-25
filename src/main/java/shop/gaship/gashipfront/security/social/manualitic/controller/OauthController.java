@@ -12,6 +12,7 @@ import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
@@ -108,6 +111,15 @@ public class OauthController {
         NaverUserData data =
             naverLoginService.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
         MemberAllFieldDto member = signupManager.getMember(data.getResponse());
+
+        TokenRequestDto tokenRequestDto =
+            new TokenRequestDto(
+                member.getMemberNo(),
+                member.getName(),
+                member.getAuthorities()
+            );
+
+        session.setAttribute("memberInfo", tokenRequestDto);
 
         SecurityContextLoginManager.setSecurityContext(member);
         JwtDto jwt = authApiService.getJwt(member.getMemberNo(), member.getAuthorities());

@@ -1,6 +1,5 @@
 package shop.gaship.gashipfront.security.common.login.controller;
 
-import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -61,20 +60,49 @@ public class LoginController {
      * 로그아웃 요청을 담당하는 기능입니다.
      *
      * @param session redis에 저장된 jwt를 불러오기위해 사용합니다.
+     * @return 홈페이지 뷰입니다.
      */
-    @GetMapping(value ="/logout")
-    public void logoutProcessing(HttpSession session, HttpServletResponse response) {
+    @GetMapping("/logout")
+    public String logoutProcessing(HttpSession session, HttpServletResponse response) {
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
         SecurityContext context = SecurityContextHolder.getContext();
-        UserDetailsDto user = (UserDetailsDto) context.getAuthentication().getPrincipal();
-        Integer memberNo = user.getMemberNo();
-        authAPIService.logout(memberNo, jwt);
+        Integer memberNo = null;
+        if (context.getAuthentication().getPrincipal() instanceof SignInSuccessUserDetailsDto) {
+            memberNo = ((SignInSuccessUserDetailsDto) context.getAuthentication().getPrincipal())
+                .getMemberNo().intValue();
+        }
+
+        if (context.getAuthentication().getPrincipal() instanceof UserDetailsDto) {
+            memberNo = ((UserDetailsDto) context.getAuthentication().getPrincipal())
+                .getMember().getMemberNo();
+        }
+        authApiService.logout(memberNo, jwt);
 
         session.invalidate();
 
         Cookie killCookie = new Cookie(CART_ID, null);
         killCookie.setMaxAge(0);
         response.addCookie(killCookie);
+
+        return "redirect:/";
+    }
+
+    /**
+     * 로그인 요청을 담당하는 기능입니다.
+     *
+     * @return 로그인 폼 화면으로 이동할수 있도록 showLoginForm을 반환합니다.
+     */
+    @GetMapping("/manager/login")
+    public String managerLogin() {
+        return "login/adminLogin";
+    }
+
+    /**
+     * 로그아웃 요청을 담당하는 기능입니다.
+     */
+    @GetMapping(value ="/manager/logout")
+    public String managerLogoutProcessing() {
+        return "redirect:/manager/login";
     }
 }
