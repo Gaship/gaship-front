@@ -3,7 +3,6 @@
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/fragments/css/sb-admin-2.css}">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script th:src="@{/signUp/js/signUp.js}"></script>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -12,7 +11,6 @@
 </head>
 <body>
 <div class="container">
-
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
@@ -24,7 +22,7 @@
                         </div>
                         <form class="user" method="post" th:action="@{/members/create}">
                             <div class="form-group row justify-content-end">
-                                <input type="email" name="email" class="w-100 form-control form-control-user" placeholder="이메일">
+                                <input type="email" name="email" class="w-100 form-control form-control-user sign-up-email" placeholder="이메일">
                                 <input type="button" class="w-25 mt-2 btn btn-primary btn-user btn-block email-verify" value="이메일 인증">
                             </div>
                             <div class="form-group row justify-content-end">
@@ -64,7 +62,7 @@
             </div>
         </div>
     </div>
-
 </div>
+<script th:src="@{/signUp/js/signUp.js}"></script>
 </body>
 </html>

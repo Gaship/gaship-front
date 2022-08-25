@@ -173,12 +173,23 @@
         max: maxPrice,
         values: [minPrice, maxPrice],
         slide: function (event, ui) {
-            minamount.val('$' + ui.values[0]);
-            maxamount.val('$' + ui.values[1]);
+            minamount.val('₩' + ui.values[0]);
+            maxamount.val('₩' + ui.values[1]);
+            var searchUrl = $("#product-filter");
+            const urls = searchUrl.attr('href').split("&");
+
+            urls[2] = "min-amount="+ ui.values[0]
+            urls[3] = "max-amount="+ ui.values[1]
+            searchUrl.prop("href", urls.join("&"));
+
         }
     });
-    minamount.val('$' + rangeSlider.slider("values", 0));
-    maxamount.val('$' + rangeSlider.slider("values", 1));
+
+    minamount.val('₩' + rangeSlider.slider("values", 0));
+    maxamount.val('₩' + rangeSlider.slider("values", 1));
+
+
+
 
     /*--------------------------
         Select
