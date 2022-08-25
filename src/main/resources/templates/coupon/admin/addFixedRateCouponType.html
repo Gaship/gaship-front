@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>정률 할인 쿠폰 타입 등록</title>
+</head>
+<body>
+<form th:action="@{/admin/coupons/coupon-type/fixed-rate/add}" method="post">
+  <fieldset>
+    <label>쿠폰 타입 이름 : </label><br>
+    <input type="text" name="name"/><br>
+    <label>정률 할인 (% 단위 0 ~ 100 %) : </label><br>
+    <input type="number" min=0 max=100 name="discountRate"/>
+    <button type="submit">쿠폰 타입 등록하기</button>
+  </fieldset>
+</form>
+</body>
+</html>
