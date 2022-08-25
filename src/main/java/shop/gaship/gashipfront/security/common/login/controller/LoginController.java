@@ -39,7 +39,7 @@ public class LoginController {
         if (isAuthenticated()) {
             return "redirect:/";
         }
-        return "showLoginForm";
+        return "login/loginForm";
     }
 
     private boolean isAuthenticated() {

@@ -57,8 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage(LOGIN_URI)
                 .successHandler(oauth2LoginSuccessHandler(null))
                 .failureUrl(LOGIN_URI);
-
-        http.csrf().disable();
     }
 
     @Override

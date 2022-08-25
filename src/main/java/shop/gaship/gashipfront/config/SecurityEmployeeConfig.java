@@ -55,7 +55,6 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/manager/logout")
                 .logoutSuccessUrl("/");
 
-        http.csrf();
     }
 
     @Override
