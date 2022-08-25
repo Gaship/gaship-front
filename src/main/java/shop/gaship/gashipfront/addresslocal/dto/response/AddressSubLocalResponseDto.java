@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 지역정보에대한 값이 반환되는 클래스입니다.
+ * 하위지역을 반환받기위한 클래스입니다.
  *
  * @author : 유호철
  * @since 1.0
@@ -17,13 +17,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressLocalResponseDto {
-
-    @Min(0)
+public class AddressSubLocalResponseDto {
+    @Min(1)
     @NotNull
     private Integer addressNo;
     @NotBlank
     private String addressName;
-    private boolean allowDelivery;
 
+    private Boolean isDelivery;
 }
