@@ -60,16 +60,5 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
 
         HttpSession session = request.getSession();
         session.setAttribute("jwt", tokensResponse);
-
-        Integer memberNo = ((SignInSuccessUserDetailsDto) authentication.getPrincipal()).getMemberNo().intValue();
-        // 비회원일 때 쓰던 장바구니 쿠키 값을 찾아서
-        Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(CART_ID))
-                .findFirst();
-        // 찾은 쿠키값이 존재하면 비회원 때 담은 상품들을 회원의 장바구니에 넣는다.
-        nonMemberCookie.ifPresent(cookie -> cartService.mergeCart(cookie.getValue(), memberNo));
-        Cookie cookie = new Cookie(CART_ID, memberNo.toString());
-        cookie.setMaxAge(60 * 60 * 24 * 100);
-        response.addCookie(cookie);
     }
 }

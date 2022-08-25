@@ -46,17 +46,18 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
 @Order(1)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final CartService cartService;
     private static final String LOGIN_URI = "/login";
-    private final OauthConfig oauthConfig;
-
-//    private final RedisCsrfRepository redisCsrfRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.authorizeRequests()
-            .antMatchers("/**")
+            .antMatchers("/login", "/securities/login/naver",
+                "/securities/login/naver/callback",
+                "/oauth2/authorization/kakao",
+                "/login/oauth2/code/kakao")
             .permitAll()
+            .anyRequest().authenticated()
             .and();
 
         http.sessionManagement()
@@ -65,21 +66,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage(LOGIN_URI)
                 .loginProcessingUrl("/loginAction")
-                .successHandler(loginSuccessHandler(null, null))
-                .failureUrl(LOGIN_URI)
                 .usernameParameter("id")
                 .passwordParameter("pw")
-                .and();
+                .successHandler(loginSuccessHandler(null, null))
+                .defaultSuccessUrl("/")
+                .failureUrl(LOGIN_URI);
+
+        http.logout();
 
         http.oauth2Login()
                 .loginPage(LOGIN_URI)
-                .defaultSuccessUrl("/")
-                .failureUrl(LOGIN_URI)
-                .successHandler(oauth2LoginSuccessHandler(null, null));
-//        http.csrf().csrfTokenRepository(redisCsrfRepository).and();
+                .successHandler(oauth2LoginSuccessHandler(null))
+                .failureUrl(LOGIN_URI);
 
         http.csrf().disable();
-//        http.logout().disable();
     }
 
     @Override
@@ -115,8 +115,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService, CartService cartService) {
-        return new Oauth2LoginSuccessHandler(commonService, cartService);
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) {
+        return new Oauth2LoginSuccessHandler(commonService);
     }
 }
 

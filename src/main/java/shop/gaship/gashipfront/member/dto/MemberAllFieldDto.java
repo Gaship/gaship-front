@@ -23,8 +23,8 @@ public class MemberAllFieldDto implements Serializable {
     private String memberStatus;
 
     private String email;
-    private List<String> authorities;
     private String password;
+    private List<String> authorities;
     private String nickName;
     private String name;
     private String gender;
@@ -36,7 +36,7 @@ public class MemberAllFieldDto implements Serializable {
     private LocalDateTime registerDatetime;
     private LocalDateTime modifyDatetime;
     private Boolean social;
-    private String encodedEmailForSearch;
+    private String recommendMemberName;
 
     @Builder
     public MemberAllFieldDto(String email, String password, String nickName, String name,

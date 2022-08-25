@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.security.social.util;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,8 +18,7 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
  * @since 1.0
  */
 public class SecurityContextLoginManager {
-    private SecurityContextLoginManager() {}
-
+    private static final String SOCIAL_PASSWORD = "비밀번호가 없는 소셜회원입니다.";
     /**
      * 로그인 기능입니다.
      *
@@ -30,7 +30,7 @@ public class SecurityContextLoginManager {
             .collect(Collectors.toList());
 
         UserDetailsDto userDetailsDto =
-            new UserDetailsDto(member.getEmail(), member.getPassword(), authorities, member);
+            new UserDetailsDto(member.getEmail(), SOCIAL_PASSWORD, authorities, member);
 
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = new UsernamePasswordAuthenticationToken(

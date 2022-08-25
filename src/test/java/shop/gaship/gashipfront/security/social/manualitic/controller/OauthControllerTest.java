@@ -98,7 +98,7 @@ class OauthControllerTest {
             .andExpect(redirectedUrl(redirectUri));
     }
 
-    @DisplayName("auth 서버에서 문제없이 통신이되었을때 200상태코드와 /all이라는 view name이 response객체에 들어가며 session에 jwt토큰이 잘 저장된다.")
+    @DisplayName("auth 서버에서 문제없이 통신이되었을때 302상태코드와 session에 jwt토큰이 잘 저장된다.")
     @Test
     void getAccessTokenAndAuthenticateNaver() throws Exception {
         // given
@@ -116,8 +116,7 @@ class OauthControllerTest {
                 .param("code", "1234")
                 .param("state", "1234")
                 .cookie(cookie1))
-            .andExpect(status().isOk())
-            .andExpect(view().name("all"));
+            .andExpect(status().is(302));
 
         JwtDto jwtResult = (JwtDto) session.getAttribute("jwt");
         String accessToken = jwtResult.getAccessToken();

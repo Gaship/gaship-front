@@ -37,7 +37,6 @@ public class MemberAdapterImpl implements MemberAdapter {
     private final ServerConfig serverConfig;
     private final WebClient webClient;
 
-    //TODO :URI 고쳐야해
     /**
      * gaship-shopping-mall api에 email을 통해서 member를 요청하는 기능입니다.
      *
@@ -48,7 +47,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public MemberAllFieldDto requestMemberByEmail(String email) {
         return webClient.get()
-            .uri("/members/email/{email}", email)
+            .uri("/api/members/email/{email}", email)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(MemberAllFieldDto.class)
@@ -56,7 +55,6 @@ public class MemberAdapterImpl implements MemberAdapter {
             .orElseThrow(NullResponseBodyException::new);
     }
 
-    //TODO :URI 고쳐야해
     /**
      * 멤버의 회원가입 요청을 담당하는 기능입니다.
      *
@@ -66,7 +64,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public void requestCreateMember(MemberAllFieldDto member) {
         webClient.post()
-            .uri("/members?isOauth=true")
+            .uri("/api/members/sign-up/oauth")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(member)
             .retrieve()
@@ -75,7 +73,6 @@ public class MemberAdapterImpl implements MemberAdapter {
             .block();
     }
 
-    //TODO :URI 고쳐야해
     /**
      * 멤버의 회원가입시 닉네임생성을 위해 최신 번호를 가져오는 기능입니다.
      *
@@ -84,7 +81,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public Integer requestLastMemberNo() {
         return webClient.get()
-            .uri("/members/lastNo")
+            .uri("/api/members/last-no")
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(Integer.class)
@@ -92,7 +89,6 @@ public class MemberAdapterImpl implements MemberAdapter {
             .orElseThrow(NullResponseBodyException::new);
     }
 
-    //TODO :URI 고쳐야해
     /**
      *
      *{@inheritDoc}

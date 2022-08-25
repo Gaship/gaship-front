@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.security.common.dto;
 import com.google.common.base.Objects;
 import java.util.Collection;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,11 +19,11 @@ import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
  * @since 1.0
  */
 @Getter
+@EqualsAndHashCode
 public class UserDetailsDto extends User implements OAuth2User {
-    private static final long serialVersionUID = 1905122041950251207L;
-    private final MemberAllFieldDto member;
     private final Integer memberNo;
     private final String email;
+    private final Boolean social;
     private Map<String, Object> attr;
 
     /**
@@ -56,11 +57,11 @@ public class UserDetailsDto extends User implements OAuth2User {
                           Collection<? extends GrantedAuthority> authorities,
                           MemberAllFieldDto member) {
         super(username, password, authorities);
+
         this.email = username;
-        this.member = member;
+        this.social = member.getSocial();
         this.memberNo = member.getMemberNo();
     }
-
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -70,27 +71,5 @@ public class UserDetailsDto extends User implements OAuth2User {
     @Override
     public String getName() {
         return email;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        UserDetailsDto that = (UserDetailsDto) o;
-        return Objects.equal(member, that.member)
-            && Objects.equal(email, that.email)
-            && Objects.equal(attr, that.attr);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(super.hashCode(), member, email, attr);
     }
 }

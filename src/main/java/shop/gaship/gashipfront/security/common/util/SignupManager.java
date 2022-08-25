@@ -8,6 +8,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
+import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.service.MemberService;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
@@ -38,9 +39,10 @@ public class SignupManager {
 
         MemberAllFieldDto member = null;
         try {
-            member = memberService.getMemberByEmail(info.getEmail());
 
+            member = memberService.getMemberByEmail(info.getEmail());
         } catch (RequestFailureThrow e) {
+
             if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 throw e;
             }

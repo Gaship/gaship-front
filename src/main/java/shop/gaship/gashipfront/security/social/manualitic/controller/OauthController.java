@@ -1,21 +1,36 @@
 package shop.gaship.gashipfront.security.social.manualitic.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
+import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,8 +61,7 @@ public class OauthController {
     private final NaverLoginService naverLoginService;
     private final AuthApiService authApiService;
     private final SignupManager signupManager;
-    private final CartService cartService;
-    private static final String CART_ID = "CID";
+
 
     /**
      * Naver로 로그인요청을 보낼 uri를 요청측에 반환해주는 기능입니다.
@@ -60,7 +74,8 @@ public class OauthController {
     @GetMapping("/login/naver")
     @ResponseBody
     public ResponseEntity<String> redirectUriForLoginPageRequestNaver(HttpSession session)
-        throws UnsupportedEncodingException, URISyntaxException {
+        throws IOException, URISyntaxException, UnrecoverableKeyException, CertificateException,
+        NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         HttpHeaders headers = new HttpHeaders();
         String uriForLoginPageRequest = naverLoginService.getUriForLoginPageRequest();
         String[] stateSplit = uriForLoginPageRequest.split("&state=");
@@ -77,16 +92,16 @@ public class OauthController {
      *
      * @param code accesstoken을 발급받기위한 인가코드입니다.
      * @param paramState csrf 공격을 막기위해 비교값으로 전달되는 값입니다.
-     * @param session 기존에 저장된 session 영역의 state값을 가져오는 용도로 사용합니다.
      * @return view name입니다.
      */
     @GetMapping("/login/naver/callback")
     public String getAccessTokenAndAuthenticateNaver(String code,
                                                      @RequestParam(value = "state")
                                                      String paramState,
-                                                     HttpSession session,
                                                      HttpServletRequest request,
-                                                     HttpServletResponse response) {
+                                                     HttpServletResponse response)
+        throws IOException {
+        HttpSession session = request.getSession(true);
         String redisState = (String) session.getAttribute("state");
         NaverAccessToken naverAccessToken =
             naverLoginService.getAccessToken(code, paramState, redisState);
@@ -98,16 +113,15 @@ public class OauthController {
         JwtDto jwt = authApiService.getJwt(member.getMemberNo(), member.getAuthorities());
         session.setAttribute("jwt", jwt);
 
-        // 비회원일 떄 쓰던 장바구니 쿠키 값을 찾아서
-        Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(CART_ID))
-                .findFirst();
-        // 찾은 쿠키값이 존재하면 비회원 때 담은 상품들을 회원의 장바구니에 넣는다.
-        nonMemberCookie.ifPresent(cookie -> cartService.mergeCart(cookie.getValue(), member.getMemberNo()));
-        //장바구니의 쿠키값을 회원의 id 로 바꿔준다.
-        Cookie cookie = new Cookie(CART_ID, member.getMemberNo().toString());
-        cookie.setMaxAge(60 * 60 * 24 * 100);
-        response.addCookie(cookie);
-        return "all";
+        RequestCache requestCache = new HttpSessionRequestCache();
+
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
+        if (Objects.nonNull(savedRequest)) {
+
+            String url = savedRequest.getRedirectUrl();
+            return Strings.concat("redirect:", url);
+        }
+
+        return "redirect:/";
     }
 }
