@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
 import shop.gaship.gashipfront.productreview.service.ProductReviewService;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
@@ -49,24 +50,30 @@ public class ProductReviewController {
 
     @GetMapping("/reviews/{orderProductNo}/remove")
     public String getReviewRemove(@PathVariable Integer orderProductNo,
-                                  HttpServletRequest request) {
+                                  HttpServletRequest request,
+                                  RedirectAttributes redirectAttributes) {
         productReviewService.removeReview(orderProductNo);
+        redirectAttributes.addFlashAttribute("message", "상품평이 삭제되었습니다.");
         return "redirect:" + request.getHeader("Referer");
     }
 
     @PostMapping("/reviews/{orderProductNo}/add")
     public String addProductReview(@ModelAttribute ProductReviewRequestDto createRequest,
+                                   MultipartFile multipartFile,
                                    HttpSession session,
-                                   MultipartFile multipartFile) {
+                                   RedirectAttributes redirectAttributes) {
         productReviewService.addReview(multipartFile, createRequest);
+        redirectAttributes.addFlashAttribute("message", "상품평이 등록되었습니다.");
         return "redirect:" + session.getAttribute("redirectUri");
     }
 
     @PostMapping("/reviews/{orderProductNo}/modify")
     public String modifyProductReview(@ModelAttribute ProductReviewRequestDto modifyRequest,
+                                      MultipartFile multipartFile,
                                       HttpSession session,
-                                      MultipartFile multipartFile) {
+                                      RedirectAttributes redirectAttributes) {
         productReviewService.modifyReview(multipartFile, modifyRequest);
+        redirectAttributes.addFlashAttribute("message", "상품평이 수정되었습니다.");
         return "redirect:" + session.getAttribute("redirectUri");
     }
 
