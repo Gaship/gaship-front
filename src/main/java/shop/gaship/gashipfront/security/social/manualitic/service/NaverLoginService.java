@@ -1,7 +1,13 @@
 package shop.gaship.gashipfront.security.social.manualitic.service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import shop.gaship.gashipfront.security.social.manualitic.dto.NaverAccessToken;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserData;
 
@@ -19,7 +25,9 @@ public interface NaverLoginService {
      * @return 전체 uri입니다.
      * @throws UnsupportedEncodingException URLEncoder.encode시 발생할수 있는 예외입니다.
      */
-    String getUriForLoginPageRequest() throws UnsupportedEncodingException, URISyntaxException;
+    String getUriForLoginPageRequest()
+        throws IOException, URISyntaxException, UnrecoverableKeyException, CertificateException,
+        NoSuchAlgorithmException, KeyStoreException, KeyManagementException;
 
     /**
      * naver에서 accessToken을 반환받는 기능을 합니다.

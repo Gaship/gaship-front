@@ -28,7 +28,7 @@ public class ServerConfig {
     @Bean
     public WebClient webClient(ServerConfig serverConfig) {
         return WebClient.builder()
-            .baseUrl(serverConfig.getGatewayUrl())
+            .baseUrl(gatewayUrl)
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
     }
