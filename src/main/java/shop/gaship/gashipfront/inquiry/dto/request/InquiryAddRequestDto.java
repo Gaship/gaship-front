@@ -4,6 +4,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 /**
  * 문의와 관련된 요청이나 반환시 정보를 담는 dto입니다.
@@ -27,6 +29,7 @@ public class InquiryAddRequestDto {
     @NotNull(message = "inquiryContent 는 필수 입력값입니다.")
     private String inquiryContent;
 
-    @NotNull(message = "isProduct 는 필수 입력값입니다.")
+    @Nullable
+    @Setter
     private Boolean isProduct;
 }

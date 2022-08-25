@@ -1,16 +1,23 @@
 package shop.gaship.gashipfront.security.social.manualitic.service.impl;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.config.OauthConfig;
+import shop.gaship.gashipfront.config.SecureManagerConfig;
 import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.security.common.exception.CsrfProtectedException;
 import shop.gaship.gashipfront.security.social.manualitic.adapter.NaverAdapter;
@@ -33,9 +40,11 @@ public class NaverLoginServiceImpl implements NaverLoginService {
     private final OauthConfig oauthConfig;
     private final NaverAdapter adapter;
 
+
     @Override
     public String getUriForLoginPageRequest()
-        throws UnsupportedEncodingException, URISyntaxException {
+        throws IOException, URISyntaxException, UnrecoverableKeyException, CertificateException,
+        NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         BigInteger state = new BigInteger(130, new SecureRandom());
 
         URI uri = new URIBuilder()
@@ -58,7 +67,7 @@ public class NaverLoginServiceImpl implements NaverLoginService {
 
         URIBuilder uriBuilder = new URIBuilder()
             .setScheme("https")
-            .setHost(oauthConfig.getNaverApiUrlAcesstoken())
+            .setHost(oauthConfig.getNaverApiUrlAccesstoken())
             .setParameter("grant_type", "authorization_code")
             .setParameter("client_id", oauthConfig.getNaverClientId())
             .setParameter("client_secret", oauthConfig.getNaverClientSecret())

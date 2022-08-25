@@ -1,0 +1,20 @@
+package shop.gaship.gashipfront.inquiry.inquiryenum;
+
+import lombok.Getter;
+
+/**
+ * 상품문의인지 고객문의인지 bool자료형으로 구분이 필요할때 가독성을 높이기 위해서 사용하는 enum 클래스입니다.
+ *
+ * @author 최겸준
+ * @since 1.0
+ */
+@Getter
+public enum InquiryType {
+    PRODUCT_INQUIRY(Boolean.TRUE), CUSTOMER_INQUIRY(Boolean.FALSE);
+
+    private final Boolean value;
+
+    InquiryType(Boolean value) {
+        this.value = value;
+    }
+}

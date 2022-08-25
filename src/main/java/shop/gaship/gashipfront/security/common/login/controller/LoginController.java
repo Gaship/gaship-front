@@ -1,9 +1,12 @@
 package shop.gaship.gashipfront.security.common.login.controller;
 
+import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -32,8 +35,26 @@ public class LoginController {
      * @return 로그인 폼 화면으로 이동할수 있도록 showLoginForm을 반환합니다.
      */
     @GetMapping("/login")
-    public String login() {
-        return "login/loginForm";
+    public String login(Authentication authentication) {
+
+        if (isAuthenticated()) {
+            return "redirect:/";
+        }
+        return "showLoginForm";
+    }
+
+    private boolean isAuthenticated() {
+        Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
+
+        if (Objects.nonNull(authentication)) {
+            if (AnonymousAuthenticationToken.class.isAssignableFrom(
+                authentication.getClass())) {
+                return false;
+            }
+        }
+
+        return authentication.isAuthenticated();
     }
 
     /**
@@ -55,7 +76,7 @@ public class LoginController {
 
         if (context.getAuthentication().getPrincipal() instanceof UserDetailsDto) {
             memberNo = ((UserDetailsDto) context.getAuthentication().getPrincipal())
-                .getMember().getMemberNo();
+                .getMemberNo();
         }
         authApiService.logout(memberNo, jwt);
 
@@ -66,5 +87,23 @@ public class LoginController {
         response.addCookie(killCookie);
 
         return "redirect:/";
+    }
+
+    /**
+     * 로그인 요청을 담당하는 기능입니다.
+     *
+     * @return 로그인 폼 화면으로 이동할수 있도록 showLoginForm을 반환합니다.
+     */
+    @GetMapping("/manager/login")
+    public String managerLogin() {
+        return "login/adminLogin";
+    }
+
+    /**
+     * 로그아웃 요청을 담당하는 기능입니다.
+     */
+    @GetMapping(value ="/manager/logout")
+    public String managerLogoutProcessing() {
+        return "redirect:/manager/login";
     }
 }
