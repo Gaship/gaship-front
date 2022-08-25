@@ -1,18 +1,8 @@
 package shop.gaship.gashipfront.config;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.reactive.function.client.WebClient;
-import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -48,18 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-            .antMatchers("/**")
-            .permitAll();
+                .antMatchers("/**")
+                .permitAll();
 
         http.sessionManagement()
-            .maximumSessions(1);
+                .maximumSessions(1);
 
         http.formLogin()
                 .loginPage(LOGIN_URI)
                 .loginProcessingUrl("/loginAction")
                 .usernameParameter("id")
                 .passwordParameter("pw")
-                .successHandler(loginSuccessHandler(null))
+                .successHandler(loginSuccessHandler())
                 .defaultSuccessUrl("/")
                 .failureUrl(LOGIN_URI);
 
@@ -81,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         webSecurity.ignoring()
-            .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger/**");
+                .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger/**");
     }
 
     @Bean
