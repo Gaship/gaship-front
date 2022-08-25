@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>상품목록</title>
+</head>
+<th:block layout:fragment="content">
+    <section class="featured spad">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-3 col-md-5 flex-lg-nowrap">
+                    <div class="sidebar categories">
+                        <div class="sidebar__item sidebar__item-cartegory">
+                            <h4>Category</h4>
+                        </div>
+                        <div class="sidebar__item">
+                            <h4>Price</h4>
+                            <div class="price-range-wrap">
+                                <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+                                     data-min="10000" data-max="3000000">
+                                    <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"
+                                          style="left: 0%;"></span>
+                                    <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"
+                                          style="left: 100%;"></span>
+                                    <div class="ui-slider-range ui-corner-all ui-widget-header"
+                                         style="left: 0%; width: 100%;"></div>
+                                </div>
+                                <div class="range-slider">
+                                    <div class="price-input">
+                                        <div style="width: 500px;"><input th:width="200px" type="text" id="minamount"></div>
+                                        <div style="width: 500px;"><input th:width="200px" type="text" id="maxamount"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sidebar__item">
+                            <a class="w-100 row justify-content-center text-white"  href="/products?page=0&category=4&min-amount=10000&max-amount=3000000" id="product-filter">
+                                <button class="site-btn rounded-sm flex-wrap">검색</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-lg-9 featured__filter" id="MixItUp525D7E">
+                    <th:block th:each="product : ${products}">
+                        <div class="col-lg-4 col-md-4 col-sm-6">
+                            <div class="featured__item">
+                                <div class="featured__item__pic bg-contain bg-center bg-no-repeaat"
+                                     th:style="'background-image: url(&quot' + ${#lists.isEmpty(product) ? product.filePaths[0] : 'img/no-photo.png' } + '&quot;);'">
+                                    <ul class="featured__item__pic__hover">
+                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="featured__item__text">
+                                    <h6><a th:href="@{'/products/' + ${product.productNo}}"
+                                           th:text="${product.productName}"></a></h6>
+                                    <h5 th:text="'₩ ' + ${product.amount}"></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <th:block th:include="component/pageFooter"></th:block>
+            </div>
+        </div>
+    </section>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script src="/product/js/prpduct.js"></script>
+</th:block>
+</html>
