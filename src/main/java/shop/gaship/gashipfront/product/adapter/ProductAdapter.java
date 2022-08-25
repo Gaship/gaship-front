@@ -100,10 +100,13 @@ public interface ProductAdapter {
     /**
      * 상품 전체조회 메서드입니다.
      *
-     * @param pageable 요청 페이지 정보
+     * @param page 요청 페이지 번호
+     * @param size 요청 페이지 당 가져올 게시물 수
      * @return 페이지 객체
      */
-    PageResponse<ProductAllInfoResponseDto> productListAll(Pageable pageable);
+    PageResponse<ProductAllInfoResponseDto> productListAll(String page, String size,
+                                                           String category, String minAmount,
+                                                           String maxAmount);
 
     List<ProductAllInfoResponseDto> productNosList(List<Integer> productNos);
 }

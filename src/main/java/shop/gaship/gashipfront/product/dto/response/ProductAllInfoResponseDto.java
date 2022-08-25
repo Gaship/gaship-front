@@ -31,5 +31,5 @@ public class ProductAllInfoResponseDto {
     private Integer level;
     private String upperName;
     private List<String> tags;
-    private List<String> filePaths;
+    private List<Integer> fileNos;
 }

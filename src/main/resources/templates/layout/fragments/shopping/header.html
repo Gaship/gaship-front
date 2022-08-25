@@ -11,8 +11,8 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="active"><a href="">쇼핑몰 홈</a></li>
-                <li><a href="">상품 전체</a></li>
+                <li class="active"><a href="/">쇼핑몰 홈</a></li>
+                <li><a href="/products?page=0">상품 전체</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap">
@@ -24,6 +24,8 @@
             </ul>
         </div>
     </div>
+
+
     <header class="header">
         <div class="container">
             <div class="row">
@@ -36,14 +38,14 @@
                     <nav class="header__menu">
                         <ul>
                             <li><a href="/" class="active">쇼핑몰 홈</a></li>
-                            <li><a href="">상품전체</a></li>
+                            <li><a href="/products?page=0">상품전체</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="header__cart col-lg-4 ">
                     <div class="header__top__right">
                         <div class="header__top__right__social">
-                            <a href="#"><i class="fa fa-shopping-bag"></i></a>
+                            <a th:href="@{/carts}"><i class="fa fa-shopping-bag"></i></a>
                         </div>
                         <div class="header__top__right__language">
                             <div>한국어</div>
@@ -56,10 +58,10 @@
                         <div class="header__top__right__auth w-50">
                             <th:block sec:authorize="hasRole('ROLE_ANONYMOUS')"><a href="/login"><i class="fa fa-user"></i> 로그인</a></th:block>
                             <div class="row justify-content-around">
-                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER')">
+                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_MEMBER')">
                                 <a th:href="@{'/members/' + ${#authentication.getPrincipal().getMemberNo()}}"><i class="fa fa-user"></i>마이페이지</a>
                             </th:block>
-                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER')">
+                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_MEMBER')">
                                 <a th:href="@{/logout}">로그아웃</a>
                             </th:block>
                             </div>

@@ -1,4 +1,5 @@
-document.querySelector(".email-verify").addEventListener(async () => {
+document.querySelector(".email-verify").addEventListener('click', async () => {
+  const email = document.querySelector(".sign-up-email").value;
   const res = await fetch(`/api/members/verify?email=${email}`);
   const messageJson = await res.json();
 
