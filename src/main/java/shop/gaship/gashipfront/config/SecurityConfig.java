@@ -48,13 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-            .antMatchers("/login", "/securities/login/naver",
-                "/securities/login/naver/callback",
-                "/oauth2/authorization/kakao",
-                "/login/oauth2/code/kakao")
-            .permitAll()
-            .anyRequest().authenticated()
-            .and();
+            .antMatchers("/**")
+            .permitAll();
 
         http.sessionManagement()
             .maximumSessions(1);

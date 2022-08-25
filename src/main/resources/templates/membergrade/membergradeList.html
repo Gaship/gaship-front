@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script th:src="@{/membergrade/js/membergrade.js}"></script>
+    <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div style="margin-right: 30px; margin-left: 30px; margin-top: 20px">
+        <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">회원 등급 관리</h1>
+        <div class="form-group row" style="margin-bottom: 20px">
+            <label for="renewalPeriodContainer" class="col-sm-2 col-form-label">
+                <h5 style="font-weight: bolder; margin-bottom: 0px">갱신기간</h5>
+            </label>
+            <div class="col-sm-10" style="display: flex">
+                <input style="width: 40px" type="text" readonly="" class="form-control-plaintext" id="renewalPeriodContainer" value="">
+                <button style="width: auto; margin-left: 10px" type="button" class="btn btn-outline-primary" id="renewalPeriodModifyBtn">수정</button>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; margin-bottom: 30px">
+            <label>
+                <h5 style="font-weight: bolder">새로운 회원등급 등록</h5>
+            </label>
+<!--            <form th:action="@{/admin/member-grades}" method="post" >-->
+            <form class="user" th:action="@{/login}" method="post">
+                <div>
+                    <div style="display: flex">
+                        <input style="width: 280px" type="text" class="form-control" name="name" placeholder="회원등급명을 입력하세요.">
+                        <input style="width: 320px; margin-left: 10px" type="text" class="form-control" name="accumulateAmount" placeholder="갱신기준 누적구매금액을 입력하세요.">
+                        <button style="width: auto; margin-left: 10px" type="submit" class="btn btn-outline-primary">등록</button>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="isDefault" th:value="${true}">
+                        <label class="form-check-label">기본 회원 등급 지정</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th style="width: auto">회원등급명</th>
+                    <th style="width: auto">갱신기준 누적구매금액</th>
+                    <th style="width: auto">수정</th>
+                    <th style="width: auto">삭제</th>
+                </tr>
+                </thead>
+                <tbody id="memberGradeTBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
