@@ -1,5 +1,6 @@
 const firstPage = 0;
 const pageSize = 10;
+let renewalPeriodContainer;
 let memberGradeTableBody;
 let token;
 let tokenHeader;
@@ -27,16 +28,23 @@ const pageHelper = {
     initPage: (memberGradeList) => {
         pageHelper.lastPageContainer.innerHtml = memberGradeList.totalPages;
         pageHelper.pageItems = memberGradeList.content;
-        drawContent();
+        drawMemberGradeContent();
     }
 }
 
 window.addEventListener("load", () => {
     init();
-    drawPage();
+    drawRenewalPeriodSection();
+    drawMemberGradeSection();
 })
 
-function drawPage() {
+function drawRenewalPeriodSection() {
+    getRenewalPeriodData()
+        .then(drawRenewalPeriodContent)
+        .then(setRenewalPeriodEvent);
+}
+
+function drawMemberGradeSection() {
     getMemberGradeData(firstPage, pageSize)
         .then(getMemberGradeDataPage)
         .then(setEvent);
@@ -66,7 +74,7 @@ function getMemberGradeDataPage(memberGradeList) {
     pageHelper.initPage(memberGradeList);
 }
 
-async function drawContent() {
+function drawMemberGradeContent() {
     clearMemberGradeTBody();
     pageHelper.pageItems.forEach(item => {
         const trTemplate =
@@ -74,8 +82,12 @@ async function drawContent() {
 <tr>
     <td id="${item.no}-name">${item.name}</td>
     <td id="${item.no}-accumulateAmount">${item.accumulateAmount}</td>
-    <td><button name="updateBtn" value="${item.no}">수정</button></td>
-    <td><button name="deleteBtn" value="${item.no}">삭제</button></td>
+    <td>
+        <button style="width: auto" name="updateBtn" value="${item.no}" class="btn btn-outline-primary">수정</button>
+    </td>
+    <td>
+        <button style="width: auto" name="deleteBtn" value="${item.no}" class="btn btn-outline-primary">삭제</button>
+    </td>
 </tr>
         `
         memberGradeTableBody.insertAdjacentHTML("beforeend", trTemplate);
@@ -90,7 +102,7 @@ function setEvent() {
         console.log(deleteBtn.value);
         deleteBtn.addEventListener("click",e => {
                 deleteMemberGrade(deleteBtn.value)
-                    .then(drawPage);
+                    .then(drawMemberGradeSection);
             }
         )
     })
@@ -102,7 +114,7 @@ function setEvent() {
         const accumulateAmount = document.getElementById(memberGradeNo + "-accumulateAmount");
 
         const saveBtnTemplate = `
-        <button value="${memberGradeNo}" onclick="updateMember(this)">저장</button>
+<button style="width: auto" value="${memberGradeNo}" onclick="updateMember(this)" class="btn btn-outline-primary">저장</button>
         `
 
         updateBtn.addEventListener("click", e => {
@@ -115,7 +127,7 @@ function setEvent() {
 
 const modifyInputTemplate = (innerText, memberGradeNo, prefix) => {
     return `
-        <input id="${memberGradeNo+prefix}Input" type="text" value="${innerText}"/>
+<input style="width: auto" class="form-control" id="${memberGradeNo+prefix}Input" type="text" value="${innerText}">
         `
 }
 
@@ -139,7 +151,7 @@ function updateMember(eventTarget) {
     const accumulateAmountInputValue = document.getElementById(memberGradeNo + '-accumulateAmountInput').value;
 
     updateMemberGrade(memberGradeNo, nameInputValue, accumulateAmountInputValue)
-        .then(drawPage);
+        .then(drawMemberGradeSection);
 }
 
 function clearMemberGradeTBody() {
@@ -163,3 +175,32 @@ async function updateMemberGrade(memberGradeNo, name, accumulateAmount) {
     await fetch("/front/member-grades/" + memberGradeNo, request);
 }
 
+async function getRenewalPeriodData() {
+    const request = {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    return await fetch("/rest/renewal-period", request)
+        .then(response => {
+            return response.json();
+        });
+}
+
+function drawRenewalPeriodContent(renewalPeriod) {
+    console.log(renewalPeriod);
+    renewalPeriodContainer = document.getElementById("renewalPeriodContainer");
+    renewalPeriodContainer.value = `${renewalPeriod.explanation}`;
+}
+
+function setRenewalPeriodEvent() {
+    const renewalPeriodModifyBtn = document.getElementById("renewalPeriodModifyBtn");
+    renewalPeriodModifyBtn.addEventListener("click", t => {
+        const renewalPeriodValue = renewalPeriodContainer.value;
+        renewalPeriodContainer.outerHTML = `
+        <input style="width: 50px" class="form-control" id="renewalModifyInput" type="text" value="${renewalPeriodValue}">
+        `
+    })
+}
