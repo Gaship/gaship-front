@@ -8,6 +8,7 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -47,8 +48,16 @@ public class Oauth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         UserDetailsDto memberDto = (UserDetailsDto) authentication.getPrincipal();
         MemberAllFieldDto member = memberDto.getMember();
 
+        TokenRequestDto tokenRequestDto =
+            new TokenRequestDto(
+                member.getMemberNo(),
+                member.getName(),
+                member.getAuthorities()
+            );
+
         JwtDto jwt = commonService.getJwt(member.getMemberNo(), member.getAuthorities());
         HttpSession session = request.getSession();
+        session.setAttribute("memberInfo", tokenRequestDto);
         session.setAttribute("jwt", jwt);
 
         // 비회원일 떄 쓰던 장바구니 쿠키 값을 찾아서

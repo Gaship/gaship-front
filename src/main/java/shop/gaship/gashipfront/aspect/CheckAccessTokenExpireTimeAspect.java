@@ -1,26 +1,27 @@
 package shop.gaship.gashipfront.aspect;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
+import shop.gaship.gashipfront.aspect.dto.ReissueJwtRequestDto;
+import shop.gaship.gashipfront.aspect.exception.RefreshTokenExpiredException;
 import shop.gaship.gashipfront.aspect.exception.TokenResponseException;
 import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
@@ -33,6 +34,7 @@ import shop.gaship.gashipfront.security.common.dto.JwtDto;
 @Aspect
 @RequiredArgsConstructor
 public class CheckAccessTokenExpireTimeAspect {
+
     private final ServerConfig serverConfig;
     private final WebClient webClient;
     private final RedisTemplate redisTemplate;
@@ -46,15 +48,27 @@ public class CheckAccessTokenExpireTimeAspect {
         HttpSession session = req.getSession(true);
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
-        if (!jwt.getAccessTokenExpireDateTime().isBefore(LocalDateTime.now())) {
+        if (jwt.getRefreshTokenExpireDateTime().isAfter(LocalDateTime.now())) {
+            throw new RefreshTokenExpiredException();
+        }
+
+        if (jwt.getAccessTokenExpireDateTime().isAfter(LocalDateTime.now())) {
+
+            TokenRequestDto tokenRequestDto = (TokenRequestDto) session.getAttribute("memberInfo");
+
+            ReissueJwtRequestDto reissueJwtRequestDto = new ReissueJwtRequestDto();
+            reissueJwtRequestDto.setRefreshToken(jwt.getRefreshToken());
+            reissueJwtRequestDto.setMemberNo(tokenRequestDto.getMemberNo());
+            reissueJwtRequestDto.setAuthorities((List<String>) tokenRequestDto.getAuthorities());
+
             JwtDto newToken = webClient.post()
-                .uri(uriBuilder -> uriBuilder.path("/securities/reissue-jwt").build())
-                .bodyValue(jwt)
-                .retrieve()
-                .toEntity(JwtDto.class)
-                .blockOptional()
-                .orElseThrow(TokenResponseException::new)
-                .getBody();
+                                       .uri(uriBuilder -> uriBuilder.path("/securities/reissue-jwt").build())
+                                       .bodyValue(reissueJwtRequestDto)
+                                       .retrieve()
+                                       .toEntity(JwtDto.class)
+                                       .blockOptional()
+                                       .orElseThrow(TokenResponseException::new)
+                                       .getBody();
 
             session.setAttribute("jwt", newToken);
         }

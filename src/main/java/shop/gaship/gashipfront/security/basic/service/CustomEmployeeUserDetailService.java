@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.exceptions.NoResponseDataException;
@@ -23,7 +22,6 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  * @see UserDetailsService
  * @since 1.0
  */
-@Service
 @RequiredArgsConstructor
 public class CustomEmployeeUserDetailService implements UserDetailsService {
     private static final Duration TIMEOUT = Duration.ofSeconds(5);

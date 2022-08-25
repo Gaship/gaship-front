@@ -4,6 +4,8 @@ import java.util.Objects;
 import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,19 +51,17 @@ public class CartController {
     @ResponseBody
     public Integer addToCart(@RequestBody CartProductModifyRequestDto request,
                              @CookieValue(value = CART_ID, required = false) String cartId,
+                             HttpSession session,
                              HttpServletResponse response,
                              RedirectAttributes attributes) throws CartProductAmountException {
+        session.getAttribute("");
         if (Objects.isNull(cartId)) {
             String newCartId = UUID.randomUUID().toString();
             response.addCookie(new Cookie(CART_ID, newCartId));
             cartId = newCartId;
         }
-        Integer orderQuantity = cartService.modifyProductQuantityFromCart(cartId, request);
-        if (orderQuantity == 0) {
-            attributes.addAttribute("cartMax", true);
-        }
         attributes.addAttribute("status", true);
-        return orderQuantity;
+        return cartService.modifyProductQuantityFromCart(cartId, request);
     }
 
     /**
@@ -75,8 +75,10 @@ public class CartController {
     @ResponseBody
     public Integer modifyFromCart(
             @RequestBody CartProductModifyRequestDto request,
-            @CookieValue(value = CART_ID) String cartId)
+            @CookieValue(value = CART_ID) String cartId,
+            HttpSession session)
             throws CartProductAmountException {
+        session.getAttribute("");
         return cartService.modifyProductQuantityFromCart(cartId, request);
     }
 

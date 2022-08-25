@@ -26,6 +26,7 @@ import shop.gaship.gashipfront.security.basic.service.CustomEmployeeUserDetailSe
 public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     private final LoginSuccessHandler loginSuccessHandler;
+    private final ServerConfig serverConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -33,39 +34,45 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().maximumSessions(1);
 
         http.formLogin()
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/admin")
                 .loginPage("/manager/login")
                 .loginProcessingUrl("/manager/login")
                 .successHandler(loginSuccessHandler)
                 .usernameParameter("id")
                 .passwordParameter("pw")
-                .failureUrl("/manager-login")
+                .failureUrl("/manager/login")
             .and()
             .httpBasic()
             .and()
                 .requestMatchers()
                     .antMatchers("/admin/**")
                     .antMatchers("/manager/**")
-            .and();
+            .and()
+            .authenticationProvider(authenticationProvider());
+
+
+        http.logout()
+                .logoutUrl("/manager/logout")
+                .logoutSuccessUrl("/");
+
+        http.csrf();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider(null));
+        auth.authenticationProvider(authenticationProvider());
     }
 
     /**
      * 직원들의 로그인에 대한 Provider 설정하는 스프링 빈입니다.
      *
-     * @param customUserDetailService 쇼핑몰 서버에서 직원의 로그인에 필요한 정보를 가져오는 Service입니다.
-     * @return 로그인의 시도
+     * @return 로그인시 로그인 확인을 담당하는 객체가 반환됩니다.
      */
-    @Bean
-    public AuthenticationProvider authenticationProvider(
-        CustomEmployeeUserDetailService customUserDetailService) {
-
+    public AuthenticationProvider authenticationProvider() {
+        CustomEmployeeUserDetailService customEmployeeUserDetailService =
+            new CustomEmployeeUserDetailService(serverConfig);
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(customUserDetailService);
+        daoAuthenticationProvider.setUserDetailsService(customEmployeeUserDetailService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 
         return daoAuthenticationProvider;

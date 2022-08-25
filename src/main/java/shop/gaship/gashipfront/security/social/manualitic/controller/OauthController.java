@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
+import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
 import shop.gaship.gashipfront.security.common.util.SignupManager;
@@ -93,6 +96,15 @@ public class OauthController {
         NaverUserData data =
             naverLoginService.getUserDataThroughAccessToken(naverAccessToken.getAccessToken());
         MemberAllFieldDto member = signupManager.getMember(data.getResponse());
+
+        TokenRequestDto tokenRequestDto =
+            new TokenRequestDto(
+                member.getMemberNo(),
+                member.getName(),
+                member.getAuthorities()
+            );
+
+        session.setAttribute("memberInfo", tokenRequestDto);
 
         SecurityContextLoginManager.setSecurityContext(member);
         JwtDto jwt = authApiService.getJwt(member.getMemberNo(), member.getAuthorities());
