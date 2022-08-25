@@ -99,7 +99,6 @@ function setEvent() {
     const updateBtnList = document.getElementsByName("updateBtn");
 
     deleteBtnList.forEach(deleteBtn => {
-        console.log(deleteBtn.value);
         deleteBtn.addEventListener("click",e => {
                 deleteMemberGrade(deleteBtn.value)
                     .then(drawMemberGradeSection);
@@ -108,7 +107,6 @@ function setEvent() {
     })
 
     updateBtnList.forEach(updateBtn => {
-        console.log(updateBtn.value);
         const memberGradeNo = updateBtn.value;
         const name = document.getElementById(memberGradeNo + "-name");
         const accumulateAmount = document.getElementById(memberGradeNo + "-accumulateAmount");
@@ -189,7 +187,6 @@ async function getRenewalPeriodData() {
 }
 
 function drawRenewalPeriodContent(renewalPeriod) {
-    console.log(renewalPeriod);
     renewalPeriodContainer = document.getElementById("renewalPeriodContainer");
     renewalPeriodContainer.value = `${renewalPeriod.explanation}`;
 }
