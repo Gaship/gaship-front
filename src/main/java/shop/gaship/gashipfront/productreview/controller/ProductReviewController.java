@@ -70,13 +70,12 @@ public class ProductReviewController {
         return "redirect:" + session.getAttribute("redirectUri");
     }
 
-    @GetMapping("/reviews")
+    @GetMapping("/admin/reviews")
     public String getReviews(@PageableDefault(size = 5) Pageable pageable,
                              Model model){
         model.addAttribute("reviews",
                 productReviewService.findReviews(pageable));
-
-        return "review/reviewList";
+        return "review/adminReviewList";
     }
 
     @GetMapping("/products/{productNo}/reviews")
