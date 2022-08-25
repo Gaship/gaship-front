@@ -21,7 +21,7 @@ public interface ProductReviewAdapter {
 
     ProductReviewResponseDto productReviewDetails(Integer orderProductNo);
 
-    PageResponse<ProductReviewResponseDto> productReviewList();
+    PageResponse<ProductReviewResponseDto> productReviewList(Pageable pageable);
 
     PageResponse<ProductReviewResponseDto> productReviewListByProduct(Integer productNo,
                                                                       Pageable pageable);

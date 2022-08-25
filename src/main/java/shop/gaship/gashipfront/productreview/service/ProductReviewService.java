@@ -17,6 +17,7 @@ public interface ProductReviewService {
     void modifyReview(MultipartFile multipartFile, ProductReviewRequestDto modifyRequest);
     void removeReview(Integer orderProductNo);
     ProductReviewResponseDto findReview(Integer orderProductNo);
+    PageResponse<ProductReviewResponseDto> findReviews(Pageable pageable);
     PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo,
                                                                 Pageable pageable);
     PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo, Pageable pageable);

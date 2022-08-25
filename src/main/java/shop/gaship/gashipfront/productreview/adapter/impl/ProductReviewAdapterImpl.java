@@ -90,9 +90,10 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     }
 
     @Override
-    public PageResponse<ProductReviewResponseDto> productReviewList() {
+    public PageResponse<ProductReviewResponseDto> productReviewList(Pageable pageable) {
         return webClient.get()
-                .uri("/api/reviews")
+                .uri("/api/reviews?page={page}&size={size}",
+                        pageable.getPageNumber(), pageable.getPageSize())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(

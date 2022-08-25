@@ -46,6 +46,18 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     }
 
     @Override
+    public PageResponse<ProductReviewResponseDto> findReviews(Pageable pageable) {
+        PageResponse<ProductReviewResponseDto> reviews =
+                productReviewAdapter.productReviewList(pageable);
+
+        reviews.getContent().forEach(review -> review.setFilePaths(review.getFileNos().stream()
+                .map(this::getFilePath)
+                .collect(Collectors.toList())));
+
+        return reviews;
+    }
+
+    @Override
     public PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo,
                                                                        Pageable pageable) {
         PageResponse<ProductReviewResponseDto> reviews =
