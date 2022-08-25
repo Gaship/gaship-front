@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.member.controller;
 
 import java.util.Objects;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -198,15 +199,15 @@ public class MemberController {
 
     @GetMapping("/members/signUp/email-verify/{verifyCode}")
     public String requestApproveComplete(@PathVariable("verifyCode") String verifyCode,
-                                         HttpServletResponse httpResponse) {
+                                         HttpServletRequest request, HttpServletResponse httpResponse) {
         memberService.requestApproveEmailVerification(verifyCode);
 
         Cookie cookie = new Cookie("signUp", verifyCode);
         cookie.setHttpOnly(true);
-        cookie.setDomain("/");
+        cookie.setPath("/");
         cookie.setMaxAge(VERIFICATION_COOKIE_MAX_AGE);
         cookie.setSecure(true);
         httpResponse.addCookie(cookie);
-        return "/member/signUpApprove";
+        return "member/signUpApprove";
     }
 }
