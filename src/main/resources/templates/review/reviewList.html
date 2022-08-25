@@ -22,12 +22,12 @@
                             <span th:text="${review.starScore}"></span>
                         </li>
                         <br/>
-                        <li class="list-inline-item ml-auto">
+                        <li class="list-inline-item ml-auto" th:if="${#strings.equals(memberNickname, review.writerNickname)}">
                             <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" th:href="@{|/reviews/${review.orderProductNo}/modify|}">
                                 수정
                             </a>
                         </li>
-                        <li class="list-inline-item ml-auto">
+                        <li class="list-inline-item ml-auto" th:if="${#strings.equals(memberNickname, review.writerNickname)}">
                             <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
                                 삭제
                             </a>
@@ -37,4 +37,9 @@
             </div>
         </div>
     </div>
+    <ul class="pagination">
+        <li class="page-item" th:if="${reviews.previous}"><a class="page-link" th:href="@{''(page=${reviews.number - 1})}">Previous</a></li>
+        <span class="page-number" th:text="|${reviews.number + 1} / ${reviews.totalPages}|"></span>
+        <li class="page-item" th:if="${reviews.next}"><a class="page-link" th:href="@{''(page=${reviews.number + 1})}">Next</a></li>
+    </ul>
 </div>

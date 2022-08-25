@@ -54,3 +54,7 @@ body{
 .col-md-8 {
     margin-bottom: 10px;
 }
+
+.page-number {
+    margin: 5px 10px;
+}
