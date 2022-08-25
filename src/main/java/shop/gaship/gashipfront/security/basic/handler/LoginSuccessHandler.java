@@ -21,7 +21,6 @@ import shop.gaship.gashipfront.exceptions.NoResponseDataException;
 import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
-import shop.gaship.gashipfront.security.common.dto.UserInfoForJwtRequestDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**

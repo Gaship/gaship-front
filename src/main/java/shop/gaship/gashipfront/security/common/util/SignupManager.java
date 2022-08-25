@@ -8,6 +8,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
+import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.service.MemberService;
 import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUserDataResponse;
@@ -15,7 +16,7 @@ import shop.gaship.gashipfront.security.social.manualitic.dto.userdata.NaverUser
 /**
  * 회원가입이 필요한지 필요하지 않은지를 비교해서 회원가입되었다면 가입된 member를 반환하며 가입되지 않았다면 자동가입시키는 역할을 가지는 클래스입니다.
  *
- * @author : 최겸준
+ * @author 최겸준
  * @since 1.0
  */
 @Component
@@ -38,9 +39,10 @@ public class SignupManager {
 
         MemberAllFieldDto member = null;
         try {
-            member = memberService.getMemberByEmail(info.getEmail());
 
+            member = memberService.getMemberByEmail(info.getEmail());
         } catch (RequestFailureThrow e) {
+
             if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 throw e;
             }

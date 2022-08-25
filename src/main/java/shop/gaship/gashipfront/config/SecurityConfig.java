@@ -1,7 +1,16 @@
 package shop.gaship.gashipfront.config;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesRegistrationAdapter;
+import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -33,25 +42,40 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URI = "/login";
-    private final CartService cartService;
     private final ServerConfig serverConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").permitAll().and();
 
-        http.sessionManagement().maximumSessions(1);
+        http.authorizeRequests()
+            .antMatchers("/login", "/securities/login/naver",
+                "/securities/login/naver/callback",
+                "/oauth2/authorization/kakao",
+                "/login/oauth2/code/kakao")
+            .permitAll()
+            .anyRequest().authenticated()
+            .and();
 
-        http.formLogin().successForwardUrl("/").loginPage(LOGIN_URI).loginProcessingUrl(LOGIN_URI)
-            .successHandler(loginSuccessHandler(null)).failureUrl(LOGIN_URI).usernameParameter("id")
-            .passwordParameter("pw").and();
+        http.sessionManagement()
+            .maximumSessions(1);
 
-        http.oauth2Login().loginPage(LOGIN_URI).defaultSuccessUrl("/").failureUrl(LOGIN_URI)
-            .successHandler(oauth2LoginSuccessHandler(null, null));
+        http.formLogin()
+                .loginPage(LOGIN_URI)
+                .loginProcessingUrl("/loginAction")
+                .usernameParameter("id")
+                .passwordParameter("pw")
+                .successHandler(loginSuccessHandler(null))
+                .defaultSuccessUrl("/")
+                .failureUrl(LOGIN_URI);
 
-        http.logout().disable();
+        http.logout();
 
-        http.authenticationProvider(authenticationProvider());
+        http.oauth2Login()
+                .loginPage(LOGIN_URI)
+                .successHandler(oauth2LoginSuccessHandler(null))
+                .failureUrl(LOGIN_URI);
+
+        http.csrf().disable();
     }
 
     @Override
@@ -65,11 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger/**");
     }
 
-    /**
-     * 일반 로그인 처리를 실행하는 객체를 반환하는 메서드입니다.
-     *
-     * @return 일반 로그인 처리를 실행하는 객체를 반환합니다.
-     */
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         CustomUserDetailService customUserDetailService = new CustomUserDetailService(serverConfig);
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -90,21 +110,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService,
-                                                               CartService cartService) {
-        return new Oauth2LoginSuccessHandler(commonService, cartService);
-    }
-
-    /**
-     * 웹클라이언트 공통 반환 메서드입니다.
-     *
-     * @return 공통 웹클라이언트를 설정하는 스프링 빈입니다.
-     */
-    @Bean
-    public WebClient webClient() {
-        return WebClient.builder().baseUrl(serverConfig.getGatewayUrl())
-            .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
-            .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) {
+        return new Oauth2LoginSuccessHandler(commonService);
     }
 }
 

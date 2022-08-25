@@ -1,0 +1,24 @@
+package shop.gaship.gashipfront.productreview.service;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
+import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
+import shop.gaship.gashipfront.util.dto.PageResponse;
+
+/**
+ * 상품평 서비스입니다.
+ *
+ * @author : 김보민
+ * @since 1.0
+ */
+public interface ProductReviewService {
+    void addReview(MultipartFile multipartFile, ProductReviewRequestDto createRequest);
+    void modifyReview(MultipartFile multipartFile, ProductReviewRequestDto modifyRequest);
+    void removeReview(Integer orderProductNo);
+    ProductReviewResponseDto findReview(Integer orderProductNo);
+    PageResponse<ProductReviewResponseDto> findReviews(Pageable pageable);
+    PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo,
+                                                                Pageable pageable);
+    PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo, Pageable pageable);
+}
