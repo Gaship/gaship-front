@@ -1,5 +1,9 @@
 package shop.gaship.gashipfront.addresslocal.service;
 
+import java.util.List;
+import shop.gaship.gashipfront.addresslocal.dto.response.AddressLocalResponseDto;
+import shop.gaship.gashipfront.addresslocal.dto.response.AddressSubLocalResponseDto;
+
 /**
  * 설명작성란
  *
@@ -9,4 +13,8 @@ package shop.gaship.gashipfront.addresslocal.service;
 public interface AddressLocalService {
 
     boolean modifyAddressLocal(Integer localNo, boolean isDelivery);
+
+    List<AddressSubLocalResponseDto> addressSubList(String address);
+
+    List<AddressLocalResponseDto> addressList();
 }

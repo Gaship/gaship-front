@@ -1,10 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <title>Title</title>
+    <style>
+        .btn-group input {
+            display: flex;
+            background-color: white; /* Green background */
+            border: 1px solid black; /* Green border */
+            color: black; /* White text */
+            padding: 5px 10px; /* Some padding */
+            cursor: pointer; /* Pointer/hand icon */
+            width: 200px; /* Set a width if needed */
+            height: 50px;
+            /*display: block; !* Make the buttons appear below each other *!*/
+            font-size: 20px
+        }
+
+        .btn-group input:not(:last-child) {
+            border-bottom: none; /* Prevent double borders */
+        }
+
+        /* Add a background color on hover */
+        .btn-group input:hover {
+            background-color: dimgray;
+        }
+
+        #sub-address input, button {
+            border: 1px solid black;
+            padding: 5px 10px;
+            width: 200px;
+            display: flex;
+            font-size: 20px;
+        }
+
+        .sub-local {
+            background-color: white;
+        }
+
+        .sub-local-limit {
+            background-color: #d62516 !important;
+        }
+
+        #sub-address button:not(:last-child) {
+            border-bottom: none; /* Prevent double borders */
+        }
+
+        /* Add a background color on hover */
+        #sub-address button:hover {
+            background-color: dimgray;
+        }
+
+        .btn-group button:focus {
+            background-color: #fcd6ff;
+        }
+
+        .btn-group button:active {
+            background-color: rebeccapurple;
+        }
+
+        .wrapper {
+            float: left;
+            width: auto;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-주소지 전체
+<div class="wrapper">
+    <div class="btn-group" th:each="address : ${addressList}">
+        <input type="button" class="btn-local-level-1,col" th:classappend="'local-'+${address.addressNo}"
+               th:value="${address.addressName}"/>
+    </div>
+</div>
+<div class="wrapper">
+    <div id="sub-address"></div>
+</div>
+
 </body>
 </html>
+
