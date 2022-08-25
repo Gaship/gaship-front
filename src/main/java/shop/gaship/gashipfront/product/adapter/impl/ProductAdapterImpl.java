@@ -1,7 +1,8 @@
 package shop.gaship.gashipfront.product.adapter.impl;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
+import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
 import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
@@ -26,13 +28,10 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class ProductAdapterImpl implements ProductAdapter {
     private static final String REQUEST_URI = "/api/products";
-    @Value("${gaship-server.gateway-url}")
-    private String gatewayUrl;
-    private final WebClient webClient = WebClient.builder()
-        .baseUrl(gatewayUrl)
-        .build();
+    private final WebClient webClient;
 
     /**
      * {@inheritDoc}
@@ -206,19 +205,30 @@ public class ProductAdapterImpl implements ProductAdapter {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<ProductAllInfoResponseDto> productListAll(Pageable pageable) {
+    public PageResponse<ProductAllInfoResponseDto> productListAll(String page, String size,
+                                                                  String category, String minAmount,
+                                                                  String maxAmount) {
         return webClient.get()
-            .uri(uriBuilder -> uriBuilder
-                .path(REQUEST_URI)
-                .queryParam("page", pageable.getPageNumber())
-                .queryParam("size", pageable.getPageSize())
-                .build())
+            .uri(uriBuilder -> {
+                UriBuilder uri = uriBuilder
+                    .path(REQUEST_URI)
+                    .queryParam("page", page)
+                    .queryParam("size", size);
+                if(Objects.nonNull(category)){
+                    uri.queryParam("category", category);
+                }
+                if(Objects.nonNull(minAmount)){
+                    uri.queryParam("minAmount", minAmount);
+                }
+                if(Objects.nonNull(maxAmount)){
+                    uri.queryParam("maxAmount", maxAmount);
+                }
+                return uri.build();
+            })
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(
-                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
-                }
-            )
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {})
             .block();
     }
 
