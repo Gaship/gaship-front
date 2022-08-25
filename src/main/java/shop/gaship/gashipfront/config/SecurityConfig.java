@@ -33,7 +33,6 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URI = "/login";
-    private final CartService cartService;
     private final ServerConfig serverConfig;
 
     @Override
@@ -43,11 +42,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().maximumSessions(1);
 
         http.formLogin().successForwardUrl("/").loginPage(LOGIN_URI).loginProcessingUrl(LOGIN_URI)
-            .successHandler(loginSuccessHandler(null)).failureUrl(LOGIN_URI).usernameParameter("id")
+            .successHandler(loginSuccessHandler()).failureUrl(LOGIN_URI).usernameParameter("id")
             .passwordParameter("pw").and();
 
         http.oauth2Login().loginPage(LOGIN_URI).defaultSuccessUrl("/").failureUrl(LOGIN_URI)
-            .successHandler(oauth2LoginSuccessHandler(null, null));
+            .successHandler(oauth2LoginSuccessHandler(null));
 
         http.logout().disable();
 
@@ -85,14 +84,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public LoginSuccessHandler loginSuccessHandler(CartService cartService) {
-        return new LoginSuccessHandler(serverConfig, cartService);
+    public LoginSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler(serverConfig);
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService,
-                                                               CartService cartService) {
-        return new Oauth2LoginSuccessHandler(commonService, cartService);
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) {
+        return new Oauth2LoginSuccessHandler(commonService);
     }
 
     /**

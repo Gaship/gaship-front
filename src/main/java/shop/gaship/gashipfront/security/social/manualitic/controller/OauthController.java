@@ -110,16 +110,6 @@ public class OauthController {
         JwtDto jwt = authApiService.getJwt(member.getMemberNo(), member.getAuthorities());
         session.setAttribute("jwt", jwt);
 
-        // 비회원일 떄 쓰던 장바구니 쿠키 값을 찾아서
-        Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(CART_ID))
-                .findFirst();
-        // 찾은 쿠키값이 존재하면 비회원 때 담은 상품들을 회원의 장바구니에 넣는다.
-        nonMemberCookie.ifPresent(cookie -> cartService.mergeCart(cookie.getValue(), member.getMemberNo()));
-        //장바구니의 쿠키값을 회원의 id 로 바꿔준다.
-        Cookie cookie = new Cookie(CART_ID, member.getMemberNo().toString());
-        cookie.setMaxAge(60 * 60 * 24 * 100);
-        response.addCookie(cookie);
         return "all";
     }
 }

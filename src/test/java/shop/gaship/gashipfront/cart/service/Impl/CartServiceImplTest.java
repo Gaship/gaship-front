@@ -83,7 +83,7 @@ class CartServiceImplTest {
     void deleteProductFromCartTest1() throws Exception {
         when(hashOperations.delete("1", 1)).thenReturn(1L);
 
-        cartService.deleteProductFromCart("1", CartDummy.cartProductDeleteRequestDto(1));
+        cartService.deleteProductFromCart("1", 1L);
 
         verify(hashOperations, times(1)).delete("1", "1");
     }
