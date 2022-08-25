@@ -21,5 +21,5 @@ public class ProductResponseDto {
     private Long installationCost;
     private Integer orderQuantity;
     private Integer quantity;
-    private List<String> filePaths;
+    private String filePaths;
 }

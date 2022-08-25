@@ -1,11 +1,10 @@
 package shop.gaship.gashipfront.cart.service;
 
-import java.util.List;
-import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 
+import java.util.List;
 
 
 /**
@@ -26,13 +25,22 @@ public interface CartService {
             String cartId, CartProductModifyRequestDto request) throws CartProductAmountException;
 
     /**
+     * 장바구니에 담긴 상품의 수량을 변경하는 메서드입니다.
+     *
+     * @param cartId 장바구니 id 값입니다.
+     * @author 최정우
+     */
+    void modifyProductQuantityFromCart(
+            String cartId, Long productNo, Long productQuantity) throws CartProductAmountException;
+
+    /**
      * 장바구니에서 상품을 삭제하는 메서드입니다.
      *
      * @param cartId  장바구니 id 값입니다.
      * @param request 삭제할 상품의 정보를 담은 객체입니다.
      * @author 최정우
      */
-    void deleteProductFromCart(String cartId, CartProductDeleteRequestDto request)
+    void deleteProductFromCart(String cartId, Long request)
             throws CartProductAmountException;
 
     /**

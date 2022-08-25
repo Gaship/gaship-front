@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/shopping/layout}">
+<head>
+    <title>장바구니</title>
+</head>
+<th:block layout:fragment="content">
+    <script>
+        var productNo;
+        var quantity;
+        var realQuantity
+        function modifyQuantity(){
+            quantity = document.getElementById("orderQuantity");
+            realQuantity = quantity.options[quantity.selectedIndex].value;
+            console.log(realQuantity);
+        }
+        function setProductNo(va){
+            productNo = va;
+            console.log(productNo);
+            console.log("출력확인");
+            console.log(quantity);
+        }
+    </script>
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">장바구니</h1>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">장바구니 목록</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Name: activate to sort column descending" style="width: 300px;">상품사진</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 300px;">상품명</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 200px;">수량</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 300px;">단가</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">총상품금액</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">수량변경</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">삭제</th>
+                                </tr>
+                                </thead>
+                                    <iframe id="cartdelete" name="cartdelete" style="display:none"></iframe>
+                                <tbody>
+                                <tr th:each="product : ${response}">
+                                    <td><img th:src="${product.filePaths}"/></td>
+                                    <td>[[${product.productName}]]</td>
+                                    <td>[[${product.orderQuantity}]]</td>
+                                    <td>[[${product.amount}]]₩</td>
+                                    <td>[[${product.amount} * ${product.orderQuantity}]]₩</td>
+                                    <td>
+<!--                                        <form th:action="@{/carts/modify-quantity(productNo=${product.productNo},productQuantity=3)}" th:method="put">-->
+
+                                                    <select name="orderQuantity" onchange="modifyQuantity(this)" class="rs-quantity-dropdown form-dropdown-select" id="orderQuantity" data-autom="item-quantity-dropdown" style="width: 2.47059rem;">
+                                                        <option th:value="1" aria-label="1 ,  수량">1</option>
+                                                        <option th:value="2" aria-label="2 ,  수량">2</option>
+                                                        <option th:value="3" aria-label="3 ,  수량">3</option>
+                                                        <option th:value="4" aria-label="4 ,  수량">4</option>
+                                                        <option th:value="5" aria-label="5 ,  수량">5</option>
+                                                        <option th:value="6" aria-label="6 ,  수량">6</option>
+                                                        <option th:value="7" aria-label="7 ,  수량">7</option>
+                                                        <option th:value="8" aria-label="8 ,  수량">8</option>
+                                                        <option th:value="9" aria-label="9 ,  수량">9</option>
+                                                        <option th:value="10" aria-label="10+ ,  수량">10</option>
+                                                    </select>
+                                                    <span class="rs-quantity-icon form-dropdown-chevron" aria-hidden="true"></span>
+
+                                            <button th:onclick="setProductNo(${product.productNo})" class="btn btn-primary" aria-describedby="submitHelp">수정</button>
+<!--                                        </form>-->
+
+                                    <td>
+<!--                                        <iframe id="pro-del" name="pro-del" style="display:none"></iframe>-->
+                                        <form th:action="@{/carts/delete-product(id=${product.productNo})}" th:method="delete" >
+                                            <button class="btn btn-danger" type="submit" aria-describedby="submitHelp">삭제</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script th:src="@{/index/index.js}"></script>
+</th:block>
+
+</html>

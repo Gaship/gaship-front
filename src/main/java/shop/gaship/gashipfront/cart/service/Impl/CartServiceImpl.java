@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.cart.dto.request.CartProductDeleteRequestDto;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.exception.CartMaxLimitException;
@@ -66,8 +65,24 @@ public class CartServiceImpl implements CartService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteProductFromCart(String cartNo, CartProductDeleteRequestDto request) {
-        hashOperations.delete(cartNo, request.getProductId().toString());
+    public void modifyProductQuantityFromCart(
+            String cartNo, Long productNo, Long productQuantity) throws CartProductAmountException {
+        redisTemplate.expire(cartNo, 101, TimeUnit.DAYS);
+        if (productQuantity > 10 || productQuantity < 1) {
+            throw new CartProductAmountException();
+        }
+        if (hashOperations.size(cartNo) > (10L)) {
+            throw new CartMaxLimitException();
+        }
+        hashOperations.put(cartNo, productNo.toString(), productQuantity.toString());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteProductFromCart(String cartNo, Long id) {
+        hashOperations.delete(cartNo, id.toString());
     }
 
     /**
@@ -96,10 +111,10 @@ public class CartServiceImpl implements CartService {
     public List<ProductResponseDto> getProductsFromCart(String cartId) {
         redisTemplate.expire(cartId, 101, TimeUnit.DAYS);
         Map<Integer, Integer> integerMap = new HashMap<>();
-        hashOperations.entries(cartId)
-                .forEach((k, v) -> integerMap.put(
-                        Integer.parseInt((String.valueOf(k))),
-                        Integer.parseInt((String.valueOf(v)))));
+        Map<Object, Object> cartInfo = hashOperations.entries(cartId);
+        cartInfo.forEach((k, v) -> integerMap.put(
+                Integer.parseInt((String.valueOf(k))),
+                Integer.parseInt((String.valueOf(v)))));
         List<ProductAllInfoResponseDto> productList =
                 productAdapter.productNosList(new ArrayList<>(integerMap.keySet()));
         return CartUtil.productListToCartList(productList, integerMap);

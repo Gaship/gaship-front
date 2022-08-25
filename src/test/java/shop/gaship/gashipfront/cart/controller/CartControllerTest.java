@@ -63,11 +63,9 @@ class CartControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(cookie().exists(CART_ID));
+                .andExpect(status().isOk());
 
-
-        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
+        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any());
     }
 
     @DisplayName("쿠키가 있는 비회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
@@ -79,12 +77,11 @@ class CartControllerTest {
         mockMvc.perform(post("/carts/add-product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body)
-                        .cookie(new Cookie(CART_ID, UUID.randomUUID().toString()))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(cookie().doesNotExist(CART_ID));
 
-        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
+        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any());
     }
 
     @DisplayName("쿠키가 있는 회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
@@ -101,71 +98,66 @@ class CartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(cookie().doesNotExist(CART_ID));
 
-        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
+        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any());
     }
+
 
     @DisplayName("비회원이 장바구니에서 상품에 수량 변경")
     @Test
-    void modifyFromCartTest1() throws Exception {
-        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(1);
-        String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(3, 21));
+    void modifyFromCartTes2t() throws Exception {
+        doNothing().when(cartService).modifyProductQuantityFromCart(any(), any(),any());
 
         mockMvc.perform(put("/carts/modify-quantity")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(CART_ID, UUID.randomUUID().toString()))
+                        .queryParam("productNo","1")
+                        .queryParam("productQuantity","1")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
 
-        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
+        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any(),any());
     }
 
     @DisplayName("회원이 장바구니에서 상품에 수량 변경")
     @Test
-    void modifyFromCartTes2t() throws Exception {
-        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(7);
-        String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(3, 7));
+    void modifyFromCartTest3() throws Exception {
+        doNothing().when(cartService).modifyProductQuantityFromCart(any(),any(), any());
 
         mockMvc.perform(put("/carts/modify-quantity")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(CART_ID, "3"))
+                        .queryParam("productNo","1")
+                        .queryParam("productQuantity","1")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
 
-        verify(cartService, times(1)).modifyProductQuantityFromCart(anyString(), any());
+        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any(),any());
     }
 
     @DisplayName("비회원이 장바구니에서 상품을 삭제할 때")
     @Test
     void deleteFromCartTest1() throws Exception {
         doNothing().when(cartService).deleteProductFromCart(any(), any());
-        String body = objectMapper.writeValueAsString(CartDummy.cartProductDeleteRequestDto(1));
 
         mockMvc.perform(delete("/carts/delete-product")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(CART_ID, UUID.randomUUID().toString()))
+                        .queryParam("id","1")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
 
-        verify(cartService, times(1)).deleteProductFromCart(anyString(), any());
+        verify(cartService, times(1)).deleteProductFromCart(any(), any());
     }
 
     @DisplayName("회원이 장바구니에서 상품을 삭제할 때")
     @Test
     void deleteFromCartTest2() throws Exception {
         doNothing().when(cartService).deleteProductFromCart(any(), any());
-        String body = objectMapper.writeValueAsString(CartDummy.cartProductDeleteRequestDto(1));
 
         mockMvc.perform(delete("/carts/delete-product")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body)
-                        .cookie(new Cookie(CART_ID, "3"))
+                        .queryParam("id","1")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
 
-        verify(cartService, times(1)).deleteProductFromCart(anyString(), any());
+        verify(cartService, times(1)).deleteProductFromCart(any(), any());
     }
 
     @DisplayName("쿠키가 있는 방문자가 상품목록을 조회")
@@ -179,15 +171,14 @@ class CartControllerTest {
                         .installationCost(0L)
                         .orderQuantity(1)
                         .quantity(1)
-                        .filePaths(List.of("1"))
+                        .filePaths("1")
                         .build()));
 
         mockMvc.perform(get("/carts/")
-                        .cookie(new Cookie(CART_ID, "3"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(cartService, times(1)).getProductsFromCart(anyString());
+        verify(cartService, times(1)).getProductsFromCart(any());
     }
 
     @DisplayName("쿠키가 없는 방문자가 상품목록을 조회")
@@ -201,13 +192,13 @@ class CartControllerTest {
                                 .installationCost(0L)
                                 .orderQuantity(1)
                                 .quantity(1)
-                                .filePaths(List.of("1"))
+                                .filePaths("1")
                         .build()));
 
         mockMvc.perform(get("/carts/")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(cartService, never()).getProductsFromCart(anyString());
+        verify(cartService, times(1)).getProductsFromCart(any());
     }
 }

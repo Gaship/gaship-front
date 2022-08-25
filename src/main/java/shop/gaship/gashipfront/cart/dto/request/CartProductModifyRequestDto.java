@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.cart.dto.request;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import lombok.Getter;
+import lombok.Setter;
 
 
 /**
@@ -12,6 +13,7 @@ import lombok.Getter;
  * @since 1.0
  */
 @Getter
+@Setter
 public class CartProductModifyRequestDto {
     @Min(value = 1, message = "상품 id 는 1 이상이어야합니다.")
     private Integer productId;
