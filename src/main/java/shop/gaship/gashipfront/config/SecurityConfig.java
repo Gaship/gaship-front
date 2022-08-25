@@ -42,6 +42,7 @@ import shop.gaship.gashipfront.security.social.automatic.handler.Oauth2LoginSucc
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URI = "/login";
+    private final ServerConfig serverConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -63,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/loginAction")
                 .usernameParameter("id")
                 .passwordParameter("pw")
-                .successHandler(loginSuccessHandler(null, null))
+                .successHandler(loginSuccessHandler(null))
                 .defaultSuccessUrl("/")
                 .failureUrl(LOGIN_URI);
 
@@ -79,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider(null));
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Override
@@ -89,9 +90,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(
-        CustomUserDetailService customUserDetailService) {
-
+    public AuthenticationProvider authenticationProvider() {
+        CustomUserDetailService customUserDetailService = new CustomUserDetailService(serverConfig);
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(customUserDetailService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -105,13 +105,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public LoginSuccessHandler loginSuccessHandler(ServerConfig serverConfig, CartService cartService) {
+    public LoginSuccessHandler loginSuccessHandler(CartService cartService) {
         return new LoginSuccessHandler(serverConfig, cartService);
     }
 
     @Bean
-    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService, CartService cartService) {
-        return new Oauth2LoginSuccessHandler(commonService, cartService);
+    public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) {
+        return new Oauth2LoginSuccessHandler(commonService);
     }
 }
 

@@ -1,16 +1,17 @@
 package shop.gaship.gashipfront.security.common.login.controller;
 
+import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -26,7 +27,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService
 @RequiredArgsConstructor
 public class LoginController {
     private static final String CART_ID = "CID";
-    private final AuthApiService authAPIService;
+    private final AuthApiService authApiService;
 
     /**
      * 로그인 요청을 담당하는 기능입니다.
@@ -75,7 +76,7 @@ public class LoginController {
 
         if (context.getAuthentication().getPrincipal() instanceof UserDetailsDto) {
             memberNo = ((UserDetailsDto) context.getAuthentication().getPrincipal())
-                .getMember().getMemberNo();
+                .getMemberNo();
         }
         authApiService.logout(memberNo, jwt);
 

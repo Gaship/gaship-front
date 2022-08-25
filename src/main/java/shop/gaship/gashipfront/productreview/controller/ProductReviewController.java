@@ -92,7 +92,7 @@ public class ProductReviewController {
                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         if (Objects.nonNull(userDetailsDto)) {
             model.addAttribute("memberNickname",
-                    userDetailsDto.getMember().getNickName());
+                    null);
         }
         model.addAttribute("reviews",
                 productReviewService.findReviewsByProduct(productNo, pageable));
@@ -107,7 +107,7 @@ public class ProductReviewController {
                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         if (Objects.nonNull(userDetailsDto)) {
             model.addAttribute("memberNickname",
-                    userDetailsDto.getMember().getNickName());
+                null);
         }
         model.addAttribute("reviews",
                 productReviewService.findReviewsByMember(memberNo, pageable));

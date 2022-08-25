@@ -77,16 +77,8 @@ public class Oauth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             .collect(Collectors.toList());
 
         JwtDto jwt = commonService.getJwt(memberDto.getMemberNo(), authorityList);
-        TokenRequestDto tokenRequestDto =
-            new TokenRequestDto(
-                member.getMemberNo(),
-                member.getName(),
-                member.getAuthorities()
-            );
 
-        JwtDto jwt = commonService.getJwt(member.getMemberNo(), member.getAuthorities());
         HttpSession session = request.getSession();
-        session.setAttribute("memberInfo", tokenRequestDto);
         session.setAttribute("jwt", jwt);
     }
 }

@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.oidc.StandardClaimAccessor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 
