@@ -31,7 +31,9 @@ public class CategoryAdapterImpl implements CategoryAdapter {
                 .uri("/api/categories")
                 .bodyValue(createRequest)
                 .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(Void.class)
+                .block();
     }
 
     /**
@@ -43,7 +45,9 @@ public class CategoryAdapterImpl implements CategoryAdapter {
                 .uri("/api/categories/{categoryNo}", modifyRequest.getNo())
                 .bodyValue(modifyRequest)
                 .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(Void.class)
+                .block();
     }
 
     /**
@@ -95,6 +99,8 @@ public class CategoryAdapterImpl implements CategoryAdapter {
         webClient.delete()
                 .uri("/api/categories/{categoryNo}", categoryNo)
                 .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(Void.class)
+                .block();
     }
 }

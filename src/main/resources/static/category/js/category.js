@@ -18,7 +18,6 @@ const shoppingMallCategories = async () => {
 
     const table = document.querySelector(".categories");
 
-
     flattedCategories.forEach(loadedCategory => {
         const td = document.createElement("tr");
         const category = document.createElement("td");
@@ -28,6 +27,7 @@ const shoppingMallCategories = async () => {
             const addBtn = document.createElement("button");
             addBtn.innerHTML += "추가"
             addBtn.className = "btn btn-primary ml-2 px-1 py-0";
+            addBtn.addEventListener("click", function () {moveAddForm(loadedCategory.no)})
             category.appendChild(addBtn);
         }
 
@@ -46,6 +46,10 @@ const shoppingMallCategories = async () => {
     });
 
     productsPageCategories();
+}
+
+const moveAddForm = (upperCategoryNo) => {
+    location.href = "/categories/add?upperCategoryNo=" + upperCategoryNo;
 }
 
 window.addEventListener('load', () => shoppingMallCategories());
