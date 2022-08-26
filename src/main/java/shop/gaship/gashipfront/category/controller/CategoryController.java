@@ -17,4 +17,8 @@ import shop.gaship.gashipfront.category.service.CategoryService;
 public class CategoryController {
     private final CategoryService categoryService;
 
+    @GetMapping("/admin/categories")
+    public String categoryList(Model model) {
+        return "category/categoryList";
+    }
 }
