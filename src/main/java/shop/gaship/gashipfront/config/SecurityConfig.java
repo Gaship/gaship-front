@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.security.basic.handler.LoginSuccessHandler;
 import shop.gaship.gashipfront.security.basic.service.CustomUserDetailService;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -48,15 +50,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("id")
                 .passwordParameter("pw")
                 .successHandler(loginSuccessHandler())
-                .defaultSuccessUrl("/")
                 .failureUrl(LOGIN_URI);
-
         http.logout();
 
         http.oauth2Login()
                 .loginPage(LOGIN_URI)
                 .successHandler(oauth2LoginSuccessHandler(null))
                 .failureUrl(LOGIN_URI);
+
+        http.authenticationProvider(authenticationProvider());
     }
 
     @Override
@@ -67,10 +69,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) {
         webSecurity.ignoring()
-                .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger/**");
+            .antMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger/**");
     }
 
-    @Bean
+    /**
+     * 일반 로그인 처리를 실행하는 객체를 반환하는 메서드입니다.
+     *
+     * @return 일반 로그인 처리를 실행하는 객체를 반환합니다.
+     */
     public AuthenticationProvider authenticationProvider() {
         CustomUserDetailService customUserDetailService = new CustomUserDetailService(serverConfig);
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -93,6 +99,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public Oauth2LoginSuccessHandler oauth2LoginSuccessHandler(AuthApiService commonService) {
         return new Oauth2LoginSuccessHandler(commonService);
+    }
+
+    /**
+     * 웹클라이언트 공통 반환 메서드입니다.
+     *
+     * @return 공통 웹클라이언트를 설정하는 스프링 빈입니다.
+     */
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder().baseUrl(serverConfig.getGatewayUrl())
+            .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE).build();
     }
 }
 

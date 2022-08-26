@@ -57,7 +57,7 @@ public class LoginController {
     }
 
     /**
-     * 로그아웃 요청을 담당하는 기능입니다.
+     * 로그아웃 요청을cvbcvc 담당하는 기능입니다.
      *
      * @param session redis에 저장된 jwt를 불러오기위해 사용합니다.
      * @return 홈페이지 뷰입니다.
