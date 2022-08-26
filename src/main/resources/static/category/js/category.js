@@ -19,16 +19,12 @@ const shoppingMallCategories = async () => {
     const table = document.querySelector(".categories");
 
     flattedCategories.forEach(loadedCategory => {
-        const td = document.createElement("tr");
+        const tr = document.createElement("tr");
         const category = document.createElement("td");
         category.innerHTML = "&nbsp".repeat(loadedCategory.level * 4) + loadedCategory.name;
 
         if (loadedCategory.level < 3) {
-            const addBtn = document.createElement("button");
-            addBtn.innerHTML += "추가"
-            addBtn.className = "btn btn-primary ml-2 px-1 py-0";
-            addBtn.addEventListener("click", function () {moveAddForm(loadedCategory.no)})
-            category.appendChild(addBtn);
+            appendCategoryAddButton(category, loadedCategory.no)
         }
 
         const modifyBtn = document.createElement("button");
@@ -41,11 +37,23 @@ const shoppingMallCategories = async () => {
         removeBtn.className = "btn btn-danger ml-2 px-1 py-0";
         category.appendChild(removeBtn);
 
-        td.appendChild(category);
-        table.appendChild(td);
+        tr.appendChild(category);
+        table.appendChild(tr);
     });
 
-    productsPageCategories();
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    appendCategoryAddButton(td, null);
+    tr.appendChild(td)
+    table.appendChild(tr);
+}
+
+const appendCategoryAddButton = (element, upperCategoryNo) => {
+    const addBtn = document.createElement("button");
+    addBtn.innerHTML += "추가"
+    addBtn.className = "btn btn-primary ml-2 px-1 py-0";
+    addBtn.addEventListener("click", function () {moveAddForm(upperCategoryNo)})
+    element.appendChild(addBtn);
 }
 
 const moveAddForm = (upperCategoryNo) => {

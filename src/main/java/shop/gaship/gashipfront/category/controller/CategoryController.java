@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.category.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/add")
-    public String categoryAddForm(@RequestParam Integer upperCategoryNo,
+    public String categoryAddForm(@RequestParam String upperCategoryNo,
                                   Model model) {
         model.addAttribute("upperCategoryNo", upperCategoryNo);
         return "category/categoryAddForm";
@@ -34,8 +35,13 @@ public class CategoryController {
 
     @PostMapping("/categories/add")
     public String categoryAdd(@RequestParam String name,
-                              @RequestParam Integer upperCategoryNo) {
-        categoryService.addCategory(new CategoryCreateRequestDto(name, upperCategoryNo));
+                              @RequestParam String upperCategoryNo) {
+        if (upperCategoryNo.equals("null")) {
+            upperCategoryNo = null;
+        }
+
+        categoryService.addCategory(new CategoryCreateRequestDto(name,
+                NumberUtils.createInteger(upperCategoryNo)));
         return "redirect:/admin/categories";
     }
 }
