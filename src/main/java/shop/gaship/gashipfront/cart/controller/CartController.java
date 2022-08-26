@@ -90,6 +90,6 @@ public class CartController {
                                       Model model) {
         String cartId = (String) request.getAttribute(CART_ID);
         model.addAttribute("response", cartService.getProductsFromCart(cartId));
-        return "layout/shopping/carts";
+        return "cart/carts";
     }
 }

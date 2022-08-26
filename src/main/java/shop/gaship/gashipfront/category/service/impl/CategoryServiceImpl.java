@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.category.adapter.CategoryAdapter;
+import shop.gaship.gashipfront.category.dto.request.CategoryCreateRequestDto;
 import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 import shop.gaship.gashipfront.category.service.CategoryService;
 
@@ -21,5 +22,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponseDto> findCategories() {
         return categoryAdapter.categoryList();
+    }
+
+    @Override
+    public void addCategory(CategoryCreateRequestDto createRequest) {
+        categoryAdapter.categoryAdd(createRequest);
     }
 }

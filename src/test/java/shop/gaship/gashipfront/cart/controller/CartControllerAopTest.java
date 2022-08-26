@@ -15,7 +15,7 @@
 //import org.springframework.http.MediaType;
 //import org.springframework.test.util.ReflectionTestUtils;
 //import org.springframework.test.web.servlet.MockMvc;
-//import shop.gaship.gashipfront.aspect.CartIdCheckAspect;
+//import shop.gaship.gashipfront.aspect.cart.CartIdCheckAspect;
 //import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 //import shop.gaship.gashipfront.cart.service.CartService;
 //

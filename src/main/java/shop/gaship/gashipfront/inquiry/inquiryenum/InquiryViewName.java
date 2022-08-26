@@ -7,14 +7,14 @@ package shop.gaship.gashipfront.inquiry.inquiryenum;
  * @since 1.0
  */
 public enum InquiryViewName {
-    VIEW_NAME_CUSTOMER_INQUIRY_LIST("inquiries/customerInquiryList"),
-    VIEW_NAME_PRODUCT_INQUIRY_LIST("inquiries/productInquiryList"),
+    VIEW_NAME_CUSTOMER_INQUIRY_LIST("inquiry/customerInquiryList"),
+    VIEW_NAME_PRODUCT_INQUIRY_LIST("inquiry/productInquiryList"),
 
-    VIEW_NAME_CUSTOMER_INQUIRY_ADD_FORM("inquiries/customerInquiryAddForm"), // 사용자
-    VIEW_NAME_PRODUCT_INQUIRY_ADD_FORM("inquiries/productInquiryAddForm"), // 사용자
+    VIEW_NAME_CUSTOMER_INQUIRY_ADD_FORM("inquiry/customerInquiryAddForm"), // 사용자
+    VIEW_NAME_PRODUCT_INQUIRY_ADD_FORM("inquiry/productInquiryAddForm"), // 사용자
 
-    VIEW_NAME_CUSTOMER_INQUIRY_DETAILS("inquiries/customerInquiryDetails"), // 사용자, 관리자
-    VIEW_NAME_PRODUCT_INQUIRY_DETAILS("inquiries/productInquiryDetails"); // 사용자, 관리자
+    VIEW_NAME_CUSTOMER_INQUIRY_DETAILS("inquiry/customerInquiryDetails"), // 사용자, 관리자
+    VIEW_NAME_PRODUCT_INQUIRY_DETAILS("inquiry/productInquiryDetails"); // 사용자, 관리자
 
     private String value;
 

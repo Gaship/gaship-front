@@ -14,10 +14,12 @@ import org.springframework.lang.Nullable;
  * @since 1.0
  */
 @Getter
+@Setter
 public class InquiryAddRequestDto {
 
     @Min(value = 1, message = "memberNo 는 최소값이 1입니다.")
-    @NotNull(message = "memberNo 는 필수 입력값입니다.")
+    @Nullable
+    @Setter
     private Integer memberNo;
 
     @Min(value = 1, message = "productNo 는 최소값이 1입니다.")
