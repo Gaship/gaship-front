@@ -13,14 +13,16 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import shop.gaship.gashipfront.exceptions.MemberNoNotFoundException;
+import shop.gaship.gashipfront.exceptions.MemberNotCreationException;
 import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
+import shop.gaship.gashipfront.inquiry.dto.request.view.ProductInfo;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
 import shop.gaship.gashipfront.inquiry.service.product.ProductInquiryService;
@@ -36,7 +38,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/inquires")
+@RequestMapping("/inquiries")
 public class ProductInquiryForMemberController {
 
     private final ProductInquiryService productInquiryService;
@@ -60,7 +62,7 @@ public class ProductInquiryForMemberController {
 
         Integer memberNo = userDetailsDto.getMemberNo();
         if (Objects.isNull(memberNo)) {
-            throw new MemberNoNotFoundException();
+            throw new MemberNotCreationException();
         }
 
         PageResponse<InquiryListResponseDto> pageResponse =
@@ -75,10 +77,11 @@ public class ProductInquiryForMemberController {
      * @return 상품문의 추가페이지에 대한 view 경로를 반환합니다.
      * @author 최겸준
      */
-    @GetMapping("/show-form/product-inquiry-add")
-    public String productInquiryAddForm(Integer productNo, Model model) {
+    @GetMapping(value = "/show-form/product-inquiry-add", params = {"productNo", "productName"})
+    public String productInquiryAddForm(@Valid ProductInfo productInfo, Model model) {
 
-        model.addAttribute("productNo", productNo);
+        model.addAttribute("productNo", productInfo.getProductNo());
+        model.addAttribute("productName", productInfo.getProductName());
         return VIEW_NAME_PRODUCT_INQUIRY_ADD_FORM.getValue();
     }
 
@@ -89,16 +92,17 @@ public class ProductInquiryForMemberController {
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @PostMapping(value = "/inquiries/product-inquiry")
+    @PostMapping(value = "/product-inquiry")
     public String productInquiryAdd(@Valid InquiryAddRequestDto inquiryAddRequestDto,
-                                    HttpSession session) {
+                                    HttpSession session, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         inquiryAddRequestDto.setIsProduct(PRODUCT_INQUIRY.getValue());
-        commonInquiryService.addInquiry(inquiryAddRequestDto);
+        inquiryAddRequestDto.setMemberNo(userDetailsDto.getMemberNo());
 
+        commonInquiryService.addInquiry(inquiryAddRequestDto);
         session.setAttribute(KEY_IS_SUCCESS.getValue(), Boolean.TRUE);
         session.setAttribute(KEY_SUCCESS_MESSAGE.getValue(),
             VALUE_MESSAGE_PRODUCT_INQUIRY_ADD_SUCCESS.getValue());
 
-        return "redirect:/inquires/member-self/product-inquiries";
+        return "redirect:/inquiries/member-self/product-inquiries";
     }
 }

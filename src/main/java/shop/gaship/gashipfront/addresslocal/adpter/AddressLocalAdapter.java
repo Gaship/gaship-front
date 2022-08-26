@@ -1,9 +1,10 @@
 package shop.gaship.gashipfront.addresslocal.adpter;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.addresslocal.dto.request.AddressLocalModifyRequestDto;
@@ -19,12 +20,12 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  */
 
 @Component
+@RequiredArgsConstructor
 public class AddressLocalAdapter {
 
-    private static final String ADDRESS_LOCALS = "/api/addressLocals";
+    private static final String ADDRESS_LOCALS = "/api/address-locals";
 
-    @Value("${gaship-server.gateway-url}")
-    private String gateWayUrl;
+    private final WebClient webClient;
 
     /**
      * 지역의 배달가능여부를 수정하기위한 메서드입니다.
@@ -33,12 +34,15 @@ public class AddressLocalAdapter {
      * @return 정상적으로 완료시 true 를 반환합니다.
      */
     public boolean modifyAddressIsDelivery(AddressLocalModifyRequestDto dto) {
-        WebClient.create(gateWayUrl)
+        webClient
             .put()
             .uri(ADDRESS_LOCALS)
+            .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(dto)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .toEntity(Void.class)
+            .block();
         return true;
     }
 
@@ -49,8 +53,7 @@ public class AddressLocalAdapter {
      * @return 지역 정보들이 반환됩니다.
      */
     public List<AddressSubLocalResponseDto> addressSubLocalList(String upperAddress) {
-        return WebClient.create(gateWayUrl)
-            .get()
+        return webClient.get()
             .uri(uriBuilder -> uriBuilder.path(ADDRESS_LOCALS)
                 .queryParam("address", upperAddress)
                 .build())
@@ -63,7 +66,7 @@ public class AddressLocalAdapter {
     }
 
     public List<AddressLocalResponseDto> addressLocalList(){
-        return WebClient.create(gateWayUrl)
+        return webClient
             .get()
             .uri(ADDRESS_LOCALS)
             .retrieve()

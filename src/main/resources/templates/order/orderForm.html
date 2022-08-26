@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>주문</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script th:type="module" th:src="@{/order/js/order.js}"></script>
+    <script th:src="@{/order/js/pageModule.js}"></script>
+    <script th:type="module"  th:src="@{/order/js/addressListModule.js}"></script>
+    <th:block th:replace="layout/fragments/shopping/bootstrap :: bootstrap-fragment"></th:block>
+</head>
+<body>
+<th:block layout:fragment="content">
+    <div style="margin-left: 200px; margin-right: 200px">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th class="shoping__product">Products</th>
+                            <th>상품 가격</th>
+                            <th>할인 금액</th>
+                            <th>총 가격</th>
+                            <th>쿠폰 적용</th>
+                        </tr>
+                        </thead>
+                        <tbody id="orderProductsContainer">
+                            <tr>
+                                <td class="shoping__cart__item">
+                                    <img src="" alt="">
+                                    <h5>책상</h5>
+                                </td>
+                                <td class="shoping__cart__price">
+                                    100,000
+                                </td>
+                                <td class="shoping__cart__quantity">
+                                    <div>
+                                        -10,000
+                                    </div>
+                                </td>
+                                <td class="shoping__cart__total">
+                                    90,000
+                                </td>
+                                <td class="shoping__cart__item__close">
+                                    <button value="쿠폰 선택"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-6">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="checkout__input">
+                            <p>수령인 이름<span>*</span></p>
+                            <input type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="checkout__input">
+                            <p>수령인 전화번호<span>*</span></p>
+                            <input type="tel">
+                        </div>
+                    </div>
+                </div>
+                <div class="checkout__input">
+                    <p>대리 수령인 전화번호</p>
+                    <input type="tel">
+                </div>
+
+                <div class="checkout__input">
+                    <p>배송지<span>*</span>
+                        <span style="margin: 10px">
+                            <button id="addressListBtn" style="padding: 10px" class="site-btn">배송지 목록</button>
+                        </span>
+                    </p>
+                    <div id="addressListContainer">
+                    </div>
+                    <div class="checkout__input">
+                        <p>시군구<span>*</span></p>
+                        <input readonly="readonly" type="text" value="">
+                    </div>
+                    <div class="checkout__input">
+                        <p>상세주소<span>*</span></p>
+                        <input readonly="readonly" type="text" value="" class="checkout__input__add">
+                        <input type="text" placeholder="상세 주소를 작성해주세요.">
+                    </div>
+                    <div class="checkout__input">
+                        <p>우편번호<span>*</span></p>
+                        <input readonly="readonly" type="text" value="">
+                    </div>
+                </div>
+                <div class="checkout__input">
+                    <p>배송 요청사항</p>
+                    <input type="text" placeholder="배송시 추가 요청사항을 작성해주세요.">
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 col-md-6">
+                <div class="checkout__order">
+                    <h4>Your Order</h4>
+                    <div class="checkout__order__products">Products <span>Total</span></div>
+                    <ul>
+                        <li>상품 총 금액 <span>20000000</span></li>
+                        <li>할인 금액 <span>2000</span></li>
+                    </ul>
+
+                    <div class="checkout__order__total">Total <span>$750.99</span></div>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
+                        ut labore et dolore magna aliqua.</p>
+
+                    <div class="checkout__input__checkbox">
+                        <label for="payment">
+                            Check Payment
+                            <input type="checkbox" id="payment">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="checkout__input__checkbox">
+                        <label for="paypal">
+                            Paypal
+                            <input type="checkbox" id="paypal">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <button type="submit" class="site-btn">PLACE ORDER</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

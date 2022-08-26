@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.employee.dto.response;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,4 +32,8 @@ public class EmployeeResponseDto {
 
     @NotBlank
     private String address;
+
+    @Min(0)
+    @NotNull
+    private Integer employeeNo;
 }

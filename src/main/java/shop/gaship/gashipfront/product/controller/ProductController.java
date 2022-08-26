@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -21,7 +22,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
-    private final ProductAdapter productAdapter;
+    private final ProductService productService;
 
     @GetMapping
     public String showProducts(@RequestParam("page")String page,
@@ -29,7 +30,7 @@ public class ProductController {
                                @RequestParam(value = "min-amount", required = false)String minAmount,
                                @RequestParam(value = "max-amount", required = false)String maxAmount,
                                Model model) {
-        PageResponse<ProductAllInfoResponseDto> products = productAdapter.productListAll(page, "12", category, minAmount, maxAmount);
+        PageResponse<ProductAllInfoResponseDto> products = productService.productAllInfoByPageable(page, "12", category, minAmount, maxAmount);
 
         model.addAttribute("products", products.getContent());
         model.addAttribute("next", products.isNext());

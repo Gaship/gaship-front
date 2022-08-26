@@ -7,11 +7,11 @@ package shop.gaship.gashipfront.exceptions;
  * @author 최겸준
  * @since 1.0
  */
-public class MemberNoNotFoundException extends RuntimeException {
+public class MemberNotCreationException extends RuntimeException {
 
-    public static final String MESSAGE = "회원 번호가 session에 저장되지 않았거나 해당 번호를 들고오지 못했습니다.";
+    public static final String MESSAGE = "가입되지 않은 회원번호입니다.";
 
-    public MemberNoNotFoundException() {
+    public MemberNotCreationException() {
         super(MESSAGE);
     }
 }
