@@ -17,7 +17,7 @@ async function getAddressListData() {
         });
 }
 
-function drawAddressListContainer() {
+async function drawAddressListContainer() {
     addressListContainer.innerHTML = `
 <div class="card">
     <div class="card-header">
@@ -56,18 +56,24 @@ function drawAddressListContainer() {
 }
 
 function drawAddressListContent() {
-    console.log(addressListPageHelper.pageItems);
-    // <tr>
-    //     <td>183</td>
-    //     <td>John Doe</td>
-    //     <td>11-7-2014</td>
-    //     <td><span className="tag tag-success">Approved</span></td>
-    //     <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-    //     <td>
-    //         <button id="addressSelectBtn" style="padding: 10px" className="site-btn">선택</button>
-    //     </td>
-    // </tr>
-    //
+    const addressListContent = document.getElementById("addressListContent");
+    addressListPageHelper.pageItems.forEach(item => {
+        const trTemplate =
+            `
+<tr>
+    <td>${item.addressListNo}</td>
+    <td>${item.addressName}</td>
+    <td>${item.address}</td>
+    <td>${item.addressDetail}</td>
+    <td>
+        ${item.zipCode}
+    </td>
+    <td></td>
+</tr>
+            `;
+        addressListContent.insertAdjacentHTML("beforeend", trTemplate);
+    })
+
 }
 
 function init() {
@@ -75,6 +81,7 @@ function init() {
 }
 
 const loadAddressList = () => {
+    init();
     getAddressListData()
         .then(addressListPageHelper.initPage)
         .then(drawAddressListContainer)
