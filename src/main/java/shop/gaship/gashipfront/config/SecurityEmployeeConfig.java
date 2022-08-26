@@ -1,7 +1,6 @@
 package shop.gaship.gashipfront.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -34,7 +33,6 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().maximumSessions(1);
 
         http.formLogin()
-                .defaultSuccessUrl("/admin")
                 .loginPage("/manager/login")
                 .loginProcessingUrl("/manager/login")
                 .successHandler(loginSuccessHandler)

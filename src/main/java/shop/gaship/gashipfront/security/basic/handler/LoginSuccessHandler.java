@@ -2,14 +2,17 @@ package shop.gaship.gashipfront.security.basic.handler;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
@@ -26,7 +29,8 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  * @since 1.0
  */
 @RequiredArgsConstructor
-public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+@Slf4j
+public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final ServerConfig serverConfig;
 
     @Override
@@ -59,6 +63,11 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
         session.setAttribute("memberInfo", tokenRequestDto);
         session.setAttribute("jwt", tokensResponse);
 
-        response.sendRedirect("/");
+        if(Objects.equals(request.getRequestURI(), "/login")){
+            response.sendRedirect("/");
+            return;
+        }
+
+        response.sendRedirect("/admin");
     }
 }
