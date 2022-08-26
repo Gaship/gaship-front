@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.category.service;
 
 import java.util.List;
+import shop.gaship.gashipfront.category.dto.request.CategoryCreateRequestDto;
 import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 
 /**
@@ -11,4 +12,5 @@ import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
  */
 public interface CategoryService {
     List<CategoryResponseDto> findCategories();
+    void addCategory(CategoryCreateRequestDto createRequest);
 }

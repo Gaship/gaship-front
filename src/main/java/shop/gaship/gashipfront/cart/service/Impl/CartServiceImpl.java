@@ -97,7 +97,7 @@ public class CartServiceImpl implements CartService {
             throw new CartMergeException();
         }
         mergeHashMap(key, map);
-        hashOperations.delete(cartId);
+        redisTemplate.delete(cartId);
     }
 
     /**

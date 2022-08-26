@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.employee.adapter;
+package shop.gaship.gashipfront.employee.service;
 
 import org.springframework.data.domain.Pageable;
 import shop.gaship.gashipfront.employee.dto.request.EmployeeCreateRequestDto;
@@ -10,13 +10,12 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * 설명작성란
  *
  * @author : 유호철
- * @see
  * @since 1.0
  */
-public interface EmployeeAdapter {
-    Boolean employeeAdd(EmployeeCreateRequestDto requestDto);
+public interface EmployeeService {
+    boolean employeeAdd(EmployeeCreateRequestDto requestDto);
 
-    Boolean employeeModify(EmployeeModifyRequestDto requestDto);
+    boolean employeeModify(EmployeeModifyRequestDto requestDto);
 
     EmployeeResponseDto employeeDetail(Integer employeeNo);
 

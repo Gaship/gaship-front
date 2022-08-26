@@ -48,7 +48,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-6">
                             <div class="featured__item">
                                 <div class="featured__item__pic bg-contain bg-center bg-no-repeaat"
-                                     th:style="'background-image: url(&quot' + ${#lists.isEmpty(product) ? product.filePaths[0] : 'img/no-photo.png' } + '&quot;);'">
+                                     th:style="'background-image: url(&quot' + ${#lists.isEmpty(product.filePaths) ? 'img/no-photo.png' : product.filePaths[0]} + '&quot;);'">
                                     <ul class="featured__item__pic__hover">
                                         <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
                                     </ul>
