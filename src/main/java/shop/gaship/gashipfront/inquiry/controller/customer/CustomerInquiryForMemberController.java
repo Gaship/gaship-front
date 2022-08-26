@@ -19,7 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import shop.gaship.gashipfront.exceptions.MemberNoNotFoundException;
+import shop.gaship.gashipfront.exceptions.MemberNotCreationException;
 import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
@@ -60,7 +60,7 @@ public class CustomerInquiryForMemberController {
 
         Integer memberNo = userDetailsDto.getMemberNo();
         if (Objects.isNull(memberNo)) {
-            throw new MemberNoNotFoundException();
+            throw new MemberNotCreationException();
         }
 
         PageResponse<InquiryListResponseDto> pageResponse =
@@ -88,11 +88,12 @@ public class CustomerInquiryForMemberController {
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @PostMapping(value = "/inquiries/customer-inquiry")
+    @PostMapping(value = "/customer-inquiry")
     public String customerInquiryAdd(@Valid InquiryAddRequestDto inquiryAddRequestDto,
-                                     HttpSession session) {
+                                     HttpSession session, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         inquiryAddRequestDto.setIsProduct(CUSTOMER_INQUIRY.getValue());
+        inquiryAddRequestDto.setMemberNo(userDetailsDto.getMemberNo());
         commonInquiryService.addInquiry(inquiryAddRequestDto);
 
         session.setAttribute(KEY_IS_SUCCESS.getValue(), Boolean.TRUE);
