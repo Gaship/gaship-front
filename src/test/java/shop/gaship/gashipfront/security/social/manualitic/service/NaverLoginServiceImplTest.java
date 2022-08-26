@@ -30,6 +30,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestPropertySources;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import shop.gaship.gashipfront.config.OauthConfig;
 import shop.gaship.gashipfront.config.RedisConfig;
@@ -57,7 +58,7 @@ import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 @ExtendWith(SpringExtension.class)
 @Import({NaverLoginServiceImpl.class})
 @EnableConfigurationProperties(value = {OauthConfig.class, SecureManagerConfig.class})
-@TestPropertySource("classpath:application.properties")
+@TestPropertySources(value = {@TestPropertySource(value = "classpath:application.properties"), @TestPropertySource(value = "classpath:application-dev.properties")})
 class NaverLoginServiceImplTest {
     @Autowired
     private NaverLoginService naverLoginService;
