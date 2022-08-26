@@ -100,6 +100,6 @@ public class CustomerInquiryForMemberController {
         session.setAttribute(KEY_SUCCESS_MESSAGE.getValue(),
             VALUE_MESSAGE_CUSTOMER_INQUIRY_ADD_SUCCESS.getValue());
 
-        return "redirect:/inquires/member-self/customer-inquiries";
+        return "redirect:/inquiries/member-self/customer-inquiries";
     }
 }
