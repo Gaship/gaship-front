@@ -25,13 +25,14 @@ public class AddressSubLocalController {
 
     @GetMapping(params = "address")
     public List<AddressSubLocalResponseDto> subCategoryList(
-        @RequestParam("address") String address){
+        @RequestParam("address") String address) {
         return addressLocalService.addressSubList(address);
     }
 
     @PutMapping(value = "/{addressNo}")
-    public boolean addressModify (@PathVariable("addressNo") Integer addressNo,
-                    @RequestParam("isDelivery") Boolean isDelivery){
+    public boolean addressModify(
+        @PathVariable("addressNo") Integer addressNo,
+        @RequestParam("isDelivery") Boolean isDelivery) {
         return addressLocalService.modifyAddressLocal(addressNo, isDelivery);
     }
 }

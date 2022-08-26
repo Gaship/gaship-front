@@ -11,14 +11,17 @@
 
 
 <th:block layout:fragment="content">
+    <h3 class="limit-h3">제한 지역 관리</h3>
     <div class="wrapper">
-        <div class="btn-group" th:each="address : ${addressList}">
-            <input type="button" class="btn-local-level-1,col" th:classappend="'local-'+${address.addressNo}"
-                   th:value="${address.addressName}"/>
+        <div class="btn-group-list">
+            <div class="btn-group" th:each="address : ${addressList}">
+                <input type="button" class="btn-local-level-1,col" th:classappend="'local-'+${address.addressNo}"
+                       th:value="${address.addressName}"/>
+            </div>
         </div>
-    </div>
-    <div class="wrapper">
-        <div id="sub-address"></div>
+        <div>
+            <div id="sub-address"></div>
+        </div>
     </div>
 </th:block>
 <th:block layout:fragment="content-js">
