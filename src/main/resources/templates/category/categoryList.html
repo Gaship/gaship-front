@@ -1,0 +1,12 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <script th:src="@{/category/js/category.js}"></script>
+</head>
+<div layout:fragment="content" class="mx-5">
+    <p class="display-4">카테고리관리</p>
+    <div style="height: 75vh" class="overflow-auto">
+        <table class="h-100 table table-bordered categories"></table>
+    </div>
+</div>
