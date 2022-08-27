@@ -16,6 +16,7 @@
 
         <div class="rs-bag-button-header large-12">
             <h1 class="rs-bag-header" data-autom="bag-header" tabindex="-1">장바구니에 들어 있는 제품입니다</h1>
+            <h1 th:id="result" class="rs-bag-header" data-autom="bag-header" tabindex="-1"></h1>
             <span class="visuallyhidden" aria-live="polite"></span>
             <div th:id = "total" class="rs-bag-headermessage"></div>
             <div class="rs-bag-headermessage">모든 주문에 무료 배송 서비스가 제공됩니다.</div>
@@ -99,6 +100,19 @@
 
     </div>
     <script th:inline="javascript">
+        let resultAmount = 0;
+
+        window.onload = function(){
+            /*[# th:each="product : ${response}"]*/
+                resultAmount += Number(/*[[${product.orderQuantity}]]*/) * Number(/*[[${product.amount}]]*/);
+                console.log(/*[[${product.orderQuantity}]]*/);
+                console.log(/*[[${product.amount}]]*/);
+                console.log(resultAmount);
+            /*[/]*/
+            console.log(resultAmount);
+            let result = document.getElementById("result");
+            result.innerText= resultAmount + "₩";
+        }
         const token = document.getElementById("_csrf").content;
         const header = document.getElementById("_csrf_header").content;
         let no;
@@ -121,6 +135,7 @@
 
             let allAmountElem = document.getElementById("allAmount-" + index);
             allAmountElem.innerText=selectValue * amount + "₩";
+
             $.ajax({
                 url: `/carts/modify-quantity?productNo=${no}&productQuantity=${selectValue}`,
                 method:"PUT",
@@ -128,6 +143,9 @@
                     xhr.setRequestHeader(header,token);
                 },
             })
+            let allResult = resultAmount +  (Number(selectValue) - Number(quantity)) * amount;
+            let result = document.getElementById("result");
+            result.innerText= allResult + "₩";
 
         }
     </script>
