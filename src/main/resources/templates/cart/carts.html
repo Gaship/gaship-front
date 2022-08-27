@@ -2,40 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/shopping/layout}">
+
 <head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>장바구니</title>
+    <link rel="stylesheet" href="/cart/css/cart.css">
 </head>
 <th:block layout:fragment="content">
-    <script>
-        var productNo;
-        var quantity;
-        var realQuantity
-        function modifyQuantity(){
-            quantity = document.getElementById("orderQuantity");
-            realQuantity = quantity.options[quantity.selectedIndex].value;
-            console.log(realQuantity);
-        }
-        function setProductNo(va){
-            productNo = va;
-            console.log(productNo);
-            console.log("출력확인");
-            console.log(quantity);
-        }
-    </script>
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
-        <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">장바구니</h1>
+        <div class="rs-bag-button-header large-12">
+            <h1 class="rs-bag-header" data-autom="bag-header" tabindex="-1">장바구니에 들어 있는 제품입니다</h1>
+            <span class="visuallyhidden" aria-live="polite"></span>
+            <div th:id = "total" class="rs-bag-headermessage"></div>
+            <div class="rs-bag-headermessage">모든 주문에 무료 배송 서비스가 제공됩니다.</div>
+            <div class="row rs-bag-checkoutbutton-header">
+                <div class="small-12 small-offset-0 large-12">
+                    <div class="rs-bag-checkoutbuttons-wrapper">
+                        <div class="rs-bag-checkoutbutton rs-bag-checkout-mainbutton">
+                            <button id="shoppingCart.actions.navCheckout" type="button" class="button button-block" data-autom="checkout">
+                                <span>결제</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">장바구니 목록</h6>
-            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row">
                         <div class="col-sm-12">
+
                             <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
                                 <thead>
                                 <tr role="row">
@@ -48,36 +50,35 @@
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">삭제</th>
                                 </tr>
                                 </thead>
-                                    <iframe id="cartdelete" name="cartdelete" style="display:none"></iframe>
+                                <iframe id="cartdelete" name="cartdelete" style="display:none"></iframe>
                                 <tbody>
                                 <tr th:each="product : ${response}">
                                     <td><img th:src="${product.filePaths}"/></td>
                                     <td>[[${product.productName}]]</td>
-                                    <td>[[${product.orderQuantity}]]</td>
-                                    <td>[[${product.amount}]]₩</td>
-                                    <td>[[${product.amount} * ${product.orderQuantity}]]₩</td>
-                                    <td>
-<!--                                        <form th:action="@{/carts/modify-quantity(productNo=${product.productNo},productQuantity=3)}" th:method="put">-->
-
-                                                    <select name="orderQuantity" onchange="modifyQuantity(this)" class="rs-quantity-dropdown form-dropdown-select" id="orderQuantity" data-autom="item-quantity-dropdown" style="width: 2.47059rem;">
-                                                        <option th:value="1" aria-label="1 ,  수량">1</option>
-                                                        <option th:value="2" aria-label="2 ,  수량">2</option>
-                                                        <option th:value="3" aria-label="3 ,  수량">3</option>
-                                                        <option th:value="4" aria-label="4 ,  수량">4</option>
-                                                        <option th:value="5" aria-label="5 ,  수량">5</option>
-                                                        <option th:value="6" aria-label="6 ,  수량">6</option>
-                                                        <option th:value="7" aria-label="7 ,  수량">7</option>
-                                                        <option th:value="8" aria-label="8 ,  수량">8</option>
-                                                        <option th:value="9" aria-label="9 ,  수량">9</option>
-                                                        <option th:value="10" aria-label="10+ ,  수량">10</option>
+                                    <td th:id="${'orderQuantity-' + productStat.index}">[[${product.orderQuantity}]]</td>
+                                    <td th:id="${'amount-' + productStat.index}">[[${product.amount}]]₩</td>
+                                    <td th:id="${'allAmount-' + productStat.index}">[[${product.amount} * ${product.orderQuantity}]]₩</td>
+                                    <td th:onclick="setProductInfo([[${product.productNo}]],[[${product.amount}]],[[${product.orderQuantity}]],[[${productStat.index}]])">
+                                        <div class="rs-iteminfo-quantity">
+                                            <div class="rs-quantity">
+                                                <div class="rs-quantity-selector">
+                                                    <select th:onchange="quantitySelect([[${productStat.index}]])" th:id ="${'select-id-' + productStat.index}" th:class="${'rs-quantity-dropdown quantity-dropdown dropdown'}  " style="width: 2.47059rem;">
+                                                        <option value="1" aria-label="1 ,  수량">1</option>
+                                                        <option value="2" aria-label="2 ,  수량">2</option>
+                                                        <option value="3" aria-label="3 ,  수량">3</option>
+                                                        <option value="4" aria-label="4 ,  수량">4</option>
+                                                        <option value="5" aria-label="5 ,  수량">5</option>
+                                                        <option value="6" aria-label="6 ,  수량">6</option>
+                                                        <option value="7" aria-label="7 ,  수량">7</option>
+                                                        <option value="8" aria-label="8 ,  수량">8</option>
+                                                        <option value="9" aria-label="9 ,  수량">9</option>
+                                                        <option value="10" aria-label="10 ,  수량">10+</option>
                                                     </select>
-                                                    <span class="rs-quantity-icon form-dropdown-chevron" aria-hidden="true"></span>
-
-                                            <button th:onclick="setProductNo(${product.productNo})" class="btn btn-primary" aria-describedby="submitHelp">수정</button>
-<!--                                        </form>-->
-
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td>
-<!--                                        <iframe id="pro-del" name="pro-del" style="display:none"></iframe>-->
                                         <form th:action="@{/carts/delete-product(id=${product.productNo})}" th:method="delete" >
                                             <button class="btn btn-danger" type="submit" aria-describedby="submitHelp">삭제</button>
                                         </form>
@@ -97,6 +98,39 @@
     </div>
 
     </div>
+    <script th:inline="javascript">
+        const token = document.getElementById("_csrf").content;
+        const header = document.getElementById("_csrf_header").content;
+        let no;
+        let amount;
+        let quantity;
+        let index;
+
+        function setProductInfo(productNo,productAmount,productQuantity,productIndex) {
+            no = productNo;
+            amount = productAmount;
+            quantity = productQuantity;
+            index = productIndex
+        }
+        function quantitySelect(index){
+            let elementById = document.getElementById('select-id-' + index);
+            let selectValue = elementById.options[elementById.selectedIndex].value;
+
+            let quantityElem = document.getElementById("orderQuantity-" + index);
+            quantityElem.innerText=selectValue;
+
+            let allAmountElem = document.getElementById("allAmount-" + index);
+            allAmountElem.innerText=selectValue * amount + "₩";
+            $.ajax({
+                url: `/carts/modify-quantity?productNo=${no}&productQuantity=${selectValue}`,
+                method:"PUT",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header,token);
+                },
+            })
+
+        }
+    </script>
 </th:block>
 <th:block layout:fragment="content-js">
     <script th:src="@{/index/index.js}"></script>
