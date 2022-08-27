@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.coupon.member.controller;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import shop.gaship.gashipfront.coupon.member.dto.CouponGenerationIssueDto;
 import shop.gaship.gashipfront.coupon.member.service.CouponMemberService;
 import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -26,10 +28,10 @@ public class CouponMemberController {
     private final CouponMemberService couponMemberService;
 
     @ModelAttribute("user")
-    public Integer getMemberNo(HttpSession session) {
+    public Integer getMemberNo(HttpSession session, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         TokenRequestDto tokenRequestDto = (TokenRequestDto) session.getAttribute("memberInfo");
 
-        return tokenRequestDto.getMemberNo();
+        return userDetailsDto.getMemberNo();
     }
 
     @GetMapping("/coupon-generation-issues/member")
