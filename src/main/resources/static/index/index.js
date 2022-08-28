@@ -30,8 +30,7 @@ const createProductImageDiv = (imageUrl, productNo, productName) => {
   const basketButtonWrapper = document.createElement("ul");
   basketButtonWrapper.classList.add("featured__item__pic__hover");
   basketButtonWrapper.innerHTML =
-    `<li><a href="/products/${productNo}"><i class="fa fa-shopping-cart"></i></a></li>`;
-
+    `<li><a onclick="addCart(${productNo})"><i class="fa fa-shopping-cart"></i></a></li>`;
   productImg.appendChild(basketButtonWrapper);
   return productImg;
 }
@@ -41,12 +40,11 @@ window.addEventListener("load", async () => {
   const productSliderWrapper = document.querySelector(".product-wrapper");
   const res = await fetch("/api/products?page=0&size=12");
   const pageSlideProducts = await res.json();
-
   pageSlideProducts.content
     .map(product => {
       const productWrapper = createProductWrapper();
       const productImageWrapper = createProductImageWrapper();
-      const productImageDiv = createProductImageDiv((product.filePaths && product.filePaths[0]) || "img/no-photo.png");
+      const productImageDiv = createProductImageDiv(((product.filePaths && product.filePaths[0]) || "img/no-photo.png"),product.productNo,product.productName);
       const productText = createAmountLabel(product.productNo, product.productName, product.amount);
 
       productWrapper.appendChild(productImageWrapper);
@@ -56,3 +54,20 @@ window.addEventListener("load", async () => {
       return productWrapper;})
     .forEach(productNode => productSliderWrapper.appendChild(productNode));
 })
+function addCart(productNo) {
+    const token = document.getElementById("_csrf").content;
+    const header = document.getElementById("_csrf_header").content;
+    $.ajax({
+        url: `/carts/modify-quantity?productNo=${productNo}&productQuantity=1`,
+        method:"PUT",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(header,token);
+        },
+        success: function(data){
+            alert(data);
+        },
+        error: function(data){
+            alert(data);
+        }
+    })
+}
