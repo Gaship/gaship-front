@@ -11,9 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author : 조재철
  * @since 1.0
  */
-//@Getter
-//@AllArgsConstructor
-@Data
+@Getter
+@AllArgsConstructor
 public class TotalSaleRequestDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime startDate;

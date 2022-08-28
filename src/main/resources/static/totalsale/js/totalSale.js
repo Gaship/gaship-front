@@ -77,4 +77,3 @@ const getTotalSale = async () => {
 }
 
 document.querySelector(".total-sale").addEventListener("click", getTotalSale);
-
