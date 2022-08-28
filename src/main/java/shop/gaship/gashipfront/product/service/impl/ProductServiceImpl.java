@@ -48,6 +48,11 @@ public class ProductServiceImpl implements ProductService {
         return productAdapter.productNosList(productNos);
     }
 
+    @Override
+    public ProductAllInfoResponseDto findProduct(Integer productNo) {
+        return productAdapter.productDetails(productNo);
+    }
+
     private String getFilePath(Integer fileNo) {
         return UriComponentsBuilder.fromHttpUrl(serverConfig.getGatewayUrl())
                 .pathSegment("api/files")

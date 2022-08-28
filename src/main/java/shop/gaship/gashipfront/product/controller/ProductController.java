@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.gaship.gashipfront.elastic.dto.response.SearchResponseDto;
@@ -33,10 +34,10 @@ public class ProductController {
 
     @GetMapping
     public String showProducts(@RequestParam("page")String page,
-                               @RequestParam(value = "category", required = false)String category,
-                               @RequestParam(value = "min-amount", required = false)String minAmount,
-                               @RequestParam(value = "max-amount", required = false)String maxAmount,
-                               Model model) {
+                           @RequestParam(value = "category", required = false)String category,
+                           @RequestParam(value = "min-amount", required = false)String minAmount,
+                           @RequestParam(value = "max-amount", required = false)String maxAmount,
+                           Model model) {
         PageResponse<ProductAllInfoResponseDto> products =
             productService.productAllInfoByPageable(page, "12", category, minAmount, maxAmount);
 
@@ -97,5 +98,13 @@ public class ProductController {
         model.addAttribute("uri", "/products");
 
         return "product/products";
+    }
+
+    @GetMapping("/{productNo}")
+    public String findProductsByKeyword(@PathVariable("productNo")Integer productNo, Model model) {
+        ProductAllInfoResponseDto product = productService.findProduct(productNo);
+        model.addAttribute("product", product);
+
+        return "product/productDetail";
     }
 }

@@ -37,4 +37,6 @@ public interface ProductService {
         Pageable page, String category);
 
     List<ProductAllInfoResponseDto> findProductNosList(List<Integer> productNos);
+
+    ProductAllInfoResponseDto findProduct(Integer productNo);
 }
