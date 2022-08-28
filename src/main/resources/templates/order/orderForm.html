@@ -12,6 +12,7 @@
     <script th:type="module" th:src="@{/order/js/order.js}"></script>
     <script th:src="@{/order/js/pageModule.js}"></script>
     <script th:type="module"  th:src="@{/order/js/addressListModule.js}"></script>
+    <script th:type="module"  th:src="@{/order/js/orderProductsModule.js}"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <th:block th:replace="layout/fragments/shopping/bootstrap :: bootstrap-fragment"></th:block>
 </head>
@@ -32,26 +33,6 @@
                         </tr>
                         </thead>
                         <tbody id="orderProductsContainer">
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="" alt="">
-                                    <h5>책상</h5>
-                                </td>
-                                <td class="shoping__cart__price">
-                                    100,000
-                                </td>
-                                <td class="shoping__cart__quantity">
-                                    <div>
-                                        -10,000
-                                    </div>
-                                </td>
-                                <td class="shoping__cart__total">
-                                    90,000
-                                </td>
-                                <td class="shoping__cart__item__close">
-                                    <button value="쿠폰 선택"></button>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
