@@ -27,10 +27,7 @@ const shoppingMallCategories = async () => {
             appendCategoryAddButton(category, loadedCategory.no)
         }
 
-        const modifyBtn = document.createElement("button");
-        modifyBtn.innerHTML += "수정"
-        modifyBtn.className = "btn btn-secondary ml-2 px-1 py-0";
-        category.appendChild(modifyBtn);
+        appendCategoryModifyButton(category, loadedCategory.no)
 
         const removeBtn = document.createElement("button");
         removeBtn.innerHTML += "삭제"
@@ -56,8 +53,20 @@ const appendCategoryAddButton = (element, upperCategoryNo) => {
     element.appendChild(addBtn);
 }
 
+const appendCategoryModifyButton = (element, categoryNo) => {
+    const modifyBtn = document.createElement("button");
+    modifyBtn.innerHTML += "수정"
+    modifyBtn.className = "btn btn-secondary ml-2 px-1 py-0";
+    modifyBtn.addEventListener("click", function () {moveModifyForm(categoryNo)})
+    element.appendChild(modifyBtn);
+}
+
 const moveAddForm = (upperCategoryNo) => {
     location.href = "/categories/add?upperCategoryNo=" + upperCategoryNo;
+}
+
+const moveModifyForm = (categoryNo) => {
+    location.href = "/categories/" + categoryNo + "/modify";
 }
 
 window.addEventListener('load', () => shoppingMallCategories());
