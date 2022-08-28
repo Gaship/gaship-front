@@ -36,10 +36,10 @@
             </div>
         </div>
         <!-- DataTales Example -->
-        <div class="card shadow mb-4">
+        <div class=" ">
             <div class="">
                 <div class="">
-                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row">
+                    <div id="dataTable_wrapper" class=" "><div class="row">
                         <div class="col-sm-12">
 
                             <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
@@ -61,7 +61,7 @@
                                     <td>[[${product.productName}]]</td>
                                     <td th:id="${'orderQuantity-' + productStat.index}">[[${product.orderQuantity}]]</td>
                                     <td th:id="${'amount-' + productStat.index}">₩[[${product.amount}]]</td>
-                                    <td th:id="${'allAmount-' + productStat.index}">₩[[${product.amount} * ${product.orderQuantity}]]</td>
+                                    <td th:id="${'allAmount-' + productStat.index}" th:class="allAmount">₩[[${product.amount} * ${product.orderQuantity}]]</td>
                                     <td th:onclick="setProductInfo([[${product.productNo}]],[[${product.amount}]],[[${product.orderQuantity}]],[[${productStat.index}]],[[${product.quantity}]])">
                                         <div class="rs-iteminfo-quantity">
                                             <div class="rs-quantity">
@@ -91,9 +91,59 @@
 
                                 </tbody>
                             </table>
+                            <div class="rs-summary ">
+                                <div class="large-9 large-offset-3 small-12 small-offset-0">
+                                    <div class="rs-summary-content rs-summary-subtotal">
+                                        <div class="rs-summary-labelandvaluecontainer">
+                                            <div class="rs-summary-label" data-autom="bagrs-summary-subtotallabel">소계</div>
+                                            <div id="result3" class="rs-summary-value" data-autom="bagrs-summary-subtotalvalue"></div>
+                                        </div>
+                                    </div>
+                                    <div class="rs-summary-content rs-summary-shipping">
+                                        <div class="rs-summary-labelandvaluecontainer">
+                                    <div class="rs-summary-label" data-autom="bagrs-summary-shippinglabel">배송</div>
+                                    <div class="rs-summary-value" data-autom="bagrs-summary-shippingvalue">무료</div>
+                                        </div>
+
+                                    </div>
+                                    <div class="rs-summary-labelandvaluecontainer rs-summary-total">
+                                    <div class="rs-summary-label" data-autom="bagtotallabel">총계</div>
+                                    <div id="result2" class="rs-summary-value" data-autom="bagtotalvalue"></div>
+
+                                    </div>
+                                    <div id="tax" class="rs-tax-section">₩ VAT 포함</div>
+                                    <div class="rs-summary-financingmessage-wrapper">
+                                        <div class="rs-summary-value">
+                                            <div id="buyflow-message-container" class="rf-ac-messages">
+                                            <div class="rf-acmessages-defaultmessage rf-acmessages-defaultmessage-show">
+                                                <div class="large-12 rs-summary-financingmessage">
+                                                    <p class="large-8 small-12">
+                                                    <div class="credit-financing">
+                                                    <a target="_blank">최대 12개월 신용 카드 할부</a>
+                                                </div>
+                                                    </p>
+                                                </div>
+                                                </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row rs-bag-checkoutbutton-bottom">
+                                <div class="small-12 small-offset-0 large-9 large-offset-3">
+                                    <div class="rs-bag-checkoutbuttons-wrapper">
+                                        <div class="rs-bag-checkoutbutton rs-bag-checkout-mainbutton">
+                                            <button id="shoppingCart.actions.checkout" type="button" class="form-button" data-autom="checkout">
+                                                <span>결제</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                        <hr/>
                     </div>
                 </div>
             </div>
@@ -104,13 +154,21 @@
     </div>
     <script th:inline="javascript">
         let resultAmount = 0;
+        let allResult = 0;
 
         window.onload = function(){
             /*[# th:each="product : ${response}"]*/
                 resultAmount += Number(/*[[${product.orderQuantity}]]*/) * Number(/*[[${product.amount}]]*/);
             /*[/]*/
             let result = document.getElementById("result");
-            result.innerText= "₩" + resultAmount;
+            let result2 = document.getElementById("result2");
+            let result3 = document.getElementById("result3");
+            let tax = document.getElementById("tax")
+            result.innerText= "₩" + resultAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".";
+            result2.innerText= "₩" + resultAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            result3.innerText= "₩" + resultAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            tax.innerText= "₩" + Math.ceil(resultAmount/11).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "의 VAT 포함";
+            allResult = resultAmount;
         }
         const token = document.getElementById("_csrf").content;
         const header = document.getElementById("_csrf_header").content;
@@ -156,9 +214,20 @@
                     alert(data);
                 }
             })
-            let allResult = resultAmount +  (Number(selectValue) - Number(quantity)) * amount;
+            const container = document.querySelectorAll(".allAmount");
+            console.log(container);
+            let allResult = 0;
+            container.forEach((e)=> allResult += Number((e.innerHTML).slice(1)));
+
             let result = document.getElementById("result");
-            result.innerText= "₩" + allResult;
+            let result2 = document.getElementById("result2");
+            let result3 = document.getElementById("result3");
+            let tax = document.getElementById("tax");
+
+            result.innerText= "₩" + allResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".";
+            result2.innerText= "₩" + allResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            result3.innerText= "₩" + allResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            tax.innerText= "₩" + Math.ceil(allResult/11).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "의 VAT 포함";
 
         }
     </script>
