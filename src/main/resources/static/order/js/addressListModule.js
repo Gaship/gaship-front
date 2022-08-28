@@ -1,6 +1,7 @@
 import pageHelper from "./pageModule.js";
 
 const addressListPageHelper = pageHelper;
+let token;
 let addressListContainer;
 
 async function getAddressListData() {
@@ -17,21 +18,14 @@ async function getAddressListData() {
         });
 }
 
-async function drawAddressListContainer() {
+function drawAddressListContainer() {
     addressListContainer.innerHTML = `
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">배송지 목록</h3>
-        <div class="card-tools">
-            <div class="input-group input-group-sm" style="width: 150px;">
-                <input type="text" name="table_search" class="form-control float-right" placeholder="배송지 이름을 입력하세요.">
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-default">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div style="display: flex" class="card-header">
+        <h4 class="card-title">배송지 목록</h4>
+        <span>
+            <button id="createAddressBtn" style="margin-left: 10px;padding: 10px" class="site-btn">신규 배송지 등록</button>
+        </span>
     </div>
 
     <div class="card-body table-responsive p-0" style="height: 300px;">
@@ -57,6 +51,7 @@ async function drawAddressListContainer() {
 
 function drawAddressListContent() {
     const addressListContent = document.getElementById("addressListContent");
+    addressListContent.innerHTML = "";
     addressListPageHelper.pageItems.forEach(item => {
         const trTemplate =
             `
@@ -77,7 +72,122 @@ function drawAddressListContent() {
 }
 
 function init() {
+    token = document.querySelector('meta[name="_csrf"]').content;
     addressListContainer = document.getElementById("addressListContainer");
+    addressListContainer.innerHTML = "";
+}
+
+function setCreateAddressEvent() {
+    const addressAddFormModalWrap = document.querySelector(".addressAddFormModalWrap");
+
+    const createAddressBtn = document.getElementById("createAddressBtn");
+    createAddressBtn.addEventListener("click", () => {
+        document.querySelector(".addressAddFormModalWrap").style.display = 'block';
+        document.querySelector(".modalBackground").style.display = 'block';
+        addressAddFormModalWrap.innerHTML = `
+    <div style="margin: 20px" id="addAddressFormModal" class="checkout__input">
+        <p>배송지<span>*</span>
+            <span style="margin: 10px">
+                <button id="searchAddressBtn" style="padding: 10px" class="site-btn">주소 검색</button>
+            </span>
+        </p>
+        <div class="checkout__input">
+            <p>우편번호<span>*</span></p>
+            <input id="zoneCode" readonly="readonly" type="text" value="">
+        </div>
+        <div class="checkout__input">
+            <p>시군구<span>*</span></p>
+            <input id="sigungu" readonly="readonly" type="text" value="">
+        </div>
+        <div class="checkout__input">
+            <p>상세주소<span>*</span></p>
+            <input id="roadAddress" readonly="readonly" type="text" value="" class="checkout__input__add">
+            <input id="addressDetail" type="text" placeholder="상세 주소를 작성해주세요.">
+        </div>
+        <button id="saveBtn" style="padding: 10px" class="site-btn">등록</button>
+        <span>
+            <button id="cancelBtn" style="padding: 10px" class="site-btn">취소</button>
+        </span>
+    </div>
+    `
+        setAddressAddFormEvent();
+    })
+}
+
+const addressAddRequestData = {
+    zonecode: "",
+    sigungu: "",
+    roadAddress: "",
+    addressDetail: "",
+    init: (data) => {
+        addressAddRequestData.roadAddress = data.roadAddress;
+        addressAddRequestData.sigungu = data.sigungu;
+        addressAddRequestData.zonecode = data.zonecode;
+        addressAddRequestData.updateForm();
+    },
+    updateForm: () => {
+        document.getElementById("zoneCode").value = addressAddRequestData.zonecode;
+        document.getElementById("sigungu").value = addressAddRequestData.sigungu;
+        document.getElementById("roadAddress").value = addressAddRequestData.roadAddress;
+    },
+    checkBlank: () => {
+        if(addressAddRequestData.zonecode==""||
+            addressAddRequestData.sigungu==""||
+            addressAddRequestData.roadAddress==""||
+            addressAddRequestData.addressDetail=="") {
+            return true;
+        }
+        return false;
+    }
+}
+
+function setAddressAddFormEvent() {
+    const searchAddressBtn = document.getElementById("searchAddressBtn");
+    const modalCancelBtn = document.getElementById("cancelBtn");
+    const modalSaveBtn = document.getElementById("saveBtn");
+
+    searchAddressBtn.addEventListener("click", () => {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                addressAddRequestData.init(data);
+            }
+        }).open();
+    })
+
+    modalCancelBtn.addEventListener("click", () => {
+        document.querySelector(".addressAddFormModalWrap").style.display = 'none';
+        document.querySelector(".modalBackground").style.display = 'none';
+        addressAddFormModalWrap.innerHTML = "";
+    })
+
+    modalSaveBtn.addEventListener("click", () => {
+        addressAddRequestData.addressDetail = document.getElementById("addressDetail").value;
+        console.log(JSON.stringify(addressAddRequestData));
+        if(addressAddRequestData.checkBlank()) {
+            window.alert("모두 입력해주세요.");
+        } else {
+            addAddress()
+                .then(() => {
+                    document.querySelector(".addressAddFormModalWrap").style.display = 'none';
+                    document.querySelector(".modalBackground").style.display = 'none';
+                    addressAddFormModalWrap.innerHTML = "";
+                })
+                .then(loadAddressList);
+        }
+    })
+}
+
+async function addAddress() {
+    const request = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": token
+        },
+        body: JSON.stringify(addressAddRequestData)
+    };
+
+    await fetch("/rest/members/address-list", request);
 }
 
 const loadAddressList = () => {
@@ -85,6 +195,7 @@ const loadAddressList = () => {
     getAddressListData()
         .then(addressListPageHelper.initPage)
         .then(drawAddressListContainer)
+        .then(setCreateAddressEvent)
         .then(drawAddressListContent);
 }
 

@@ -4,10 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.addresslist.adapter.AddressListAdapter;
+import shop.gaship.gashipfront.addresslist.dto.request.AddressAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
 import shop.gaship.gashipfront.addresslist.service.AddressListService;
+import shop.gaship.gashipfront.addresslocal.adpter.AddressLocalAdapter;
+import shop.gaship.gashipfront.addresslocal.dto.response.AddressSubLocalResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -20,6 +23,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequiredArgsConstructor
 public class AddressListServiceImpl implements AddressListService {
     private final AddressListAdapter addressListAdapter;
+    private final AddressLocalAdapter addressLocalAdapter;
 
     /**
      * {@inheritDoc}
@@ -59,5 +63,17 @@ public class AddressListServiceImpl implements AddressListService {
     @Override
     public PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable) {
         return addressListAdapter.findAddressLists(memberNo, pageable);
+    }
+
+    @Override
+    public void addAddress(Integer memberNo, AddressAddRequestDto addressAddRequestDto) {
+        AddressSubLocalResponseDto addressLocal =
+                addressLocalAdapter.getAddressLocalSub(addressAddRequestDto.getSigungu());
+
+        addressListAdapter.addAddressList(new AddressListAddRequestDto(addressLocal.getAddressNo(),
+                memberNo,
+                addressAddRequestDto.getRoadAddress(),
+                addressAddRequestDto.getAddressDetail(),
+                addressAddRequestDto.getZonecode()));
     }
 }

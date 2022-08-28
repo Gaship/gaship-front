@@ -8,9 +8,11 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/order/css/order.css}">
     <script th:type="module" th:src="@{/order/js/order.js}"></script>
     <script th:src="@{/order/js/pageModule.js}"></script>
     <script th:type="module"  th:src="@{/order/js/addressListModule.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <th:block th:replace="layout/fragments/shopping/bootstrap :: bootstrap-fragment"></th:block>
 </head>
 <body>
@@ -137,7 +139,11 @@
                 </div>
             </div>
         </div>
+        <div class="modalBackground"></div>
+        <div class="addressAddFormModalWrap">
+        </div>
     </div>
+
 </th:block>
 </body>
 </html>
