@@ -3416,6 +3416,9 @@ ol {
 	.over_hid {
 		overflow: hidden;
 	}
+	.over_scroll {
+		overflow: scroll !important;
+	}
 }
 
 /* Small Device = 320px */

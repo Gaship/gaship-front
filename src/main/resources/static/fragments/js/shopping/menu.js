@@ -59,10 +59,9 @@ const shoppingMallCategories = async () => {
 
 
   flattedCategories.forEach(loadedCategory => {
-    // href 넣어야함
     const category = document.createElement("li");
     const categoryAtag = document.createElement("a");
-    categoryAtag.href = loadedCategory.no;
+    categoryAtag.href = '/products?page=0&size=12&category=' + loadedCategory.no;
     categoryAtag.innerHTML = loadedCategory.name;
     if(loadedCategory.level === 1){
       categoryAtag.classList.add("categories__item__level_1")
