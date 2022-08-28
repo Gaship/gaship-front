@@ -60,4 +60,10 @@ public class CategoryController {
         categoryService.modifyCategory(modifyRequest);
         return "redirect:/admin/categories";
     }
+
+    @GetMapping("/categories/remove")
+    public String categoryRemove(@RequestParam Integer categoryNo) {
+        categoryService.removeCategory(categoryNo);
+        return "redirect:/admin/categories";
+    }
 }

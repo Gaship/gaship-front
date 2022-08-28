@@ -26,13 +26,8 @@ const shoppingMallCategories = async () => {
         if (loadedCategory.level < 3) {
             appendCategoryAddButton(category, loadedCategory.no)
         }
-
         appendCategoryModifyButton(category, loadedCategory.no)
-
-        const removeBtn = document.createElement("button");
-        removeBtn.innerHTML += "삭제"
-        removeBtn.className = "btn btn-danger ml-2 px-1 py-0";
-        category.appendChild(removeBtn);
+        appendCategoryRemoveButton(category, loadedCategory.no)
 
         tr.appendChild(category);
         table.appendChild(tr);
@@ -61,12 +56,26 @@ const appendCategoryModifyButton = (element, categoryNo) => {
     element.appendChild(modifyBtn);
 }
 
+const appendCategoryRemoveButton = (element, categoryNo) => {
+    const removeBtn = document.createElement("button");
+    removeBtn.innerHTML += "삭제"
+    removeBtn.className = "btn btn-danger ml-2 px-1 py-0";
+    removeBtn.addEventListener("click", function () {removeCategory(categoryNo)})
+    element.appendChild(removeBtn);
+}
+
 const moveAddForm = (upperCategoryNo) => {
     location.href = "/categories/add?upperCategoryNo=" + upperCategoryNo;
 }
 
 const moveModifyForm = (categoryNo) => {
     location.href = "/categories/" + categoryNo + "/modify";
+}
+
+const removeCategory = (categoryNo) => {
+    if (confirm("삭제하시겠습니까?")) {
+        location.href = "/categories/remove?categoryNo=" + categoryNo;
+    }
 }
 
 window.addEventListener('load', () => shoppingMallCategories());
