@@ -9,6 +9,9 @@
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>장바구니</title>
     <link rel="stylesheet" href="/cart/css/cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->
@@ -34,8 +37,8 @@
         </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
-            <div class="card-body">
-                <div class="table-responsive">
+            <div class="">
+                <div class="">
                     <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row">
                         <div class="col-sm-12">
 
@@ -57,9 +60,9 @@
                                     <td><img th:src="${product.filePaths}"/></td>
                                     <td>[[${product.productName}]]</td>
                                     <td th:id="${'orderQuantity-' + productStat.index}">[[${product.orderQuantity}]]</td>
-                                    <td th:id="${'amount-' + productStat.index}">[[${product.amount}]]₩</td>
-                                    <td th:id="${'allAmount-' + productStat.index}">[[${product.amount} * ${product.orderQuantity}]]₩</td>
-                                    <td th:onclick="setProductInfo([[${product.productNo}]],[[${product.amount}]],[[${product.orderQuantity}]],[[${productStat.index}]])">
+                                    <td th:id="${'amount-' + productStat.index}">₩[[${product.amount}]]</td>
+                                    <td th:id="${'allAmount-' + productStat.index}">₩[[${product.amount} * ${product.orderQuantity}]]</td>
+                                    <td th:onclick="setProductInfo([[${product.productNo}]],[[${product.amount}]],[[${product.orderQuantity}]],[[${productStat.index}]],[[${product.quantity}]])">
                                         <div class="rs-iteminfo-quantity">
                                             <div class="rs-quantity">
                                                 <div class="rs-quantity-selector">
@@ -73,7 +76,7 @@
                                                         <option value="7" aria-label="7 ,  수량">7</option>
                                                         <option value="8" aria-label="8 ,  수량">8</option>
                                                         <option value="9" aria-label="9 ,  수량">9</option>
-                                                        <option value="10" aria-label="10 ,  수량">10+</option>
+                                                        <option value="10" aria-label="10 ,  수량">10</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -105,13 +108,9 @@
         window.onload = function(){
             /*[# th:each="product : ${response}"]*/
                 resultAmount += Number(/*[[${product.orderQuantity}]]*/) * Number(/*[[${product.amount}]]*/);
-                console.log(/*[[${product.orderQuantity}]]*/);
-                console.log(/*[[${product.amount}]]*/);
-                console.log(resultAmount);
             /*[/]*/
-            console.log(resultAmount);
             let result = document.getElementById("result");
-            result.innerText= resultAmount + "₩";
+            result.innerText= "₩" + resultAmount;
         }
         const token = document.getElementById("_csrf").content;
         const header = document.getElementById("_csrf_header").content;
@@ -119,22 +118,30 @@
         let amount;
         let quantity;
         let index;
+        let stock;
 
-        function setProductInfo(productNo,productAmount,productQuantity,productIndex) {
+        function setProductInfo(productNo,productAmount,productQuantity,productIndex,productStock) {
             no = productNo;
             amount = productAmount;
             quantity = productQuantity;
             index = productIndex
+            stock = productStock;
         }
         function quantitySelect(index){
             let elementById = document.getElementById('select-id-' + index);
             let selectValue = elementById.options[elementById.selectedIndex].value;
 
+            if(selectValue > stock){
+                toastr.warning("재고보다 많은 수량을 선택할 수 없습니다.");
+                return false;
+            }
             let quantityElem = document.getElementById("orderQuantity-" + index);
             quantityElem.innerText=selectValue;
 
             let allAmountElem = document.getElementById("allAmount-" + index);
-            allAmountElem.innerText=selectValue * amount + "₩";
+            allAmountElem.innerText="₩" + selectValue * amount;
+
+
 
             $.ajax({
                 url: `/carts/modify-quantity?productNo=${no}&productQuantity=${selectValue}`,
@@ -142,10 +149,16 @@
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader(header,token);
                 },
+                success: function(data){
+                    toastr.success("수량이 변경되었습니다.");
+                },
+                error: function(data){
+                    alert(data);
+                }
             })
             let allResult = resultAmount +  (Number(selectValue) - Number(quantity)) * amount;
             let result = document.getElementById("result");
-            result.innerText= allResult + "₩";
+            result.innerText= "₩" + allResult;
 
         }
     </script>
