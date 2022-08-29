@@ -56,10 +56,8 @@
                 <h2>기본정보</h2>
                 <div class="form-row">
                     <label for="category" class="text-white">카테고리</label>
-                    <select name="category" id="category">
-                        <option class="option" value="businessman" selected>Businessman</option>
-                        <option class="option" value="reporter">Reporter</option>
-                        <option class="option" value="secretary">Secretary</option>
+                    <select name="categoryNo" id="category">
+                        <option class="option" th:each="category : ${categories}" th:value="${category.no}" th:text="|${#strings.repeat('&nbsp', (category.level - 1) * 4) + category.name}|"></option>
                     </select>
                     <span class="select-btn">
 						  	<i class="zmdi zmdi-chevron-down"></i>
@@ -67,10 +65,8 @@
                 </div>
                 <div class="form-row">
                     <label for="deliveryType" class="text-white">배송타입</label>
-                    <select name="deliveryType" id="deliveryType">
-                        <option value="director" selected>Director</option>
-                        <option value="manager">Manager</option>
-                        <option value="employee">Employee</option>
+                    <select name="deliveryTypeNo" id="deliveryType">
+                        <option class="option" th:each="deliveryType : ${deliveryTypes}" th:value="${deliveryType.statusCodeNo}" th:text="${deliveryType.statusCodeName}"></option>
                     </select>
                     <span class="select-btn">
 						  	<i class="zmdi zmdi-chevron-down"></i>
@@ -87,21 +83,10 @@
                 </div>
                 <div class="checkbox-container">
                     <span class="product-tag text-white">상품태그</span>
-                    <span class="form-checkbox">
-                        <label class="container text-white">시원한
-                            <input type="checkbox" name="tagNos" value="1">
-                            <span class="checkmark"></span>
-                        </label>
-                    </span>
-                    <span class="form-checkbox">
-                        <label class="container text-white">따뜻한
-                            <input type="checkbox" name="tagNos" value="2">
-                            <span class="checkmark"></span>
-                        </label>
-                    </span>
-                    <span class="form-checkbox">
-                        <label class="container text-white">평범한
-                            <input type="checkbox" name="tagNos" value="3">
+                    <span class="form-checkbox" th:each="tag : ${tags}">
+                        <label class="container text-white">
+                            <span th:text="${tag.title}"></span>
+                            <input type="checkbox" name="tagNos" th:value="${tag.tagNo}">
                             <span class="checkmark"></span>
                         </label>
                     </span>
