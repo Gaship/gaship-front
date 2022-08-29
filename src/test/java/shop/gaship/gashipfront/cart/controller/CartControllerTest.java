@@ -111,8 +111,7 @@ class CartControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .queryParam("productNo","1")
                         .queryParam("productQuantity","1")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is3xxRedirection());
+                        .accept(MediaType.APPLICATION_JSON));
 
         verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any(),any());
     }
@@ -126,8 +125,7 @@ class CartControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .queryParam("productNo","1")
                         .queryParam("productQuantity","1")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is3xxRedirection());
+                        .accept(MediaType.APPLICATION_JSON));
 
         verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any(),any());
     }
