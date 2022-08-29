@@ -76,5 +76,15 @@ public class AddressLocalAdapter {
                 }
             ).block();
     }
+
+    public AddressSubLocalResponseDto getAddressLocalSub(String sigungu) {
+        return webClient
+                .get()
+                .uri(ADDRESS_LOCALS + "?sigungu=" + sigungu)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(AddressSubLocalResponseDto.class)
+                .block();
+    }
 }
 

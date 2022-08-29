@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>신규 배송지 등록</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <th:block th:replace="layout/fragments/shopping/bootstrap :: bootstrap-fragment"></th:block>
+</head>
+<body>
+    <div id="addAddressFormModal" class="checkout__input">
+        <p>배송지<span>*</span>
+            <span style="margin: 10px">
+                <button id="searchAddressBtn" style="padding: 10px" class="site-btn">주소 검색</button>
+            </span>
+        </p>
+        <div class="checkout__input">
+            <p>배송지 이름<span>*</span></p>
+            <input id="addressName" type="text" placeholder="상세 주소를 작성해주세요.">
+        </div>
+        <div class="checkout__input">
+            <p>우편번호<span>*</span></p>
+            <input id="zoneCode" readonly="readonly" type="text" value="">
+        </div>
+        <div class="checkout__input">
+            <p>시군구<span>*</span></p>
+            <input id="sigungu" readonly="readonly" type="text" value="">
+        </div>
+        <div class="checkout__input">
+            <p>상세주소<span>*</span></p>
+            <input id="address" readonly="readonly" type="text" value="" class="checkout__input__add">
+            <input id="addressDetail" type="text" placeholder="상세 주소를 작성해주세요.">
+        </div>
+        <button id="saveBtn" style="padding: 10px" class="site-btn">등록</button>
+        <span>
+            <button id="cancelBtn" style="padding: 10px" class="site-btn">취소</button>
+        </span>
+    </div>
+</body>
+</html>

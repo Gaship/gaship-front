@@ -1,6 +1,8 @@
 package shop.gaship.gashipfront.addresslist.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 배송지목록 추가 dto.
@@ -9,6 +11,8 @@ import lombok.Getter;
  * @since 1.0
  */
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddressListAddRequestDto {
     private Integer addressLocalNo;
     private Integer memberNo;
