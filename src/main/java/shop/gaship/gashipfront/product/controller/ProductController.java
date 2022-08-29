@@ -10,12 +10,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.category.service.CategoryService;
 import shop.gaship.gashipfront.elastic.dto.response.SearchResponseDto;
 import shop.gaship.gashipfront.elastic.service.SearchService;
+import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.statuscode.adapter.StatusCodeAdapter;
@@ -122,5 +126,12 @@ public class ProductController {
                 statusCodeAdapter.getStatusCodeList(DeliveryType.GROUP));
         model.addAttribute("tags", tagService.findTags());
         return "product/productAddForm";
+    }
+
+    @PostMapping("/add")
+    public String productAdd(List<MultipartFile> multipartFiles,
+                             @ModelAttribute ProductCreateRequestDto createRequest) {
+        productService.addProduct(multipartFiles, createRequest);
+        return "redirect:/";
     }
 }

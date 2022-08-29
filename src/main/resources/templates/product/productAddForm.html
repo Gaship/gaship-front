@@ -12,7 +12,8 @@
 <body class="form-v10">
 <div class="page-content">
     <div class="form-v10-content">
-        <form class="form-detail" action="#" method="post" id="myform">
+        <form class="form-detail" action="/products/add" method="post" id="myform" enctype="multipart/form-data">
+            <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}"/>
             <div class="form-left">
                 <h2>상세정보</h2>
                 <div class="form-group">
@@ -37,7 +38,7 @@
                     </div>
                     <div class="form-row form-row-2">
                         <label for="colorInput" class="form-label text-dark">색상</label>
-                        <input type="color" class="form-control form-control-color" id="colorInput" value="#FFFFFF" title="색상을 선택하세요">
+                        <input type="color" name="color" class="form-control form-control-color" id="colorInput" value="#FFFFFF" title="색상을 선택하세요">
                     </div>
                 </div>
                 <div class="form-row">
@@ -94,7 +95,7 @@
                 <div class="form-row">
                     <div class="mb-3">
                         <label for="formFileMultiple" class="form-label text-white">상품 이미지</label>
-                        <input name="multipartFile" class="multipartFile" accept="image/*" type="file" id="formFileMultiple" multiple/>
+                        <input name="multipartFiles" class="multipartFile" accept="image/*" type="file" id="formFileMultiple" multiple/>
                     </div>
                 </div>
                 <div class="form-row-last">

@@ -4,8 +4,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import shop.gaship.gashipfront.config.ServerConfig;
+import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
+import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -41,5 +42,11 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductAllInfoResponseDto findProduct(Integer productNo) {
         return productAdapter.productDetails(productNo);
+    }
+
+    @Override
+    public void addProduct(List<MultipartFile> multipartFiles,
+                           ProductCreateRequestDto createRequest) {
+        productAdapter.productAdd(multipartFiles, createRequest);
     }
 }
