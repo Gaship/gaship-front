@@ -17,6 +17,8 @@ public interface EmployeeService {
 
     void employeeModify(EmployeeModifyRequestDto requestDto);
 
+    void employeeDelete(Integer employeeNo);
+
     EmployeeResponseDto employeeDetail(Integer employeeNo);
 
     PageResponse<EmployeeResponseDto> employeeList(Pageable pageable);

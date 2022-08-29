@@ -17,6 +17,8 @@ public interface EmployeeAdapter {
 
     void employeeModify(EmployeeModifyRequestDto requestDto);
 
+    void employeeRemove(Integer employeeNo);
+
     EmployeeResponseDto employeeDetail(Integer employeeNo);
 
     PageResponse<EmployeeResponseDto> employeeList(Pageable pageable);

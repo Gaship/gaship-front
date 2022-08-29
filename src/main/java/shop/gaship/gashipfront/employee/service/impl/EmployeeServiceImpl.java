@@ -34,6 +34,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public void employeeDelete(Integer employeeNo){
+        employeeAdapter.employeeRemove(employeeNo);
+    }
+
+    @Override
     public EmployeeResponseDto employeeDetail(Integer employeeNo){
         return employeeAdapter.employeeDetail(employeeNo);
     }

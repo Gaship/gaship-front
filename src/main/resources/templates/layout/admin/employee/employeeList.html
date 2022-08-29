@@ -35,6 +35,7 @@
                 <table class="table table-hover table-striped">
                     <thead>
                     <tr role="row">
+                        <td>#</td>
                         <td>직원 번호</td>
                         <td>직원 이름</td>
                         <td>전화 번호</td>
@@ -44,7 +45,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr role="row" th:each="employee:${employees}">
+                    <tr role="row" th:each="employee,stat:${employees}">
+                        <td th:text="${stat.count}"></td>
                         <td th:text="${employee.employeeNo}"></td>
                         <td th:text="${employee.name}"></td>
                         <td th:text="${employee.phoneNo}"></td>
@@ -53,20 +55,43 @@
                         <td>
                             <button class="btn btn-outline-primary"
                                     th:onclick="|location.href='@{/admin/employees/modify}/${employee.employeeNo}'|">수정</button>
-                            <button class="btn btn-outline-primary">삭제</button>
+                            <button class="btn btn-outline-secondary deleteButton"
+                                    th:data-employee-no="${employee.employeeNo}">
+                                삭제
+                            </button>
+<!--                            <form action="#" th:action="@{/admin/employees/{employeeNo}(employeeNo=${employee.employeeNo})}" th:method="delete" >-->
+<!--                                <button type="submit" class="btn btn-outline-primary">-->
+<!--                                    삭제-->
+<!--                                </button>-->
+<!--                            </form>-->
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
 
 </th:block>
 <th:block layout:fragment="content-js">
-</th:block>
-<script>
+    <script>
+        const token = document.getElementById('_csrf').getAttribute('content');
 
-</script>
+        const deleteEmployee = async (e) =>{
+
+            const employeeNo = e.target.getAttribute("data-employee-no");
+            const response = await fetch(`/api/employees/`+ employeeNo,
+                {
+                    method : 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    }
+                }).then(()=> window.location.reload());
+        }
+
+        document.querySelectorAll('.deleteButton')
+            .forEach(element => element.addEventListener('click',deleteEmployee))
+    </script>
+</th:block>
+
 </html>
