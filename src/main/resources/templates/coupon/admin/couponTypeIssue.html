@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>쿠폰 즉시 발</title>
+</head>
+<body>
+<form th:action="@{/admin/coupons/coupon-type/generation-coupon/issue}" method="post">
+  <label>
+    <input type="hidden" name="couponTypeNo" th:value="${couponTypeNo}">
+  </label><br>
+  <fieldset>
+    <legend>회원 등급</legend>
+    <label>발급 하기 원하는 등급</label><br>
+    <div th:each="memberGrade : ${memberGradeList}">
+      <label>
+        <input type="radio" name="memberGradeNo" th:value="${memberGrade.memberGradeNo}" th:text="${memberGrade.name}"/>
+      </label><br>
+    </div>
+  </fieldset>
+  <label>
+    <input type="hidden" name="generationDatetime" id='generationTime'/>
+  </label><br>
+  <label>
+    <input type="hidden" name="issueDatetime" id='issueTime'/>
+  </label><br>
+  <label>쿠폰 만료 기간</label><br>
+  <label>
+    <input type="datetime-local" name="expirationDatetime"/>
+  </label><br>
+  <button type="submit">쿠폰 즉시 발송</button>
+</form>
+
+<script src="/coupon/js/gradeTargetCoupon.js"></script>
+</body>
+</html>
