@@ -48,4 +48,9 @@ public class ProductController {
 
         return "product/products";
     }
+
+    @GetMapping("/add")
+    public String productAddForm() {
+        return "product/productAddForm";
+    }
 }
