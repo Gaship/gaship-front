@@ -55,13 +55,13 @@ public class CartController {
      * @author 최정우
      */
     @PutMapping("/modify-quantity")
-    public String modifyFromCart(HttpServletRequest servletRequest,
+    @ResponseBody
+    public boolean modifyFromCart(HttpServletRequest servletRequest,
                                  @RequestParam Long productNo,
                                  @RequestParam Long productQuantity) throws CartProductAmountException {
-
         String cartId = (String) servletRequest.getAttribute(CART_ID);
         cartService.modifyProductQuantityFromCart(cartId, productNo, productQuantity);
-        return "redirect:/carts";
+        return true;
     }
 
     /**

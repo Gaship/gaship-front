@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.gaship.gashipfront.employee.dto.request.EmployeeCreateRequestDto;
@@ -31,16 +30,34 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
+    @GetMapping("/add")
+    public String moveAddForm(){
+        return "layout/admin/employee/employeeAddForm";
+    }
+    @GetMapping("/modify/{employeeNo}")
+    public String moveModifyForm(@PathVariable("employeeNo") Integer employeeNo,
+                                 Model model){
+        EmployeeResponseDto employee = employeeService.employeeDetail(employeeNo);
+        model.addAttribute("employee", employee);
+
+        return "layout/admin/employee/employeeModifyForm";
+    }
+
     @PostMapping
-    public String addEmployee(@RequestBody EmployeeCreateRequestDto dto) {
+    public String addEmployee(EmployeeCreateRequestDto dto) {
+        //회원번호 26번 고정
+        dto.setAuthorityNo(26);
         employeeService.employeeAdd(dto);
-        return "redirect:layout/admin/employee/employeeAddForm";
+        return "redirect:/admin/employees";
     }
 
     @PutMapping("/{employeeNo}")
-    public String modifyEmployee(@RequestBody EmployeeModifyRequestDto dto) {
+    public String modifyEmployee(
+        @PathVariable("employeeNo") Integer employeeNo
+        ,EmployeeModifyRequestDto dto) {
+
         employeeService.employeeModify(dto);
-        return "redirect:layout/admin/employee/employeeList";
+        return "layout/admin/employee/employeeList";
     }
 
     @GetMapping("/{employeeNo}")
@@ -56,7 +73,7 @@ public class EmployeeController {
             page = 0;
         }
         PageResponse<EmployeeResponseDto> employees = employeeService.employeeList(PageRequest.of(page, 10));
-//
+
         model.addAttribute("employees", employees.getContent());
         model.addAttribute("next", employees.isNext());
         model.addAttribute("previous", employees.isPrevious());

@@ -2,82 +2,89 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/shopping/layout}">
+
 <head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>장바구니</title>
+    <link rel="stylesheet" href="/cart/css/cart.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
 <th:block layout:fragment="content">
-    <script>
-        var productNo;
-        var quantity;
-        var realQuantity
-        function modifyQuantity(){
-            quantity = document.getElementById("orderQuantity");
-            realQuantity = quantity.options[quantity.selectedIndex].value;
-            console.log(realQuantity);
-        }
-        function setProductNo(va){
-            productNo = va;
-            console.log(productNo);
-            console.log("출력확인");
-            console.log(quantity);
-        }
-    </script>
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
-        <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">장바구니</h1>
-        <!-- DataTales Example -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">장바구니 목록</h6>
+        <div class="rs-bag-button-header large-12">
+            <h1 class="rs-bag-header" data-autom="bag-header" tabindex="-1">장바구니에 들어 있는 제품입니다</h1>
+            <h1 th:id="result" class="rs-bag-header" data-autom="bag-header" tabindex="-1"></h1>
+            <span class="visuallyhidden" aria-live="polite"></span>
+            <div th:id = "total" class="rs-bag-headermessage"></div>
+            <div class="rs-bag-headermessage">모든 주문에 무료 배송 서비스가 제공됩니다.</div>
+            <div class="row rs-bag-checkoutbutton-header">
+                <div class="small-12 small-offset-0 large-12">
+                    <div class="rs-bag-checkoutbuttons-wrapper">
+                        <div class="rs-bag-checkoutbutton rs-bag-checkout-mainbutton">
+                            <a th:href="@{/order}">
+                                <button id="shoppingCart.actions.navCheckout" type="button" class="button button-block" data-autom="checkout">
+                                    <span>주문하기</span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row">
+        </div>
+        <!-- DataTales Example -->
+        <div class=" ">
+            <div class="">
+                <div class="">
+                    <div id="dataTable_wrapper" class=" "><div class="row">
                         <div class="col-sm-12">
+
                             <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
                                 <thead>
                                 <tr role="row">
-                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Name: activate to sort column descending" style="width: 300px;">상품사진</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Name: activate to sort column descending" style="width: 400px;">상품사진</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 300px;">상품명</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 200px;">수량</th>
-                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 300px;">단가</th>
-                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">총상품금액</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 200px;">단가</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 200px;">총상품금액</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">수량변경</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">삭제</th>
                                 </tr>
                                 </thead>
-                                    <iframe id="cartdelete" name="cartdelete" style="display:none"></iframe>
+                                <iframe id="cartdelete" name="cartdelete" style="display:none"></iframe>
                                 <tbody>
                                 <tr th:each="product : ${response}">
                                     <td><img th:src="${product.filePaths}"/></td>
                                     <td>[[${product.productName}]]</td>
-                                    <td>[[${product.orderQuantity}]]</td>
-                                    <td>[[${product.amount}]]₩</td>
-                                    <td>[[${product.amount} * ${product.orderQuantity}]]₩</td>
-                                    <td>
-<!--                                        <form th:action="@{/carts/modify-quantity(productNo=${product.productNo},productQuantity=3)}" th:method="put">-->
-
-                                                    <select name="orderQuantity" onchange="modifyQuantity(this)" class="rs-quantity-dropdown form-dropdown-select" id="orderQuantity" data-autom="item-quantity-dropdown" style="width: 2.47059rem;">
-                                                        <option th:value="1" aria-label="1 ,  수량">1</option>
-                                                        <option th:value="2" aria-label="2 ,  수량">2</option>
-                                                        <option th:value="3" aria-label="3 ,  수량">3</option>
-                                                        <option th:value="4" aria-label="4 ,  수량">4</option>
-                                                        <option th:value="5" aria-label="5 ,  수량">5</option>
-                                                        <option th:value="6" aria-label="6 ,  수량">6</option>
-                                                        <option th:value="7" aria-label="7 ,  수량">7</option>
-                                                        <option th:value="8" aria-label="8 ,  수량">8</option>
-                                                        <option th:value="9" aria-label="9 ,  수량">9</option>
-                                                        <option th:value="10" aria-label="10+ ,  수량">10</option>
+                                    <td th:id="${'orderQuantity-' + productStat.index}">[[${product.orderQuantity}]]</td>
+                                    <td th:id="${'amount-' + productStat.index}">₩[[${product.amount}]]</td>
+                                    <td th:id="${'allAmount-' + productStat.index}" th:class="allAmount">₩[[${product.amount} * ${product.orderQuantity}]]</td>
+                                    <td th:onclick="setProductInfo([[${product.productNo}]],[[${product.amount}]],[[${product.orderQuantity}]],[[${productStat.index}]],[[${product.quantity}]])">
+                                        <div class="rs-iteminfo-quantity">
+                                            <div class="rs-quantity">
+                                                <div class="rs-quantity-selector">
+                                                    <select th:onchange="quantitySelect([[${productStat.index}]])" th:id ="${'select-id-' + productStat.index}" th:class="${'rs-quantity-dropdown quantity-dropdown dropdown'}  " style="width: 2.47059rem;">
+                                                        <option value="1" aria-label="1 ,  수량">1</option>
+                                                        <option value="2" aria-label="2 ,  수량">2</option>
+                                                        <option value="3" aria-label="3 ,  수량">3</option>
+                                                        <option value="4" aria-label="4 ,  수량">4</option>
+                                                        <option value="5" aria-label="5 ,  수량">5</option>
+                                                        <option value="6" aria-label="6 ,  수량">6</option>
+                                                        <option value="7" aria-label="7 ,  수량">7</option>
+                                                        <option value="8" aria-label="8 ,  수량">8</option>
+                                                        <option value="9" aria-label="9 ,  수량">9</option>
+                                                        <option value="10" aria-label="10 ,  수량">10</option>
                                                     </select>
-                                                    <span class="rs-quantity-icon form-dropdown-chevron" aria-hidden="true"></span>
-
-                                            <button th:onclick="setProductNo(${product.productNo})" class="btn btn-primary" aria-describedby="submitHelp">수정</button>
-<!--                                        </form>-->
-
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td>
-<!--                                        <iframe id="pro-del" name="pro-del" style="display:none"></iframe>-->
                                         <form th:action="@{/carts/delete-product(id=${product.productNo})}" th:method="delete" >
                                             <button class="btn btn-danger" type="submit" aria-describedby="submitHelp">삭제</button>
                                         </form>
@@ -86,9 +93,61 @@
 
                                 </tbody>
                             </table>
+                            <div class="rs-summary ">
+                                <div class="large-9 large-offset-3 small-12 small-offset-0">
+                                    <div class="rs-summary-content rs-summary-subtotal">
+                                        <div class="rs-summary-labelandvaluecontainer">
+                                            <div class="rs-summary-label" data-autom="bagrs-summary-subtotallabel">소계</div>
+                                            <div id="result3" class="rs-summary-value" data-autom="bagrs-summary-subtotalvalue"></div>
+                                        </div>
+                                    </div>
+                                    <div class="rs-summary-content rs-summary-shipping">
+                                        <div class="rs-summary-labelandvaluecontainer">
+                                    <div class="rs-summary-label" data-autom="bagrs-summary-shippinglabel">배송</div>
+                                    <div class="rs-summary-value" data-autom="bagrs-summary-shippingvalue">무료</div>
+                                        </div>
+
+                                    </div>
+                                    <div class="rs-summary-labelandvaluecontainer rs-summary-total">
+                                    <div class="rs-summary-label" data-autom="bagtotallabel">총계</div>
+                                    <div id="result2" class="rs-summary-value" data-autom="bagtotalvalue"></div>
+
+                                    </div>
+                                    <div id="tax" class="rs-tax-section">₩ VAT 포함</div>
+                                    <div class="rs-summary-financingmessage-wrapper">
+                                        <div class="rs-summary-value">
+                                            <div id="buyflow-message-container" class="rf-ac-messages">
+                                            <div class="rf-acmessages-defaultmessage rf-acmessages-defaultmessage-show">
+                                                <div class="large-12 rs-summary-financingmessage">
+                                                    <p class="large-8 small-12">
+                                                    <div class="credit-financing">
+                                                    <a target="_blank">최대 12개월 신용 카드 할부</a>
+                                                </div>
+                                                    </p>
+                                                </div>
+                                                </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row rs-bag-checkoutbutton-bottom">
+                                <div class="small-12 small-offset-0 large-9 large-offset-3">
+                                    <div class="rs-bag-checkoutbuttons-wrapper">
+                                        <div class="rs-bag-checkoutbutton rs-bag-checkout-mainbutton">
+                                            <a th:href="@{/order}">
+                                            <button id="shoppingCart.actions.checkout" type="button" class="form-button" data-autom="checkout">
+                                                <span>주문하기</span>
+                                            </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                        <hr/>
                     </div>
                 </div>
             </div>
@@ -97,6 +156,85 @@
     </div>
 
     </div>
+    <script th:inline="javascript">
+        let resultAmount = 0;
+        let allResult = 0;
+
+        window.onload = function(){
+            /*[# th:each="product : ${response}"]*/
+                resultAmount += Number(/*[[${product.orderQuantity}]]*/) * Number(/*[[${product.amount}]]*/);
+            /*[/]*/
+            let result = document.getElementById("result");
+            let result2 = document.getElementById("result2");
+            let result3 = document.getElementById("result3");
+            let tax = document.getElementById("tax")
+            result.innerText= "₩" + resultAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".";
+            result2.innerText= "₩" + resultAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            result3.innerText= "₩" + resultAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            tax.innerText= "₩" + Math.ceil(resultAmount/11).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "의 VAT 포함";
+            allResult = resultAmount;
+        }
+        const token = document.getElementById("_csrf").content;
+        const header = document.getElementById("_csrf_header").content;
+        let no;
+        let amount;
+        let quantity;
+        let index;
+        let stock;
+
+        function setProductInfo(productNo,productAmount,productQuantity,productIndex,productStock) {
+            no = productNo;
+            amount = productAmount;
+            quantity = productQuantity;
+            index = productIndex
+            stock = productStock;
+        }
+        function quantitySelect(index){
+            let elementById = document.getElementById('select-id-' + index);
+            let selectValue = elementById.options[elementById.selectedIndex].value;
+
+            if(selectValue > stock){
+                toastr.warning("재고보다 많은 수량을 선택할 수 없습니다.");
+                return false;
+            }
+            let quantityElem = document.getElementById("orderQuantity-" + index);
+            quantityElem.innerText=selectValue;
+
+            let allAmountElem = document.getElementById("allAmount-" + index);
+            allAmountElem.innerText="₩" + selectValue * amount;
+
+
+
+            $.ajax({
+                url: `/carts/modify-quantity?productNo=${no}&productQuantity=${selectValue}`,
+                method:"PUT",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header,token);
+                },
+                success: function(data){
+                    toastr.success("수량이 변경되었습니다.");
+                },
+                error: function(data){
+                    alert(data);
+                }
+            })
+            const container = document.querySelectorAll(".allAmount");
+            console.log(container);
+            let allResult = 0;
+            container.forEach((e)=> allResult += Number((e.innerHTML).slice(1)));
+
+            let result = document.getElementById("result");
+            let result2 = document.getElementById("result2");
+            let result3 = document.getElementById("result3");
+            let tax = document.getElementById("tax");
+
+            result.innerText= "₩" + allResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ".";
+            result2.innerText= "₩" + allResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            result3.innerText= "₩" + allResult.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            tax.innerText= "₩" + Math.ceil(allResult/11).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + "의 VAT 포함";
+
+        }
+    </script>
 </th:block>
 <th:block layout:fragment="content-js">
     <script th:src="@{/index/index.js}"></script>

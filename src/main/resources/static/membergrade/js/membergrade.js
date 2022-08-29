@@ -3,7 +3,6 @@ const pageSize = 10;
 let renewalPeriodContainer;
 let memberGradeTableBody;
 let token;
-let tokenHeader;
 
 const pageHelper = {
     pagingSize: 10,
@@ -52,8 +51,7 @@ function drawMemberGradeSection() {
 
 function init() {
     memberGradeTableBody = document.getElementById("memberGradeTBody");
-    token = document.getElementById("_csrf").textContent;
-    tokenHeader = document.getElementById('_csrf_header').textContent;
+    token = document.querySelector('meta[name="_csrf"]').content;
 }
 
 async function getMemberGradeData(page, size) {
@@ -135,7 +133,7 @@ async function deleteMemberGrade(memberGradeNo) {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
-            tokenHeader:token
+            "X-CSRF-TOKEN":token
         },
     };
 
@@ -161,7 +159,7 @@ async function updateMemberGrade(memberGradeNo, name, accumulateAmount) {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            tokenHeader:token
+            "X-CSRF-TOKEN":token
         },
         body: JSON.stringify({
             "name":name,

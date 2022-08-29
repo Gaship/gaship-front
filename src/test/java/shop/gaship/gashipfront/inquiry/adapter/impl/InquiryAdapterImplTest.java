@@ -155,14 +155,14 @@ class InquiryAdapterImplTest {
     @DisplayName("문의가 존재할때 잘 삭제된다.")
     @Test
     void inquiryDelete() {
-        assertThatNoException().isThrownBy(() -> inquiryAdapter.inquiryDelete(7));
+        assertThatNoException().isThrownBy(() -> inquiryAdapter.inquiryDelete(7, 1));
     }
 
     @Disabled("(주의) 해당 설정은 직접 db에 존재하는 번호를 확인한뒤에 해야한다. 안그러면 예외가 발생한다. 그래서 주의가 필요하기때문에 disabled해놓았다.")
     @DisplayName("존재하지 않는 문의번호로 문의 삭제요청 할 시에 예외가 발생한다.")
     @Test
     void inquiryDelete_fail() {
-        assertThatThrownBy(() -> inquiryAdapter.inquiryDelete(7))
+        assertThatThrownBy(() -> inquiryAdapter.inquiryDelete(7, 1))
             .isInstanceOf(RequestFailureThrow.class)
             .hasMessageContaining("문의를 찾을 수 없습니다.");
     }

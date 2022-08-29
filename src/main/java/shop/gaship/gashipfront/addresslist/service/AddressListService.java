@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.addresslist.service;
 
 import org.springframework.data.domain.Pageable;
+import shop.gaship.gashipfront.addresslist.dto.request.AddressAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
@@ -52,4 +53,6 @@ public interface AddressListService {
      * @return 배송지 조회 결과가 담긴 dto Page
      */
     PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable);
+
+    void addAddress(Integer memberNo, AddressAddRequestDto addressAddRequestDto);
 }

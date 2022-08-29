@@ -36,8 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http.authorizeRequests()
-                .antMatchers("/**")
-                .permitAll();
+            .antMatchers("/**")
+            .permitAll();
 
         http.sessionManagement()
                 .maximumSessions(1);
@@ -49,6 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("pw")
                 .successHandler(loginSuccessHandler())
                 .failureUrl(LOGIN_URI);
+
         http.logout();
 
         http.oauth2Login()

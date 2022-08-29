@@ -107,4 +107,9 @@ public class ProductController {
 
         return "product/productDetail";
     }
+
+    @GetMapping("/add")
+    public String productAddForm() {
+        return "product/productAddForm";
+    }
 }

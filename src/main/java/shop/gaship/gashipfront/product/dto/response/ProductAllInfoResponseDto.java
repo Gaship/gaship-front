@@ -33,8 +33,5 @@ public class ProductAllInfoResponseDto {
     private String deliveryType;
     private String upperName;
     private List<String> tags;
-    private List<Integer> fileNos;
-
-    @Setter
     private List<String> filePaths;
 }

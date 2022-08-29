@@ -42,7 +42,10 @@
                     aria-label="할인금액" style="width: 297px;">할인금액
                 </th>
                 <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                    aria-label="삭제" style="width: 159px;">삭제
+                    aria-label="쿠폰예약발송" style="width: 297px;">쿠폰예약발송
+                </th>
+                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                    aria-label="쿠폰즉시발송" style="width: 297px;">쿠폰즉시발송
                 </th>
               </tr>
               </thead>
@@ -51,10 +54,10 @@
                 <td th:text="${couponType.name}"></td>
                 <td th:text="${couponType.discountRate}"></td>
                 <td th:text="${couponType.discountAmount}"></td>
-                <td>
-                  <input th:disabled="${couponType.isStopGenerationIssue}" type="button" class="deleteButton"
-                          th:data-coupon-no="${couponType.couponTypeNo}" value="삭제">
-                </td>
+                <td th:if="${couponType.isStopGenerationIssue}"><button><a th:href="@{'/admin/coupons/coupon-type/' + ${couponType.couponTypeNo} + '/generation-coupon'}">쿠폰 예약 발송하기</a></button></td>
+                <td th:unless="${couponType.isStopGenerationIssue}">쿠폰 생성 발급 중지된 쿠폰</td>
+                <td th:if="${couponType.isStopGenerationIssue}"><button><a th:href="@{'/admin/coupons/coupon-type/' + ${couponType.couponTypeNo} + '/issue-coupon'}">쿠폰 예약 발송하기</a></button></td>
+                <td th:unless="${couponType.isStopGenerationIssue}">쿠폰 생성 발급 중지된 쿠폰</td>
               </tr>
               </tbody>
             </table>
@@ -100,8 +103,5 @@
   <button><a th:href="@{/admin/coupons/coupon-type/fixed-amount/add}">정액 할인 쿠폰 등록하기</a></button>
   <button><a th:href="@{/admin/coupons/coupon-type/fixed-rate/add}">정률 할인 쿠폰 등록하기</a></button>
   <button><a th:href="@{/admin/coupons/coupon-type/recommend-member-coupon}">추천인 쿠폰 타입 수정하기</a></button>
-</th:block>
-<th:block layout:fragment="content-js">
-  <script src="/coupon/js/coupon.js"></script>
 </th:block>
 </html>

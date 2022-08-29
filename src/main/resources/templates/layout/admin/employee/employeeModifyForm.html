@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <title>직원수정 페이지</title>
+    <style>
+        .form-style {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+
+    <h1 class="h3 mb-2 text-gray-800">직원 수정</h1>
+    <form class="form-style" th:action="@{'/admin/employees/' + ${employee.employeeNo}}" method="post">
+        <div class="form-row ">
+            <div class="form-group col-md-6">
+                <label for="inputPassword4">Password</label>
+                <input type="password" class="form-control" id="inputPassword4" value="put" placeholder="Password" name="password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputName">Name</label>
+            <input type="text" class="form-control" id="inputName" placeholder="이름을 입력.." name="name" value="put" th:text="${employee.name}">
+        </div>
+        <div class="form-group">
+            <label for="inputAddress">Address</label>
+            <input type="number" class="form-control" id="inputAddress" placeholder="1234 Main St" name="addressNo" value="put" th:text="${employee.address}">
+        </div>
+        <div class="form-group">
+            <label for="phone">휴대전화 (입력시 - 를 빼주세요)</label>
+            <input class="form-control" type="tel" id="phone" name="phoneNo" value="put" th:text="${employee.phoneNo}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Fix</button>
+    </form>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script th:src="@{/index/index.js}"></script>
+</th:block>
+
+</html>
