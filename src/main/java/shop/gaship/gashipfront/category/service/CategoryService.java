@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.category.service;
 
 import java.util.List;
 import shop.gaship.gashipfront.category.dto.request.CategoryCreateRequestDto;
+import shop.gaship.gashipfront.category.dto.request.CategoryModifyRequestDto;
 import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 
 /**
@@ -11,6 +12,9 @@ import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
  * @since 1.0
  */
 public interface CategoryService {
+    CategoryResponseDto findCategory(Integer categoryNo);
     List<CategoryResponseDto> findCategories();
     void addCategory(CategoryCreateRequestDto createRequest);
+    void modifyCategory(CategoryModifyRequestDto modifyRequest);
+    void removeCategory(Integer categoryNo);
 }
