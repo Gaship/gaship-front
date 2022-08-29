@@ -155,7 +155,6 @@ function clearMemberGradeTBody() {
 }
 
 async function updateMemberGrade(memberGradeNo, name, accumulateAmount) {
-    console.log(tokenHeader);
     const request = {
         method: "PUT",
         headers: {

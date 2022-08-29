@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.coupon.admin.controller;
 
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import shop.gaship.gashipfront.coupon.dto.CouponTypeCreationDto;
 import shop.gaship.gashipfront.coupon.dto.CouponTypeDto;
 import shop.gaship.gashipfront.coupon.dto.group.FixAmountGroup;
 import shop.gaship.gashipfront.coupon.dto.group.FixRateGroup;
+import shop.gaship.gashipfront.coupon.dto.request.CouponGenerationIssueCreationRequestDto;
+import shop.gaship.gashipfront.coupon.dto.response.CouponTargetMemberGradeResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -100,7 +103,7 @@ public class CouponAdminController {
 
         model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
 
-        return "coupon/admin/couponTypeList";
+        return "coupon/admin/couponTypeDeleteList";
     }
 
     @GetMapping("/coupon-type/delete-cannot")
@@ -142,4 +145,47 @@ public class CouponAdminController {
 
         return "coupon/admin/couponTypeList";
     }
+
+    @GetMapping("/coupon-type/{couponTypeNo}/generation-coupon")
+    public String couponGeneration(@PathVariable(value = "couponTypeNo") Integer couponTypeNo, Model model) {
+
+        List<CouponTargetMemberGradeResponseDto> couponTargetMemberGradeResponseDtoList =
+            couponAdminService.findCouponTargetMemberGrade();
+
+        model.addAttribute("couponTypeNo", couponTypeNo);
+        model.addAttribute("memberGradeList", couponTargetMemberGradeResponseDtoList);
+
+        return "coupon/admin/couponTypeGeneration";
+    }
+
+    @PostMapping(value = "/coupon-type/generation-coupon/issue-reservation")
+    public String couponIssueReservation(
+        CouponGenerationIssueCreationRequestDto couponGenerationIssueCreationRequestDto) {
+
+        couponAdminService.generateAndIssueCoupon(couponGenerationIssueCreationRequestDto);
+
+        return "redirect:/admin/coupons/coupon-type";
+    }
+
+    @GetMapping("/coupon-type/{couponTypeNo}/issue-coupon")
+    public String couponIssue(@PathVariable(value = "couponTypeNo") Integer couponTypeNo, Model model) {
+
+        List<CouponTargetMemberGradeResponseDto> couponTargetMemberGradeResponseDtoList =
+            couponAdminService.findCouponTargetMemberGrade();
+
+        model.addAttribute("couponTypeNo", couponTypeNo);
+        model.addAttribute("memberGradeList", couponTargetMemberGradeResponseDtoList);
+
+        return "coupon/admin/couponTypeIssue";
+    }
+
+    @PostMapping(value = "/coupon-type/generation-coupon/issue")
+    public String couponDirectIssue(
+        CouponGenerationIssueCreationRequestDto couponGenerationIssueCreationRequestDto) {
+
+        couponAdminService.generateAndIssueCoupon(couponGenerationIssueCreationRequestDto);
+
+        return "redirect:/admin/coupons/coupon-type";
+    }
+
 }

@@ -39,12 +39,21 @@ public interface CommonInquiryService {
                              InquiryAnswerRequestDto inquiryAnswerModifyRequestDto);
 
     /**
-     * 문의를 실삭제하기위해서 adapter에 요청전 비지니스로직을 처리하는 기능입니다.
+     * 본인스스로 문의를 실삭제하기위해서 adapter에 요청전 비지니스로직을 처리하는 기능입니다.
+     *
+     * @param inquiryNo 삭제대상 문의번호입니다.
+     * @param memberNo
+     * @author 최겸준
+     */
+    void deleteInquiry(Integer inquiryNo, Integer memberNo);
+
+    /**
+     * 직원 또는 관리자가 문의를 실삭제하기위해서 adapter에 요청전 비지니스로직을 처리하는 기능입니다.
      *
      * @param inquiryNo 삭제대상 문의번호입니다.
      * @author 최겸준
      */
-    void deleteInquiry(Integer inquiryNo);
+    void deleteInquiryManager(Integer inquiryNo);
 
     /**
      * 문의답변을 삭제하기위해서 adapter에 요청전 비지니스로직을 처리하는 기능입니다.
@@ -62,4 +71,6 @@ public interface CommonInquiryService {
      * @author 최겸준
      */
     InquiryDetailsResponseDto findInquiry(Integer inquiryNo);
+
+
 }

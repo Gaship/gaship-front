@@ -26,16 +26,8 @@ const shoppingMallCategories = async () => {
         if (loadedCategory.level < 3) {
             appendCategoryAddButton(category, loadedCategory.no)
         }
-
-        const modifyBtn = document.createElement("button");
-        modifyBtn.innerHTML += "수정"
-        modifyBtn.className = "btn btn-secondary ml-2 px-1 py-0";
-        category.appendChild(modifyBtn);
-
-        const removeBtn = document.createElement("button");
-        removeBtn.innerHTML += "삭제"
-        removeBtn.className = "btn btn-danger ml-2 px-1 py-0";
-        category.appendChild(removeBtn);
+        appendCategoryModifyButton(category, loadedCategory.no)
+        appendCategoryRemoveButton(category, loadedCategory.no)
 
         tr.appendChild(category);
         table.appendChild(tr);
@@ -56,8 +48,34 @@ const appendCategoryAddButton = (element, upperCategoryNo) => {
     element.appendChild(addBtn);
 }
 
+const appendCategoryModifyButton = (element, categoryNo) => {
+    const modifyBtn = document.createElement("button");
+    modifyBtn.innerHTML += "수정"
+    modifyBtn.className = "btn btn-secondary ml-2 px-1 py-0";
+    modifyBtn.addEventListener("click", function () {moveModifyForm(categoryNo)})
+    element.appendChild(modifyBtn);
+}
+
+const appendCategoryRemoveButton = (element, categoryNo) => {
+    const removeBtn = document.createElement("button");
+    removeBtn.innerHTML += "삭제"
+    removeBtn.className = "btn btn-danger ml-2 px-1 py-0";
+    removeBtn.addEventListener("click", function () {removeCategory(categoryNo)})
+    element.appendChild(removeBtn);
+}
+
 const moveAddForm = (upperCategoryNo) => {
     location.href = "/categories/add?upperCategoryNo=" + upperCategoryNo;
+}
+
+const moveModifyForm = (categoryNo) => {
+    location.href = "/categories/" + categoryNo + "/modify";
+}
+
+const removeCategory = (categoryNo) => {
+    if (confirm("삭제하시겠습니까?")) {
+        location.href = "/categories/remove?categoryNo=" + categoryNo;
+    }
 }
 
 window.addEventListener('load', () => shoppingMallCategories());

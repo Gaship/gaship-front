@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.customer.CustomerInquiryService;
-import shop.gaship.gashipfront.inquiry.util.InquirySuccessVerifier;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -37,9 +36,7 @@ public class CustomerInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries")
-    public String customerInquiryList(Pageable pageable, Model model, HttpSession session) {
-
-        InquirySuccessVerifier.verify(model, session);
+    public String customerInquiryList(Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiries(pageable);

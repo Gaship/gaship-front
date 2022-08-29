@@ -68,8 +68,22 @@ public class InquiryAdapterImpl implements InquiryAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void inquiryDelete(Integer inquiryNo) {
-        webClient.delete().uri("/api/inquiries/{inquiryNo}", inquiryNo).retrieve()
+    public void inquiryDelete(Integer inquiryNo, Integer memberNo) {
+        webClient.delete().uri(uriBuilder -> uriBuilder.path("/api/inquiries/{inquiryNo}")
+                .queryParam("memberNo", memberNo)
+                .build(inquiryNo))
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono).toEntity(void.class)
+            .block();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inquiryDeleteManager(Integer inquiryNo) {
+        webClient.delete().uri("/api/inquiries/{inquiryNo}/manager", inquiryNo)
+            .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono).toEntity(void.class)
             .block();
     }
@@ -90,7 +104,7 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     @Override
     public InquiryDetailsResponseDto inquiryDetails(Integer inquiryNo) {
 
-        return webClient.get().uri("/api/inquiries/{inquiryNo}", 1)
+        return webClient.get().uri("/api/inquiries/{inquiryNo}", inquiryNo)
             .accept(MediaType.APPLICATION_JSON).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(InquiryDetailsResponseDto.class).blockOptional()

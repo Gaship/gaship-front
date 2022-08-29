@@ -4,9 +4,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -15,10 +13,8 @@ import org.hibernate.validator.constraints.Length;
  * @author : 김보민
  * @since 1.0
  */
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@EqualsAndHashCode
 public class CategoryModifyRequestDto {
     @NotNull
     @Min(1)
