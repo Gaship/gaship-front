@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import shop.gaship.gashipfront.product.adapter.ProductAdapter;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -47,5 +46,10 @@ public class ProductController {
         model.addAttribute("uri", "/products");
 
         return "product/products";
+    }
+
+    @GetMapping("/add")
+    public String productAddForm() {
+        return "product/productAddForm";
     }
 }

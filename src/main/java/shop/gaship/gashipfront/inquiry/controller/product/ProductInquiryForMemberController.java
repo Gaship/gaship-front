@@ -13,20 +13,19 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.gaship.gashipfront.exceptions.MemberNotCreationException;
 import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
 import shop.gaship.gashipfront.inquiry.dto.request.view.ProductInfo;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
 import shop.gaship.gashipfront.inquiry.service.product.ProductInquiryService;
-import shop.gaship.gashipfront.inquiry.util.InquirySuccessVerifier;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -47,29 +46,18 @@ public class ProductInquiryForMemberController {
     /**
      * 본인인 회원에 대한 상품문의목록 조회요청을 처리하는 기능입니다.
      *
-     * @param pageable       페이지네이션에 맞게 조회하기 위한 정보를 담고있는 객체입니다.
-     * @param model          view에서 처리되어야할 데이터를 저장하는 객체입니다.
-     * @param userDetailsDto 로그인된 사용자정보를 담고 있는 객체입니다.
      * @return 문의 목록을 보여주는 view name을 반환합니다.
      * @author 최겸준
      */
     @GetMapping(value = "/member-self/product-inquiries")
-    public String productInquiryMemberList(
-        Pageable pageable, Model model, HttpSession session,
-        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public String productInquiryMemberList(@AuthenticationPrincipal UserDetailsDto userDetailsDto, Model model) {
 
-        InquirySuccessVerifier.verify(model, session);
-
-        Integer memberNo = userDetailsDto.getMemberNo();
-        if (Objects.isNull(memberNo)) {
-            throw new MemberNotCreationException();
-        }
-
-        PageResponse<InquiryListResponseDto> pageResponse =
-            productInquiryService.findProductInquiriesByMemberNo(pageable, memberNo);
-        model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
+        model.addAttribute("memberNo", userDetailsDto.getMemberNo());
+        model.addAttribute("whereUri", "product");
         return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
     }
+
+
 
     /**
      * 상품문의를 추가하기 위한 추가페이지 조회 요청을 처리합니다.
@@ -94,15 +82,13 @@ public class ProductInquiryForMemberController {
      */
     @PostMapping(value = "/product-inquiry")
     public String productInquiryAdd(@Valid InquiryAddRequestDto inquiryAddRequestDto,
-                                    HttpSession session, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                                    RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         inquiryAddRequestDto.setIsProduct(PRODUCT_INQUIRY.getValue());
         inquiryAddRequestDto.setMemberNo(userDetailsDto.getMemberNo());
 
         commonInquiryService.addInquiry(inquiryAddRequestDto);
-        session.setAttribute(KEY_IS_SUCCESS.getValue(), Boolean.TRUE);
-        session.setAttribute(KEY_SUCCESS_MESSAGE.getValue(),
-            VALUE_MESSAGE_PRODUCT_INQUIRY_ADD_SUCCESS.getValue());
 
+        redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(), VALUE_MESSAGE_PRODUCT_INQUIRY_ADD_SUCCESS.getValue());
         return "redirect:/inquiries/member-self/product-inquiries";
     }
 }

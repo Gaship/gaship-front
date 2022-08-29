@@ -43,7 +43,7 @@ public class CartUtil {
                                 .installationCost(ele.getInstallationCost())
                                 .orderQuantity(integerMap.get(ele.getProductNo()))
                                 .quantity(ele.getQuantity())
-                                .filePaths("http://localhost:7070/api/files/" + ele.getFileNos().get(0) + "/download")
+                                .filePaths(ele.getFilePaths().get(0))
                                 .build())
                 .collect(Collectors.toList());
     }
