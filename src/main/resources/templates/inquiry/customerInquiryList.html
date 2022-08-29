@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>고객문의 목록</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
+    <script th:src="@{/inquiry/js/inquirylistpage.js}"></script>
+    <script th:inline="javascript">
+        const memberNo = [[${memberNo}]];
+        let whereUri = "customer";
+    </script>
 </head>
 <body>
 <div>
@@ -16,27 +24,16 @@
                 <th style="width: auto">답변상태</th>
                 <th style="width: auto">닉네임</th>
                 <th style="width: auto">등록시간</th>
-                <th style="width: auto">수정</th>
-                <th style="width: auto">삭제</th>
+                <th style="width: auto"></th>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each = "item : ${pageResponse.content}">
-                <td th:text="${item.inquiryNo}"></td>
-                <td th:text="${item.memberNickname}"></td>
-                <td th:text="${item.processStatus}"></td>
-                <td th:text="${item.title}"></td>
-                <td th:text="${item.registerDatetime}"></td>
-                <td>
-                    <button style="width: auto" name="updateBtn" value="${item.no}" class="btn btn-outline-primary">수정</button>
-                </td>
-                <td>
-                    <button style="width: auto" name="deleteBtn" value="${item.no}" class="btn btn-outline-primary">삭제</button>
-                </td>
-            </tr>
+            <tbody id = "inquiryListTBody">
             </tbody>
         </table>
     </div>
+
+    <a href="/inquiries/show-form/customer-inquiry-add" style="width: auto; margin-left: 5px" type="button" class="btn btn-outline-primary">등록</a>
+    <a href="/customer-center" style="width: auto; margin-left: 10px" type="button" class="btn btn-outline-primary">고객센터</a>
 </div>
 </body>
 </html>

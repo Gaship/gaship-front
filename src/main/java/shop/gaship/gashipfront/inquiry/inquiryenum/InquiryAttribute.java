@@ -21,7 +21,7 @@ public enum InquiryAttribute {
 
     KEY_PAGE_RESPONSE("pageResponse"),
 
-    KEY_INQUIRY_DETAILS("inquiryDetails");
+    KEY_DETAILS("details");
 
     private final String value;
 

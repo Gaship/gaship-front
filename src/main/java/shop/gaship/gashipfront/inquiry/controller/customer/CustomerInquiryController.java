@@ -1,9 +1,8 @@
 package shop.gaship.gashipfront.inquiry.controller.customer;
 
-import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_INQUIRY_DETAILS;
+import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_DETAILS;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_CUSTOMER_INQUIRY_DETAILS;
 
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryDetailsResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
-import shop.gaship.gashipfront.inquiry.util.InquirySuccessVerifier;
 
 /**
  * 상품문의에 대한 요청을 처리하는 클래스입니다.
@@ -22,7 +20,7 @@ import shop.gaship.gashipfront.inquiry.util.InquirySuccessVerifier;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/inquires")
+@RequestMapping("/inquiries")
 public class CustomerInquiryController {
 
     private final CommonInquiryService commonInquiryService;
@@ -36,13 +34,12 @@ public class CustomerInquiryController {
      */
     @GetMapping(value = "/customer-inquiries/{inquiryNo}")
     public String customerInquiryDetails(
-        @PathVariable Integer inquiryNo, Model model, HttpSession session) {
-        InquirySuccessVerifier.verify(model, session);
+        @PathVariable Integer inquiryNo, Model model) {
 
         InquiryDetailsResponseDto inquiryDetailsResponseDto =
             commonInquiryService.findInquiry(inquiryNo);
 
-        model.addAttribute(KEY_INQUIRY_DETAILS.getValue(), inquiryDetailsResponseDto);
+        model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);
         return VIEW_NAME_CUSTOMER_INQUIRY_DETAILS.getValue();
     }
 }

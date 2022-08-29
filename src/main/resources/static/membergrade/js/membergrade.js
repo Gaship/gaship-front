@@ -54,6 +54,9 @@ function init() {
     memberGradeTableBody = document.getElementById("memberGradeTBody");
     token = document.getElementById("_csrf").textContent;
     tokenHeader = document.getElementById('_csrf_header').textContent;
+
+    alert("token: " + token);
+    alert("tokenHeader: " + tokenHeader);
 }
 
 async function getMemberGradeData(page, size) {
