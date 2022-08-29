@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.addresslist.adapter.Impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,9 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class AddressListAdapterImpl implements AddressListAdapter {
-    private static final String BASE_URL = "http://localhost:7070";
-
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl(BASE_URL)
-            .build();
+    private final WebClient webClient;
 
     /**
      * {@inheritDoc}
