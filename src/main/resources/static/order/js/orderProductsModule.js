@@ -1,3 +1,5 @@
+import {loadMemberCoupons} from "./couponListModule.js";
+
 let orderProductsContainer;
 
 let orderName;
@@ -96,6 +98,7 @@ function drawOrderProductsContent() {
 }
 
 const loadOrderProducts = () => {
+    loadMemberCoupons();
     getOrderProducts()
         .then(setOrderRequestData);
 }
