@@ -1,6 +1,6 @@
 package shop.gaship.gashipfront.inquiry.controller.product;
 
-import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_INQUIRY_DETAILS;
+import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_DETAILS;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_PAGE_RESPONSE;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_PRODUCT_INQUIRY_DETAILS;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_PRODUCT_INQUIRY_LIST;
@@ -53,7 +53,7 @@ public class ProductInquiryController {
     }
 
     /**
-     * 관리자 또는 회원본인에 대한 상품문의 상세조회 요청을 처리하는 기능입니다.
+     * 상품문의 상세조회 요청을 처리하는 기능입니다.
      *
      * @param inquiryNo 조회의 기준이 되는 문의번호입니다.
      * @return view 경로를 반환합니다.
@@ -65,7 +65,7 @@ public class ProductInquiryController {
         InquiryDetailsResponseDto inquiryDetailsResponseDto =
             commonInquiryService.findInquiry(inquiryNo);
 
-        model.addAttribute(KEY_INQUIRY_DETAILS.getValue(), inquiryDetailsResponseDto);
+        model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);
         return VIEW_NAME_PRODUCT_INQUIRY_DETAILS.getValue();
     }
 }

@@ -40,13 +40,23 @@ public interface InquiryAdapter {
     void inquiryAnswerModify(InquiryAnswerRequestDto inquiryAnswerModifyRequestDto);
 
     /**
-     * 문의를 삭제하는 기능 요청을 보냅니다.
+     * 본인의 문의를 삭제하는 기능 요청을 보냅니다.
+     * 이때 삭제는 실삭제를 뜻합니다.
+     *
+     * @param inquiryNo 삭제할 문의의 번호입니다.
+     * @param memberNo 삭제하려는 본인의 번호입니다.
+     * @author 최겸준
+     */
+    void inquiryDelete(Integer inquiryNo, Integer memberNo);
+
+    /**
+     * 직원 또는 관리자가 문의를 삭제하는 기능 요청을 보냅니다.
      * 이때 삭제는 실삭제를 뜻합니다.
      *
      * @param inquiryNo 삭제할 문의의 번호입니다.
      * @author 최겸준
      */
-    void inquiryDelete(Integer inquiryNo);
+    void inquiryDeleteManager(Integer inquiryNo);
 
     /**
      * 문의의 답변을 삭제하는 기능 요청을 보냅니다.
@@ -145,4 +155,6 @@ public interface InquiryAdapter {
      */
     PageResponse<InquiryListResponseDto> productInquiryProductList(Pageable pageable,
                                                                    Integer productNo);
+
+
 }

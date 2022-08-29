@@ -49,8 +49,16 @@ public class CommonInquiryServiceImpl implements CommonInquiryService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteInquiry(Integer inquiryNo) {
-        inquiryAdapter.inquiryDelete(inquiryNo);
+    public void deleteInquiry(Integer inquiryNo, Integer memberNo) {
+        inquiryAdapter.inquiryDelete(inquiryNo, memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteInquiryManager(Integer inquiryNo) {
+        inquiryAdapter.inquiryDeleteManager(inquiryNo);
     }
 
     /**
