@@ -162,7 +162,7 @@ function setAddressAddFormEvent() {
 
     modalSaveBtn.addEventListener("click", () => {
         addressAddRequestData.addressDetail = document.getElementById("addressDetail").value;
-        console.log(JSON.stringify(addressAddRequestData));
+
         if(addressAddRequestData.checkBlank()) {
             window.alert("모두 입력해주세요.");
         } else {

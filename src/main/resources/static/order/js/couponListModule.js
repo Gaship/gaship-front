@@ -13,7 +13,7 @@ async function getMemberCoupons() {
 }
 
 function setMemberCouponsData(memberCouponList) {
-    console.log(memberCouponList);
+    // console.log(memberCouponList);
 }
 
 const loadMemberCoupons = () => {
