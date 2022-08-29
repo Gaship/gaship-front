@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.employee.adapter.EmployeeAdapter;
 import shop.gaship.gashipfront.employee.dto.request.EmployeeCreateRequestDto;
@@ -32,32 +33,32 @@ public class EmployeeAdapterImpl implements EmployeeAdapter {
      * {@inheritDoc}
      */
     @Override
-    public Boolean employeeAdd(EmployeeCreateRequestDto requestDto) {
+    public void employeeAdd(EmployeeCreateRequestDto requestDto) {
         webClient
             .post()
             .uri(EMPLOYEE_BASE_URI)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(requestDto)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
-
-        return true;
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Boolean employeeModify(EmployeeModifyRequestDto requestDto) {
+    public void employeeModify(@RequestBody EmployeeModifyRequestDto requestDto) {
         webClient
             .put()
-            .uri(EMPLOYEE_BASE_URI + requestDto.getEmployeeNo())
+            .uri(EMPLOYEE_BASE_URI +"/{employeeNo}",requestDto.getEmployeeNo())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(requestDto)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
-
-        return true;
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     @Override
