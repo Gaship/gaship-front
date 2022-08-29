@@ -3,6 +3,9 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/shopping/layout}">
 <head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <meta charset="UTF-8">
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -64,12 +67,13 @@
                         </div>
                     </th:block>
                 </div>
-                <th:block th:include="component/pageFooter"></th:block>
+                <th:block th:if="${!#lists.isEmpty(products)}">
+                    <th:block th:include="component/pageFooter"></th:block>
+                </th:block>
             </div>
         </div>
     </section>
 </th:block>
 <th:block layout:fragment="content-js">
-    <script src="/product/js/prpduct.js"></script>
 </th:block>
 </html>

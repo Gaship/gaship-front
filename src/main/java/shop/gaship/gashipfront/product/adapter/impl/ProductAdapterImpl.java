@@ -168,10 +168,10 @@ public class ProductAdapterImpl implements ProductAdapter {
                                                                        Pageable pageable) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
-                .path(REQUEST_URI + "/category/{categoryNo}")
+                .path(REQUEST_URI + "/category/" + categoryNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
-                .build(categoryNo))
+                .build())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(
