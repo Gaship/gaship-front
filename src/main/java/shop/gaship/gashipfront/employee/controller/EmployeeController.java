@@ -1,16 +1,20 @@
 package shop.gaship.gashipfront.employee.controller;
 
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import shop.gaship.gashipfront.addresslocal.dto.response.AddressLocalResponseDto;
+import shop.gaship.gashipfront.addresslocal.service.AddressLocalService;
 import shop.gaship.gashipfront.employee.dto.request.EmployeeCreateRequestDto;
 import shop.gaship.gashipfront.employee.dto.request.EmployeeModifyRequestDto;
 import shop.gaship.gashipfront.employee.dto.response.EmployeeResponseDto;
@@ -30,14 +34,22 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class EmployeeController {
     private final EmployeeService employeeService;
 
+    private final AddressLocalService addressLocalService;
+
     @GetMapping("/add")
-    public String moveAddForm(){
+    public String moveAddForm(Model model) {
+        List<AddressLocalResponseDto> addressList = addressLocalService.addressList();
+        model.addAttribute("addressList", addressList);
         return "layout/admin/employee/employeeAddForm";
     }
+
     @GetMapping("/modify/{employeeNo}")
     public String moveModifyForm(@PathVariable("employeeNo") Integer employeeNo,
-                                 Model model){
+                                 Model model) {
         EmployeeResponseDto employee = employeeService.employeeDetail(employeeNo);
+        List<AddressLocalResponseDto> addressList = addressLocalService.addressList();
+
+        model.addAttribute("addressList", addressList);
         model.addAttribute("employee", employee);
 
         return "layout/admin/employee/employeeModifyForm";
@@ -53,11 +65,11 @@ public class EmployeeController {
 
     @PutMapping("/{employeeNo}")
     public String modifyEmployee(
-        @PathVariable("employeeNo") Integer employeeNo
-        ,EmployeeModifyRequestDto dto) {
+        @PathVariable("employeeNo") Integer employeeNo, EmployeeModifyRequestDto dto) {
 
+        dto.setEmployeeNo(employeeNo);
         employeeService.employeeModify(dto);
-        return "layout/admin/employee/employeeList";
+        return "redirect:layout/admin/employee/employeeList";
     }
 
     @GetMapping("/{employeeNo}")
