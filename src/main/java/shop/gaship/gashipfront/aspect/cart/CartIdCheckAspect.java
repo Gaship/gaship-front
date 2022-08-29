@@ -1,5 +1,12 @@
 package shop.gaship.gashipfront.aspect.cart;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,15 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import shop.gaship.gashipfront.cart.service.CartService;
-import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 
 /**
  * @author 최정우
@@ -30,6 +29,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class CartIdCheckAspect {
+
     public static final String CART_ID = "CID";
     private static String cartKey;
     private final CartService cartService;
@@ -39,17 +39,20 @@ public class CartIdCheckAspect {
         String userId = null;
 
         if (SecurityContextHolder.getContext().getAuthentication() instanceof UsernamePasswordAuthenticationToken) {
-            SignInSuccessUserDetailsDto authentication = (SignInSuccessUserDetailsDto) SecurityContextHolder.getContext()
-                    .getAuthentication().getPrincipal();
+            UserDetailsDto authentication =
+                (UserDetailsDto) SecurityContextHolder.getContext()
+                                                      .getAuthentication().getPrincipal();
             userId = authentication.getMemberNo().toString();
         }
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        HttpServletRequest request =
+            ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletResponse response =
+            ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
 //      request 에서 비회원 카트 아이디 조회
         Optional<Cookie> nonMemberCookie = Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(CART_ID))
-                .findFirst();
+                                                 .filter(cookie -> cookie.getName().equals(CART_ID))
+                                                 .findFirst();
 //      세션에도 회원 정보(회원 장바구니 식별값)가 없고 쿠키에도 catId(비회원 장바구니 식별값) 가 없을 경우
         if (Objects.isNull(userId) && nonMemberCookie.isEmpty()) {
             // 비회원 장바구니 쿠키를 부여한다.
