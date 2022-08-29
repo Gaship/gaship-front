@@ -24,13 +24,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeAdapterImpl employeeAdapter;
 
     @Override
-    public boolean employeeAdd(EmployeeCreateRequestDto requestDto){
-        return employeeAdapter.employeeAdd(requestDto);
+    public void employeeAdd(EmployeeCreateRequestDto requestDto){
+        employeeAdapter.employeeAdd(requestDto);
     }
 
     @Override
-    public boolean employeeModify(EmployeeModifyRequestDto requestDto){
-        return employeeAdapter.employeeModify(requestDto);
+    public void employeeModify(EmployeeModifyRequestDto requestDto){
+        employeeAdapter.employeeModify(requestDto);
     }
 
     @Override
