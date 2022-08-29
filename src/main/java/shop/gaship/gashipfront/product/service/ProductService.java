@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
+import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -43,4 +44,6 @@ public interface ProductService {
     ProductAllInfoResponseDto findProduct(Integer productNo);
 
     void addProduct(List<MultipartFile> multipartFiles, ProductCreateRequestDto createRequest);
+
+    void modifyProduct(List<MultipartFile> multipartFiles, ProductModifyRequestDto modifyRequest);
 }

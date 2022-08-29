@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
 import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
+import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -48,5 +49,11 @@ public class ProductServiceImpl implements ProductService {
     public void addProduct(List<MultipartFile> multipartFiles,
                            ProductCreateRequestDto createRequest) {
         productAdapter.productAdd(multipartFiles, createRequest);
+    }
+
+    @Override
+    public void modifyProduct(List<MultipartFile> multipartFiles,
+                              ProductModifyRequestDto modifyRequest) {
+        productAdapter.productModify(multipartFiles, modifyRequest);
     }
 }

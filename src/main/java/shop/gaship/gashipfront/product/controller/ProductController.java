@@ -20,6 +20,7 @@ import shop.gaship.gashipfront.category.service.CategoryService;
 import shop.gaship.gashipfront.elastic.dto.response.SearchResponseDto;
 import shop.gaship.gashipfront.elastic.service.SearchService;
 import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
+import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.statuscode.adapter.StatusCodeAdapter;
@@ -132,6 +133,24 @@ public class ProductController {
     public String productAdd(List<MultipartFile> multipartFiles,
                              @ModelAttribute ProductCreateRequestDto createRequest) {
         productService.addProduct(multipartFiles, createRequest);
+        return "redirect:/";
+    }
+
+    @GetMapping("/modify")
+    public String productModifyForm(@RequestParam Integer productNo,
+                                    Model model) {
+        model.addAttribute("categories", categoryService.findFlattenCategories());
+        model.addAttribute("deliveryTypes",
+                statusCodeAdapter.getStatusCodeList(DeliveryType.GROUP));
+        model.addAttribute("tags", tagService.findTags());
+        model.addAttribute("product", productService.findProduct(productNo));
+        return "product/productModifyForm";
+    }
+
+    @PostMapping(value = "/modify", params = "productNo")
+    public String productModify(List<MultipartFile> multipartFiles,
+                                @ModelAttribute ProductModifyRequestDto modifyRequest) {
+        productService.modifyProduct(multipartFiles, modifyRequest);
         return "redirect:/";
     }
 }

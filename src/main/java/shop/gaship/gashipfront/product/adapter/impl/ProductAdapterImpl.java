@@ -63,15 +63,18 @@ public class ProductAdapterImpl implements ProductAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void productModify(List<MultipartFile> files, ProductModifyRequestDto modifyRequest) {
+    public void productModify(List<MultipartFile> multipartFiles, ProductModifyRequestDto modifyRequest) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        files.forEach(file -> builder.part("image", file));
+
+        multipartFiles.forEach(multipartFile ->
+                builder.part("image", multipartFile.getResource(),
+                        parseMediaType(Objects.requireNonNull(multipartFile.getContentType()))));
         builder.part("modifyRequest", modifyRequest, MediaType.APPLICATION_JSON);
 
         webClient.put()
             .uri(REQUEST_URI + "/{productNo}", modifyRequest.getNo())
             .contentType(MediaType.MULTIPART_FORM_DATA)
-            .bodyValue(builder.build())
+            .body(BodyInserters.fromMultipartData(builder.build()))
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(Void.class)
@@ -88,7 +91,9 @@ public class ProductAdapterImpl implements ProductAdapter {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(modifyRequest)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     /**
