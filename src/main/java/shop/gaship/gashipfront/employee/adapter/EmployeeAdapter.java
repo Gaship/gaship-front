@@ -10,13 +10,12 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * 설명작성란
  *
  * @author : 유호철
- * @see
  * @since 1.0
  */
 public interface EmployeeAdapter {
-    Boolean employeeAdd(EmployeeCreateRequestDto requestDto);
+    void employeeAdd(EmployeeCreateRequestDto requestDto);
 
-    Boolean employeeModify(EmployeeModifyRequestDto requestDto);
+    void employeeModify(EmployeeModifyRequestDto requestDto);
 
     EmployeeResponseDto employeeDetail(Integer employeeNo);
 

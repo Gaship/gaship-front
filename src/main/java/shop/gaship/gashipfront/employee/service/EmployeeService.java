@@ -13,9 +13,9 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @since 1.0
  */
 public interface EmployeeService {
-    boolean employeeAdd(EmployeeCreateRequestDto requestDto);
+    void employeeAdd(EmployeeCreateRequestDto requestDto);
 
-    boolean employeeModify(EmployeeModifyRequestDto requestDto);
+    void employeeModify(EmployeeModifyRequestDto requestDto);
 
     EmployeeResponseDto employeeDetail(Integer employeeNo);
 

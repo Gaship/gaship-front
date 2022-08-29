@@ -7,7 +7,9 @@ import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import reactor.util.annotation.Nullable;
 
 /**
  * 직원생성을 위한 Dto 객체입니다.
@@ -17,10 +19,10 @@ import org.hibernate.validator.constraints.Length;
  */
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class EmployeeCreateRequestDto {
     @Min(1)
-    @NotNull(message = "권한번호를 기입해주세요")
+    @Nullable
+    @Setter
     private Integer authorityNo;
     @Min(1)
     @NotNull(message = "지역번호를 입력해주세요")
