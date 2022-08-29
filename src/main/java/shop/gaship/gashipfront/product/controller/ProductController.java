@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import shop.gaship.gashipfront.category.service.CategoryService;
 import shop.gaship.gashipfront.elastic.dto.response.SearchResponseDto;
 import shop.gaship.gashipfront.elastic.service.SearchService;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
+import shop.gaship.gashipfront.tag.service.TagService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -31,6 +33,8 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class ProductController {
     private final ProductService productService;
     private final SearchService searchService;
+    private final CategoryService categoryService;
+    private final TagService tagService;
 
     @GetMapping
     public String showProducts(@RequestParam("page")String page,
@@ -109,7 +113,9 @@ public class ProductController {
     }
 
     @GetMapping("/add")
-    public String productAddForm() {
+    public String productAddForm(Model model) {
+        model.addAttribute("categories", categoryService.findFlattenCategories());
+        model.addAttribute("tags", tagService.findTags());
         return "product/productAddForm";
     }
 }
