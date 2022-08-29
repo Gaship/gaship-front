@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="UTF-8">
+    <title>회원탈퇴</title>
+</head>
+<th:block layout:fragment="content">
+    <div class="container">
+        <th:block th:include="component/userDetailMenu"></th:block>
+    </div>
+</th:block>
+<th:block layout:fragment="content-js">
+
+</th:block>
+</html>

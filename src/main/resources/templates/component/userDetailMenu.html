@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div class="sidebar">
+    <div class="sidebar__item">
+        <h4 class="current-location"></h4>
+        <ul>
+            <li class="link-info"><a th:href="${'/members/' + memberNo}">회원정보</a></li>
+            <li class="link-order"><a th:href="${'/members/' + memberNo + '/orders'}">주문내역</a></li>
+            <li class="link-address"><a th:href="${'/members/' + memberNo + '/addresses'}">배송지관리</a></li>
+            <li class="link-tag"><a th:href="${'/members/' + memberNo + '/tags'}">태그관리</a></li>
+            <li class="link-exit"><a th:href="${'/members/' + memberNo + '/exit'}">회원탈퇴</a></li>
+        </ul>
+    </div>
+</div>
+<script>
+    const currentLocation = document.querySelector(".current-location");
+    if(location.href.match(/exit/)) {
+        const exitLiTag = document.querySelector(".link-exit");
+        currentLocation.innerHTML = exitLiTag.firstChild.textContent;
+    } else if(location.href.match(/orders/)){
+        const ordersLiTag = document.querySelector(".link-orders");
+        currentLocation.innerHTML = ordersLiTag.firstChild.textContent;
+    } else if(location.href.match(/addresses/)){
+        const addressLiTag = document.querySelector(".link-address");
+        currentLocation.innerHTML = addressLiTag.firstChild.textContent;
+    } else if(location.href.match(/tags/)){
+        const tagLiTag = document.querySelector(".link-tag");
+        currentLocation.innerHTML = tagLiTag.firstChild.textContent;
+    } else {
+        const infoLiTag = document.querySelector(".link-info");
+        currentLocation.innerHTML = infoLiTag.firstChild.textContent;
+    }
+</script>
+</html>
