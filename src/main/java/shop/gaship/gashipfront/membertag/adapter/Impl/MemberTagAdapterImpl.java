@@ -1,6 +1,8 @@
 package shop.gaship.gashipfront.membertag.adapter.Impl;
 
 import java.util.List;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,17 +20,15 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class MemberTagAdapterImpl implements MemberTagAdapter {
-    private static final String BASE_URL = "http://localhost:7070";
-
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl(BASE_URL)
-            .build();
+    public static final String MEMBER_TAG_PATH = "/api/member-tag";
+    private final WebClient webClient;
 
     @Override
-    public void deleteAllAndAddAllMemberTags(MemberTagRequestDto request) {
+    public void deleteAllAndAddAllMemberTags(MemberTagRequestDto request,Integer memberNo) {
         webClient.post()
-                .uri("/api/members/{memberNo}/member-tag", request.getMemberNo())
+                .uri(MEMBER_TAG_PATH + "/" + memberNo)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -40,7 +40,7 @@ public class MemberTagAdapterImpl implements MemberTagAdapter {
     @Override
     public List<MemberTagResponseDto> findMemberTags(Integer memberNo) {
         return webClient.get()
-                .uri("/api/members/{memberNo}/member-tag", memberNo)
+                .uri("/api/member-tag" + "/" + memberNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToFlux(new ParameterizedTypeReference<MemberTagResponseDto>() {

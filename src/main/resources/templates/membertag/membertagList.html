@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+    <title>태그</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/membertag/css/membertag.css">
+</head>
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">내 태그</h1>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">내 태그 목록</h6>
+            </div>
+            <div class="col-sm-12 container">
+            <div class="flex-items"th:each="tag : ${response}">
+                <button th:onclick="setTitle([[${tag.tagNo}]],[[${tag.title}]],[[${tagStat.index}]])" class="btn btn-4 tags">[[${tag.title}]]</button>
+            </div>
+
+            <div class="col-sm-12 container">
+                <div class="flex-items"th:each="tag : ${tags}">
+                    <button th:onclick="setTitle([[${tag.tagNo}]],[[${tag.title}]],[[${tagStat.index}]])" class="btn btn-4 tags">[[${tag.title}]]</button>
+                </div>
+<!--                <div id="addModalBg" style="display: none" class="modalBackground modal__background"></div>-->
+<!--                <div id="addModalWrap" style="display: none" class="modal addressAddFormModalWrap modal__box">-->
+<!--                    <input type="text" id="addTitle" name="title">-->
+<!--                    <button class="btn btn-4" type="button" id="addBackBtn" onclick="closeModal();">취소</button>-->
+<!--                    <button class="btn btn-4" type="button" id="addBtn" onclick="add();">저장</button>-->
+<!--                </div>-->
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+
+    </script>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script th:src="@{/index/index.js}"></script>
+</th:block>
+
+</html>
