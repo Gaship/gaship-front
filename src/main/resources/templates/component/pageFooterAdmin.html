@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="h-25 w-100 mx-auto my-0 row justify-content-around">
+    <th:block>
+        <a class="w-25 row justify-content-center text-white" th:href="@{ ${uri} + '?page=' + ${previousPageNo}+ ${#strings.isEmpty(size) ? '' : '&size=' + size} + ${#strings.isEmpty(queryParam) ? '' : queryParam}}">
+            <button th:disabled="${!previous}" class="site-btn rounded-sm btn-primary">
+                이전
+            </button>
+        </a>
+        <div class="w-50 row justify-content-center">
+            <h3 th:text="${pageNum}"></h3>
+            <h3> / </h3>
+            <h3 th:text="${totalPage}"></h3>
+        </div>
+        <a class="w-25 row justify-content-center text-white" th:href="@{ ${uri} + '?page=' + ${nextPageNo} + ${#strings.isEmpty(size) ? '' : '&size=' + size} +  ${#strings.isEmpty(queryParam) ? '' : queryParam}}">
+            <button th:disabled="${!next}" class="site-btn rounded-sm flex-wrap btn btn-primary">
+                다음
+            </button>
+        </a>
+    </th:block>
+</div>
+</html>

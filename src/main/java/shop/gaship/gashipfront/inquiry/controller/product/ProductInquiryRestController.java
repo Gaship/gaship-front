@@ -6,7 +6,6 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +16,6 @@ import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
 import shop.gaship.gashipfront.inquiry.service.product.ProductInquiryService;
-import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -31,6 +29,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequestMapping("/api/inquires")
 @RequiredArgsConstructor
 public class ProductInquiryRestController {
+
     private final ProductInquiryService productInquiryService;
     private final CommonInquiryService commonInquiryService;
 
@@ -57,14 +56,10 @@ public class ProductInquiryRestController {
      */
     @PostMapping(value = "/product-inquiry")
     public void productInquiryAdd(@RequestBody @Valid InquiryAddRequestDto inquiryAddRequestDto,
-                                  @AuthenticationPrincipal UserDetails userDetails) {
-        if (userDetails instanceof SignInSuccessUserDetailsDto) {
-            inquiryAddRequestDto.setMemberNo(((SignInSuccessUserDetailsDto) userDetails)
-                .getMemberNo().intValue());
-        }
-        if (userDetails instanceof UserDetailsDto) {
-            inquiryAddRequestDto.setMemberNo(((UserDetailsDto) userDetails).getMemberNo());
-        }
+        @AuthenticationPrincipal UserDetailsDto user) {
+
+        inquiryAddRequestDto.setMemberNo(user.getMemberNo());
+
         inquiryAddRequestDto.setIsProduct(PRODUCT_INQUIRY.getValue());
 
         commonInquiryService.addInquiry(inquiryAddRequestDto);

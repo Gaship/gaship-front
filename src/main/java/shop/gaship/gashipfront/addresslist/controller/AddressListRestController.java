@@ -3,12 +3,14 @@ package shop.gaship.gashipfront.addresslist.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
 import shop.gaship.gashipfront.addresslist.service.AddressListService;
-import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -22,35 +24,20 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequiredArgsConstructor
 @RequestMapping("/rest/members/address-list")
 public class AddressListRestController {
+
     private final AddressListService addressListService;
 
     @GetMapping
     public PageResponse<AddressListResponseDto> addressLists(
-            @AuthenticationPrincipal UserDetails user, Pageable pageable) {
+        @AuthenticationPrincipal UserDetailsDto user, Pageable pageable) {
 
-        if(user instanceof UserDetailsDto) {
-            return addressListService
-                    .findAddressLists(Long.valueOf(((UserDetailsDto) user).getMemberNo()),
-                            pageable);
-        }
-        return addressListService
-                .findAddressLists(((SignInSuccessUserDetailsDto) user).getMemberNo(),
-                        pageable);
+        return addressListService.findAddressLists(user.getMemberNo(), pageable);
     }
 
     @PostMapping
-    public void addressAdd(@AuthenticationPrincipal UserDetails user,
-                           @RequestBody AddressAddRequestDto addressAddRequestDto){
+    public void addressAdd(@AuthenticationPrincipal UserDetailsDto user,
+        @RequestBody AddressAddRequestDto addressAddRequestDto) {
+        addressListService.addAddress(user.getMemberNo(), addressAddRequestDto);
 
-        if(user instanceof UserDetailsDto) {
-            addressListService
-                    .addAddress(((UserDetailsDto) user).getMemberNo(),
-                            addressAddRequestDto);
-        } else {
-            addressListService
-                    .addAddress((((SignInSuccessUserDetailsDto)user)
-                                    .getMemberNo()).intValue(),
-                            addressAddRequestDto);
-        }
     }
 }

@@ -14,6 +14,7 @@ import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 public interface CategoryService {
     CategoryResponseDto findCategory(Integer categoryNo);
     List<CategoryResponseDto> findCategories();
+    List<CategoryResponseDto> findFlattenCategories();
     void addCategory(CategoryCreateRequestDto createRequest);
     void modifyCategory(CategoryModifyRequestDto modifyRequest);
     void removeCategory(Integer categoryNo);
