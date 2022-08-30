@@ -2,9 +2,11 @@ package shop.gaship.gashipfront.inquiry.controller.product;
 
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_PAGE_RESPONSE;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_PRODUCT_INQUIRY_LIST;
+import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_PRODUCT_INQUIRY_LIST_ADMIN;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/inquires")
+@RequestMapping("/admin/inquiries")
 public class ProductInquiryForManagerController {
 
     private final ProductInquiryService productInquiryService;
@@ -37,16 +39,16 @@ public class ProductInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String productInquiryList(
-        Pageable pageable, Model model) {
+          Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             productInquiryService.findProductInquiries(pageable);
 
         model.addAttribute("isUser", false);
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
-        return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
+        return VIEW_NAME_PRODUCT_INQUIRY_LIST_ADMIN.getValue();
     }
 
     /**
@@ -58,9 +60,9 @@ public class ProductInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries/status-hold")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String productInquiryStatusHoldList(
-        Pageable pageable, Model model) {
+        @PageableDefault Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse
             = productInquiryService.findProductInquiriesStatusHold(pageable);
@@ -79,9 +81,9 @@ public class ProductInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries/status-complete")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String productInquiryStatusCompleteList(
-        Pageable pageable, Model model) {
+        @PageableDefault  Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             productInquiryService.findProductInquiriesStatusComplete(pageable);

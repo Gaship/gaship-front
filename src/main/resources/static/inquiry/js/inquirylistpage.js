@@ -24,7 +24,12 @@ async function deleteInquiry(eventTarget) {
         isProduct = true;
     }
 
-    await fetch(`/js/inquiries/${inquiryNo}?isProduct=${isProduct}`, request)
+    let path = inquiryNo;
+    if (!isUser) {
+        path += "/manager";
+    }
+
+    await fetch(`/js/inquiries/${path}?isProduct=${isProduct}`, request)
         .then(response => response.json())
         .then(data => {
             let redirectUri = data.redirectUri;
@@ -32,3 +37,6 @@ async function deleteInquiry(eventTarget) {
         });
 }
 
+function addInquiryAnswer(eventTarget) {
+
+}

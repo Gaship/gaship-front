@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/shopping/layout}">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>고객문의 상세조회</title>
@@ -11,9 +9,7 @@
     <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
 </head>
 
-<th:block layout:fragment="content">
-    <div class="container">
-        <!--        <div class="w-25"></div>-->
+
         <div role="main" class="container h5">
             <h1 th:text="${'고객문의 상세조회 [' + details.processStatus + ']'}"></h1>
             <div class="card-content">
@@ -48,8 +44,8 @@
                               th:text="${details.inquiryContent}"></textarea>
                     </div>
                 </div>
-                <button style="width: auto; margin-left: 10px" class="btn btn-outline-primary mt-5"
-                        th:value="${details.inquiryNo}" onclick="deleteInquiry(this)">삭제
+                <button style="width: auto; margin-left: 10px" class="btn btn-danger mt-5"
+                        th:value="${details.inquiryNo}" onclick="deleteInquiry(this)">문의전체삭제
                 </button>
             </div>
 
@@ -99,6 +95,4 @@
                 let whereUri = "customer";
             </script>
         </div>
-    </div>
-</th:block>
 </html>

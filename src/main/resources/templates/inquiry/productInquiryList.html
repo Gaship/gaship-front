@@ -12,7 +12,10 @@
 </head>
 <th:block layout:fragment="content">
     <div class="container">
-        <!--        <div class="w-25"></div>-->
+        <div class="row flex-md-nowrap">
+        <div class="w-25">
+            <th:block th:include="component/userDetailMenu"></th:block>
+        </div>
         <div role="main" class="container h5">
             <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">상품문의 목록</h1>
             <div class="card-body p-0">
@@ -38,7 +41,7 @@
                         <td th:text="${item.registerDatetime}"></td>
                         <td>
                             <button th:if="${(isUser and item.self) or (#authorization.expression('isAuthenticated()') and not isUser)}"
-                                    style="width: auto; margin-left: 10px" class="btn btn-outline-primary"
+                                    style="width: auto; margin-left: 10px" class="btn btn-danger"
                                     th:value="${item.inquiryNo}"
                                     onclick="deleteInquiry(this)">삭제
                             </button>
@@ -50,14 +53,13 @@
 
             <a href="/inquiries/show-form/product-inquiry-add?productNo=2&productName=액션침대"
                style="width: auto; margin-left: 5px" type="button" class="btn btn-outline-primary">등록</a>
-            <a href="/customer-center" style="width: auto; margin-left: 10px" type="button"
-               class="btn btn-outline-primary">고객센터</a>
         </div>
 
         <script th:src="@{/inquiry/js/inquirylistpage.js}"></script>
         <script>
             let whereUri = "product";
         </script>
+    </div>
     </div>
     </div>
 </th:block>
