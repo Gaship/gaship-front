@@ -60,7 +60,7 @@
                             <th:block sec:authorize="hasRole('ROLE_ANONYMOUS')"><a href="/login"><i class="fa fa-user"></i> 로그인</a></th:block>
                             <div class="row justify-content-around">
                             <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_MEMBER')">
-                                <a th:href="@{'/members/' + ${#authentication.getPrincipal().getMemberNo()}}"><i class="fa fa-user"></i>마이페이지</a>
+                                <a th:href="@{'/members/details'}"><i class="fa fa-user"></i>마이페이지</a>
                             </th:block>
                             <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_MEMBER')">
                                 <a th:href="@{/logout}">로그아웃</a>
