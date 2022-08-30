@@ -39,9 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/**")
             .permitAll();
 
-        http.sessionManagement()
-                .maximumSessions(1);
-
         http.formLogin()
                 .loginPage(LOGIN_URI)
                 .loginProcessingUrl(LOGIN_URI)
