@@ -71,7 +71,7 @@ public class ProductInquiryController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries/{inquiryNo}")
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     public String productInquiryDetails(
         @PathVariable Integer inquiryNo, Model model,
         @AuthenticationPrincipal UserDetailsDto userDetailsDto) {

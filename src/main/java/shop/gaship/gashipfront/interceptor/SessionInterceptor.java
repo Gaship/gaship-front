@@ -22,16 +22,16 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            Arrays.stream(cookies)
-                  .filter(cookie -> cookie.getName().equals(SESSION_ID))
-                  .findFirst()
-                  .ifPresent(cookie -> cookie.setMaxAge(SESSION_AND_COOKIE_TIME_OUT_SECOND));
-        }
-
-        request.getSession().setMaxInactiveInterval(SESSION_AND_COOKIE_TIME_OUT_SECOND);
+//        Cookie[] cookies = request.getCookies();
+//
+//        if (cookies != null) {
+//            Arrays.stream(cookies)
+//                  .filter(cookie -> cookie.getName().equals(SESSION_ID))
+//                  .findFirst()
+//                  .ifPresent(cookie -> cookie.setMaxAge(SESSION_AND_COOKIE_TIME_OUT_SECOND));
+//        }
+//
+//        request.getSession().setMaxInactiveInterval(SESSION_AND_COOKIE_TIME_OUT_SECOND);
 
         return true;
     }
