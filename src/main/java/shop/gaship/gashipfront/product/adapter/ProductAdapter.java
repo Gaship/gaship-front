@@ -20,18 +20,18 @@ public interface ProductAdapter {
     /**
      * 어댑터 상품 추가 메서드입니다.
      *
-     * @param files         상품 등록 시 이미지 파일
+     * @param multipartFiles         상품 등록 시 이미지 파일
      * @param createRequest 상품 등록 요청
      */
-    void productAdd(List<MultipartFile> files, ProductCreateRequestDto createRequest);
+    void productAdd(List<MultipartFile> multipartFiles, ProductCreateRequestDto createRequest);
 
     /**
      * 어댑터 상품 수정 메서드입니다.
      *
-     * @param files         상품 수정 시 이미지 파일
+     * @param multipartFiles         상품 수정 시 이미지 파일
      * @param modifyRequest 상품 수정 요청
      */
-    void productModify(List<MultipartFile> files, ProductModifyRequestDto modifyRequest);
+    void productModify(List<MultipartFile> multipartFiles, ProductModifyRequestDto modifyRequest);
 
     /**
      * 어댑터 상품 판매상태 수정 메서드입니다.
