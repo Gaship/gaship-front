@@ -30,6 +30,7 @@ public class ProductAllInfoResponseDto {
     private String explanation;
     private Integer level;
     private String deliveryType;
+    private String salesStatus;
     private String upperName;
     private List<String> tags;
     private List<String> filePaths;

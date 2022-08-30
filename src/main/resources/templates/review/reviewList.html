@@ -51,10 +51,10 @@
                                         <span style="font-size: 17px" th:text="${review.productName}"></span>
                                     </div>
                                     <div sec:authorize="isAuthenticated()">
-                                        <a class="w-auto p-1 btn btn-secondary btn-lg review-btn" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/modify|}">
+                                        <a class="w-auto p-1 btn btn-sm btn-secondary btn-lg" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/modify|}">
                                             수정
                                         </a>
-                                        <a class="w-auto p-1 btn btn-secondary btn-lg review-btn" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
+                                        <a class="w-auto p-1 btn btn-sm btn-danger btn-lg" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
                                             삭제
                                         </a>
                                     </div>
