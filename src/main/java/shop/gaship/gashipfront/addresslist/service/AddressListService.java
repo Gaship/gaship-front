@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.addresslist.service;
 
 import org.springframework.data.domain.Pageable;
+import shop.gaship.gashipfront.addresslist.dto.request.AddressAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
@@ -33,7 +34,7 @@ public interface AddressListService {
      * @param memberNo 회원 id 값
      * @param addressListNo 배송지 id 값
      */
-    void deleteAddressList(Long memberNo, Long addressListNo);
+    void deleteAddressList(Integer memberNo, Long addressListNo);
 
     /**
      * 배송지를 단건 조회하는 메서드.
@@ -42,7 +43,7 @@ public interface AddressListService {
      * @param addressListNo 배송지 id 값
      * @return 배송지 조회 결과가 담긴 dto
      */
-    AddressListResponseDto findAddressList(Long memberNo, Long addressListNo);
+    AddressListResponseDto findAddressList(Integer memberNo, Long addressListNo);
 
     /**
      * 상태가 "사용"인 배송지를 다건 조회하는 메서드.
@@ -51,5 +52,7 @@ public interface AddressListService {
      * @param pageable 조회하려느 배송지 목록의 페이지 번호와 사이즈가 담겨있는 객체
      * @return 배송지 조회 결과가 담긴 dto Page
      */
-    PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable);
+    PageResponse<AddressListResponseDto> findAddressLists(Integer memberNo, Pageable pageable);
+
+    void addAddress(Integer memberNo, AddressAddRequestDto addressAddRequestDto);
 }

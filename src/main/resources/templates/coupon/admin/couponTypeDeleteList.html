@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>쿠폰 타입 리스트</title>
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+</head>
+<th:block layout:fragment="content">
+
+  <button><a th:href="@{/admin/coupons/coupon-type}">쿠폰 타입</a></button>
+  <button><a th:href="@{/admin/coupons/coupon-type/delete-can}">삭제 가능한 쿠폰 타입</a></button>
+  <button><a th:href="@{/admin/coupons/coupon-type/delete-cannot}">삭제 불가능한 쿠폰 타입</a></button>
+  <button><a th:href="@{/admin/coupons/coupon-type/fixed-amount}">정액 할인 쿠폰 타입</a></button>
+  <button><a th:href="@{/admin/coupons/coupon-type/fixed-rate}">정률 할인 쿠폰 타입</a></button>
+  <button><a th:href="@{/admin/coupons/coupon-type/recommend}">추천인 할인 쿠폰 타입</a></button>
+
+  <div class="card-body">
+    <div class="table-responsive" style="overflow-x: hidden">
+      <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length" id="dataTable_length">
+              <label><a th:href="@{/admin/coupons/coupon-type}">쿠폰 타입</a></button></label></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid"
+                   aria-describedby="dataTable_info" style="width: 100%;">
+              <thead>
+              <tr role="row">
+                <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                    aria-sort="ascending" aria-label="이름" style="width: 397px;">
+                  이름
+                </th>
+                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                    aria-label="할인률" style="width: 584px;">할인률 (%)
+                </th>
+                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                    aria-label="할인금액" style="width: 297px;">할인금액 (원)
+                </th>
+                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                    aria-label="삭제" style="width: 159px;">삭제
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="couponType : ${couponTypeList}">
+                <td th:text="${couponType.name}"></td>
+                <td th:text="${couponType.discountRate}"></td>
+                <td th:text="${couponType.discountAmount}"></td>
+                <td>
+                  <input type="button" class="deleteButton"
+                         th:data-coupon-no="${couponType.couponTypeNo}" value="삭제">
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <th:block th:if="${!#lists.isEmpty(couponTypeList)}">
+          <th:block th:include="component/pageFooter"></th:block>
+        </th:block>
+      </div>
+    </div>
+  </div>
+  <button><a th:href="@{/admin/coupons/coupon-type/fixed-amount/add}">정액 할인 쿠폰 등록하기</a></button>
+  <button><a th:href="@{/admin/coupons/coupon-type/fixed-rate/add}">정률 할인 쿠폰 등록하기</a></button>
+  <button><a th:href="@{/admin/coupons/coupon-type/recommend-member-coupon}">추천인 쿠폰 타입 수정하기</a></button>
+</th:block>
+<th:block layout:fragment="content-js">
+  <script src="/coupon/js/coupon.js"></script>
+</th:block>
+</html>

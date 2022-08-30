@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
+    <link rel="stylesheet" type="text/css" href="/product/css/montserrat-font.css">
+    <link rel="stylesheet" type="text/css" href="/product/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="/product/css/style.css"/>
+    <link rel="stylesheet" href="/product/css/productForm.css">
+    <title>productAddForm</title>
+</head>
+<body class="form-v10">
+<div class="page-content">
+    <div class="form-v10-content">
+        <form class="form-detail" action="/products/add" method="post" id="myform" enctype="multipart/form-data">
+            <input th:name="${_csrf.parameterName}" type="hidden" th:value="${_csrf.token}"/>
+            <div class="form-left">
+                <h2>상세정보</h2>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <input type="text" name="manufacturer" class="manufacturer" id="manufacturer" placeholder="제조사" required>
+                    </div>
+                    <div class="form-row form-row-2">
+                        <input type="text" name="manufacturerCountry" class="manufacturerCountry" id="manufacturerCountry" placeholder="제조국" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <input type="text" name="seller" class="seller" id="seller" placeholder="판매자" required>
+                    </div>
+                    <div class="form-row form-row-2">
+                        <input type="text" name="importer" class="importer" id="importer" placeholder="수입자" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-row form-row-1">
+                        <input type="number" name="shippingInstallationCost" id="shippingInstallationCost" class="shippingInstallationCost" placeholder="배송비" required>
+                    </div>
+                    <div class="form-row form-row-2">
+                        <label for="colorInput" class="form-label text-dark">색상</label>
+                        <input type="color" name="color" class="form-control form-control-color" id="colorInput" value="#FFFFFF" title="색상을 선택하세요">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <input type="number" name="stockQuantity" id="stockQuantity" class="input-number" placeholder="재고수량" required>
+                </div>
+                <div class="form-row">
+                    <label for="qualityAssuranceStandard" class="form-label text-dark">품질보증기준</label>
+                    <textarea name="qualityAssuranceStandard" class="form-control" id="qualityAssuranceStandard" rows="5"></textarea>
+                </div>
+                <div class="form-row">
+                    <label for="explanation" class="form-label text-dark">상세설명</label>
+                    <textarea name="explanation" class="form-control" id="explanation" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="form-right">
+                <h2>기본정보</h2>
+                <div class="form-row">
+                    <label for="category" class="text-white">카테고리</label>
+                    <select name="categoryNo" id="category">
+                        <option class="option" th:each="category : ${categories}" th:value="${category.no}" th:text="|${#strings.repeat('&nbsp', (category.level - 1) * 4) + category.name}|"></option>
+                    </select>
+                    <span class="select-btn">
+						  	<i class="zmdi zmdi-chevron-down"></i>
+						</span>
+                </div>
+                <div class="form-row">
+                    <label for="deliveryType" class="text-white">배송타입</label>
+                    <select name="deliveryTypeNo" id="deliveryType">
+                        <option class="option" th:each="deliveryType : ${deliveryTypes}" th:value="${deliveryType.statusCodeNo}" th:text="${deliveryType.statusCodeName}"></option>
+                    </select>
+                    <span class="select-btn">
+						  	<i class="zmdi zmdi-chevron-down"></i>
+						</span>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="name" id="name" class="input-text" placeholder="이름" required>
+                </div>
+                <div class="form-row">
+                    <input type="number" name="amount" id="amount" class="input-number" placeholder="금액" required>
+                </div>
+                <div class="form-row form-row-1">
+                    <input type="text" name="code" class="code" id="code" placeholder="상품코드" required>
+                </div>
+                <div class="checkbox-container">
+                    <span class="product-tag text-white">상품태그</span>
+                    <span class="form-checkbox" th:each="tag : ${tags}">
+                        <label class="container text-white">
+                            <span th:text="${tag.title}"></span>
+                            <input type="checkbox" name="tagNos" th:value="${tag.tagNo}">
+                            <span class="checkmark"></span>
+                        </label>
+                    </span>
+                </div>
+                <div class="form-row">
+                    <div class="mb-3">
+                        <label for="formFileMultiple" class="form-label text-white">상품 이미지</label>
+                        <input name="multipartFiles" class="multipartFile" accept="image/*" type="file" id="formFileMultiple" multiple/>
+                    </div>
+                </div>
+                <div class="form-row-last">
+                    <input type="submit" name="register" class="register" value="Register">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -141,22 +141,22 @@ public class MemberController {
      * 회원이 자신의 상세정보를 조회하는 컨트롤러.
      *
      * @param memberNo 조회하려는 회원 id
-     * @param redirectAttributes redirectAttributes
      * @param model model
      * @return 회원정보 상세 페이지
      * @author 최정우
      */
     @GetMapping("/members/{memberNo}")
-    public String memberDetails(
-            @PathVariable Integer memberNo,
-            RedirectAttributes redirectAttributes,
-            Model model) {
+    public String memberDetails(@PathVariable Integer memberNo, Model model) {
         MemberResponseDto dto = memberService.findMember(memberNo);
-        model.addAttribute(RESPONSE, dto);
-        redirectAttributes.addAttribute(MEM_NO, memberNo);
-        redirectAttributes.addAttribute(STATUS, true);
+        model.addAttribute("member", dto);
+        model.addAttribute("memberNo", dto.getMemberNo());
+        return "member/memberDetails";
+    }
 
-        return "memberInfo";
+    @GetMapping("/members/{memberNo}/exit")
+    public String showMemberExitPage(@PathVariable Integer memberNo, Model model) {
+        model.addAttribute("memberNo", memberNo);
+        return "member/memberExit";
     }
 
     /**

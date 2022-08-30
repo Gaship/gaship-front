@@ -6,9 +6,7 @@
     <meta charset="UTF-8">
     <title>직원 관리</title>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <style>
-
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/employee/css/employeeList.css}">
 </head>
 
 
@@ -17,131 +15,60 @@
 
         <!-- Page Heading -->
         <h1 class="h3 mb-2 text-gray-800">직원 관리</h1>
+
+        <div>
+            <button type="button" class="btn btn-primary btn-register " onclick="location.href='/admin/employees/add'">
+                등록하기
+            </button>
+        </div>
+
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">직원 목록</h6>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6">
-                                <div class="dataTables_length" id="dataTable_length"><label>여러개 보기<select
-                                        name="dataTable_length" aria-controls="dataTable"
-                                        class="custom-select custom-select-sm form-control form-control-sm">
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                    <option value="100">100</option>
-                                </select> 목록</label></div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                                <div id="dataTable_filter" class="dataTables_filter"><label>검색:<input type="search"
-                                                                                                      class="form-control form-control-sm"
-                                                                                                      placeholder=""
-                                                                                                      aria-controls="dataTable"></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <table class="table table-bordered dataTable" id="dataTable" width="100%"
-                                       cellspacing="0" role="grid" aria-describedby="dataTable_info"
-                                       style="width: 100%;">
-                                    <thead>
-                                    <tr role="row">
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Name: activate to sort column descending"
-                                            style="width: 150px;">닉네임
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Position: activate to sort column ascending"
-                                            style="width: 150px;">계정
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Age: activate to sort column ascending"
-                                            style="width: 150px;">가입일
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Age: activate to sort column ascending"
-                                            style="width: 150px;">추천인
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Start date: activate to sort column ascending"
-                                            style="width: 150px;">누적 구매금액
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Office: activate to sort column ascending"
-                                            style="width: 150px;">회원 등급
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Office: activate to sort column ascending"
-                                            style="width: 150px;">회원 상태
-                                        </th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                            colspan="1" aria-label="Salary: activate to sort column ascending"
-                                            style="width: 150px;">수정
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:forEach="">
-                                        <td></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-5"></div>
-                            <div class="col-sm-12 col-md-7">
-                                <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
-                                    <ul class="pagination">
-                                        <li class="paginate_button page-item previous disabled" id="dataTable_previous">
-                                            <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0"
-                                               class="page-link">Previous</a>
-                                        </li>
-                                        <li class="paginate_button page-item active"><a href="#"
-                                                                                        aria-controls="dataTable"
-                                                                                        data-dt-idx="1" tabindex="0"
-                                                                                        class="page-link">1</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="dataTable"
-                                                                                  data-dt-idx="2" tabindex="0"
-                                                                                  class="page-link">2</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="dataTable"
-                                                                                  data-dt-idx="3" tabindex="0"
-                                                                                  class="page-link">3</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="dataTable"
-                                                                                  data-dt-idx="4" tabindex="0"
-                                                                                  class="page-link">4</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="dataTable"
-                                                                                  data-dt-idx="5" tabindex="0"
-                                                                                  class="page-link">5</a></li>
-                                        <li class="paginate_button page-item "><a href="#" aria-controls="dataTable"
-                                                                                  data-dt-idx="6" tabindex="0"
-                                                                                  class="page-link">6</a></li>
-                                        <li class="paginate_button page-item next" id="dataTable_next"><a href="#"
-                                                                                                          aria-controls="dataTable"
-                                                                                                          data-dt-idx="7"
-                                                                                                          tabindex="0"
-                                                                                                          class="page-link">Next</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <table class="table table-hover table-striped">
+                    <thead>
+                    <tr role="row">
+                        <td>#</td>
+                        <td>직원 이름</td>
+                        <td>전화 번호</td>
+                        <td>담당 지역</td>
+                        <td>이메일</td>
+                        <td>수정 삭제</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr role="row" th:each="employee,stat:${employees}">
+                        <td th:text="${stat.count}"></td>
+                        <td th:text="${employee.name}"></td>
+                        <td th:text="${employee.phoneNo}"></td>
+                        <td th:text="${employee.address}"></td>
+                        <td th:text="${employee.email}"></td>
+                        <td>
+                            <button class="btn btn-outline-primary"
+                                    th:onclick="|location.href='@{/admin/employees/modify}/${employee.employeeNo}'|">수정</button>
+                            <button class="btn btn-outline-secondary deleteButton"
+                                    th:data-employee-no="${employee.employeeNo}">
+                                삭제
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer py-3">
+                <th:block th:if="${!#lists.isEmpty(employees)}">
+                    <th:block th:include="component/pageFooter"></th:block>
+                </th:block>
             </div>
         </div>
-
     </div>
 
 </th:block>
 <th:block layout:fragment="content-js">
-</th:block>
-<script>
+    <script th:src="@{/employee/js/employeeList.js}"></script>
 
-</script>
+</th:block>
 </html>

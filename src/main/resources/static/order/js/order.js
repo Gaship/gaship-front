@@ -1,18 +1,19 @@
-import {addressListPageHelper, loadAddressList} from "./addressListModule.js";
+import {loadAddressList} from "./addressListModule.js";
+import {loadOrderProducts, orderRequestData} from "./orderProductsModule.js";
 
 const addressListBtn = document.getElementById("addressListBtn");
 let orderProductsContainer;
 
-
-window.addEventListener("load", () => {
-    init();
+addressListBtn.addEventListener("click", () => {
+    loadAddressList();
 })
 
 const init = () => {
     orderProductsContainer = document.getElementById("orderProductsContainer");
 }
 
-addressListBtn.addEventListener("click", () => {
-    loadAddressList();
-    console.log(addressListPageHelper.pageItems);
+window.addEventListener("load", () => {
+    init();
+    loadOrderProducts();
+    console.log(orderRequestData);
 })

@@ -117,4 +117,12 @@ public interface MemberService {
      * @param verifyCode 인증코드입니다.
      */
     void checkApprovedEmail(String verifyCode);
+
+
+    /**
+     * 회원탈퇴를 실행하는 메서드입니다.
+     *
+     * @param email 탈퇴 할 멤버의 이메일입니다.
+     */
+    void verifySignUpCode(String email);
 }

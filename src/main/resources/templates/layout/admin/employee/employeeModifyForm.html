@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <title>직원수정 페이지</title>
+    <style>
+        .form-style {
+            margin-left: 30px;
+            margin-right: 30px;
+        }
+    </style>
+</head>
+<th:block layout:fragment="content">
+
+    <h1 class="h3 mb-2 text-gray-800">직원 수정</h1>
+    <form class="form-style" th:action="@{'/admin/employees/' + ${employee.employeeNo}}" method="post">
+        <input type="hidden" name="_method" value="PUT">
+
+        <div class="form-group">
+            <label for="inputName">이름</label>
+            <input type="text" class="form-control" id="inputName" placeholder="이름을 입력.." name="name"
+                   th:value="${employee.name}">
+        </div>
+        <div class="form-group">
+            <label for="inputPwd">비밀번호</label>
+            <input type="password" class="form-control" id="inputPwd" placeholder="비밀번호입력.." name="password">
+        </div>
+
+        <div class="form-group">
+            <label for="inputAddress">주소</label>
+            <button type="button" class="btn-primary form-control" id="inputAddress" name="address"
+                    data-target="#address-modal" data-toggle="modal"
+                    th:text="${employee.address}">
+            </button>
+            <input type="hidden" class="form-control address-no" id="inputAddressNo" name="addressNo">
+        </div>
+        <div class="form-group">
+            <label for="phone">휴대전화 (입력시 - 를 빼주세요)</label>
+            <input class="form-control" type="tel" id="phone" name="phoneNo" th:value="${employee.phoneNo}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">수정하기</button>
+        <button type="button" class="btn btn-primary" onclick="location.href='/admin/employees'">
+            돌아가기
+        </button>
+    </form>
+    <div class="modal fade" id="address-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header float-right">
+                    <h5>주소 지역</h5>
+                    <div class="text-right">
+                        <i data-dismiss="modal" aria-label="Close" class="fa fa-close"></i>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th scope="col">주소 번호</th>
+                                <th scope="col">주소 명</th>
+                                <th scope="col">선 택</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="address:${addressList}">'
+                                <td th:text="${address.addressNo}"></td>
+                                <td th:text="${address.addressName}"></td>
+                                <td>
+                                    <button class="btn-address btn-primary"
+                                            data-value=""
+                                            data-content=""
+                                            th:attr="data-value=${address.addressNo},data-content=${address.addressName}"
+                                            th:classappend="'address-'+${address.addressNo}" data-dismiss="modal">선택
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content-js">
+    <script th:src="@{/index/index.js}"></script>
+    <script>
+        const addressClick = async (e) => {
+            const addressName = document.getElementById('inputAddress');
+            const addressNo = document.getElementById('inputAddressNo');
+
+            addressName.innerText = e.target.getAttribute('data-content');
+            addressNo.value = e.target.getAttribute('data-value');
+        }
+
+        for (let i = 0; i < 17; i++) {
+            document.querySelector(`.address-${i + 1}`).addEventListener("click", addressClick);
+        }
+    </script>
+</th:block>
+
+</html>

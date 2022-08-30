@@ -1,17 +1,19 @@
 package shop.gaship.gashipfront.product.service.impl;
 
-import java.util.stream.Collectors;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
-import shop.gaship.gashipfront.config.ServerConfig;
+import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
+import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
+import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
- * 설명작성란
+ * 제품의 데이터 요청 처리를 수행하는 클래스입니다.
  *
  * @author 김민수
  * @since 1.0
@@ -20,25 +22,38 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductAdapter productAdapter;
-    private final ServerConfig serverConfig;
 
+    @Override
     public PageResponse<ProductAllInfoResponseDto> productAllInfoByPageable(
         String page, String size, String category, String minAmount, String maxAmount) {
-        PageResponse<ProductAllInfoResponseDto> products =
-                productAdapter.productListAll(page, size, category, minAmount, maxAmount);
-
-        products.getContent().forEach(product -> product.setFilePaths(product.getFileNos().stream()
-                .map(this::getFilePath)
-                .collect(Collectors.toList())));
-
-        return products;
+        return productAdapter.productListAll(page, size, category, minAmount, maxAmount);
     }
 
-    private String getFilePath(Integer fileNo) {
-        return UriComponentsBuilder.fromHttpUrl(serverConfig.getGatewayUrl())
-                .pathSegment("api/files")
-                .pathSegment(String.valueOf(fileNo))
-                .pathSegment("download")
-                .build().toString();
+    @Override
+    public PageResponse<ProductAllInfoResponseDto> productCategoryByPageable(Pageable page,
+                                                                             String category) {
+        return productAdapter.productCategoryList(Integer.parseInt(category), page);
+    }
+
+    @Override
+    public List<ProductAllInfoResponseDto> findProductNosList(List<Integer> productNos) {
+        return productAdapter.productNosList(productNos);
+    }
+
+    @Override
+    public ProductAllInfoResponseDto findProduct(Integer productNo) {
+        return productAdapter.productDetails(productNo);
+    }
+
+    @Override
+    public void addProduct(List<MultipartFile> multipartFiles,
+                           ProductCreateRequestDto createRequest) {
+        productAdapter.productAdd(multipartFiles, createRequest);
+    }
+
+    @Override
+    public void modifyProduct(List<MultipartFile> multipartFiles,
+                              ProductModifyRequestDto modifyRequest) {
+        productAdapter.productModify(multipartFiles, modifyRequest);
     }
 }

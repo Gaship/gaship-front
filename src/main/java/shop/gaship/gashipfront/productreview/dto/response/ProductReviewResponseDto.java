@@ -24,8 +24,8 @@ public class ProductReviewResponseDto {
     private Integer starScore;
     private LocalDateTime registerDateTime;
     private LocalDateTime modifyDateTime;
-    private List<Integer> fileNos;
+    private List<String> filePaths;
 
     @Setter
-    private List<String> filePaths;
+    private Boolean isWriter;
 }

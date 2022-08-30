@@ -23,21 +23,46 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeAdapterImpl employeeAdapter;
 
+    /**
+     * {@inheritDoc}
+     *
+     */
     @Override
-    public boolean employeeAdd(EmployeeCreateRequestDto requestDto){
-        return employeeAdapter.employeeAdd(requestDto);
+    public void employeeAdd(EmployeeCreateRequestDto requestDto){
+        employeeAdapter.employeeAdd(requestDto);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     */
     @Override
-    public boolean employeeModify(EmployeeModifyRequestDto requestDto){
-        return employeeAdapter.employeeModify(requestDto);
+    public void employeeModify(EmployeeModifyRequestDto requestDto){
+        employeeAdapter.employeeModify(requestDto);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public void employeeDelete(Integer employeeNo){
+        employeeAdapter.employeeRemove(employeeNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
     @Override
     public EmployeeResponseDto employeeDetail(Integer employeeNo){
         return employeeAdapter.employeeDetail(employeeNo);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     */
     @Override
     public PageResponse<EmployeeResponseDto> employeeList(Pageable pageable){
         return employeeAdapter.employeeList(pageable);

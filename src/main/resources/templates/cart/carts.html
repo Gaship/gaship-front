@@ -27,9 +27,11 @@
                 <div class="small-12 small-offset-0 large-12">
                     <div class="rs-bag-checkoutbuttons-wrapper">
                         <div class="rs-bag-checkoutbutton rs-bag-checkout-mainbutton">
-                            <button id="shoppingCart.actions.navCheckout" type="button" class="button button-block" data-autom="checkout">
-                                <span>결제</span>
-                            </button>
+                            <a th:href="@{/order}">
+                                <button id="shoppingCart.actions.navCheckout" type="button" class="button button-block" data-autom="checkout">
+                                    <span>주문하기</span>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -133,9 +135,11 @@
                                 <div class="small-12 small-offset-0 large-9 large-offset-3">
                                     <div class="rs-bag-checkoutbuttons-wrapper">
                                         <div class="rs-bag-checkoutbutton rs-bag-checkout-mainbutton">
+                                            <a th:href="@{/order}">
                                             <button id="shoppingCart.actions.checkout" type="button" class="form-button" data-autom="checkout">
-                                                <span>결제</span>
+                                                <span>주문하기</span>
                                             </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>

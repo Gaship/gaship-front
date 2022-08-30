@@ -32,39 +32,50 @@ public class EmployeeAdapterImpl implements EmployeeAdapter {
      * {@inheritDoc}
      */
     @Override
-    public Boolean employeeAdd(EmployeeCreateRequestDto requestDto) {
+    public void employeeAdd(EmployeeCreateRequestDto requestDto) {
         webClient
             .post()
             .uri(EMPLOYEE_BASE_URI)
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(requestDto)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
-
-        return true;
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Boolean employeeModify(EmployeeModifyRequestDto requestDto) {
+    public void employeeModify(EmployeeModifyRequestDto requestDto) {
         webClient
             .put()
-            .uri(EMPLOYEE_BASE_URI + requestDto.getEmployeeNo())
+            .uri(EMPLOYEE_BASE_URI +"/{employeeNo}",requestDto.getEmployeeNo())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(requestDto)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
+    }
 
-        return true;
+    @Override
+    public void employeeRemove(Integer employeeNo) {
+        webClient
+            .delete()
+            .uri(EMPLOYEE_BASE_URI +"/{employeeNo}",employeeNo)
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     @Override
     public EmployeeResponseDto employeeDetail(Integer employeeNo) {
         return webClient
             .get()
-            .uri(EMPLOYEE_BASE_URI + employeeNo)
+            .uri(EMPLOYEE_BASE_URI +"/{employeeNo}", employeeNo)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(EmployeeResponseDto.class)

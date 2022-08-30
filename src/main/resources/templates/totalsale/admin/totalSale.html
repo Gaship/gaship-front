@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>전체 매출 현황</title>
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<th:block layout:fragment="content">
+  <label>
+    시작 일자 :
+    <input type="datetime-local" id="startDate">
+  </label><br>
+  <label>
+    종료 일자 :
+    <input type="datetime-local" id="endDate">
+  </label><br>
+  <button class="total-sale" type="button">일정 제출</button>
+
+  <div class="card-body">
+    <div class="table-responsive" style="overflow: hidden">
+      <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length" id="dataTable_length">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid"
+                     aria-describedby="dataTable_info" style="width: 100%;">
+                <thead>
+                <tr role="row">
+                  <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                      aria-sort="ascending" aria-label="일자" style="width: 397px;">
+                    일자
+                  </th>
+                  <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                      aria-label="주문 건수" style="width: 584px;">주문 건수
+                  </th>
+                  <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                      aria-label="취소/환불 건수" style="width: 297px;">취소/환불 건수
+                  </th>
+                  <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                      aria-label="판매 건수" style="width: 159px;">판매 건수
+                  </th>
+                  <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                      aria-label="주문 총 금액" style="width: 159px;">주문 총 금액
+                  </th>
+                  <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                      aria-label="주문 취소 금액" style="width: 159px;">주문 취소 금액
+                  </th>
+                  <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                      aria-label="판매 완료 금액" style="width: 159px;">판매 완료 금액
+                  </th>
+                </tr>
+                </thead>
+                <tbody id="total-sale-table">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="chart_div" style="width: 900px; height: 500px;"></div>
+</th:block>
+
+<th:block layout:fragment="content-js">
+  <script src="/totalsale/js/totalSale.js"></script>
+</th:block>
+</html>
