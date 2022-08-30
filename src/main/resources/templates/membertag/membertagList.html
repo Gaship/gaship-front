@@ -10,37 +10,141 @@
     <link rel="stylesheet" href="/membertag/css/membertag.css">
 </head>
 <th:block layout:fragment="content">
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-
-        <!-- Page Heading -->
-        <h1 class="h3 mb-2 text-gray-800">내 태그</h1>
-        <!-- DataTales Example -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            <div class="col-sm-12 container">
                 <h6 class="m-0 font-weight-bold text-primary">내 태그 목록</h6>
             </div>
+
             <div class="col-sm-12 container">
-            <div class="flex-items"th:each="tag : ${response}">
-                <button th:onclick="setTitle([[${tag.tagNo}]],[[${tag.title}]],[[${tagStat.index}]])" class="btn btn-4 tags">[[${tag.title}]]</button>
+                <div class="flex-items"th:each="tag : ${memberTag}">
+                    <button th:onclick="findProductByTag([[${tag.tagNo}]])" class="btn btn-5 tags">[[${tag.title}]]</button>
+                </div>
+                <div th:if="${memberTag.empty}">
+                    <p> 태그가 선택되지 않았습니다.</p>
+                </div>
             </div>
+
+            <hr>
+
+            <div class="col-sm-12 container">
+
+                <h6 class="m-0 font-weight-bold text-primary">내 태그 수정</h6>
+            </div>
+
+            <hr>
 
             <div class="col-sm-12 container">
                 <div class="flex-items"th:each="tag : ${tags}">
-                    <button th:onclick="setTitle([[${tag.tagNo}]],[[${tag.title}]],[[${tagStat.index}]])" class="btn btn-4 tags">[[${tag.title}]]</button>
+                    <button type="button" th:id="${'memberTag-' + tagStat.index}" th:onclick="setMemberTag([[${tag.tagNo}]],[[${tagStat.index}]])" class="btn btn-3 tags">[[${tag.title}]]</button>
                 </div>
-<!--                <div id="addModalBg" style="display: none" class="modalBackground modal__background"></div>-->
-<!--                <div id="addModalWrap" style="display: none" class="modal addressAddFormModalWrap modal__box">-->
-<!--                    <input type="text" id="addTitle" name="title">-->
-<!--                    <button class="btn btn-4" type="button" id="addBackBtn" onclick="closeModal();">취소</button>-->
-<!--                    <button class="btn btn-4" type="button" id="addBtn" onclick="add();">저장</button>-->
-<!--                </div>-->
+            </div>
+
+            <hr>
+
+            <div class="col-sm-12 container">
+                    <button th:onclick="modifyMemberTag()" class="btn btn-2 tags">수정하기</button>
 
             </div>
-        </div>
-    </div>
-    </div>
+
+            <hr>
     <script>
+        var arr = [];
+        let index;
+        let ind;
+        let token = document.getElementById("_csrf").content;
+        let header = document.getElementById("_csrf_header").content;
+
+        function setMemberTag(no,index){
+            console.log("선택됨")
+            console.log("no = " + no);
+            console.log("index = " + index);
+                // 배열에서 해당값 삭제
+            if (arr.includes(no)){
+                console.log("이미 선택된 값" + index + "  " + no)
+                ind = arr.indexOf(no);
+                if (ind > -1) {
+                    arr.splice(ind, 1);
+                }
+                // 색상 바꾸는 클래스 삭제
+                let elementById = document.getElementById("memberTag-" + index);
+                elementById.classList.remove('btn-1');
+                elementById.classList.add('btn-3');
+                // return
+                return;
+            }
+            if (arr.length > 4){
+                console.log("5개만 선택 가능")
+                // toastr 로 5개까지 선택 가능하다고 하기
+                toastr.error("태그는 5개까지 선택 가능합니다.");
+                //return
+                return;
+            }
+
+            console.log("추가하는거 시작")
+            // 색상바꾸는 클래스 추가
+            let elementById = document.getElementById("memberTag-" + index);
+            elementById.classList.remove('btn-3');
+            elementById.classList.add('btn-1');
+            // 배열에 no 추가
+            arr.push(no);
+            console.log(arr);
+        }
+
+        function modifyMemberTag(no,index){
+            if (arr.length != 5){
+                // toastr 로 5개 선택해야한다고 하기
+                toastr.error("5개의 태그를 선택해야합니다.");
+                //return
+                return;
+            }
+
+            // api로 쏘기
+            let jsondata ={
+                "tagIds" : arr
+            }
+            $.ajax({
+                url: `/member-tag`,
+                method:"POST",
+                dataType: 'json',
+                data: JSON.stringify(jsondata),
+                contentType:'application/json;charset=UTF-8',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header,token);
+                },
+                success: function(data){
+                    toastr.success("태그 설정이 완료되었습니다.");
+                },
+                error: function(error){
+                    if('errors' in error['responseJSON']){
+                        toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
+                    } else {
+                        toastr.error(error['responseJSON']['message']);
+                    }
+                }
+            })
+        }
+
+        function findProductById(no){
+            $.ajax({
+                url: `/product`,
+                method:"GET",
+                contentType:'application/json;charset=UTF-8',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header,token);
+                },
+                success: function(data){
+                    toastr.success("태그로 상품을 검색합니다.");
+                },
+                error: function(error){
+                    if('errors' in error['responseJSON']){
+                        toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
+                    } else {
+                        toastr.error(error['responseJSON']['message']);
+                    }
+                }
+            })
+        }
+
+
 
     </script>
 </th:block>
