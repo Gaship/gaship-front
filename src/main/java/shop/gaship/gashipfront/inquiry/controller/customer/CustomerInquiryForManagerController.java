@@ -6,6 +6,8 @@ import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_N
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,7 @@ public class CustomerInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String customerInquiryList(Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
@@ -53,6 +56,7 @@ public class CustomerInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries/status-hold")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String customerInquiryStatusHoldList(Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
@@ -70,6 +74,7 @@ public class CustomerInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries/status-complete")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String customerInquiryStatusCompleteList(Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
