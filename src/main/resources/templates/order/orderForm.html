@@ -92,28 +92,19 @@
             <div class="col-lg-4 col-md-6">
                 <div class="checkout__order">
                     <h4>Your Order</h4>
-                    <div class="checkout__order__products">Products <span>Total</span></div>
+                    <div class="checkout__order__products">Products <span></span></div>
                     <ul>
-                        <li>상품 총 금액 <span>20000000</span></li>
-                        <li>할인 금액 <span>2000</span></li>
+                        <li>상품 총 금액 <span id="productTotalAmount"></span></li>
+                        <li>할인 금액 <span id="discountTotalAmount"></span></li>
                     </ul>
 
-                    <div class="checkout__order__total">Total <span>$750.99</span></div>
+                    <div class="checkout__order__total">Total <span id="paymentTotalAmount"></span></div>
 
-                    <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                        ut labore et dolore magna aliqua.</p>
 
                     <div class="checkout__input__checkbox">
                         <label for="payment">
-                            Check Payment
+                            카드결제
                             <input type="checkbox" id="payment">
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                    <div class="checkout__input__checkbox">
-                        <label for="paypal">
-                            Paypal
-                            <input type="checkbox" id="paypal">
                             <span class="checkmark"></span>
                         </label>
                     </div>

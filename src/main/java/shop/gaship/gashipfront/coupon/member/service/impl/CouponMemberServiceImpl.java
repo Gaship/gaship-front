@@ -5,8 +5,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.coupon.member.adapter.CouponMemberAdapter;
 import shop.gaship.gashipfront.coupon.member.dto.CouponGenerationIssueDto;
+import shop.gaship.gashipfront.coupon.member.dto.response.UnusedMemberCouponResponseDto;
 import shop.gaship.gashipfront.coupon.member.service.CouponMemberService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
+
+import java.util.List;
 
 /**
  * @author : 조재철
@@ -46,5 +49,10 @@ public class CouponMemberServiceImpl implements CouponMemberService {
     public PageResponse<CouponGenerationIssueDto> findCouponGenerationIssueUnusedUnexpiredByMemberNo(Pageable pageable,
         Integer memberNo) {
         return couponMemberAdapter.findCouponGenerationIssueUnusedUnexpired(pageable, memberNo);
+    }
+
+    @Override
+    public List<UnusedMemberCouponResponseDto> getUnusedMemberCoupons(Integer memberNo) {
+        return couponMemberAdapter.findUnusedMemberCouponResponseDto(memberNo);
     }
 }

@@ -15,5 +15,4 @@ const init = () => {
 window.addEventListener("load", () => {
     init();
     loadOrderProducts();
-    console.log(orderRequestData);
 })
