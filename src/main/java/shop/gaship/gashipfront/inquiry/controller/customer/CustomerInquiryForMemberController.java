@@ -61,6 +61,8 @@ public class CustomerInquiryForMemberController {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiriesByMemberNo(pageable, memberNo);
+
+
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();
     }

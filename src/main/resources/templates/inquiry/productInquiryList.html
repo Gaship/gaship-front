@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head xmlns:th="http://www.w3.org/1999/html">
     <meta charset="UTF-8">
     <title>상품문의 목록</title>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
@@ -7,50 +10,55 @@
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
 </head>
-<body>
-<div>
-    <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">상품문의 목록</h1>
-    <div class="card-body p-0">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th style="width: auto">번호</th>
-                <th style="width: auto">제목</th>
-                <th style="width: auto">답변상태</th>
-                <th style="width: auto">닉네임</th>
-                <th style="width: auto">등록시간</th>
-                <th style="width: auto"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${pageResponse.content}">
-                <td th:text="${item.inquiryNo}"></td>
-                <td><a th:href="@{/inquiries/product-inquiries/{inquiryNo}(inquiryNo = ${item.inquiryNo})}"><span
-                        th:text="${item.title}"></span></a></td>
-                <td th:text="${item.processStatus}"></td>
-                <td th:text="${item.memberNickname}"></td>
-                <td th:text="${item.registerDatetime}"></td>
-                <td>
-                    <button th:if="${(isUser and item.self) or (#authorization.expression('isAuthenticated()') and not isUser)}"
-                            style="width: auto; margin-left: 10px" class="btn btn-outline-primary"
-                            th:value="${item.inquiryNo}"
-                            onclick="deleteInquiry(this)">삭제
-                    </button>
-                <td>
-            </tr>
-            </tbody>
-        </table>
+<th:block layout:fragment="content">
+    <div class="container">
+        <!--        <div class="w-25"></div>-->
+        <div role="main" class="container h5">
+            <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">상품문의 목록</h1>
+            <div class="card-body p-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: auto">번호</th>
+                        <th style="width: auto">제목</th>
+                        <th style="width: auto">답변상태</th>
+                        <th style="width: auto">닉네임</th>
+                        <th style="width: auto">등록시간</th>
+                        <th style="width: auto"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${pageResponse.content}">
+                        <td th:text="${item.inquiryNo}"></td>
+                        <td>
+                            <a th:href="@{/inquiries/product-inquiries/{inquiryNo}(inquiryNo = ${item.inquiryNo})}"><span
+                                    th:text="${item.title}"></span></a></td>
+                        <td th:text="${item.processStatus}"></td>
+                        <td th:text="${item.memberNickname}"></td>
+                        <td th:text="${item.registerDatetime}"></td>
+                        <td>
+                            <button th:if="${(isUser and item.self) or (#authorization.expression('isAuthenticated()') and not isUser)}"
+                                    style="width: auto; margin-left: 10px" class="btn btn-outline-primary"
+                                    th:value="${item.inquiryNo}"
+                                    onclick="deleteInquiry(this)">삭제
+                            </button>
+                        <td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <a href="/inquiries/show-form/product-inquiry-add?productNo=2&productName=액션침대"
+               style="width: auto; margin-left: 5px" type="button" class="btn btn-outline-primary">등록</a>
+            <a href="/customer-center" style="width: auto; margin-left: 10px" type="button"
+               class="btn btn-outline-primary">고객센터</a>
+        </div>
+
+        <script th:src="@{/inquiry/js/inquirylistpage.js}"></script>
+        <script>
+            let whereUri = "product";
+        </script>
     </div>
-
-    <a href="/inquiries/show-form/product-inquiry-add?productNo=2&productName=액션침대"
-       style="width: auto; margin-left: 5px" type="button" class="btn btn-outline-primary">등록</a>
-    <a href="/customer-center" style="width: auto; margin-left: 10px" type="button"
-       class="btn btn-outline-primary">고객센터</a>
-</div>
-
-<script th:src="@{/inquiry/js/inquirylistpage.js}"></script>
-<script>
-    let whereUri = "product";
-</script>
-</body>
+    </div>
+</th:block>
 </html>

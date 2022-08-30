@@ -21,5 +21,5 @@ public class InquiryListResponseDto {
     private LocalDateTime registerDatetime;
 
     @Setter
-    private boolean isSelf;
+    private boolean self;
 }
