@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>주문 내역 리스트</title>
+
+</head>
+<th:block layout:fragment="content">
+  <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"
+       style="margin-right: 455px; margin-left: 485px; margin-top: 20px">
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <div class="dataTables_length" id="dataTable_length">
+        </div>
+      </div>
+      <div class="row" style="overflow: hidden;
+           position: relative;
+           width: 100%;">
+        <div class="col-sm-12">
+          <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid"
+                 aria-describedby="dataTable_info" style="width: 100%;">
+            <thead>
+            <tr role="row">
+              <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-sort="ascending" aria-label="주문 번호">
+                주문 번호
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-label="이름">이름
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-label="총 금액">총 금액
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-label="주문 일자">주문 일자
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-label="수령인">수령인
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-label="수령인 번호">수령인 번호
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-label="배송 상태">배송 상태
+              </th>
+              <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                  aria-label="운송장 번호 (배송 위치 정보 조회하기)">운송장 번호 (배송 위치 정보 조회하기)
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderProduct : ${orderProductList}">
+              <td th:text="${orderProduct.orderNo}"></td>
+              <td th:text="${orderProduct.productName}"></td>
+              <td th:text="${orderProduct.totalOrderAmount}"></td>
+              <td th:text="${orderProduct.orderDatetime}"></td>
+              <td th:text="${orderProduct.receiptName}"></td>
+              <td th:text="${orderProduct.receiptPhoneNumber}"></td>
+              <td th:text="${orderProduct.orderStatus}"></td>
+              <td th:text="${orderProduct.trackingNo}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <th:block th:if="${!#lists.isEmpty(orderProductList)}">
+        <th:block th:include="component/pageFooter"></th:block>
+      </th:block>
+    </div>
+  </div>
+</th:block>
+</html>
