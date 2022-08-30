@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<div class="sidebar">
+    <div class="sidebar__item">
+        <h4 class="current-location"></h4>
+        <ul>
+            <li class="link-info"><a th:href="${'/members/' + memberNo}">회원정보</a></li>
+            <li class="link-order"><a th:href="${'/members/' + memberNo + '/orders'}">주문내역</a></li>
+            <li class="link-address"><a th:href="${'/members/' + memberNo + '/addresses'}">배송지관리</a></li>
+            <li class="link-tag"><a th:href="${'/members/' + memberNo + '/tags'}">태그관리</a></li>
+            <li class="link-exit"><a th:href="${'/members/' + memberNo + '/review'}">내 상품평</a></li>
+            <li class="link-exit"><a th:href="${'/members/' + memberNo + '/exit'}">회원탈퇴</a></li>
+        </ul>
+    </div>
+</div>
+</html>

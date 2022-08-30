@@ -31,12 +31,12 @@
                         </li>
                         <br/>
                         <div sec:authorize="isAuthenticated()">
-                            <li class="list-inline-item ml-auto" th:if="${#authentication.principal.memberNo == review.writerNo}">
+                            <li class="list-inline-item ml-auto" th:if="${review.isWriter}">
                                 <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" th:href="@{|/reviews/${review.orderProductNo}/modify|}">
                                     수정
                                 </a>
                             </li>
-                            <li class="list-inline-item ml-auto" th:if="${#authentication.principal.memberNo == review.writerNo}">
+                            <li class="list-inline-item ml-auto" th:if="${review.isWriter}">
                                 <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
                                     삭제
                                 </a>

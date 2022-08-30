@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.category.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<CategoryResponseDto> findFlattenCategories() {
+        List<CategoryResponseDto> categories = findCategories();
+        List<CategoryResponseDto> flattenCategories = new ArrayList<>();
+
+        flatCategories(flattenCategories, categories);
+
+        return flattenCategories;
+    }
+
+    @Override
     public void addCategory(CategoryCreateRequestDto createRequest) {
         categoryAdapter.categoryAdd(createRequest);
     }
@@ -43,5 +54,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void removeCategory(Integer categoryNo) {
         categoryAdapter.categoryRemove(categoryNo);
+    }
+
+    private void flatCategories(List<CategoryResponseDto> flattenCategories,
+                                List<CategoryResponseDto> categories) {
+        categories.forEach(category -> {
+            if (category.getLowerCategories().isEmpty()) {
+                flattenCategories.add(category);
+            } else {
+                flattenCategories.add(category);
+                flatCategories(flattenCategories, category.getLowerCategories());
+            }
+        });
+
     }
 }

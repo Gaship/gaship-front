@@ -31,6 +31,7 @@ const doSearch = async (e) => {
       const divTag = document.createElement("div");
       const pTag = document.createElement("p");
       const searchResultLink = document.createElement("a");
+      searchResultLink.classList.add('text-dark');
 
       searchResultLink.href = `https://gaship.shop/products/${result.id}`;
       searchResultLink.innerHTML = result.name + " (" + result.code + ")";
