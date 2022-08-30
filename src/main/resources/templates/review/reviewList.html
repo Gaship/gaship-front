@@ -41,8 +41,9 @@
                                     <p th:text="${review.content}"></p>
 
                                     <ul class="list-inline d-sm-flex my-0">
-                                        <li class="list-inline-item g-mr-20" th:each="i : ${#numbers.sequence(1, review.starScore)}">
-                                            <i class="fa fa-star g-pos-rel g-top-1 g-mr-3"></i>
+                                        <li class="list-inline-item g-mr-20" th:each="i : ${#numbers.sequence(0, 4)}">
+                                            <i th:if="${i < review.starScore}" class="fa fa-star g-pos-rel g-top-1 g-mr-3"></i>
+                                            <i th:unless="${i < review.starScore}" class="fa fa-star-o g-pos-rel g-top-1 g-mr-3"></i>
                                         </li>
                                     </ul>
                                     <div sec:authorize="isAuthenticated()">
