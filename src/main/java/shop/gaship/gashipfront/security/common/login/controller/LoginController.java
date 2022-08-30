@@ -1,7 +1,6 @@
 package shop.gaship.gashipfront.security.common.login.controller;
 
 import java.util.Objects;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService;
@@ -26,6 +24,7 @@ import shop.gaship.gashipfront.security.common.gashipauth.service.AuthApiService
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
+
     private final AuthApiService authApiService;
 
     /**
@@ -34,7 +33,7 @@ public class LoginController {
      * @return 로그인 폼 화면으로 이동할수 있도록 showLoginForm을 반환합니다.
      */
     @GetMapping("/login")
-    public String login(Authentication authentication) {
+    public String login() {
 
         if (isAuthenticated()) {
             return "redirect:/";
@@ -67,16 +66,8 @@ public class LoginController {
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
         SecurityContext context = SecurityContextHolder.getContext();
-        Integer memberNo = null;
-        if (context.getAuthentication().getPrincipal() instanceof SignInSuccessUserDetailsDto) {
-            memberNo = ((SignInSuccessUserDetailsDto) context.getAuthentication().getPrincipal())
-                .getMemberNo().intValue();
-        }
+        Integer memberNo = ((UserDetailsDto) context.getAuthentication().getPrincipal()).getMemberNo();
 
-        if (context.getAuthentication().getPrincipal() instanceof UserDetailsDto) {
-            memberNo = ((UserDetailsDto) context.getAuthentication().getPrincipal())
-                .getMemberNo();
-        }
         authApiService.logout(memberNo, jwt);
 
         session.invalidate();
@@ -97,7 +88,7 @@ public class LoginController {
     /**
      * 로그아웃 요청을 담당하는 기능입니다.
      */
-    @GetMapping(value ="/manager/logout")
+    @GetMapping(value = "/manager/logout")
     public String managerLogoutProcessing() {
         return "redirect:/manager/login";
     }

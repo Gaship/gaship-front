@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.exceptions.NoResponseDataException;
-import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
@@ -30,7 +30,7 @@ public class CustomEmployeeUserDetailService implements UserDetailsService {
     private final ServerConfig serverConfig;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetailsDto loadUserByUsername(String username) throws UsernameNotFoundException {
         List<String> contentTypeValues = List.of(MediaType.APPLICATION_JSON.toString());
 
         return WebClient.create(serverConfig.getGatewayUrl()).get()
@@ -38,7 +38,7 @@ public class CustomEmployeeUserDetailService implements UserDetailsService {
             .headers(httpHeaders -> httpHeaders.put(HttpHeaders.ACCEPT, contentTypeValues))
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-            .toEntity(SignInSuccessUserDetailsDto.class)
+            .toEntity(UserDetailsDto.class)
             .timeout(TIMEOUT)
             .blockOptional()
             .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
