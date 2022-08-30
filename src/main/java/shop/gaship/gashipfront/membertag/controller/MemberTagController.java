@@ -66,7 +66,7 @@ public class MemberTagController {
         }
         List<MemberTagResponseDto> memberTags = memberTagService.findMemberTags(userDetailsDto.getMemberNo());
         model.addAttribute("tags", tagService.findTags());
-        model.addAttribute("response", memberTags);
+        model.addAttribute("memberTag", memberTags);
 
         return "membertag/membertagList";
     }
