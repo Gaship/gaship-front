@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +37,12 @@ public class EmployeeController {
 
     private final AddressLocalService addressLocalService;
 
+    /**
+     * 직원등록 페이지로 이동하기위한 메서드입니다.
+     *
+     * @param model the model
+     * @return 이동할 html
+     */
     @GetMapping("/add")
     public String moveAddForm(Model model) {
         List<AddressLocalResponseDto> addressList = addressLocalService.addressList();
@@ -43,6 +50,13 @@ public class EmployeeController {
         return "layout/admin/employee/employeeAddForm";
     }
 
+    /**
+     * 직원수정 페이지로 이동하기위한 메서드입니다.
+     *
+     * @param employeeNo 직원번호가 기입됩니다.
+     * @param model      the model
+     * @return 이동할 html
+     */
     @GetMapping("/modify/{employeeNo}")
     public String moveModifyForm(@PathVariable("employeeNo") Integer employeeNo,
                                  Model model) {
@@ -55,14 +69,27 @@ public class EmployeeController {
         return "layout/admin/employee/employeeModifyForm";
     }
 
+    /**
+     * 직원이 등록될때 사용되는 post 메서드입니다.
+     *
+     * @param dto 이름,이메일(아이디),비밀번호,휴대폰 번호 등이 기입됩니다.
+     * @return 생성후 직원의 메인페이지로 갑니다.
+     */
     @PostMapping
     public String addEmployee(EmployeeCreateRequestDto dto) {
-        //회원번호 26번 고정
+//        회원번호 26번 고정
         dto.setAuthorityNo(26);
         employeeService.employeeAdd(dto);
         return "redirect:/admin/employees";
     }
 
+    /**
+     * 직원수정을 위한 PUT 메서드입니다.
+     *
+     * @param employeeNo 직원번호가 기입됩니다.
+     * @param dto  이름,비밀번호,휴대폰 번호 등이 기입됩니다.
+     * @return 수정후 직원의 메인페이지로 이동합니다.
+     */
     @PutMapping("/{employeeNo}")
     public String modifyEmployee(
         @PathVariable("employeeNo") Integer employeeNo, EmployeeModifyRequestDto dto) {
@@ -72,25 +99,31 @@ public class EmployeeController {
         return "redirect:layout/admin/employee/employeeList";
     }
 
-    @GetMapping("/{employeeNo}")
-    public String employeeDetail(@PathVariable("employeeNo") Integer employeeNo) {
-        employeeService.employeeDetail(employeeNo);
-        return "?"; //필요할 곳이 있을까?
-    }
-
+    /**
+     * 직원의 메인페이지로 보내주는 GET 메서드입니다.
+     * page 값을 입력받아 원하는 페이지로 보내집니다.
+     *
+     * @param page  보고싶은 페이지값이 기입됩니다.
+     * @param model the model
+     * @return 직원 메인 페이지입니다.
+     */
     @GetMapping
     public String employeeList(@RequestParam(value = "page", required = false) Integer page,
                                Model model) {
         if (Objects.isNull(page)) {
             page = 0;
         }
-        PageResponse<EmployeeResponseDto> employees = employeeService.employeeList(PageRequest.of(page, 10));
+        Pageable pageRequest = PageRequest.of(page, 10);
+        PageResponse<EmployeeResponseDto> employees = employeeService.employeeList(pageRequest);
 
+        model.addAttribute("uri", "/admin/employees");
         model.addAttribute("employees", employees.getContent());
         model.addAttribute("next", employees.isNext());
         model.addAttribute("previous", employees.isPrevious());
         model.addAttribute("totalPage", employees.getTotalPages());
         model.addAttribute("pageNum", employees.getNumber() + 1);
+        model.addAttribute("previousPageNo", pageRequest.getPageNumber() - 1);
+        model.addAttribute("nextPageNo", pageRequest.getPageNumber() + 1);
 
         return "layout/admin/employee/employeeList";
     }

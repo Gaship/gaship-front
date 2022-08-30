@@ -6,11 +6,7 @@
     <meta charset="UTF-8">
     <title>직원 관리</title>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <style>
-        .btn-register{
-            margin: auto;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/employee/css/employeeList.css}">
 </head>
 
 
@@ -36,7 +32,6 @@
                     <thead>
                     <tr role="row">
                         <td>#</td>
-                        <td>직원 번호</td>
                         <td>직원 이름</td>
                         <td>전화 번호</td>
                         <td>담당 지역</td>
@@ -47,7 +42,6 @@
                     <tbody>
                     <tr role="row" th:each="employee,stat:${employees}">
                         <td th:text="${stat.count}"></td>
-                        <td th:text="${employee.employeeNo}"></td>
                         <td th:text="${employee.name}"></td>
                         <td th:text="${employee.phoneNo}"></td>
                         <td th:text="${employee.address}"></td>
@@ -59,39 +53,22 @@
                                     th:data-employee-no="${employee.employeeNo}">
                                 삭제
                             </button>
-<!--                            <form action="#" th:action="@{/admin/employees/{employeeNo}(employeeNo=${employee.employeeNo})}" th:method="delete" >-->
-<!--                                <button type="submit" class="btn btn-outline-primary">-->
-<!--                                    삭제-->
-<!--                                </button>-->
-<!--                            </form>-->
                         </td>
                     </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="card-footer py-3">
+                <th:block th:if="${!#lists.isEmpty(employees)}">
+                    <th:block th:include="component/pageFooter"></th:block>
+                </th:block>
             </div>
         </div>
     </div>
 
 </th:block>
 <th:block layout:fragment="content-js">
-    <script>
-        const token = document.getElementById('_csrf').getAttribute('content');
+    <script th:src="@{/employee/js/employeeList.js}"></script>
 
-        const deleteEmployee = async (e) =>{
-
-            const employeeNo = e.target.getAttribute("data-employee-no");
-            const response = await fetch(`/api/employees/`+ employeeNo,
-                {
-                    method : 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': token
-                    }
-                }).then(()=> window.location.reload());
-        }
-
-        document.querySelectorAll('.deleteButton')
-            .forEach(element => element.addEventListener('click',deleteEmployee))
-    </script>
 </th:block>
-
 </html>
