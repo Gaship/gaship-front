@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,7 +38,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<String> contentTypeValues = List.of(MediaType.APPLICATION_JSON.toString());
 
-        ResponseEntity<SignInUserDetailsDto> signInUserDetailsDtoResponseEntity =
+        SignInUserDetailsDto signInUserDetailsDto =
             WebClient.create(serverConfig.getGatewayUrl()).get()
                      .uri("/api/members/user-detail?email={email}", username)
                      .headers(httpHeaders -> {
@@ -51,12 +50,12 @@ public class CustomUserDetailService implements UserDetailsService {
                      .toEntity(SignInUserDetailsDto.class)
                      .timeout(TIMEOUT)
                      .blockOptional()
-                     .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE));
-
-        SignInUserDetailsDto signInUserDetailsDto = signInUserDetailsDtoResponseEntity.getBody();
+                     .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
+                     .getBody();
 
         UserDetailsDto userDetails =
-            new UserDetailsDto(Objects.requireNonNull(signInUserDetailsDto).getEmail(),
+            new UserDetailsDto(
+                Objects.requireNonNull(signInUserDetailsDto).getEmail(),
                 signInUserDetailsDto.getHashedPassword(),
                 signInUserDetailsDto.getAuthorities(),
                 signInUserDetailsDto.getMemberNo(),

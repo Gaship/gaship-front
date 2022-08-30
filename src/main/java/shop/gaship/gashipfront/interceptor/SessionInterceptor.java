@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import shop.gaship.gashipfront.exceptions.NotFoundSessionIdCookieException;
 
 /**
  * 요청 마다 세션, 세션 쿠키 타임아웃 초기화 시키기 위한 인터셉터.
@@ -29,8 +28,7 @@ public class SessionInterceptor implements HandlerInterceptor {
             Arrays.stream(cookies)
                   .filter(cookie -> cookie.getName().equals(SESSION_ID))
                   .findFirst()
-                  .orElseThrow(NotFoundSessionIdCookieException::new)
-                  .setMaxAge(SESSION_AND_COOKIE_TIME_OUT_SECOND);
+                  .ifPresent(cookie -> cookie.setMaxAge(SESSION_AND_COOKIE_TIME_OUT_SECOND));
         }
 
         request.getSession().setMaxInactiveInterval(SESSION_AND_COOKIE_TIME_OUT_SECOND);
