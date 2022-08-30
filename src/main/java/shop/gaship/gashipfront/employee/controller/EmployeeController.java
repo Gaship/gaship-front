@@ -97,7 +97,9 @@ public class EmployeeController {
     @PutMapping("/{employeeNo}")
     public String modifyEmployee(
         @PathVariable("employeeNo") Integer employeeNo, EmployeeModifyRequestDto dto) {
-
+        if(!dto.getPassword().isEmpty()){
+            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
         dto.setEmployeeNo(employeeNo);
         employeeService.employeeModify(dto);
         return "redirect:/admin/employees";
