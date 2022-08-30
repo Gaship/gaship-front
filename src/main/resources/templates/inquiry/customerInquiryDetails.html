@@ -44,8 +44,18 @@
                               th:text="${details.inquiryContent}"></textarea>
                     </div>
                 </div>
-                <button style="width: auto; margin-left: 10px" class="btn btn-danger mt-5"
-                        th:value="${details.inquiryNo}" onclick="deleteInquiry(this)">문의전체삭제
+
+                <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+                    <form action="/js/inquiries/inquiry-answer?isProduct=false" method="POST" th:if="${#strings.equals(details.processStatus, '답변대기')}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <input name="inquiryNo" type="hidden" th:value="${details.inquiryNo}">
+                        <textarea name = "answerContent" class="form-control ml-2 mt-5" style="height: 30vh"></textarea>
+                        <input class = "btn btn-outline-primary ml-2 mt-3" type="submit" value="답변등록">
+                    </form>
+                </th:block>
+
+                <button th:if="${(isUser and details.self) or (#authorization.expression('isAuthenticated()') and not isUser)}" style="width: auto; margin-left: 10px" class="btn btn-danger mt-5"
+                        th:value="${details.inquiryNo}" onclick="deleteInquiry(this)">문의삭제
                 </button>
             </div>
 
@@ -56,9 +66,9 @@
                     </div>
                     <form class="form-group">
                         <div class="form-group">
-                            <span class="col-sm-2 control-label">직원이름</span>
+                            <span class="col-sm-2 control-label">직원</span>
                             <div class="col-sm-10 h-100">
-                                <p class="form-control" th:value="${details.employeeName}"></p>
+                                <p class="form-control" th:text="${details.employeeName}"></p>
                             </div>
                         </div>
 
@@ -73,26 +83,36 @@
                         <div class="form-group mt-5">
                             <span class="col-sm-2 control-label">답변등록시간</span>
                             <div class="col-sm-10 h-100">
-                                <p class="form-control" th:value="${details.answerRegisterDatetime}"></p>
+                                <p class="form-control" th:text="${details.answerRegisterDatetime}"></p>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <span class="col-sm-2 control-label">답변수정시간</span>
                             <div class="col-sm-10 h-100">
-                                <p class="form-control" th:value="${details.answerModifyDatetime}"></p>
+                                <p class="form-control" th:text="${details.answerModifyDatetime}"></p>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <a href="/inquiries/member-self/customer-inquiries" style="width: auto; margin-left: 10px" type="button"
-               class="btn btn-outline-primary mt-3">고객문의 목록</a>
+            <th:block sec:authorize="hasRole('ROLE_USER')">
+                <a href="/inquiries/member-self/customer-inquiries" style="width: auto; margin-left: 10px" type="button"
+                   class="btn btn-outline-primary mt-3">마이페이지 고객문의 목록</a>
+            </th:block>
 
-            <script th:src="@{/inquiry/js/inquirylistpage.js}"></script>
+            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+                <a href="/admin/inquiries/customer-inquiries" style="width: auto; margin-left: 10px" type="button"
+                   class="btn btn-outline-primary mt-3">관리자 고객문의 목록</a>
+            </th:block>
+
+
+
+            <script th:src="@{/inquiry/js/inquiry.js}"></script>
             <script th:inline="javascript">
                 let whereUri = "customer";
+                let isUser = [[${isUser}]];
             </script>
         </div>
 </html>

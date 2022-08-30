@@ -40,7 +40,7 @@
                         <td th:text="${item.memberNickname}"></td>
                         <td th:text="${item.registerDatetime}"></td>
                         <td>
-                            <button th:if="${(isUser and item.self) or (#authorization.expression('isAuthenticated()') and not isUser)}"
+                            <button th:if="${#authorization.expression('hasRole(''ROLE_USER'')') and item.self}"
                                     style="width: auto; margin-left: 10px" class="btn btn-danger"
                                     th:value="${item.inquiryNo}"
                                     onclick="deleteInquiry(this)">삭제
@@ -55,9 +55,10 @@
                style="width: auto; margin-left: 5px" type="button" class="btn btn-outline-primary">등록</a>
         </div>
 
-        <script th:src="@{/inquiry/js/inquirylistpage.js}"></script>
+        <script th:src="@{/inquiry/js/inquiry.js}"></script>
         <script>
             let whereUri = "product";
+            let isUser = true;
         </script>
     </div>
     </div>

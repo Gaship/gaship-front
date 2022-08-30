@@ -71,7 +71,7 @@ public class ProductInquiryController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries/{inquiryNo}")
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public String productInquiryDetails(
         @PathVariable Integer inquiryNo, Model model,
         @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
@@ -80,7 +80,6 @@ public class ProductInquiryController {
             commonInquiryService.findInquiry(inquiryNo);
 
         Boolean isUser = RoleUserMySelfProcessor.setSelf(userDetailsDto, inquiryDetailsResponseDto);
-
         model.addAttribute("isUser", isUser);
         model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);
         return VIEW_NAME_PRODUCT_INQUIRY_DETAILS.getValue();

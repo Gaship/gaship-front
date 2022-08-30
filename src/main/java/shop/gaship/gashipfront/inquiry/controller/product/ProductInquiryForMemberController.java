@@ -63,7 +63,6 @@ public class ProductInquiryForMemberController {
             productInquiryService.findProductInquiriesByMemberNo(pageable, memberNo);
         RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
 
-        model.addAttribute("isUser", Boolean.TRUE);
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
     }
