@@ -96,7 +96,7 @@ public class EmployeeController {
 
         dto.setEmployeeNo(employeeNo);
         employeeService.employeeModify(dto);
-        return "redirect:layout/admin/employee/employeeList";
+        return "redirect:/admin/employees";
     }
 
     /**
