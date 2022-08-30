@@ -6,6 +6,7 @@ import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -125,4 +126,6 @@ public interface MemberService {
      * @param email 탈퇴 할 멤버의 이메일입니다.
      */
     void verifySignUpCode(String email);
+
+    void reissuePassword(ReissuePasswordRequest reissuePasswordRequest);
 }

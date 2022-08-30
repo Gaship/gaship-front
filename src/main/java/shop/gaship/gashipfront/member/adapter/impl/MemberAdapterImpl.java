@@ -198,6 +198,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @return 임시비밀번호가 바뀌고 이메일에 잘 전송이되면 true값을 반환합니다.
      * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
+    @Override
     public boolean reissuePasswordRequest(ReissuePasswordRequest reissuePasswordRequest) {
         String result = Objects.requireNonNull(WebClient.create(serverConfig.getGatewayUrl()).post()
                 .uri("/api/members/find-password")
