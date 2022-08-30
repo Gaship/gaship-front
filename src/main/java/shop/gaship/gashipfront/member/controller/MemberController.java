@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,6 +25,7 @@ import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.member.exception.SignUpDenyException;
 import shop.gaship.gashipfront.member.service.MemberService;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -81,21 +83,16 @@ public class MemberController {
      * 멤버의 개인정보를 수정하는 컨트롤러.
      *
      * @param request            수정정보에 대한 정보가 들어있는 dto
-     * @param memberNo           회원 id
-     * @param redirectAttributes redirectAttributes
      * @return 멤버의 정보를 보여주는 페이지
      * @author 최정우
      */
-    @PutMapping("/members/{memberNo}")
-    public String memberModify(
-            @ModelAttribute @Valid MemberModifyRequestDto request,
-            @PathVariable Integer memberNo,
-            RedirectAttributes redirectAttributes) {
+    @PutMapping("/members")
+    public String memberModify(@ModelAttribute @Valid MemberModifyRequestDto request,
+                               @AuthenticationPrincipal UserDetailsDto userDetails) {
+        request.setMemberNo(userDetails.getMemberNo());
         memberService.modifyMember(request);
-        redirectAttributes.addAttribute(MEM_NO, memberNo);
-        redirectAttributes.addAttribute(STATUS, true);
 
-        return "redirect:/members/{memberNo}";
+        return "redirect:/members/details";
     }
 
     /**
@@ -128,9 +125,8 @@ public class MemberController {
      * @author 최정우
      */
     @DeleteMapping("/members/{memberNo}")
-    public String memberRemove(
-            @PathVariable Integer memberNo,
-            RedirectAttributes redirectAttributes) {
+    public String memberRemove(@PathVariable Integer memberNo,
+                               RedirectAttributes redirectAttributes) {
         memberService.removeMember(memberNo);
         redirectAttributes.addAttribute(STATUS, true);
 
@@ -140,16 +136,17 @@ public class MemberController {
     /**
      * 회원이 자신의 상세정보를 조회하는 컨트롤러.
      *
-     * @param memberNo 조회하려는 회원 id
      * @param model model
      * @return 회원정보 상세 페이지
      * @author 최정우
      */
-    @GetMapping("/members/{memberNo}")
-    public String memberDetails(@PathVariable Integer memberNo, Model model) {
+    @GetMapping("/members/details")
+    public String memberDetails(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                Model model) {
+        Integer memberNo = userDetailsDto.getMemberNo();
         MemberResponseDto dto = memberService.findMember(memberNo);
         model.addAttribute("member", dto);
-        model.addAttribute("memberNo", dto.getMemberNo());
+        model.addAttribute("memberNo", memberNo);
         return "member/memberDetails";
     }
 
@@ -157,6 +154,23 @@ public class MemberController {
     public String showMemberExitPage(@PathVariable Integer memberNo, Model model) {
         model.addAttribute("memberNo", memberNo);
         return "member/memberExit";
+    }
+
+    /**
+     * 회원 목록 수정페이지.
+     *
+     * @return 태그 목록과 자신이 선택한 태그를 보여주는 페이지
+     * @author 김민수
+     */
+    @GetMapping("/members/update")
+    public String memberDetailsUpdate(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                      Model model) {
+        Integer memberNo = userDetailsDto.getMemberNo();
+        MemberResponseDto dto = memberService.findMember(memberNo);
+        model.addAttribute("member", dto);
+        model.addAttribute("memberNo", memberNo);
+
+        return "member/memberDetailModify";
     }
 
     /**
