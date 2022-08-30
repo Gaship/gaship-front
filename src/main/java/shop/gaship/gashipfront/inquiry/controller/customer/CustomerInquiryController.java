@@ -1,9 +1,11 @@
 package shop.gaship.gashipfront.inquiry.controller.customer;
 
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_DETAILS;
+import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_CUSTOMER_INQUIRY_ADD_FORM;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_CUSTOMER_INQUIRY_DETAILS;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,7 @@ public class CustomerInquiryController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries/{inquiryNo}")
+    @PreAuthorize("isAuthenticated()")
     public String customerInquiryDetails(
         @PathVariable Integer inquiryNo, Model model) {
 
@@ -41,5 +44,17 @@ public class CustomerInquiryController {
 
         model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);
         return VIEW_NAME_CUSTOMER_INQUIRY_DETAILS.getValue();
+    }
+
+    /**
+     * 고객문의를 추가하기 위한 추가페이지 조회 요청을 처리합니다.
+     *
+     * @return 고객문의 추가페이지에 대한 view name을 반환합니다.
+     * @author 최겸준
+     */
+    @GetMapping("/show-form/customer-inquiry-add")
+    public String customerInquiryAddForm() {
+
+        return VIEW_NAME_CUSTOMER_INQUIRY_ADD_FORM.getValue();
     }
 }

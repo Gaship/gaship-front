@@ -5,6 +5,8 @@ import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_N
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,11 +37,14 @@ public class ProductInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String productInquiryList(
         Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             productInquiryService.findProductInquiries(pageable);
+
+        model.addAttribute("isUser", false);
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
     }
@@ -53,11 +58,14 @@ public class ProductInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries/status-hold")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String productInquiryStatusHoldList(
         Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse
             = productInquiryService.findProductInquiriesStatusHold(pageable);
+
+        model.addAttribute("isUser", false);
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
     }
@@ -71,11 +79,14 @@ public class ProductInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/product-inquiries/status-complete")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String productInquiryStatusCompleteList(
         Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             productInquiryService.findProductInquiriesStatusComplete(pageable);
+
+        model.addAttribute("isUser", false);
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
     }
