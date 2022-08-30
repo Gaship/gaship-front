@@ -12,6 +12,7 @@ import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.member.exception.SignUpDenyException;
@@ -139,6 +140,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void verifySignUpCode(String email) {
         memberAdapter.verifySignUpIdentify(email);
+    }
+
+    @Override
+    public void reissuePassword(ReissuePasswordRequest reissuePasswordRequest) {
+        memberAdapter.reissuePasswordRequest(reissuePasswordRequest);
     }
 
     /**

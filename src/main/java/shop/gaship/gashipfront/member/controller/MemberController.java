@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.member.exception.SignUpDenyException;
@@ -223,5 +224,17 @@ public class MemberController {
         cookie.setSecure(true);
         httpResponse.addCookie(cookie);
         return "member/signUpApprove";
+    }
+
+    @GetMapping("/members/forgot-password")
+    public String showForgotPassword() {
+
+        return "member/forgotPassword";
+    }
+
+    @PostMapping("/members/forgot-password")
+    public String requestReissuePassword(ReissuePasswordRequest reissuePasswordRequest) {
+        memberService.reissuePassword(reissuePasswordRequest);
+        return "redirect:/login";
     }
 }
