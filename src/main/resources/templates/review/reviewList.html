@@ -46,11 +46,15 @@
                                             <i th:unless="${i < review.starScore}" class="fa fa-star-o g-pos-rel g-top-1 g-mr-3"></i>
                                         </li>
                                     </ul>
+                                    <div class="list-inline-item g-mr-20 my-2">
+                                        <i class="fa fa-tag g-pos-rel g-top-1 g-mr-3"></i>
+                                        <span style="font-size: 17px" th:text="${review.productName}"></span>
+                                    </div>
                                     <div sec:authorize="isAuthenticated()">
-                                        <a class="w-auto p-1 mt-2 btn btn-secondary btn-lg review-btn" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/modify|}">
+                                        <a class="w-auto p-1 btn btn-secondary btn-lg review-btn" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/modify|}">
                                             수정
                                         </a>
-                                        <a class="w-auto p-1 mt-2 btn btn-secondary btn-lg review-btn" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
+                                        <a class="w-auto p-1 btn btn-secondary btn-lg review-btn" th:if="${review.isWriter}" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
                                             삭제
                                         </a>
                                     </div>
