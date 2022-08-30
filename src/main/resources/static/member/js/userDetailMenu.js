@@ -12,6 +12,9 @@ if(location.href.match(/exit/)) {
 } else if(location.href.match(/tags/)){
   const tagLiTag = document.querySelector(".link-tag");
   currentLocation.innerHTML = tagLiTag.firstChild.textContent;
+} else if(location.href.match(/reviews/)){
+  const reviewLiTag = document.querySelector(".link-review");
+  currentLocation.innerHTML = reviewLiTag.firstChild.textContent;
 } else {
   const infoLiTag = document.querySelector(".link-info");
   currentLocation.innerHTML = infoLiTag.firstChild.textContent;

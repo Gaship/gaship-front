@@ -10,7 +10,7 @@ const reviewRetrieve = pageNo => async (e) => {
     const title = document.createElement("strong");
     const reviewInfoWrapper = document.createElement("div");
     const memberName = document.createElement("h7");
-    const star = document.createElement("h7");
+    const starLi = document.createElement("span");
     const date = document.createElement("h7");
     const content = document.createElement("p");
 
@@ -19,9 +19,20 @@ const reviewRetrieve = pageNo => async (e) => {
 
     title.innerText = review.title;
     memberName.innerText = '작성자 : ' + review.writerNickname;
-    star.innerText = '별점 : ' + review.starScore + ' 점';
+
+    [...Array(5).keys()].forEach(i => {
+      const star = document.createElement("i");
+
+      if (i < review.starScore) {
+        star.classList.add("fa", "fa-star", "g-pos-rel", "g-top-1", "g-mr-3");
+      } else {
+        star.classList.add("fa", "fa-star-o", "g-pos-rel", "g-top-1", "g-mr-3");
+      }
+      starLi.appendChild(star);
+    })
+
     date.innerText = '작성날짜 : ' + review.registerDateTime;
-    reviewInfoWrapper.append(memberName, star, date);
+    reviewInfoWrapper.append(memberName, starLi, date);
     content.innerText = review.content;
     reviewWrapper.append(title, reviewInfoWrapper);
     productReview.append(reviewWrapper, content);
