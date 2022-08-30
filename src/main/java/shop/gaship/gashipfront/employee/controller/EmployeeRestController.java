@@ -20,6 +20,11 @@ import shop.gaship.gashipfront.employee.service.EmployeeService;
 public class EmployeeRestController {
     private final EmployeeService employeeService;
 
+    /**
+     * 직원을 삭제하기 위한 DELETE 메서드입니다.
+     *
+     * @param employeeNo 삭제할 직원번호가 기입됩니다.
+     */
     @DeleteMapping("/{employeeNo}")
     public void removeEmployee(@PathVariable("employeeNo") Integer employeeNo){
         employeeService.employeeDelete(employeeNo);
