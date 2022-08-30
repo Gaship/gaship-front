@@ -23,6 +23,7 @@ const orderRequestData = {
     memberNo: "",
     orderProducts: [],
     receiverName: "",
+    receiverPhoneNo: "",
     receiverSubPhoneNo: "",
     deliveryRequest: "",
     totalAmount: 0,
@@ -55,6 +56,9 @@ const orderRequestData = {
     setTotalDiscountAmount: () => {
         discountTotalAmount = orderRequestData.orderProducts
             .reduce((accumulate, orderProduct) => accumulate + orderProduct.couponAmount, 0);
+    },
+    setAddress: (addressListNo) => {
+        orderRequestData.addressListNo = addressListNo;
     }
 }
 
@@ -128,6 +132,7 @@ function drawOrderProductsContent() {
     })
 
     setOrderAmountInfo();
+    setCouponEvent();
 }
 
 function clearCouponSelectBox(targetValue) {
@@ -194,8 +199,7 @@ function setOrderAmountInfo() {
 const loadOrderProducts = () => {
     loadMemberCoupons();
     getOrderProducts()
-        .then(setOrderRequestData)
-        .then(setCouponEvent);
+        .then(setOrderRequestData);
 }
 
 export {loadOrderProducts, orderRequestData}

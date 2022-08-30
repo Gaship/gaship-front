@@ -1,4 +1,5 @@
-import pageHelper from "./pageModule.js";
+import {pageHelper} from "./pageModule.js";
+import {orderRequestData} from "./order.js";
 
 const addressListPageHelper = pageHelper;
 let token;
@@ -63,12 +64,39 @@ function drawAddressListContent() {
     <td>
         ${item.zipCode}
     </td>
-    <td></td>
+    <td>
+    <button name="selectAddress" value="${item.addressListNo}" 
+                style="padding: 10px" class="site-btn">선택
+    </button>
+    </td>
 </tr>
             `;
         addressListContent.insertAdjacentHTML("beforeend", trTemplate);
     })
 
+    setSelectAddressBtnEvent();
+}
+
+function setSelectAddressBtnEvent() {
+    const selectAddressBtnList = document.getElementsByName("selectAddress");
+    selectAddressBtnList.forEach(btn => {
+        btn.addEventListener('click', e => {
+            const addressListNo = e.target.value;
+
+            const selectAddress = addressListPageHelper.pageItems
+                .filter(addressInfo => addressInfo.addressListNo == addressListNo);
+
+            document.getElementById("sigunguInput").value = selectAddress[0].addressName;
+            document.getElementById("roadAddressInput").value = selectAddress[0].address;
+            document.getElementById("addressDetailsInput").value = selectAddress[0].addressDetail;
+            document.getElementById("zonecodeInput").value = selectAddress[0].zipCode;
+
+
+            orderRequestData.setAddress(addressListNo);
+
+            document.getElementById("addressListContainer").style.display = 'none';
+        })
+    })
 }
 
 function init() {

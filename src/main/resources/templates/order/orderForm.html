@@ -10,7 +10,7 @@
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/order/css/order.css}">
     <script th:type="module" th:src="@{/order/js/order.js}"></script>
-    <script th:src="@{/order/js/pageModule.js}"></script>
+    <script th:type="module" th:src="@{/order/js/pageModule.js}"></script>
     <script th:type="module"  th:src="@{/order/js/addressListModule.js}"></script>
     <script th:type="module"  th:src="@{/order/js/orderProductsModule.js}"></script>
     <script th:type="module"  th:src="@{/order/js/couponListModule.js}"></script>
@@ -45,19 +45,19 @@
                     <div class="col-lg-6">
                         <div class="checkout__input">
                             <p>수령인 이름<span>*</span></p>
-                            <input type="text">
+                            <input id="receiverNameInput" type="text" value="">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="checkout__input">
                             <p>수령인 전화번호<span>*</span></p>
-                            <input type="tel">
+                            <input id="receiverPhoneNoInput" type="tel">
                         </div>
                     </div>
                 </div>
                 <div class="checkout__input">
                     <p>대리 수령인 전화번호</p>
-                    <input type="tel">
+                    <input id="receiverSubPhoneNoInput" type="tel">
                 </div>
 
                 <div class="checkout__input">
@@ -66,25 +66,25 @@
                             <button id="addressListBtn" style="padding: 10px" class="site-btn">배송지 목록</button>
                         </span>
                     </p>
-                    <div id="addressListContainer">
+                    <div style="display: none" id="addressListContainer">
                     </div>
                     <div class="checkout__input">
                         <p>시군구<span>*</span></p>
-                        <input readonly="readonly" type="text" value="">
+                        <input id="sigunguInput" readonly="readonly" type="text" value="">
                     </div>
                     <div class="checkout__input">
                         <p>상세주소<span>*</span></p>
-                        <input readonly="readonly" type="text" value="" class="checkout__input__add">
-                        <input type="text" placeholder="상세 주소를 작성해주세요.">
+                        <input id="roadAddressInput" readonly="readonly" type="text" value="" class="checkout__input__add">
+                        <input id="addressDetailsInput" readonly="readonly" type="text" valu="">
                     </div>
                     <div class="checkout__input">
                         <p>우편번호<span>*</span></p>
-                        <input readonly="readonly" type="text" value="">
+                        <input id="zonecodeInput" readonly="readonly" type="text" value="">
                     </div>
                 </div>
                 <div class="checkout__input">
                     <p>배송 요청사항</p>
-                    <input type="text" placeholder="배송시 추가 요청사항을 작성해주세요.">
+                    <input id="deliveryRequestInput" type="text" placeholder="배송시 추가 요청사항을 작성해주세요." value="">
                 </div>
             </div>
 
@@ -108,7 +108,7 @@
                             <span class="checkmark"></span>
                         </label>
                     </div>
-                    <button type="submit" class="site-btn">PLACE ORDER</button>
+                    <button id="doPaymentBtn" type="submit" class="site-btn">결제하기</button>
                 </div>
             </div>
         </div>
