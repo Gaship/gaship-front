@@ -20,7 +20,6 @@ function OrderProduct(index, orderProductData) {
 
 const orderRequestData = {
     addressListNo: "",
-    memberNo: "",
     orderProducts: [],
     receiverName: "",
     receiverPhoneNo: "",
