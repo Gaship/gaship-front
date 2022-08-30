@@ -117,4 +117,7 @@ public interface MemberService {
      * @param verifyCode 인증코드입니다.
      */
     void checkApprovedEmail(String verifyCode);
+
+
+    void verifySignUpCode(String email);
 }
