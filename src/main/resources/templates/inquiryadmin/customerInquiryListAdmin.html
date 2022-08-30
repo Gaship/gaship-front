@@ -5,7 +5,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>관리자 상품문의 목록</title>
+    <title>관리자 고객문의 목록</title>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -15,7 +15,7 @@
     <div class="container">
         <div class="row flex-md-nowrap">
             <div role="main" class="container h5">
-                <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">상품문의 목록</h1>
+                <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">고객문의 목록</h1>
                 <div class="card-body p-0">
                     <table class="table table-striped">
                         <thead>
@@ -32,7 +32,7 @@
                         <tr th:each="item : ${pageResponse.content}">
                             <td th:text="${item.inquiryNo}"></td>
                             <td>
-                                <a th:href="@{/inquiries/product-inquiries/{inquiryNo}(inquiryNo = ${item.inquiryNo})}"><span
+                                <a th:href="@{/inquiries/customer-inquiries/{inquiryNo}(inquiryNo = ${item.inquiryNo})}"><span
                                         th:text="${item.title}"></span></a>
                             </td>
                             <td th:text="${item.processStatus}"></td>
@@ -52,7 +52,7 @@
 
             <script th:src="@{/inquiry/js/inquiry.js}"></script>
             <script>
-                let whereUri = "product";
+                let whereUri = "customer";
                 let isUser = false;
             </script>
         </div>

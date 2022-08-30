@@ -25,6 +25,7 @@ async function deleteInquiry(eventTarget) {
     }
 
     let path = inquiryNo;
+
     if (!isUser) {
         path += "/manager";
     }
