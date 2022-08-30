@@ -26,6 +26,7 @@ public class EmployeeModifyRequestDto {
     private Integer employeeNo;
 
     @NotNull
+    @Setter
     private String password;
 
     @Pattern(regexp = "^[가-힣]+", message = "이름을 정확히 입력하여주십시오.")
