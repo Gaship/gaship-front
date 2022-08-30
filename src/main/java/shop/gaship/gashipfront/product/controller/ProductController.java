@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,6 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @since 1.0
  */
 @Controller
-@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
@@ -44,7 +44,7 @@ public class ProductController {
     private final StatusCodeAdapter statusCodeAdapter;
     private final TagService tagService;
 
-    @GetMapping
+    @GetMapping("/products")
     public String showProducts(@RequestParam("page")String page,
                            @RequestParam(value = "category", required = false)String category,
                            @RequestParam(value = "min-amount", required = false)String minAmount,
@@ -71,7 +71,7 @@ public class ProductController {
     }
 
 
-    @GetMapping(params = "category")
+    @GetMapping(value = "/products", params = "category")
     public String findProductCategoryByPageable(
         Pageable page, @RequestParam(value = "category")String category, Model model) {
         PageResponse<ProductAllInfoResponseDto> products =
@@ -89,7 +89,7 @@ public class ProductController {
         return "product/products";
     }
 
-    @GetMapping(params = "keyword")
+    @GetMapping(value = "/products", params = "keyword")
     public String findProductsByKeyword(
         Pageable page, @RequestParam(value = "keyword")String keyword, Model model) {
         List<Integer> searchResult = searchService.searchProductKeyword(keyword).stream()
@@ -112,7 +112,7 @@ public class ProductController {
         return "product/products";
     }
 
-    @GetMapping("/{productNo}")
+    @GetMapping("/products/{productNo}")
     public String findProductsByKeyword(@PathVariable("productNo")Integer productNo, Model model) {
         ProductAllInfoResponseDto product = productService.findProduct(productNo);
         model.addAttribute("product", product);
@@ -120,7 +120,7 @@ public class ProductController {
         return "product/productDetail";
     }
 
-    @GetMapping("/add")
+    @GetMapping("/products/add")
     public String productAddForm(Model model) {
         model.addAttribute("categories", categoryService.findFlattenCategories());
         model.addAttribute("deliveryTypes",
@@ -129,14 +129,14 @@ public class ProductController {
         return "product/productAddForm";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/products/add")
     public String productAdd(List<MultipartFile> multipartFiles,
                              @ModelAttribute ProductCreateRequestDto createRequest) {
         productService.addProduct(multipartFiles, createRequest);
         return "redirect:/";
     }
 
-    @GetMapping("/modify")
+    @GetMapping("/products/modify")
     public String productModifyForm(@RequestParam Integer productNo,
                                     Model model) {
         model.addAttribute("categories", categoryService.findFlattenCategories());
@@ -147,10 +147,20 @@ public class ProductController {
         return "product/productModifyForm";
     }
 
-    @PostMapping(value = "/modify", params = "productNo")
+    @PostMapping(value = "/products/modify", params = "productNo")
     public String productModify(List<MultipartFile> multipartFiles,
                                 @ModelAttribute ProductModifyRequestDto modifyRequest) {
         productService.modifyProduct(multipartFiles, modifyRequest);
         return "redirect:/";
+    }
+
+    @GetMapping("/admin/products")
+    public String showAdminProductList(@PageableDefault(size = 10) Pageable pageable,
+                                       Model model) {
+        model.addAttribute("products", productService.productAllInfoByPageable(
+                String.valueOf(pageable.getPageNumber()),
+                String.valueOf(pageable.getPageSize()),
+                null, null, null));
+        return "product/adminProductList";
     }
 }

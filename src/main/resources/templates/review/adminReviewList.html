@@ -52,7 +52,7 @@
     </div>
     <ul class="pagination">
       <li class="page-item" th:if="${reviews.previous}"><a class="page-link" th:href="@{''(page=${reviews.number - 1})}">Previous</a></li>
-      <span class="page-number" th:text="|${reviews.number + 1} / ${reviews.totalPages}|"></span>
+      <span class="page-number" th:text="|${reviews.number + 1} / ${reviews.totalPages}|" th:if="${reviews.totalPages > 0}"></span>
       <li class="page-item" th:if="${reviews.next}"><a class="page-link" th:href="@{''(page=${reviews.number + 1})}">Next</a></li>
     </ul>
   </div>
