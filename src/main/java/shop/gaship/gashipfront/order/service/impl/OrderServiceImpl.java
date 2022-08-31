@@ -3,7 +3,9 @@ package shop.gaship.gashipfront.order.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.order.adapter.OrderAdapter;
+import shop.gaship.gashipfront.order.adapter.PaymentAdapter;
 import shop.gaship.gashipfront.order.dto.request.OrderRegisterRequestDto;
+import shop.gaship.gashipfront.order.dto.request.PaymentSuccessRequestDto;
 import shop.gaship.gashipfront.order.dto.response.OrderResponseDto;
 import shop.gaship.gashipfront.order.service.OrderService;
 
@@ -17,13 +19,19 @@ import shop.gaship.gashipfront.order.service.OrderService;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderAdapter orderAdapter;
+    private final PaymentAdapter paymentAdapter;
 
 
     @Override
     public OrderResponseDto processOrder(Integer memberNo, OrderRegisterRequestDto requestDto) {
         requestDto.setMemberNo(memberNo);
-        OrderResponseDto responseDto = orderAdapter.doOrder(requestDto);
 
-        return null;
+
+        return orderAdapter.doOrder(requestDto);
+    }
+
+    @Override
+    public void successPayment(PaymentSuccessRequestDto requestDto) {
+        paymentAdapter.successPayment(requestDto);
     }
 }
