@@ -47,7 +47,7 @@
                         </tr>
                         </tbody>
                     </table>
-                    <th:block th:if="${!#lists.isEmpty(pageResponse)}">
+                    <th:block th:if="${!#lists.isEmpty(pageResponse.content)}">
                         <th:block th:include="component/pageFooter"></th:block>
                     </th:block>
                 </div>
