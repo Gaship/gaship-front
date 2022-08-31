@@ -64,10 +64,10 @@ function addCart(productNo) {
             xhr.setRequestHeader(header,token);
         },
         success: function(data){
-            alert(data);
+            toastr.success("수량이 변경되었습니다.");
         },
         error: function(data){
-            alert(data);
+            toastr.error("상품이 안담겼습니다.");
         }
     })
 }

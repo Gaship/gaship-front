@@ -66,6 +66,7 @@ public class ProductInquiryServiceImpl implements ProductInquiryService {
     public PageResponse<InquiryListResponseDto> findProductInquiriesByProductNo(Pageable pageable,
                                                                                 Integer productNo) {
 
+
         return inquiryAdapter.productInquiryProductList(pageable, productNo);
     }
 }

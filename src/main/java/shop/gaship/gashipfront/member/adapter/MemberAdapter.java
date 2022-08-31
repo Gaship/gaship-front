@@ -8,6 +8,7 @@ import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
 import shop.gaship.gashipfront.member.dto.request.VerificationCodeDto;
 import shop.gaship.gashipfront.member.dto.request.VerificationSuccessDto;
 import shop.gaship.gashipfront.member.dto.request.VerifiedCheckDto;
@@ -132,5 +133,7 @@ public interface MemberAdapter {
     VerificationSuccessDto approveVerifyCode(String verifyCode);
 
     VerifiedCheckDto checkApprovedVerification(String verifyCode);
+
+    boolean reissuePasswordRequest(ReissuePasswordRequest reissuePasswordRequest);
 }
 

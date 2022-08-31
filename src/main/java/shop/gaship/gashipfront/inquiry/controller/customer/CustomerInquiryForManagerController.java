@@ -2,10 +2,14 @@ package shop.gaship.gashipfront.inquiry.controller.customer;
 
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_PAGE_RESPONSE;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_CUSTOMER_INQUIRY_LIST;
+import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_CUSTOMER_INQUIRY_LIST_ADMIN;
 
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +25,9 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @since 1.0
  */
 @Controller
-@RequestMapping("/inquiries")
+@RequestMapping("/admin/inquiries")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
 public class CustomerInquiryForManagerController {
 
     private final CustomerInquiryService customerInquiryService;
@@ -36,12 +41,13 @@ public class CustomerInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries")
-    public String customerInquiryList(Pageable pageable, Model model) {
+    public String customerInquiryList(@PageableDefault Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiries(pageable);
+
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
-        return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();
+        return VIEW_NAME_CUSTOMER_INQUIRY_LIST_ADMIN.getValue();
     }
 
     /**
@@ -53,10 +59,11 @@ public class CustomerInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries/status-hold")
-    public String customerInquiryStatusHoldList(Pageable pageable, Model model) {
+    public String customerInquiryStatusHoldList(@PageableDefault Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiriesStatusHold(pageable);
+
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();
     }
@@ -70,10 +77,11 @@ public class CustomerInquiryForManagerController {
      * @author 최겸준
      */
     @GetMapping(value = "/customer-inquiries/status-complete")
-    public String customerInquiryStatusCompleteList(Pageable pageable, Model model) {
+    public String customerInquiryStatusCompleteList(@PageableDefault Pageable pageable, Model model) {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiriesStatusComplete(pageable);
+
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();
     }

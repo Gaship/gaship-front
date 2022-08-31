@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.inquiry.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 문의 상세조회시 body에 담아야할 정보들을 가지는 객체입니다.
@@ -35,4 +36,6 @@ public class InquiryDetailsResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime answerModifyDatetime;
 
+    @Setter
+    private boolean self;
 }
