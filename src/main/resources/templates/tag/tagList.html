@@ -123,10 +123,10 @@
                 },
                 success: function(data){
                     toastr.success("태그 추가가 완료되었습니다.");
+                    location.reload(true);
 
                 },
                 error: function(error){
-                    console.log(error);
                     if('errors' in error['responseJSON']){
                         toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
                     } else if ('message' in error['responseJSON']){
