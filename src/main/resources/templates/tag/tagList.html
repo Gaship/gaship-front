@@ -7,6 +7,7 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="stylesheet" href="/tag/css/tag.css">
     <link rel="stylesheet" type="text/css" th:href="@{/order/css/order.css}">
 </head>

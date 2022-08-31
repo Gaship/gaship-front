@@ -4,11 +4,10 @@ body{
     font-family: 'Montserrat', sans-serif;
     margin:0;
 }
-.container {
+.member__tag__container {
     flex-direction: row;
     display: flex;
     flex-wrap: wrap;
-    width: 80vw;
     margin: 0 auto;
 }
 .btn {
