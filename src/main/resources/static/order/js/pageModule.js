@@ -24,4 +24,4 @@ const pageHelper = {
     }
 };
 
-export default pageHelper;
+export {pageHelper}

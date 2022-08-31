@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.order.dto.request;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 
 /**
@@ -15,6 +16,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class OrderRegisterRequestDto {
     private Integer addressListNo;
+    @Setter
     private Integer memberNo;
     private List<OrderProductSpecificDto> orderProducts;
     private String receiverName;
