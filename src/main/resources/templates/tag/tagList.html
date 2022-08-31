@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <title>메인페이지</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="/tag/css/tag.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/order/css/order.css}">
+</head>
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">태그관리</h1>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">태그 목록 (태그를 클릭해 수정)</h6>
+            </div>
+
+            <div class="col-sm-12 container">
+                <div class="flex-items"th:each="tag : ${response}">
+                    <button th:onclick="setTitle([[${tag.tagNo}]],[[${tag.title}]],[[${tagStat.index}]])" th:id="${'modalOpenBtn-' + tagStat.index}" class="btn btn-4 tags">[[${tag.title}]]</button>
+                </div>
+                    <button class="btn btn-1 addTag">+</button>
+
+                    <div id="modalBg" style="display: none" class="modalBackground modal__background"></div>
+                    <div id="modalWrap" style="display: none" class="modal addressAddFormModalWrap modal__box">
+                        <input type="text" id="title" name="title">
+                        <button class="btn btn-4" type="button" id="backBtn" onclick="closeModal();">취소</button>
+                        <button class="btn btn-4" type="button" id="modifyBtn" onclick="modify();">수정</button>
+                    </div>
+
+                    <div id="addModalBg" style="display: none" class="modalBackground modal__background"></div>
+                    <div id="addModalWrap" style="display: none" class="modal addressAddFormModalWrap modal__box">
+                        <input type="text" id="addTitle" name="title">
+                        <button class="btn btn-4" type="button" id="addBackBtn" onclick="closeModal();">취소</button>
+                        <button class="btn btn-4" type="button" id="addBtn" onclick="add();">저장</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let tagNo;
+        let title;
+        let index;
+        let name;
+        let token = document.getElementById("_csrf").content;
+        let header = document.getElementById("_csrf_header").content;
+
+        function setTitle(eachTagNo,eachTitle,tagIndex){
+            tagNo = eachTagNo;
+            title = eachTitle;
+            index = tagIndex;
+        }
+
+        const tags = document.querySelectorAll(".tags");
+        tags.forEach((e)=> e.addEventListener("click",()=>{
+            document.getElementById("modalWrap").style.display = 'block';
+            document.getElementById("modalBg").style.display = 'block';
+        }))
+
+        const addTag = document.querySelector(".addTag");
+        addTag.addEventListener("click",()=>{
+            document.getElementById("addModalWrap").style.display = 'block';
+            document.getElementById("addModalBg").style.display = 'block';
+        })
+
+        function closeModal(){
+            document.getElementById("modalWrap").style.display = 'none';
+            document.getElementById("modalBg").style.display = 'none';
+            document.getElementById("addModalWrap").style.display = 'none';
+            document.getElementById("addModalBg").style.display = 'none';
+        }
+        function modify(){
+            name = document.getElementById('title').value;
+            let jsondata ={
+                "tagNo" : `${tagNo}`,
+                "title" : `${name}`
+            }
+            $.ajax({
+                url: `/tags/${tagNo}`,
+                method:"PUT",
+                data:JSON.stringify(jsondata),
+                contentType:'application/json;charset=UTF-8',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header,token);
+                },
+                success: function(data){
+                    toastr.success("태그 변경이 완료되었습니다.");
+                    let modal = document.getElementById('modalOpenBtn-' + index);
+                    modal.innerText = name;
+                    closeModal();
+                },
+                error: function(error){
+                    if('errors' in error['responseJSON']){
+                        toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
+                    } else {
+                        toastr.error(error['responseJSON']['message']);
+                    }
+                }
+            })
+        }
+        function add(){
+            name = document.getElementById('addTitle').value;
+            let jsondata ={
+                "title" : `${name}`
+            }
+            $.ajax({
+                url: `/tags`,
+                method:"POST",
+                data:JSON.stringify(jsondata),
+                contentType:'application/json;charset=UTF-8',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header,token);
+                },
+                success: function(data){
+                    toastr.success("태그 추가가 완료되었습니다.");
+                },
+                error: function(error){
+                    if('errors' in error['responseJSON']){
+                        toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
+                    } else {
+                        toastr.error(error['responseJSON']['message']);
+                    }
+                }
+            })
+        }
+
+    </script>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script th:src="@{/index/index.js}"></script>
+</th:block>
+
+</html>

@@ -56,7 +56,7 @@ public class CommonInquiryRestController {
      * @author 최겸준
      */
     @PostMapping(value = "/inquiry-answer", params = {"isProduct"})
-//    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String inquiryAnswerAdd(
         @Valid InquiryAnswerRequestDto inquiryAnswerAddRequestDto,
         @NotNull Boolean isProduct,
@@ -160,7 +160,7 @@ public class CommonInquiryRestController {
      */
     @ResponseBody
     @DeleteMapping(value = "/{inquiryNo}/manager", params = {"isProduct"})
-//    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public Map<String, String> inquiryDeleteByManager(@PathVariable Integer inquiryNo, Boolean isProduct,
                                          RedirectAttributes redirectAttributes) {
 

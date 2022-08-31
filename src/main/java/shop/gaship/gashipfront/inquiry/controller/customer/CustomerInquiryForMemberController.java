@@ -25,6 +25,7 @@ import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
 import shop.gaship.gashipfront.inquiry.service.customer.CustomerInquiryService;
+import shop.gaship.gashipfront.inquiry.util.RoleUserMySelfProcessor;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -61,7 +62,7 @@ public class CustomerInquiryForMemberController {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiriesByMemberNo(pageable, memberNo);
-
+        RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
 
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();

@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import shop.gaship.gashipfront.cart.service.CartService;
+import shop.gaship.gashipfront.security.basic.dto.SignInUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 
 /**
@@ -38,11 +41,10 @@ public class CartIdCheckAspect {
     public void getCatId() throws Throwable {
         String userId = null;
 
-        if (SecurityContextHolder.getContext().getAuthentication() instanceof UsernamePasswordAuthenticationToken) {
-            UserDetailsDto authentication =
-                (UserDetailsDto) SecurityContextHolder.getContext()
-                                                      .getAuthentication().getPrincipal();
-            userId = authentication.getMemberNo().toString();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal != "anonymousUser"){
+            UserDetailsDto userDetailsDto = (UserDetailsDto) principal;
+            userId = userDetailsDto.getMemberNo().toString();
         }
 
         HttpServletRequest request =

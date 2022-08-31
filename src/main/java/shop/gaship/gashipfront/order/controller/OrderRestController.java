@@ -2,15 +2,15 @@ package shop.gaship.gashipfront.order.controller;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.service.CartService;
-import shop.gaship.gashipfront.coupon.member.dto.CouponGenerationIssueDto;
+import shop.gaship.gashipfront.coupon.member.dto.response.UnusedMemberCouponResponseDto;
 import shop.gaship.gashipfront.coupon.member.service.CouponMemberService;
+import shop.gaship.gashipfront.order.dto.request.OrderRegisterRequestDto;
+import shop.gaship.gashipfront.order.dto.response.OrderResponseDto;
+import shop.gaship.gashipfront.order.service.OrderService;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 
 /**
@@ -23,22 +23,27 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 @RequiredArgsConstructor
 @RequestMapping("/rest/order")
 public class OrderRestController {
-
     private final CartService cartService;
     private final CouponMemberService couponMemberService;
+    private final OrderService orderService;
 
     @GetMapping("/products")
     public List<ProductResponseDto> orderProductList(
-        @AuthenticationPrincipal UserDetailsDto user) {
-        return cartService.getProductsFromCart(user.getMemberNo().toString());
+            @AuthenticationPrincipal UserDetailsDto user) {
+            return cartService.getProductsFromCart(user.getMemberNo().toString());
     }
 
     @GetMapping("/coupons")
-    public List<CouponGenerationIssueDto> unusedMemberCouponList(
-        @AuthenticationPrincipal UserDetailsDto user) {
-        return couponMemberService
-            .findCouponGenerationIssueUnusedUnexpiredByMemberNo(
-                PageRequest.of(0, Integer.MAX_VALUE), user.getMemberNo())
-            .getContent();
+    public List<UnusedMemberCouponResponseDto> unusedMemberCouponList(
+            @AuthenticationPrincipal UserDetailsDto user) {
+
+        return couponMemberService.getUnusedMemberCoupons(user.getMemberNo());
+    }
+
+    @PostMapping
+    public OrderResponseDto doOrder(@AuthenticationPrincipal UserDetailsDto user,
+                                    @RequestBody OrderRegisterRequestDto requestDto) {
+
+        return orderService.processOrder(user.getMemberNo(), requestDto);
     }
 }

@@ -41,7 +41,7 @@
                 </li>
               </ul>
               <li class="list-inline-item ml-auto">
-                <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
+                <a class="w-auto p-1 btn btn-sm btn-danger btn-lg" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
                   삭제
                 </a>
               </li>
@@ -52,7 +52,7 @@
     </div>
     <ul class="pagination">
       <li class="page-item" th:if="${reviews.previous}"><a class="page-link" th:href="@{''(page=${reviews.number - 1})}">Previous</a></li>
-      <span class="page-number" th:text="|${reviews.number + 1} / ${reviews.totalPages}|"></span>
+      <span class="page-number" th:text="|${reviews.number + 1} / ${reviews.totalPages}|" th:if="${reviews.totalPages > 0}"></span>
       <li class="page-item" th:if="${reviews.next}"><a class="page-link" th:href="@{''(page=${reviews.number + 1})}">Next</a></li>
     </ul>
   </div>

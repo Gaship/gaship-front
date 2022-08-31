@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 상품문의 목록</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
+</head>
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="row flex-md-nowrap">
+            <div role="main" class="container h5">
+                <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">상품문의 목록</h1>
+                <div class="card-body p-0">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width: auto">번호</th>
+                            <th style="width: auto">제목</th>
+                            <th style="width: auto">답변상태</th>
+                            <th style="width: auto">닉네임</th>
+                            <th style="width: auto">등록시간</th>
+                            <th style="width: auto"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${pageResponse.content}">
+                            <td th:text="${item.inquiryNo}"></td>
+                            <td>
+                                <a th:href="@{/inquiries/product-inquiries/{inquiryNo}(inquiryNo = ${item.inquiryNo})}"><span
+                                        th:text="${item.title}"></span></a>
+                            </td>
+                            <td th:text="${item.processStatus}"></td>
+                            <td th:text="${item.memberNickname}"></td>
+                            <td th:text="${item.registerDatetime}"></td>
+                            <td>
+                                <button th:if = "${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_MANAGER'')')}" style="width: auto; margin-left: 10px" class="btn btn-danger"
+                                        th:value="${item.inquiryNo}"
+                                        onclick="deleteInquiry(this)">삭제
+                                </button>
+                            <td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <script th:src="@{/inquiry/js/inquiry.js}"></script>
+            <script>
+                let whereUri = "product";
+                let isUser = false;
+            </script>
+        </div>
+    </div>
+    </div>
+</th:block>
+</html>
