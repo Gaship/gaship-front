@@ -161,5 +161,8 @@ public class CartServiceImpl implements CartService {
         return collect;
     }
 
-
+    @Override
+    public void deleteOrderedProductFromCart(String cartId) {
+        redisTemplate.delete(cartId);
+    }
 }

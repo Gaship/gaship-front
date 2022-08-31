@@ -102,12 +102,9 @@
             let jsondata = {
                 "tagIds": arr
             }
-            console.log(jsondata);
-            console.log(JSON.stringify(jsondata));
             $.ajax({
-                url: '/member-tag',
+                url: `/member-tag`,
                 method: "POST",
-                dataType: 'json',
                 data: JSON.stringify(jsondata),
                 contentType: 'application/json;charset=UTF-8',
                 beforeSend: function (xhr) {
@@ -115,6 +112,16 @@
                 },
                 success: function (data) {
                     toastr.success("태그 설정이 완료되었습니다.");
+                    location.reload(true);
+                },
+                error: function (error) {
+                    toastr.success("다시 로그인 해주세요");
+                    if ('errors' in error['responseJSON']) {
+                        toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
+                    } else {
+                        toastr.error(error['responseJSON']['message']);
+                    }
+                    location.reload(true);
                 }
             })
         }
