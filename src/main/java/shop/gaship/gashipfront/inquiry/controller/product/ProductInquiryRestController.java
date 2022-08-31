@@ -16,6 +16,7 @@ import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
 import shop.gaship.gashipfront.inquiry.service.product.ProductInquiryService;
+import shop.gaship.gashipfront.inquiry.util.RoleUserMySelfProcessor;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -43,9 +44,13 @@ public class ProductInquiryRestController {
      */
     @GetMapping(value = "/products/{productNo}")
     public PageResponse<InquiryListResponseDto> productInquiryProductList(
-        Pageable pageable, @PathVariable Integer productNo) {
+        Pageable pageable, @PathVariable Integer productNo,
+        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        PageResponse<InquiryListResponseDto> pageResponse =
+            productInquiryService.findProductInquiriesByProductNo(pageable, productNo);
+        RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
 
-        return productInquiryService.findProductInquiriesByProductNo(pageable, productNo);
+        return pageResponse;
     }
 
     /**

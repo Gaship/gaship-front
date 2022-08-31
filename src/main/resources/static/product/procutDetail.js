@@ -63,6 +63,22 @@ const inquiryRetrieve = pageNo => async (e) => {
     const memberName = document.createElement("h7");
     const star = document.createElement("h7");
     const date = document.createElement("h7");
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerText = '삭제';
+    deleteBtn.classList.add('btn', 'btn-danger');
+    deleteBtn.addEventListener('click', () => {
+      const token = document.getElementById("_csrf");
+      const tokenHeader = document.getElementById("_csrf_header");
+      fetch(`/js/inquiries/${inquiry.inquiryNo}?isProduct=true`, {
+        method : 'DELETE',
+        headers : {
+          'Content-Type':'application/json',
+          [`${tokenHeader.content}`] : token.content
+        }
+      }).then(() => {
+        location.reload();
+      });
+    });
 
     inquiryWrapper.classList.add("row", "justify-content-between");
     inquiryInfoWrapper.classList.add("row", "w-50", "justify-content-around");
@@ -75,7 +91,12 @@ const inquiryRetrieve = pageNo => async (e) => {
     memberName.innerText = '작성자 : ' + inquiry.memberNickname;
     star.innerText = '처리상태 : ' + inquiry.processStatus;
     date.innerText = '작성날짜 : ' + inquiry.registerDatetime;
+
+    if(inquiry.self){
+      inquiryInfoWrapper.append(deleteBtn, memberName, star, date);
+    }
     inquiryInfoWrapper.append(memberName, star, date);
+
     inquiryWrapper.append(title, inquiryInfoWrapper);
     productInquiry.append(inquiryWrapper);
   });
