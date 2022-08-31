@@ -17,7 +17,7 @@ public interface MemberTagAdapter {
      *
      * @param request 회원 id, 태그 id 리스트 가 담겨있는 객체
      */
-    void deleteAllAndAddAllMemberTags(MemberTagRequestDto request);
+    void deleteAllAndAddAllMemberTags(MemberTagRequestDto request,Integer memberNo);
 
     /**
      * 회원이 설정한 모든 태그를 가져오는 메서드.

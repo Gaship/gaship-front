@@ -17,7 +17,6 @@ import org.hibernate.validator.constraints.Length;
  * @since 1.0
  */
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class ProductModifyRequestDto {
     @Min(1)

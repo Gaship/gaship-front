@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="sidebar-fragment">
@@ -57,7 +58,7 @@
                     <a class="collapse-item" href="/order/reorder">반품관리</a>
                     <a class="collapse-item" href="/order/exxchange">교환관리</a>
                     <a class="collapse-item" href="/admin/reviews">구매평관리</a>
-                    <a class="collapse-item" href="/coupon">쿠폰</a>
+                    <a class="collapse-item" href="/admin/coupons/coupon-type">쿠폰</a>
                     <a class="collapse-item" href="/ship">배송관리</a>
                     <a class="collapse-item" href="/admin/categories">카테고리 관리</a>
 
@@ -73,8 +74,8 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <!--                    href에 컨트롤러 매핑 url 넣고 개발하시면 됩니다.현재는 상품관리 빼고 이상한 url이 매핑되어있습니다-->
                     <!--                    컨트롤러의 반환 값에는 각자 layout의 경로를 적으시면 됩니다.-->
-                    <a class="collapse-item" href="/inquiry">상품문의관리</a>
-                    <a class="collapse-item" href="/admin/order">고객문의관리</a>
+                    <a class="collapse-item" href="/admin/inquiries/product-inquiries">상품문의관리</a>
+                    <a class="collapse-item" href="/admin/inquiries/customer-inquiries">고객문의관리</a>
                 </div>
             </div>
         </li>
@@ -87,7 +88,7 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <!--                    href에 컨트롤러 매핑 url 넣고 개발하시면 됩니다.현재는 상품관리 빼고 이상한 url이 매핑되어있습니다-->
                     <!--                    컨트롤러의 반환 값에는 각자 layout의 경로를 적으시면 됩니다.-->
-                    <a class="collapse-item" href="/sales">매출</a>
+                    <a class="collapse-item" href="/admin/total-sale">매출</a>
                 </div>
             </div>
         </li>
@@ -103,7 +104,7 @@
                     <a class="collapse-item" href="/inquiry">태그관리</a>
                     <a class="collapse-item" href="/admin/address-local">배달제한지역관리</a>
                     <a class="collapse-item" href="/dayLabor">배달인원관리</a>
-                    <a class="collapse-item" href="/employee">직원관리</a>
+                    <a class="collapse-item" href="/admin/employees">직원관리</a>
                 </div>
             </div>
         </li>

@@ -11,6 +11,8 @@ import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,7 @@ import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
 import shop.gaship.gashipfront.inquiry.service.customer.CustomerInquiryService;
+import shop.gaship.gashipfront.inquiry.util.RoleUserMySelfProcessor;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -44,30 +47,25 @@ public class CustomerInquiryForMemberController {
      * 본인인 회원에 대한 고객문의목록 조회요청을 처리하는 기능입니다.
      *
      * @param model          view에서 처리되어야할 데이터를 저장하는 객체입니다.
-     * @param userDetailsDto 로그인된 사용자정보를 담고 있는 객체입니다.
      * @return 문의 목록을 보여주는 view name을 반환합니다.
      * @author 최겸준
      */
     @GetMapping(value = "/member-self/customer-inquiries")
-    public String customerInquiryMemberList(
-        Model model,
-        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    @Secured("ROLE_USER")
+    public String customerInquiryMemberList(Pageable pageable,
+                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto, Model model) {
 
-        model.addAttribute("memberNo", userDetailsDto.getMemberNo());
-        model.addAttribute("whereUri", "customer");
+        Integer memberNo = userDetailsDto.getMemberNo();
+        if (Objects.isNull(memberNo)) {
+            throw new MemberNotCreationException();
+        }
+
+        PageResponse<InquiryListResponseDto> pageResponse =
+            customerInquiryService.findCustomerInquiriesByMemberNo(pageable, memberNo);
+        RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
+
+        model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
         return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();
-    }
-
-    /**
-     * 고객문의를 추가하기 위한 추가페이지 조회 요청을 처리합니다.
-     *
-     * @return 고객문의 추가페이지에 대한 view name을 반환합니다.
-     * @author 최겸준
-     */
-    @GetMapping("/show-form/customer-inquiry-add")
-    public String customerInquiryAddForm() {
-
-        return VIEW_NAME_CUSTOMER_INQUIRY_ADD_FORM.getValue();
     }
 
     /**
@@ -78,12 +76,14 @@ public class CustomerInquiryForMemberController {
      * @author 최겸준
      */
     @PostMapping(value = "/customer-inquiry")
+    @Secured("ROLE_USER")
     public String customerInquiryAdd(@Valid InquiryAddRequestDto inquiryAddRequestDto,
                                      RedirectAttributes redirectAttributes,
                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         inquiryAddRequestDto.setIsProduct(CUSTOMER_INQUIRY.getValue());
         inquiryAddRequestDto.setMemberNo(userDetailsDto.getMemberNo());
+
         commonInquiryService.addInquiry(inquiryAddRequestDto);
 
         redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),

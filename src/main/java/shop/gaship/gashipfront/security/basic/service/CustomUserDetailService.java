@@ -7,15 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.config.ServerConfig;
 import shop.gaship.gashipfront.exceptions.NoResponseDataException;
-import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipfront.security.basic.dto.SignInUserDetailsDto;
 import shop.gaship.gashipfront.security.basic.exception.LoginDenyException;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
 /**
@@ -27,6 +27,7 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
  */
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
+
     private static final Duration TIMEOUT = Duration.ofSeconds(5);
     private static final String ERROR_MESSAGE = "정보가 존재하지않습니다.";
     private static final String SOCIAL_LOGIN_DENY_MESSAGE =
@@ -37,22 +38,30 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         List<String> contentTypeValues = List.of(MediaType.APPLICATION_JSON.toString());
 
-        ResponseEntity<SignInSuccessUserDetailsDto> userDetailsResponse =
+        SignInUserDetailsDto signInUserDetailsDto =
             WebClient.create(serverConfig.getGatewayUrl()).get()
-                .uri("/api/members/user-detail?email={email}", username)
-                .headers(httpHeaders -> {
-                    httpHeaders.put(HttpHeaders.CONTENT_TYPE, contentTypeValues);
-                    httpHeaders.put(HttpHeaders.ACCEPT, contentTypeValues);
-                })
-                .retrieve()
-                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                .toEntity(SignInSuccessUserDetailsDto.class)
-                .timeout(TIMEOUT)
-                .blockOptional()
-                .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE));
+                     .uri("/api/members/user-detail?email={email}", username)
+                     .headers(httpHeaders -> {
+                         httpHeaders.put(HttpHeaders.CONTENT_TYPE, contentTypeValues);
+                         httpHeaders.put(HttpHeaders.ACCEPT, contentTypeValues);
+                     })
+                     .retrieve()
+                     .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                     .toEntity(SignInUserDetailsDto.class)
+                     .timeout(TIMEOUT)
+                     .blockOptional()
+                     .orElseThrow(() -> new NoResponseDataException(ERROR_MESSAGE))
+                     .getBody();
 
-        SignInSuccessUserDetailsDto userDetails = userDetailsResponse.getBody();
-        boolean isSocialMember = Objects.requireNonNull(userDetails).isSocial();
+        UserDetailsDto userDetails =
+            new UserDetailsDto(
+                Objects.requireNonNull(signInUserDetailsDto).getEmail(),
+                signInUserDetailsDto.getHashedPassword(),
+                signInUserDetailsDto.getAuthorities(),
+                signInUserDetailsDto.getMemberNo(),
+                signInUserDetailsDto.getIsSocial());
+
+        boolean isSocialMember = Objects.requireNonNull(userDetails).getSocial();
 
         if (isSocialMember) {
             throw new LoginDenyException(SOCIAL_LOGIN_DENY_MESSAGE);

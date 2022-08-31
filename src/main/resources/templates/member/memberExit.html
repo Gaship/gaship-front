@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="UTF-8">
+    <title>회원탈퇴</title>
+</head>
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="row flex-md-nowrap">
+            <div class="w-25">
+                <th:block th:include="component/userDetailMenu"></th:block>
+            </div>
+            <div role="main" class="container h5">
+                <div class="media text-muted pt-3">
+                    <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                        <strong class="d-block text-gray-dark">회원탈퇴하기</strong>
+                    </p>
+                </div>
+                <div class="row justify-content-center mt-3">
+                    <button class="btn btn-danger mr-3 site-btn exit-btn">예</button>
+                    <a href="/">
+                        <button class="site-btn btn">아니오</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script src="/member/js/userDetailMenu.js"></script>
+    <script src="/member/js/userExit.js"></script>
+</th:block>
+</html>

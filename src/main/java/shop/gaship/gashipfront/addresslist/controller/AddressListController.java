@@ -64,7 +64,7 @@ public class AddressListController {
      * @author 최정우
      */
     @DeleteMapping("/{addressListNo}")
-    public String addressListRemove(@PathVariable Long memberNo,
+    public String addressListRemove(@PathVariable Integer memberNo,
                                     @PathVariable Long addressListNo,
                                     RedirectAttributes redirectAttributes) {
         redirectAttributes.addAttribute("memberNo", memberNo);
@@ -82,7 +82,7 @@ public class AddressListController {
      * @author 최정우
      */
     @GetMapping("/{addressListNo}")
-    public String addressListDetails(@PathVariable Long memberNo,
+    public String addressListDetails(@PathVariable Integer memberNo,
                                      @PathVariable Long addressListNo,
                                      RedirectAttributes redirectAttributes,
                                      Model model) {
@@ -102,7 +102,7 @@ public class AddressListController {
      * @author 최정우
      */
     @GetMapping
-    public String addressLists(@PathVariable Long memberNo,
+    public String addressLists(@PathVariable Integer memberNo,
                                Pageable pageable,
                                RedirectAttributes redirectAttributes,
                                Model model) {

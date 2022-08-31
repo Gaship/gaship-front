@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -88,60 +89,72 @@ public class CouponAdminController {
     }
 
     @GetMapping("/coupon-type")
-    public String couponTypeList(Pageable pageable, Model model) {
+    public String couponTypeList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse = couponAdminService.findCouponTypeList(pageable);
 
-        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+        pagingProcessing(model, couponTypeDtoPageResponse, pageable);
+
+        model.addAttribute("uri", "/admin/coupons/coupon-type");
 
         return "coupon/admin/couponTypeList";
     }
 
     @GetMapping("/coupon-type/delete-can")
-    public String couponTypeCanDeleteList(Pageable pageable, Model model) {
+    public String couponTypeCanDeleteList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse =
             couponAdminService.findCouponTypeCanDeleteList(pageable);
 
-        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+        pagingProcessing(model, couponTypeDtoPageResponse, pageable);
+
+        model.addAttribute("uri", "/admin/coupons/coupon-type/delete-can");
 
         return "coupon/admin/couponTypeDeleteList";
     }
 
     @GetMapping("/coupon-type/delete-cannot")
-    public String couponTypeCannotDeleteList(Pageable pageable, Model model) {
+    public String couponTypeCannotDeleteList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse =
             couponAdminService.findCouponTypeCannotDeleteList(pageable);
 
-        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+        pagingProcessing(model, couponTypeDtoPageResponse, pageable);
+
+        model.addAttribute("uri", "/admin/coupons/coupon-type/delete-cannot");
 
         return "coupon/admin/couponTypeList";
     }
 
     @GetMapping("/coupon-type/fixed-amount")
-    public String couponTypeFixedAmountList(Pageable pageable, Model model) {
+    public String couponTypeFixedAmountList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse =
             couponAdminService.findCouponTypeFixedAmountList(pageable);
 
-        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+        pagingProcessing(model, couponTypeDtoPageResponse, pageable);
+
+        model.addAttribute("uri", "/admin/coupons/coupon-type/fixed-amount");
 
         return "coupon/admin/couponTypeList";
     }
 
     @GetMapping("/coupon-type/fixed-rate")
-    public String couponTypeFixedRateList(Pageable pageable, Model model) {
+    public String couponTypeFixedRateList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse =
             couponAdminService.findCouponTypeFixedRateList(pageable);
 
-        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+        pagingProcessing(model, couponTypeDtoPageResponse, pageable);
+
+        model.addAttribute("uri", "/admin/coupons/coupon-type/fixed-rate");
 
         return "coupon/admin/couponTypeList";
     }
 
     @GetMapping("/coupon-type/recommend")
-    public String couponTypeRecommendList(Pageable pageable, Model model) {
+    public String couponTypeRecommendList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<CouponTypeDto> couponTypeDtoPageResponse =
             couponAdminService.findCouponTypeRecommend(pageable);
 
-        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+        pagingProcessing(model, couponTypeDtoPageResponse, pageable);
+
+        model.addAttribute("uri", "/admin/coupons/coupon-type/recommend");
 
         return "coupon/admin/couponTypeList";
     }
@@ -186,6 +199,18 @@ public class CouponAdminController {
         couponAdminService.generateAndIssueCoupon(couponGenerationIssueCreationRequestDto);
 
         return "redirect:/admin/coupons/coupon-type";
+    }
+
+    private void pagingProcessing(Model model, PageResponse<CouponTypeDto> couponTypeDtoPageResponse,
+        Pageable pageable) {
+        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+
+        model.addAttribute("next", couponTypeDtoPageResponse.isNext());
+        model.addAttribute("previous", couponTypeDtoPageResponse.isPrevious());
+        model.addAttribute("totalPage", couponTypeDtoPageResponse.getTotalPages());
+        model.addAttribute("pageNum", couponTypeDtoPageResponse.getNumber() + 1);
+        model.addAttribute("previousPageNo", pageable.getPageNumber() - 1);
+        model.addAttribute("nextPageNo", pageable.getPageNumber() + 1);
     }
 
 }

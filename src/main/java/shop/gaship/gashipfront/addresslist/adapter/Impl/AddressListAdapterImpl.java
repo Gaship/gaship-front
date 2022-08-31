@@ -63,7 +63,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void deleteAddressList(Long memberNo, Long addressListNo) {
+    public void deleteAddressList(Integer memberNo, Long addressListNo) {
         webClient.delete()
                 .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
@@ -77,7 +77,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
      * {@inheritDoc}
      */
     @Override
-    public AddressListResponseDto findAddressList(Long memberNo, Long addressListNo) {
+    public AddressListResponseDto findAddressList(Integer memberNo, Long addressListNo) {
         return webClient.get()
                 .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
@@ -91,7 +91,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable) {
+    public PageResponse<AddressListResponseDto> findAddressLists(Integer memberNo, Pageable pageable) {
         return webClient.get()
                 .uri("/api/members/{memberNo}/addressLists", memberNo)
                 .retrieve()

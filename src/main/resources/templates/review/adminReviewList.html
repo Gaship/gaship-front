@@ -30,14 +30,16 @@
             <p th:text="${review.content}"></p>
 
             <ul class="list-inline d-sm-flex my-0">
-              <li class="list-inline-item g-mr-20">
-                <i class="fa fa-star g-pos-rel g-top-1 g-mr-3"></i>
-                <span th:text="${review.starScore}"></span>
-              </li>
-              <li class="list-inline-item g-mr-20">
-                <i class="fa fa-tag g-pos-rel g-top-1 g-mr-3"></i>
-                <span th:text="${review.productName}"></span>
-              </li>
+              <ul class="list-inline d-sm-flex my-0">
+                <li class="list-inline-item g-mr-20" th:each="i : ${#numbers.sequence(0, 4)}">
+                  <i th:if="${i < review.starScore}" class="fa fa-star g-pos-rel g-top-1 g-mr-3"></i>
+                  <i th:unless="${i < review.starScore}" class="fa fa-star-o g-pos-rel g-top-1 g-mr-3"></i>
+                </li>
+                <li class="list-inline-item g-mr-20">
+                  <i class="fa fa-tag g-pos-rel g-top-1 g-mr-3"></i>
+                  <span th:text="${review.productName}"></span>
+                </li>
+              </ul>
               <li class="list-inline-item ml-auto">
                 <a class="u-link-v5 g-color-gray-dark-v4 g-color-primary--hover" th:href="@{|/reviews/${review.orderProductNo}/remove|}">
                   삭제

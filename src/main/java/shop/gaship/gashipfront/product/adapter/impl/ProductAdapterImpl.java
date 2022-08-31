@@ -1,5 +1,7 @@
 package shop.gaship.gashipfront.product.adapter.impl;
 
+import static org.springframework.http.MediaType.parseMediaType;
+
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
@@ -37,34 +40,45 @@ public class ProductAdapterImpl implements ProductAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void productAdd(List<MultipartFile> files, ProductCreateRequestDto createRequest) {
+    public void productAdd(List<MultipartFile> multipartFiles,
+                           ProductCreateRequestDto createRequest) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        files.forEach(file -> builder.part("image", file));
+
+        multipartFiles.forEach(multipartFile ->
+                builder.part("image", multipartFile.getResource(),
+                parseMediaType(Objects.requireNonNull(multipartFile.getContentType()))));
         builder.part("createRequest", createRequest, MediaType.APPLICATION_JSON);
 
         webClient.post()
             .uri(REQUEST_URI)
             .contentType(MediaType.MULTIPART_FORM_DATA)
-            .bodyValue(builder.build())
+            .body(BodyInserters.fromMultipartData(builder.build()))
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void productModify(List<MultipartFile> files, ProductModifyRequestDto modifyRequest) {
+    public void productModify(List<MultipartFile> multipartFiles, ProductModifyRequestDto modifyRequest) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        files.forEach(file -> builder.part("image", file));
+
+        multipartFiles.forEach(multipartFile ->
+                builder.part("image", multipartFile.getResource(),
+                        parseMediaType(Objects.requireNonNull(multipartFile.getContentType()))));
         builder.part("modifyRequest", modifyRequest, MediaType.APPLICATION_JSON);
 
         webClient.put()
             .uri(REQUEST_URI + "/{productNo}", modifyRequest.getNo())
             .contentType(MediaType.MULTIPART_FORM_DATA)
-            .bodyValue(builder.build())
+            .body(BodyInserters.fromMultipartData(builder.build()))
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     /**
@@ -77,7 +91,9 @@ public class ProductAdapterImpl implements ProductAdapter {
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(modifyRequest)
             .retrieve()
-            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono);
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(Void.class)
+            .block();
     }
 
     /**
@@ -168,10 +184,10 @@ public class ProductAdapterImpl implements ProductAdapter {
                                                                        Pageable pageable) {
         return webClient.get()
             .uri(uriBuilder -> uriBuilder
-                .path(REQUEST_URI + "/category/{categoryNo}")
+                .path(REQUEST_URI + "/category/" + categoryNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
-                .build(categoryNo))
+                .build())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(
