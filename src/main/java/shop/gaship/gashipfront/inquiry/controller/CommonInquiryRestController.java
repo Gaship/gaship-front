@@ -40,7 +40,7 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
  * @author 최겸준
  * @since 1.0
  */
-@Controller
+@RestController
 @RequestMapping("/js/inquiries")
 @RequiredArgsConstructor
 public class CommonInquiryRestController {
@@ -49,41 +49,12 @@ public class CommonInquiryRestController {
     private static final String REDIRECT_URI_FORMAT_MANAGER = "/admin/inquiries/%s-inquiries/";
 
     /**
-     * 관리자가 문의의 답변을 추가하기 위한 요청을 처리합니다.
-     *
-     * @param inquiryAnswerAddRequestDto 문의답변에 들어가야할 정보들을 가지는 DTO 객체입니다.
-     * @return view 경로를 반환합니다.
-     * @author 최겸준
-     */
-    @PostMapping(value = "/inquiry-answer", params = {"isProduct"})
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
-    public String inquiryAnswerAdd(
-        @Valid InquiryAnswerRequestDto inquiryAnswerAddRequestDto,
-        @NotNull Boolean isProduct,
-        @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-        RedirectAttributes redirectAttributes) {
-
-        inquiryAnswerAddRequestDto.setEmployeeNo(userDetailsDto.getMemberNo());
-        commonInquiryService.addInquiryAnswer(inquiryAnswerAddRequestDto);
-
-        redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),
-            VALUE_MESSAGE_INQUIRY_ANSWER_ADD_SUCCESS.getValue());
-
-        String redirectUri = getRedirectUri(isProduct, "/inquiries/%s-inquiries/");
-        String inquiryNo = inquiryAnswerAddRequestDto.getInquiryNo().toString();
-
-        redirectUri = Strings.concat(redirectUri, inquiryNo);
-        return Strings.concat("redirect:", redirectUri);
-    }
-
-    /**
      * 관리자가 문의의 답변을 수정하기 위한 요청을 처리합니다.
      *
      * @param inquiryAnswerModifyRequestDto 문의답변에 들어가야할 정보들을 가지는 DTO 객체입니다.
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @ResponseBody
     @PutMapping(value = "/{inquiryNo}/inquiry-answer", params = {"isProduct"})
     public String inquiryAnswerModify(@Valid InquiryAnswerRequestDto inquiryAnswerModifyRequestDto,
                                       @NotNull Boolean isProduct,
@@ -105,7 +76,6 @@ public class CommonInquiryRestController {
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @ResponseBody
     @DeleteMapping(value = "/{inquiryNo}/inquiry-answer", params = {"isProduct"})
     public String inquiryAnswerDelete(@PathVariable @NotNull Integer inquiryNo,
                                       @NotNull Boolean isProduct,
@@ -127,13 +97,13 @@ public class CommonInquiryRestController {
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @ResponseBody
     @DeleteMapping(value = "/{inquiryNo}", params = {"isProduct"})
     @Secured("ROLE_USER")
     public Map<String, String> inquiryDeleteByMemberSelf(@PathVariable Integer inquiryNo,
                                                          Boolean isProduct,
                                                          RedirectAttributes redirectAttributes,
                                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
         Integer memberNo = userDetailsDto.getMemberNo();
         if (Objects.isNull(memberNo)) {
             throw new MemberNotCreationException();
@@ -158,7 +128,6 @@ public class CommonInquiryRestController {
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @ResponseBody
     @DeleteMapping(value = "/{inquiryNo}/manager", params = {"isProduct"})
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public Map<String, String> inquiryDeleteByManager(@PathVariable Integer inquiryNo, Boolean isProduct,
