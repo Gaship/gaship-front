@@ -1,0 +1,79 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta charset="UTF-8">
+    <title>products</title>
+</head>
+<th:block layout:fragment="content">
+    <div class="container-fluid">
+        <h1 class="h3 mb-2 text-gray-800">상품관리</h1>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">상품 목록</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row">
+                        <div class="col-sm-12 col-md-6"><div class="dataTables_length" id="dataTable_length">
+                            <a class="w-auto p-1 mb-2 btn btn-primary btn-lg review-btn" href="/products/add">상품 등록</a>
+                        </div></div>
+                        <div class="col-sm-12 col-md-6"><div class="dataTables_filter">
+<!--                            <label>코드로 검색:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label>-->
+                        </div></div></div>
+                        <div class="row">
+                    <div class="col-sm-12">
+                            <table class="table table-bordered dataTable" id="dataTable" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">대표이미지</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">상품명</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">카테고리</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">배송형태</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">상품상태</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">등록일</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">수정</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">재고량</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="product : ${products.content}">
+                                    <td><img class="w-100" th:src="${product.filePaths.get(0)}"/></td>
+                                    <td th:text="${product.productName}"></td>
+                                    <td th:text="${product.categoryName}"></td>
+                                    <td th:text="${product.deliveryType}"></td>
+                                    <td>
+                                        <select name="salesStatus" id="salesStatus" class="form-select" onchange="changeSalesStatus(this)">
+                                            <option class="option" th:selected="${#strings.equals(salesStatus.statusCodeName, product.salesStatus)}" th:each="salesStatus : ${salesStatusList}" th:value="${#strings.concat(product.productNo, '=', salesStatus.statusCodeName)}" th:text="${salesStatus.statusCodeName}"></option>
+                                        </select>
+                                    </td>
+                                    <td th:text="${product.dateTime}"></td>
+                                    <td><a class="w-auto p-1 btn btn-sm btn-secondary btn-lg review-btn" th:href="@{|/products/modify?productNo=${product.productNo}|}">
+                                        수정
+                                    </a></td>
+                                    <td th:text="${product.quantity}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <ul class="pagination">
+                                <li class="page-item mr-3" th:if="${products.previous}"><a class="page-link" th:href="@{''(page=${products.number - 1})}">Previous</a></li>
+                                <span class="page-number pt-1" th:text="|${products.number + 1} / ${products.totalPages}|" th:if="${products.totalPages > 0}"></span>
+                                <li class="page-item ml-3" th:if="${products.next}"><a class="page-link" th:href="@{''(page=${products.number + 1})}">Next</a></li>
+                            </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script src="/product/adminProductList.js"></script>
+</th:block>
+</html>

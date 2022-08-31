@@ -4,7 +4,6 @@ package shop.gaship.gashipfront.product.dto.response;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 상품을 가져올 정보들이 담겨있습니다.
@@ -31,6 +30,7 @@ public class ProductAllInfoResponseDto {
     private String explanation;
     private Integer level;
     private String deliveryType;
+    private String salesStatus;
     private String upperName;
     private List<String> tags;
     private List<String> filePaths;

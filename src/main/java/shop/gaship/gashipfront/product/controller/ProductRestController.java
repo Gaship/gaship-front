@@ -2,9 +2,12 @@ package shop.gaship.gashipfront.product.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -28,5 +31,10 @@ public class ProductRestController {
         @RequestParam(value = "min-amount", required = false)String minAmount,
         @RequestParam(value = "max-amount", required = false)String maxAmount) {
         return productService.productAllInfoByPageable(page, size, category, minAmount, maxAmount);
+    }
+
+    @PostMapping("/sales-status")
+    public void modifySalesStatus(@RequestBody SalesStatusModifyRequestDto salesStatusModifyRequest) {
+        productService.modifySalesStatus(salesStatusModifyRequest);
     }
 }
