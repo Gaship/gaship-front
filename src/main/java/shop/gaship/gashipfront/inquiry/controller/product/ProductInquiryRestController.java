@@ -1,11 +1,14 @@
 package shop.gaship.gashipfront.inquiry.controller.product;
 
+import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryAttribute.KEY_PAGE_RESPONSE;
 import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryType.PRODUCT_INQUIRY;
+import static shop.gaship.gashipfront.inquiry.inquiryenum.InquiryViewName.VIEW_NAME_PRODUCT_INQUIRY_LIST;
 
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,5 +71,25 @@ public class ProductInquiryRestController {
         inquiryAddRequestDto.setIsProduct(PRODUCT_INQUIRY.getValue());
 
         commonInquiryService.addInquiry(inquiryAddRequestDto);
+    }
+
+    /**
+     * 관리자 또는 회원이 상품상세페이지에서 해당하는 상품에 대한 상품문의목록 조회요청을 처리하는 기능입니다.
+     *
+     * @param pageable  페이지네이션에 맞게 조회하기 위한 정보를 담고있는 객체입니다.
+     * @param productNo 기준이 되는 상품의 식별번호입니다.
+     * @return 문의 목록을 보여주는 view name을 반환합니다.
+     * @author 최겸준
+     */
+    @GetMapping(value = "/product/{productNo}")
+    public PageResponse<InquiryListResponseDto> productInquiryProductList(
+        Pageable pageable, @PathVariable Integer productNo,
+        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        PageResponse<InquiryListResponseDto> pageResponse =
+            productInquiryService.findProductInquiriesByProductNo(pageable, productNo);
+
+        RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
+        return pageResponse;
     }
 }

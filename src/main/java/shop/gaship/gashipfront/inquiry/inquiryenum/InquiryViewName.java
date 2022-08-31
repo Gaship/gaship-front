@@ -16,7 +16,9 @@ public enum InquiryViewName {
     VIEW_NAME_PRODUCT_INQUIRY_ADD_FORM("inquiry/productInquiryAddForm"), // 사용자
 
     VIEW_NAME_CUSTOMER_INQUIRY_DETAILS("inquiry/customerInquiryDetails"), // 사용자, 관리자
-    VIEW_NAME_PRODUCT_INQUIRY_DETAILS("inquiry/productInquiryDetails"); // 사용자, 관리자
+    VIEW_NAME_PRODUCT_INQUIRY_DETAILS("inquiry/productInquiryDetails"),
+    VIEW_NAME_CUSTOMER_INQUIRY_DETAILS_ADMIN("inquiryadmin/customerInquiryDetailsAdmin"),
+    VIEW_NAME_PRODUCT_INQUIRY_DETAILS_ADMIN("inquiryadmin/productInquiryDetailsAdmin"); // 사용자, 관리자
 
     private String value;
 
