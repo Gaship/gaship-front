@@ -117,6 +117,7 @@ public class ProductInquiryForMemberController {
 
         redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),
             VALUE_MESSAGE_PRODUCT_INQUIRY_ADD_SUCCESS.getValue());
-        return "redirect:/inquiries/member-self/product-inquiries/";
+
+        return "redirect:/products/" + inquiryAddRequestDto.getProductNo();
     }
 }
