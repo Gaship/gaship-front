@@ -49,7 +49,7 @@ public class OrderProductController {
     }
 
     @GetMapping("/{orderProductNo}/details")
-    public String findOrderProductOrderProductNo(@PathVariable(value = "orderProductNum") Integer orderProductNo,
+    public String findOrderProductOrderProductNo(@PathVariable(value = "orderProductNo") Integer orderProductNo,
         @AuthenticationPrincipal UserDetailsDto userDetailsDto, Model model) {
         OrderProductDetailResponseDto orderProductDetailResponseDto =
             orderProductService.findOrderProductDetail(orderProductNo, userDetailsDto.getMemberNo());
