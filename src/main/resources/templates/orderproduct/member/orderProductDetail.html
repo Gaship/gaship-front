@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 내역 리스트</title>
+</head>
+<th:block layout:fragment="content">
+
+        <!-- Page Heading -->
+        <div class="card">
+            <div class="card-header"><h1 class="h3 mb-2 text-gray-800">주문 상세 내역</h1></div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="product__details__pic">
+                                <div class="product__details__pic__item">
+                                    <img class="product__details__pic__item--large" th:src="${orderProductDetail.filePath}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <div class="product__details__text">
+                     가           <h3 th:text="${orderProductDetail.productName}"></h3>
+                                <div class="product__details__price"
+                                     th:text="${'₩' + orderProductDetail.totalOrderAmount}"></div>
+                                <ul>
+                                    <li><b>주문번호</b> <span><samp th:text="${orderProductDetail.orderNo}"></samp></span></li>
+                                    <li><b>배송유형</b> <span><samp
+                                            th:text="${orderProductDetail.orderProductStatus}"></samp></span></li>
+                                    <li><b>배송번호 </b> <span><samp th:text="${orderProductDetail.trackingNo}"></samp></span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="product__details__tab">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item ">
+                                        <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                                           aria-selected="true">상품 정보/설명</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                        <div class="product__details__tab__desc">
+                                            <h6>상품정보 및 설명</h6>
+                                            <p>이름 : <span th:text="${orderProductDetail.productName}"></span></p>
+                                            <p>제조사 : <span th:text="${orderProductDetail.manufacturer}"></span></p>
+                                            <p>제조국 : <span th:text="${orderProductDetail.manufacturerCountry}"></span></p>
+                                            <p>판매자 : <span th:text="${orderProductDetail.seller}"></span></p>
+                                            <p>수입자 : <span th:text="${orderProductDetail.importer}"></span></p>
+                                            <p>품질보증 : <span th:text="${orderProductDetail.qualityAssuranceStandard}"></span></p>
+                                            <p>색상 : <span th:text="${orderProductDetail.color}"></span></p>
+                                        </div>
+                                        <div>
+                                            <p>상품설명 : <span th:text="${orderProductDetail.explanation}"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</th:block>
+</html>

@@ -2,6 +2,7 @@ package shop.gaship.gashipfront.coupon.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +33,7 @@ public class CouponMemberController {
     }
 
     @GetMapping("/coupon-generation-issues/member")
-    public String couponGenerationIssueByMemberNoList(Pageable pageable, Model model,
+    public String couponGenerationIssueByMemberNoList(@PageableDefault Pageable pageable, Model model,
         @ModelAttribute("user") Integer memberNo) {
         PageResponse<CouponGenerationIssueDto> couponTypeDtoPageResponse =
             couponMemberService.findCouponGenerationIssueByMemberNo(pageable, memberNo);
@@ -47,7 +48,7 @@ public class CouponMemberController {
     }
 
     @GetMapping("/coupon-generation-issues/member/used-coupons")
-    public String couponGenerationIssueUsedByMemberNoList(Pageable pageable, Model model,
+    public String couponGenerationIssueUsedByMemberNoList(@PageableDefault Pageable pageable, Model model,
         @ModelAttribute("user") Integer memberNo) {
         PageResponse<CouponGenerationIssueDto> couponTypeDtoPageResponse =
             couponMemberService.findCouponGenerationIssueUsedByMemberNo(pageable, memberNo);
@@ -62,7 +63,7 @@ public class CouponMemberController {
     }
 
     @GetMapping("/coupon-generation-issues/member/unused-coupons")
-    public String couponGenerationIssueUnusedByMemberNoList(Pageable pageable, Model model,
+    public String couponGenerationIssueUnusedByMemberNoList(@PageableDefault Pageable pageable, Model model,
         @ModelAttribute("user") Integer memberNo) {
         PageResponse<CouponGenerationIssueDto> couponTypeDtoPageResponse =
             couponMemberService.findCouponGenerationIssueUnusedByMemberNo(pageable, memberNo);
@@ -77,7 +78,7 @@ public class CouponMemberController {
     }
 
     @GetMapping("/coupon-generation-issues/member/unused-coupons/expired-coupons")
-    public String couponGenerationIssueUnusedExpiredByMemberNoList(Pageable pageable, Model model,
+    public String couponGenerationIssueUnusedExpiredByMemberNoList(@PageableDefault Pageable pageable, Model model,
         @ModelAttribute("user") Integer memberNo) {
         PageResponse<CouponGenerationIssueDto> couponTypeDtoPageResponse =
             couponMemberService.findCouponGenerationIssueUnusedExpiredByMemberNo(pageable, memberNo);
@@ -92,7 +93,7 @@ public class CouponMemberController {
     }
 
     @GetMapping("/coupon-generation-issues/member/unused-coupons/unexpired-coupons")
-    public String couponGenerationIssueUnusedUnexpiredByMemberNoList(Pageable pageable, Model model,
+    public String couponGenerationIssueUnusedUnexpiredByMemberNoList(@PageableDefault Pageable pageable, Model model,
         @ModelAttribute("user") Integer memberNo) {
         PageResponse<CouponGenerationIssueDto> couponTypeDtoPageResponse =
             couponMemberService.findCouponGenerationIssueUnusedUnexpiredByMemberNo(pageable, memberNo);
