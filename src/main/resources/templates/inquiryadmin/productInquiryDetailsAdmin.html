@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>상품문의 상세조회</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
+</head>
+<th:block layout:fragment="content">
+    <div class="container">
+        <div role="main" class="container h5">
+            <h1 th:text="${'상품문의 상세조회 [' + details.processStatus + ']'}"></h1>
+            <div class="card-content">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">글 번호</label>
+                    <div class="col-sm-10">
+                        <p class="form-control" th:text="${details.inquiryNo}"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">닉네임</label>
+                    <div class="col-sm-10">
+                        <p class="form-control" th:text="${details.memberNickname}"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">문의 등록일</label>
+                    <div class="col-sm-10">
+                        <p class="form-control" th:text="${details.registerDatetime}"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">상품명</label>
+                    <div class="col-sm-10">
+                        <a class="form-control" style="color: blue"
+                           th:href="@{/products/{productNo}(productNo = ${details.productNo})}"
+                           th:text="${details.productName}"></a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">제목</label>
+                    <div class="col-sm-10">
+                        <p class="form-control" th:text="${details.title}"></p>
+                    </div>
+                </div>
+
+
+                <div class="form-group" style="height: 30vh">
+                    <span class="col-sm-2 control-label">내용</span>
+                    <div class="col-sm-10 h-100">
+                        <textarea readonly class="form-control h-100" th:text="${details.inquiryContent}"></textarea>
+                    </div>
+                </div>
+
+                <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
+                    <form action="/js/inquiries/inquiry-answer?isProduct=true" method="POST"
+                          th:if="${#strings.equals(details.processStatus, '답변대기')}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input name="inquiryNo" type="hidden" th:value="${details.inquiryNo}">
+                        <textarea name="answerContent" class="form-control ml-2 mt-5" style="height: 30vh"></textarea>
+                        <input class="btn btn-outline-primary ml-2 mt-3" type="submit" value="답변등록">
+                    </form>
+                </th:block>
+
+                <button style="width: auto; margin-left: 10px"
+                        class="btn btn-danger mt-3" th:value="${details.inquiryNo}"
+                        onclick="deleteInquiry(this)">문의삭제
+                </button>
+            </div>
+
+            <div class="box-content mt-5" th:if="${#strings.equals(details.processStatus, '답변완료')}">
+                <div class="card-content">
+                    <div class="clearfix ml-3">
+                        <h4 class="box-title pull-left">Answer</h4>
+                    </div>
+                    <form class="form-group">
+                        <div class="form-group">
+                            <span class="col-sm-2 control-label">직원</span>
+                            <div class="col-sm-10 h-100">
+                                <p class="form-control" th:text="${details.employeeName}"></p>
+                            </div>
+                        </div>
+                        <div class="form-group" style="height: 30vh">
+                            <span class="col-sm-2 control-label">내용</span>
+                            <div class="col-sm-10 h-100">
+                                <textarea readonly class="form-control h-100"
+                                          th:text="${details.answerContent}"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-5">
+                            <span class="col-sm-2 control-label">답변등록시간</span>
+                            <div class="col-sm-10 h-100">
+                                <p class="form-control" th:text="${details.answerRegisterDatetime}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="col-sm-2 control-label">답변수정시간</span>
+                            <div class="col-sm-10 h-100">
+                                <p class="form-control" th:text="${details.answerModifyDatetime}"></p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <th:block sec:authorize="hasRole('ROLE_USER')">
+                <a href="/inquiries/member-self/product-inquiries" style="width: auto; margin-left: 10px" type="button"
+                   class="btn btn-outline-primary mt-3">마이페이지 상품문의 목록</a>
+            </th:block>
+
+            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+                <a href="/admin/inquiries/product-inquiries" style="width: auto; margin-left: 10px" type="button"
+                   class="btn btn-outline-primary mt-3">관리자 상품문의 목록</a>
+            </th:block>
+
+            <script th:src="@{/inquiry/js/inquiry.js}"></script>
+            <script th:inline="javascript">
+                let whereUri = "product";
+                let isUser = false;
+            </script>
+        </div>
+    </div>
+</th:block>
+</html>
