@@ -14,6 +14,7 @@ import shop.gaship.gashipfront.orderproduct.dto.response.DeliveryInfoResponseDto
 import shop.gaship.gashipfront.orderproduct.dto.response.OrderProductDetailResponseDto;
 import shop.gaship.gashipfront.orderproduct.dto.response.OrderProductResponseDto;
 import shop.gaship.gashipfront.orderproduct.service.OrderProductService;
+import shop.gaship.gashipfront.productreview.service.ProductReviewService;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -27,6 +28,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class OrderProductController {
 
     private final OrderProductService orderProductService;
+    private final ProductReviewService productReviewService;
 
     @GetMapping
     public String findOrderProductListByMemberNo(@PageableDefault Pageable pageable, Model model,
@@ -34,7 +36,11 @@ public class OrderProductController {
         PageResponse<OrderProductResponseDto> orderProductResponseDtoPageResponse =
             orderProductService.findOrderProductListByMemberNo(pageable, userDetailsDto.getMemberNo());
 
-        model.addAttribute("orderProductList", orderProductResponseDtoPageResponse.getContent());
+        List<OrderProductResponseDto> content = orderProductResponseDtoPageResponse.getContent();
+        content.forEach(orderProduct -> orderProduct.setExistsReview(
+                productReviewService.isExist(orderProduct.getOrderProductNo())));
+
+        model.addAttribute("orderProductList", content);
 
         model.addAttribute("next", orderProductResponseDtoPageResponse.isNext());
         model.addAttribute("previous", orderProductResponseDtoPageResponse.isPrevious());

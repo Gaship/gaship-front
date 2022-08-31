@@ -57,4 +57,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
                                                                       Pageable pageable) {
         return productReviewAdapter.productReviewListByMember(memberNo, pageable);
     }
+
+    @Override
+    public Boolean isExist(Integer orderProductNo) {
+        return productReviewAdapter.productReviewExists(orderProductNo).getIsExist();
+    }
 }

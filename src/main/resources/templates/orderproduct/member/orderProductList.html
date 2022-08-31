@@ -37,6 +37,12 @@
     </style>
 </head>
 <th:block layout:fragment="content">
+    <div class="container">
+        <div class="row flex-md-nowrap">
+            <div class="w-25">
+                <th:block th:include="component/userDetailMenu"></th:block>
+            </div>
+            <div role="main" class="container h5">
     <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
         <div class="row">
             <div class="col-sm-12 col-md-6">
@@ -47,9 +53,9 @@
            position: relative;
            width: 100%;">
                 <div class="col-sm-12">
-                    <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0"
+                    <table class="table table-sm table-bordered dataTable" id="dataTable" width="100%" cellspacing="0"
                            role="grid"
-                           aria-describedby="dataTable_info" style="width: 100%;">
+                           aria-describedby="dataTable_info" style="width: 100%;font-size: 10px;">
                         <thead>
                         <tr role="row">
                             <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1"
@@ -57,26 +63,29 @@
                                 aria-sort="ascending" aria-label="주문 번호">
                                 주문 번호
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
                                 aria-label="이름">이름
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
                                 aria-label="총 금액">총 금액
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
                                 aria-label="주문 일자">주문 일자
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
                                 aria-label="수령인">수령인
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
                                 aria-label="수령인 번호">수령인 번호
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
                                 aria-label="배송 상태">배송 상태
                             </th>
-                            <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
                                 aria-label="운송장 번호 (배송 위치 정보 조회하기)">운송장 번호 (배송 위치 정보 조회하기)
+                            </th>
+                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                                aria-label="상품평 작성">상품평 작성
                             </th>
                         </tr>
                         </thead>
@@ -99,6 +108,12 @@
                                     <a th:href="@{/orderProduct.trackingNo}"></a>
                                 </th:block>
                             </td>
+                            <td>
+                                <a style="font-size: 10px" class="w-auto p-1 btn btn-sm btn-primary btn-lg " th:href="@{|/reviews/${orderProduct.orderProductNo}/add|}" th:unless="${orderProduct.existsReview}">
+                                    작성
+                                </a>
+                                <p style="font-size: 10px" th:if="${orderProduct.existsReview}" class="">작성완료</p>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -109,5 +124,11 @@
             </th:block>
         </div>
     </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script src="/member/js/userDetailMenu.js"></script>
 </th:block>
 </html>

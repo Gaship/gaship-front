@@ -21,4 +21,5 @@ public interface ProductReviewService {
     PageResponse<ProductReviewResponseDto> findReviewsByProduct(Integer productNo,
                                                                 Pageable pageable);
     PageResponse<ProductReviewResponseDto> findReviewsByMember(Integer memberNo, Pageable pageable);
+    Boolean isExist(Integer orderProductNo);
 }
