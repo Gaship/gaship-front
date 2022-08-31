@@ -87,7 +87,7 @@ public class ProductAdapterImpl implements ProductAdapter {
     @Override
     public void salesStatusModify(SalesStatusModifyRequestDto modifyRequest) {
         webClient.put()
-            .uri(REQUEST_URI + "/{productNo}/salesStatus", modifyRequest.getProductNo())
+            .uri(REQUEST_URI + "/{productNo}/sales-status", modifyRequest.getProductNo())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(modifyRequest)
             .retrieve()

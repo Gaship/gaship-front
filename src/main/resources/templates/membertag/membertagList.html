@@ -7,45 +7,53 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="stylesheet" href="/membertag/css/membertag.css">
 </head>
 <th:block layout:fragment="content">
-            <div class="col-sm-12 container">
-                <h6 class="m-0 font-weight-bold text-primary">내 태그 목록</h6>
+    <div class="container">
+        <div class="row flex-md-nowrap">
+            <div class="w-25">
+                <th:block th:include="component/userDetailMenu"></th:block>
             </div>
-
-            <div class="col-sm-12 container">
-                <div class="flex-items"th:each="tag : ${memberTag}">
-                    <button th:onclick="findProductByTag([[${tag.tagNo}]])" class="btn btn-5 tags">[[${tag.title}]]</button>
+            <div role="main" class="container h5">
+                <div>
+                    <div class="container">
+                        <h6 class="m-0 font-weight-bold text-primary">내 태그 목록</h6>
+                    </div>
+                    <div class="member__tag__container">
+                        <div class="flex-items" th:each="tag : ${memberTag}">
+                            <button type="button"
+                                    th:onclick="findProductByTag([[${tag.tagNo}]])"
+                                    class="btn btn-5 tags">[[${tag.title}]]
+                            </button>
+                        </div>
+                        <div th:if="${memberTag.empty}">
+                            <p> 태그가 선택되지 않았습니다.</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="member__tag__container">
+                        <h6 class="m-0 font-weight-bold text-primary">내 태그 수정</h6>
+                    </div>
+                    <hr>
+                    <div class="member__tag__container">
+                        <div class="flex-items" th:each="tag : ${tags}">
+                            <button type="button" th:id="${'memberTag-' + tagStat.index}"
+                                    th:onclick="setMemberTag([[${tag.tagNo}]],[[${tagStat.index}]])"
+                                    class="btn btn-3 tags">[[${tag.title}]]
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="member__tag__container">
+                        <button th:onclick="modifyMemberTag()" class="btn btn-2 tags">수정하기</button>
+                    </div>
+                    <hr>
                 </div>
-                <div th:if="${memberTag.empty}">
-                    <p> 태그가 선택되지 않았습니다.</p>
-                </div>
             </div>
-
-            <hr>
-
-            <div class="col-sm-12 container">
-
-                <h6 class="m-0 font-weight-bold text-primary">내 태그 수정</h6>
-            </div>
-
-            <hr>
-
-            <div class="col-sm-12 container">
-                <div class="flex-items"th:each="tag : ${tags}">
-                    <button type="button" th:id="${'memberTag-' + tagStat.index}" th:onclick="setMemberTag([[${tag.tagNo}]],[[${tagStat.index}]])" class="btn btn-3 tags">[[${tag.title}]]</button>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="col-sm-12 container">
-                    <button th:onclick="modifyMemberTag()" class="btn btn-2 tags">수정하기</button>
-
-            </div>
-
-            <hr>
+        </div>
+    </div>
     <script>
         var arr = [];
         let index;
@@ -53,13 +61,10 @@
         let token = document.getElementById("_csrf").content;
         let header = document.getElementById("_csrf_header").content;
 
-        function setMemberTag(no,index){
-            console.log("선택됨")
-            console.log("no = " + no);
-            console.log("index = " + index);
-                // 배열에서 해당값 삭제
-            if (arr.includes(no)){
-                console.log("이미 선택된 값" + index + "  " + no)
+        function setMemberTag(no, index) {
+
+            // 배열에서 해당값 삭제
+            if (arr.includes(no)) {
                 ind = arr.indexOf(no);
                 if (ind > -1) {
                     arr.splice(ind, 1);
@@ -71,26 +76,22 @@
                 // return
                 return;
             }
-            if (arr.length > 4){
-                console.log("5개만 선택 가능")
+            if (arr.length > 4) {
                 // toastr 로 5개까지 선택 가능하다고 하기
                 toastr.error("태그는 5개까지 선택 가능합니다.");
                 //return
                 return;
             }
-
-            console.log("추가하는거 시작")
             // 색상바꾸는 클래스 추가
             let elementById = document.getElementById("memberTag-" + index);
             elementById.classList.remove('btn-3');
             elementById.classList.add('btn-1');
             // 배열에 no 추가
             arr.push(no);
-            console.log(arr);
         }
 
-        function modifyMemberTag(no,index){
-            if (arr.length != 5){
+        function modifyMemberTag() {
+            if (arr.length != 5) {
                 // toastr 로 5개 선택해야한다고 하기
                 toastr.error("5개의 태그를 선택해야합니다.");
                 //return
@@ -98,44 +99,39 @@
             }
 
             // api로 쏘기
-            let jsondata ={
-                "tagIds" : arr
+            let jsondata = {
+                "tagIds": arr
             }
+            console.log(jsondata);
+            console.log(JSON.stringify(jsondata));
             $.ajax({
-                url: `/member-tag`,
-                method:"POST",
+                url: '/member-tag',
+                method: "POST",
                 dataType: 'json',
                 data: JSON.stringify(jsondata),
-                contentType:'application/json;charset=UTF-8',
+                contentType: 'application/json;charset=UTF-8',
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader(header,token);
+                    xhr.setRequestHeader(header, token);
                 },
-                success: function(data){
+                success: function (data) {
                     toastr.success("태그 설정이 완료되었습니다.");
-                },
-                error: function(error){
-                    if('errors' in error['responseJSON']){
-                        toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
-                    } else {
-                        toastr.error(error['responseJSON']['message']);
-                    }
                 }
             })
         }
 
-        function findProductById(no){
+        function findProductById(no) {
             $.ajax({
                 url: `/product`,
-                method:"GET",
-                contentType:'application/json;charset=UTF-8',
+                method: "GET",
+                contentType: 'application/json;charset=UTF-8',
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader(header,token);
+                    xhr.setRequestHeader(header, token);
                 },
-                success: function(data){
+                success: function (data) {
                     toastr.success("태그로 상품을 검색합니다.");
                 },
-                error: function(error){
-                    if('errors' in error['responseJSON']){
+                error: function (error) {
+                    if ('errors' in error['responseJSON']) {
                         toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
                     } else {
                         toastr.error(error['responseJSON']['message']);
@@ -143,7 +139,6 @@
                 }
             })
         }
-
 
 
     </script>

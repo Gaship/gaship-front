@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.tag.adapter.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,17 +22,15 @@ import java.util.List;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class TagAdapterImpl implements TagAdapter {
-    private static final String BASE_URL = "http://localhost:7070";
-
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl(BASE_URL)
-            .build();
+    private static final String BASE_URL = "/api/tags";
+    private final WebClient webClient;
 
     @Override
     public void addTag(TagAddRequestDto request) {
         webClient.post()
-                .uri("/api/tags")
+                .uri(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -43,7 +42,7 @@ public class TagAdapterImpl implements TagAdapter {
     @Override
     public void modifyTag(TagModifyRequestDto request) {
         webClient.put()
-                .uri("/api/tags/{tagNo}", request.getTagNo())
+                .uri(BASE_URL+ "/"+ request.getTagNo())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -65,7 +64,7 @@ public class TagAdapterImpl implements TagAdapter {
     @Override
     public List<TagResponseDto> findTags() {
         return webClient.get()
-                .uri("/api/tags")
+                .uri(BASE_URL)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(new ParameterizedTypeReference<List<TagResponseDto>>() {

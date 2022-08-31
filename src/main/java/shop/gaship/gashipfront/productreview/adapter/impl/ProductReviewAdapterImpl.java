@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.productreview.adapter.ProductReviewAdapter;
 import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto;
+import shop.gaship.gashipfront.productreview.dto.response.ProductReviewExistsResponseDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -124,6 +125,16 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(
                         new ParameterizedTypeReference<PageResponse<ProductReviewResponseDto>>() {})
+                .block();
+    }
+
+    @Override
+    public ProductReviewExistsResponseDto productReviewExists(Integer orderProductNo) {
+        return webClient.get()
+                .uri(REVIEW_URI + "/exists", orderProductNo)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(ProductReviewExistsResponseDto.class)
                 .block();
     }
 }
