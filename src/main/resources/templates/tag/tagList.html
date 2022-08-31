@@ -27,7 +27,7 @@
                 <div class="flex-items"th:each="tag : ${response}">
                     <button th:onclick="setTitle([[${tag.tagNo}]],[[${tag.title}]],[[${tagStat.index}]])" th:id="${'modalOpenBtn-' + tagStat.index}" class="btn btn-4 tags">[[${tag.title}]]</button>
                 </div>
-                    <button class="btn btn-1 addTag">+</button>
+                    <button class="btn btn-1 addTag">     +     </button>
 
                     <div id="modalBg" style="display: none" class="modalBackground modal__background"></div>
                     <div id="modalWrap" style="display: none" class="modal addressAddFormModalWrap modal__box">
@@ -123,10 +123,10 @@
                 },
                 success: function(data){
                     toastr.success("태그 추가가 완료되었습니다.");
+                    location.reload(true);
 
                 },
                 error: function(error){
-                    console.log(error);
                     if('errors' in error['responseJSON']){
                         toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
                     } else if ('message' in error['responseJSON']){
