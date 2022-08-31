@@ -45,8 +45,8 @@ function doPayment(orderRegisterResponseData) {
         orderId: "gaship-"+orderRegisterResponseData.orderId,
         orderName: orderRegisterResponseData.orderName,
         customerName: orderRegisterResponseData.customerName,
-        successUrl: 'http://localhost:8080/order/success?provider=TOSS',
-        failUrl: 'http://localhost:8080/rest/order/success'
+        successUrl: 'https://gaship.shop/order/success?provider=TOSS',
+        failUrl: 'https://gaship.shop/order/fail'
     })
 }
 

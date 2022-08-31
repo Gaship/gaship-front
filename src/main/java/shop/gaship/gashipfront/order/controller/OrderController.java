@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import shop.gaship.gashipfront.order.dto.request.PaymentSuccessRequestDto;
 import shop.gaship.gashipfront.order.service.OrderService;
-
 import java.security.Principal;
 import java.util.Objects;
 
@@ -48,5 +47,10 @@ public class OrderController {
                 .build());
 
         return "redirect:/member/order-product";
+    }
+
+    @GetMapping("/fail")
+    public String paymentFail() {
+        return "order/paymentFail";
     }
 }
