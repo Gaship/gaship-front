@@ -52,7 +52,7 @@ public class MemberController {
      */
     @GetMapping("/members/create")
     public String memberSignup() {
-        return "/member/signUpForm";
+        return "member/signUpForm";
     }
 
     /**
