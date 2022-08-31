@@ -61,4 +61,6 @@ public interface CartService {
      */
     List<ProductResponseDto> getProductsFromCart(String cartId);
 
+    void deleteOrderedProductFromCart(String cartId);
+
 }
