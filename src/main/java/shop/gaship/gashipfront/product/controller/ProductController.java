@@ -26,6 +26,7 @@ import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.statuscode.adapter.StatusCodeAdapter;
 import shop.gaship.gashipfront.statuscode.enumm.DeliveryType;
+import shop.gaship.gashipfront.statuscode.enumm.SalesStatus;
 import shop.gaship.gashipfront.tag.service.TagService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -161,6 +162,8 @@ public class ProductController {
                 String.valueOf(pageable.getPageNumber()),
                 String.valueOf(pageable.getPageSize()),
                 null, null, null));
+        model.addAttribute("salesStatusList",
+                statusCodeAdapter.getStatusCodeList(SalesStatus.GROUP));
         return "product/adminProductList";
     }
 }

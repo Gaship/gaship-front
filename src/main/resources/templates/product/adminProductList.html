@@ -19,10 +19,10 @@
                 <div class="table-responsive">
                     <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row">
                         <div class="col-sm-12 col-md-6"><div class="dataTables_length" id="dataTable_length">
-                            <a class="w-auto p-1 btn btn-primary btn-lg review-btn" href="/products/add">상품 등록</a>
+                            <a class="w-auto p-1 mb-2 btn btn-primary btn-lg review-btn" href="/products/add">상품 등록</a>
                         </div></div>
                         <div class="col-sm-12 col-md-6"><div class="dataTables_filter">
-                            <label>코드로 검색:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label>
+<!--                            <label>코드로 검색:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label>-->
                         </div></div></div>
                         <div class="row">
                     <div class="col-sm-12">
@@ -36,7 +36,6 @@
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">상품상태</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">등록일</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">수정</th>
-                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">삭제</th>
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 150px;">재고량</th>
                                 </tr>
                                 </thead>
@@ -46,13 +45,14 @@
                                     <td th:text="${product.productName}"></td>
                                     <td th:text="${product.categoryName}"></td>
                                     <td th:text="${product.deliveryType}"></td>
-                                    <td th:text="${product.salesStatus}"></td>
+                                    <td>
+                                        <select name="salesStatus" id="salesStatus" class="form-select" onchange="changeSalesStatus(this)">
+                                            <option class="option" th:selected="${#strings.equals(salesStatus.statusCodeName, product.salesStatus)}" th:each="salesStatus : ${salesStatusList}" th:value="${#strings.concat(product.productNo, '=', salesStatus.statusCodeName)}" th:text="${salesStatus.statusCodeName}"></option>
+                                        </select>
+                                    </td>
                                     <td th:text="${product.dateTime}"></td>
                                     <td><a class="w-auto p-1 btn btn-sm btn-secondary btn-lg review-btn" th:href="@{|/products/modify?productNo=${product.productNo}|}">
                                         수정
-                                    </a></td>
-                                    <td><a class="w-auto p-1 btn btn-sm btn-danger btn-lg review-btn">
-                                        삭제
                                     </a></td>
                                     <td th:text="${product.quantity}"></td>
                                 </tr>
@@ -70,8 +70,10 @@
     </div>
 
     </div>
-<table>
-
-</table>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script src="/product/adminProductList.js"></script>
 </th:block>
 </html>
