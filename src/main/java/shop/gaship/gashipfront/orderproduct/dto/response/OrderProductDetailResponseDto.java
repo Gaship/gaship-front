@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.orderproduct.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +23,14 @@ public class OrderProductDetailResponseDto {
     private String importer;
     private String qualityAssuranceStandard;
     private String explanation;
+    private Integer memberNo;
+    private String address;
+    private String zipCode;
+    private String receiptName;
+    private String receiptPhoneNumber;
+    private String receiptSubPhoneNumber;
+    private LocalDateTime cancellationDatetime;
+    private Long cancellationAmount;
+    private String cancellationReason;
     private String filePath;
 }
