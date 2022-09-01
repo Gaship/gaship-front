@@ -1,9 +1,11 @@
 package shop.gaship.gashipfront.member.controller;
 
 import java.util.Objects;
+import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -64,11 +66,30 @@ public class MemberController {
     @PostMapping("/members/create")
     public String doSignUp(@Valid MemberCreationRequest memberCreationRequest,
                            @CookieValue(value = "signUp", required = false)
-                           Cookie signUpVerifiedCookie) {
+                           Cookie signUpVerifiedCookie, HttpServletRequest request) {
         if(Objects.isNull(signUpVerifiedCookie)) {
             String errorMessage = "본인 확인 이메일 인증을 완료 후 회원가입을 진행해주십시오.";
             throw new SignUpDenyException(errorMessage);
         }
+
+        HttpSession session = request.getSession(false);
+
+        Optional.ofNullable(session.getAttribute("nicknameDuplication"))
+            .ifPresentOrElse(
+                isNicknameDuplicated -> {
+                    Boolean result = (Boolean) isNicknameDuplicated;
+                    if(result) {
+                        throw new SignUpDenyException("중복된 닉네임입니다. 다른 닉네임을 생각해주세요.");
+                    }
+                },
+                () -> {
+                    throw new SignUpDenyException("닉네임 중복확인이 필요합니다.");
+            });
+
+
+        Optional.ofNullable(session.getAttribute("recommendMember"))
+            .ifPresent(recommendMemberNo ->
+                memberCreationRequest.setRecommendMemberNo((Integer) recommendMemberNo));
 
         String verifyCode = signUpVerifiedCookie.getValue();
         memberService.checkApprovedEmail(verifyCode);
