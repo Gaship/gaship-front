@@ -1,10 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>배송지 목록</title>
+    <title>배송지 관리</title>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/addresslist/css/addressList.css}">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script defer th:src="@{/addresslist/js/addressList.js}"></script>
+    <th:block th:replace="layout/fragments/shopping/bootstrap :: bootstrap-fragment"></th:block>
 </head>
-<body>
+<th:block layout:fragment="content-js">
+    <script src="/member/js/userDetailMenu.js"></script>
+</th:block>
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="row flex-md-nowrap">
+            <div class="w-25">
+                <th:block th:include="component/userDetailMenu"></th:block>
+            </div>
+            <div role="main" class="container h5">
+                <h3 style="color: black; font-weight: bolder; margin-bottom: 30px">배송지 관리</h3>
+                <div class="card">
+                    <div style="display: flex" class="card-header">
+                        <h4 class="card-title">배송지 목록</h4>
+                        <span>
+                            <button id="createAddressBtn" style="margin-left: 10px;padding: 10px" class="site-btn">
+                                신규 배송지 등록
+                            </button>
+                        </span>
+                    </div>
 
-</body>
+                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>주소</th>
+                                <th>상세주소</th>
+                                <th>우편번호</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody id="addressListContent">
+                                <tr th:each="address:${addressList}">
+                                    <td th:text="${address.addressListNo}"></td>
+                                    <td th:text="${address.address}"></td>
+                                    <td th:text="${address.addressDetail}"></td>
+                                    <td th:text="${address.zipCode}"></td>
+                                    <td>
+                                        <form style="margin-left: 10px" th:action="@{|/member/address-list/${address.addressListNo}|}" th:method="delete" >
+                                            <button name="deleteAddressBtn" class="site-btn">
+                                                삭제
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="margin-top: 10px">
+                    <th:block th:if="${!#lists.isEmpty(addressList)}">
+                        <th:block th:include="component/pageFooter"></th:block>
+                    </th:block>
+                </div>
+            </div>
+            <div class="modalBackground"></div>
+            <div class="addressAddFormModalWrap">
+                <div style="margin: 20px" id="addAddressFormModal" class="checkout__input">
+                    <p>배송지<span>*</span>
+                        <span style="margin: 10px">
+                            <button id="searchAddressBtn" style="padding: 10px" class="site-btn">주소 검색</button>
+                        </span>
+                    </p>
+                    <div class="checkout__input">
+                        <p>우편번호<span>*</span></p>
+                        <input id="zoneCode" readonly="readonly" type="text" value="">
+                    </div>
+                    <div class="checkout__input">
+                        <p>시군구<span>*</span></p>
+                        <input id="sigungu" readonly="readonly" type="text" value="">
+                    </div>
+                    <div class="checkout__input">
+                        <p>상세주소<span>*</span></p>
+                        <input id="roadAddress" readonly="readonly" type="text" value="" class="checkout__input__add">
+                        <input id="addressDetail" type="text" placeholder="상세 주소를 작성해주세요.">
+                    </div>
+                    <button id="saveBtn" style="padding: 10px" class="site-btn">등록</button>
+                    <span>
+                        <button id="cancelBtn" style="padding: 10px" class="site-btn">취소</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block layout:fragment="content-js">
+    <script src="/member/js/userDetailMenu.js"></script>
+</th:block>
 </html>

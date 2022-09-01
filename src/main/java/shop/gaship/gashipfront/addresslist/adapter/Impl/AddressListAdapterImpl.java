@@ -93,7 +93,8 @@ public class AddressListAdapterImpl implements AddressListAdapter {
     @Override
     public PageResponse<AddressListResponseDto> findAddressLists(Integer memberNo, Pageable pageable) {
         return webClient.get()
-                .uri("/api/members/{memberNo}/addressLists", memberNo)
+                .uri("/api/members/{memberNo}/addressLists?page=" + pageable.getPageNumber()
+                        + "&size=" + pageable.getPageSize(), memberNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(new ParameterizedTypeReference<PageResponse<AddressListResponseDto>>() {
