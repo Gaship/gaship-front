@@ -20,6 +20,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Builder
 public class MemberCreationRequest {
     @Min(0)
+    @Setter
     private Integer recommendMemberNo;
 
     @NotBlank
