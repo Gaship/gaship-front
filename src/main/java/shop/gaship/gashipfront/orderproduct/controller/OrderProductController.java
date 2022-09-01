@@ -32,13 +32,13 @@ public class OrderProductController {
 
     @GetMapping
     public String findOrderProductListByMemberNo(@PageableDefault Pageable pageable, Model model,
-        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         PageResponse<OrderProductResponseDto> orderProductResponseDtoPageResponse =
             orderProductService.findOrderProductListByMemberNo(pageable, userDetailsDto.getMemberNo());
 
         List<OrderProductResponseDto> content = orderProductResponseDtoPageResponse.getContent();
-        content.forEach(orderProduct -> orderProduct.setExistsReview(
-                productReviewService.isExist(orderProduct.getOrderProductNo())));
+//        content.forEach(orderProduct -> orderProduct.setExistsReview(
+//            productReviewService.isExist(orderProduct.getOrderProductNo())));
 
         model.addAttribute("orderProductList", content);
 
@@ -54,13 +54,24 @@ public class OrderProductController {
         return "orderproduct/member/orderProductList";
     }
 
-    @GetMapping("/{orderProductNo}/details")
-    public String findOrderProductOrderProductNo(@PathVariable(value = "orderProductNo") Integer orderProductNo,
-        @AuthenticationPrincipal UserDetailsDto userDetailsDto, Model model) {
-        OrderProductDetailResponseDto orderProductDetailResponseDto =
-            orderProductService.findOrderProductDetail(orderProductNo, userDetailsDto.getMemberNo());
+    @GetMapping("/{orderNo}/details")
+    public String findOrderProductOrderProductNo(@PathVariable(value = "orderNo") Integer orderNo,
+                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                 @PageableDefault Pageable pageable,
+                                                 Model model) {
+        PageResponse<OrderProductDetailResponseDto> orderProductDetailResponseDto =
+            orderProductService.findOrderProductDetail(orderNo, userDetailsDto.getMemberNo(),pageable);
 
-        model.addAttribute("orderProductDetail", orderProductDetailResponseDto);
+        model.addAttribute("next", orderProductDetailResponseDto.isNext());
+        model.addAttribute("previous", orderProductDetailResponseDto.isPrevious());
+        model.addAttribute("totalPage", orderProductDetailResponseDto.getTotalPages());
+        model.addAttribute("pageNum", orderProductDetailResponseDto.getNumber() + 1);
+        model.addAttribute("previousPageNo", pageable.getPageNumber() - 1);
+        model.addAttribute("nextPageNo", pageable.getPageNumber() + 1);
+
+        model.addAttribute("uri", "/member/order-product/" + orderNo +"/details");
+
+        model.addAttribute("orderProductDetail", orderProductDetailResponseDto.getContent());
 
         return "orderproduct/member/orderProductDetail";
     }

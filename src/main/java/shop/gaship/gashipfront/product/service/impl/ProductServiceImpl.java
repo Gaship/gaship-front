@@ -37,6 +37,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public PageResponse<ProductAllInfoResponseDto> findProductListByCode(Pageable pageable,
+                                                                         String code) {
+        return productAdapter.productListSearchCode(code, pageable);
+    }
+
+    @Override
     public List<ProductAllInfoResponseDto> findProductNosList(List<Integer> productNos) {
         return productAdapter.productNosList(productNos);
     }

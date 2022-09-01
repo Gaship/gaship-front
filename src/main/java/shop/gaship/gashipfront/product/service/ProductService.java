@@ -40,6 +40,8 @@ public interface ProductService {
     PageResponse<ProductAllInfoResponseDto> productCategoryByPageable(
         Pageable page, String category);
 
+    PageResponse<ProductAllInfoResponseDto> findProductListByCode(Pageable pageable, String code);
+
     List<ProductAllInfoResponseDto> findProductNosList(List<Integer> productNos);
 
     ProductAllInfoResponseDto findProduct(Integer productNo);

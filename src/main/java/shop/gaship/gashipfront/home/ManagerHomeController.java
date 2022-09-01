@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since 1.0
  */
 @Controller
-@RequestMapping("/manager")
+@RequestMapping("/admin")
 public class ManagerHomeController {
     /**
      * 사용자가 현재 관리자 혹은 직원의 권한이라면 관리자화면을 아니라면 관리자 로그인화면으로
