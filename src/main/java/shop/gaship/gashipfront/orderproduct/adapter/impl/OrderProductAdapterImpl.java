@@ -25,30 +25,30 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @Component
 public class OrderProductAdapterImpl implements OrderProductAdapter {
 
-    private final WebClient webClient;
     public static final String ORDER_PRODUCT_PREFIX_URL = "/api/order-products";
     public static final String DELIVERY_HOST = "http://localhost:9090";
+    private final WebClient webClient;
 
     @Override
     public PageResponse<OrderProductResponseDto> findOrderProductListByMemberNo(
         Pageable pageable, Integer memberNo) {
         return webClient.get()
-                        .uri(ORDER_PRODUCT_PREFIX_URL + "/member/" + memberNo + "?page=" + pageable.getPageNumber()
-                            + "&size="
-                            + pageable.getPageSize())
-                        .retrieve()
-                        .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                        .bodyToMono(new ParameterizedTypeReference<PageResponse<OrderProductResponseDto>>() {
-                        })
-                        .blockOptional().orElseThrow(NullResponseBodyException::new);
+            .uri(ORDER_PRODUCT_PREFIX_URL + "/member/" + memberNo + "?page=" + pageable.getPageNumber()
+                + "&size="
+                + pageable.getPageSize())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(new ParameterizedTypeReference<PageResponse<OrderProductResponseDto>>() {
+            })
+            .blockOptional().orElseThrow(NullResponseBodyException::new);
     }
 
     @Override
     public List<DeliveryInfoResponseDto> findDeliveryInfoByTrackingNo(String trackingNo) {
         WebClient webClientDelivery = WebClient.builder()
-                                       .baseUrl(DELIVERY_HOST)
-                                       .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                                       .build();
+            .baseUrl(DELIVERY_HOST)
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .build();
 
         return webClientDelivery.get()
             .uri("/tracking-no?trackingNo=" + trackingNo)
@@ -60,12 +60,18 @@ public class OrderProductAdapterImpl implements OrderProductAdapter {
     }
 
     @Override
-    public OrderProductDetailResponseDto findOrderProductDetail(Integer orderProductNo, Integer memberNo) {
+    public PageResponse<OrderProductDetailResponseDto> findOrderProductDetail(Integer orderNo, Integer memberNo, Pageable pageable) {
         return webClient.get()
-                        .uri(ORDER_PRODUCT_PREFIX_URL + "/" + orderProductNo + "?memberNo=" + memberNo)
-                        .retrieve()
-                        .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-                        .bodyToMono(OrderProductDetailResponseDto.class)
-                        .blockOptional().orElseThrow(NullResponseBodyException::new);
+            .uri(uriBuilder -> uriBuilder
+                .path(ORDER_PRODUCT_PREFIX_URL + "/" + orderNo)
+                .queryParam("memberNo", memberNo)
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .build())
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(new ParameterizedTypeReference<PageResponse<OrderProductDetailResponseDto>>() {
+            })
+            .blockOptional().orElseThrow(NullResponseBodyException::new);
     }
 }

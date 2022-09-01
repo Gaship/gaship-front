@@ -18,5 +18,5 @@ public interface OrderProductAdapter {
 
     List<DeliveryInfoResponseDto> findDeliveryInfoByTrackingNo(String trackingNo);
 
-    OrderProductDetailResponseDto findOrderProductDetail(Integer orderProductNo, Integer memberNo);
+    PageResponse<OrderProductDetailResponseDto> findOrderProductDetail(Integer orderProductNo, Integer memberNo, Pageable pageable);
 }
