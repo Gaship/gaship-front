@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListAddRequestDto;
 import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestDto;
+import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
 import shop.gaship.gashipfront.addresslist.service.AddressListService;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
+import shop.gaship.gashipfront.util.dto.PageResponse;
 
 import java.util.Objects;
 
@@ -110,8 +112,17 @@ public class AddressListController {
             return "redirect:/";
         }
 
-        model.addAttribute("addressList",
-                addressListService.findAddressLists(user.getMemberNo(), pageable));
+        PageResponse<AddressListResponseDto> addressList =
+                addressListService.findAddressLists(user.getMemberNo(), pageable);
+
+        model.addAttribute("addressList",addressList.getContent());
+        model.addAttribute("next", addressList.isNext());
+        model.addAttribute("previous", addressList.isPrevious());
+        model.addAttribute("totalPage", addressList.getTotalPages());
+        model.addAttribute("pageNum", addressList.getNumber() + 1);
+        model.addAttribute("previousPageNo", addressList.getNumber() - 1);
+        model.addAttribute("nextPageNo", addressList.getNumber() + 1);
+        model.addAttribute("uri", "/member/address-list");
 
         return "addresslist/addressList";
     }

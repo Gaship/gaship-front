@@ -4,7 +4,7 @@
       layout:decorate="~{layout/shopping/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>배송지 목록</title>
+    <title>배송지 관리</title>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <!-- default header name is X-CSRF-TOKEN -->
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -46,7 +46,7 @@
                             </tr>
                             </thead>
                             <tbody id="addressListContent">
-                                <tr th:each="address:${addressList.content}">
+                                <tr th:each="address:${addressList}">
                                     <td th:text="${address.addressListNo}"></td>
                                     <td th:text="${address.address}"></td>
                                     <td th:text="${address.addressDetail}"></td>
@@ -63,11 +63,11 @@
                         </table>
                     </div>
                 </div>
-                <ul class="pagination">
-                    <li style="margin-right: 10px;" class="page-item" th:if="${addressList.previous}"><a class="page-link" th:href="@{''(page=${addressList.number - 1})}">Previous</a></li>
-                    <span class="page-number" th:text="|${addressList.number + 1} / ${addressList.totalPages}|" th:if="${addressList.totalPages > 0}"></span>
-                    <li style="margin-left: 10px" class="page-item" th:if="${addressList.next}"><a class="page-link" th:href="@{''(page=${addressList.number + 1})}">Next</a></li>
-                </ul>
+                <div style="margin-top: 10px">
+                    <th:block th:if="${!#lists.isEmpty(addressList)}">
+                        <th:block th:include="component/pageFooter"></th:block>
+                    </th:block>
+                </div>
             </div>
             <div class="modalBackground"></div>
             <div class="addressAddFormModalWrap">
