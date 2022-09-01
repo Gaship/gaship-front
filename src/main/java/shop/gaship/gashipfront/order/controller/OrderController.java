@@ -2,12 +2,16 @@ package shop.gaship.gashipfront.order.controller;
 
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.order.dto.request.PaymentSuccessRequestDto;
 import shop.gaship.gashipfront.order.service.OrderService;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
+
 import java.security.Principal;
 import java.util.Objects;
 
@@ -23,6 +27,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final CartService cartService;
 
     @GetMapping
     public String orderForm(Principal principal) {
@@ -37,14 +42,17 @@ public class OrderController {
             @ApiParam(required = true) @RequestParam String paymentKey,
             @ApiParam(required = true) @RequestParam String orderId,
             @ApiParam(required = true) @RequestParam Long amount,
-            @RequestParam(name = "provider") String provider
-    ) {
+            @RequestParam(name = "provider") String provider,
+            @AuthenticationPrincipal UserDetailsDto user
+            ) {
         orderService.successPayment(PaymentSuccessRequestDto.builder()
                 .paymentKey(paymentKey)
                 .orderId(orderId.split("gaship-")[1])
                 .amount(amount)
                 .provider(provider)
                 .build());
+
+        cartService.deleteOrderedProductFromCart(user.getMemberNo().toString());
 
         return "redirect:/member/order-product";
     }
