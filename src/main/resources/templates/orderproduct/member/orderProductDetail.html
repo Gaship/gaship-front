@@ -14,13 +14,13 @@
                 <th:block th:include="component/userDetailMenu"></th:block>
             </div>
             <div role="main" class="container h5">
-
+                <p class="display-4 mb-2 text-dark">주문 상세 내역</p>
                 <!-- Page Heading -->
-                <div class="card">
-                    <div class="card-header"><h1 class="h3 mb-2 text-gray-800">주문 상세 내역</h1></div>
+                <div class="card mb-3" th:each="order : ${orderProductDetail}">
+                    <div class="card-header" th:text="${order.orderNo} + ' - ' + ${order.orderProductNo}"></div>
                     <div class="card-body">
                         <div class="container">
-                            <div class="row" th:each="order:${orderProductDetail}">
+                            <div class="row">
                                 <div class="col-lg-6 col-md-6">
                                     <div class="product__details__pic">
                                         <div class="product__details__pic__item">
@@ -34,25 +34,24 @@
                                         <h3 th:text="${order.productName}"></h3>
                                         <div class="product__details__price"
                                              th:text="${'₩' + order.totalOrderAmount}"></div>
-                                        <ul>
-                                            <li><b>주문번호</b> <span><samp th:text="${order.orderNo}"></samp></span>
+                                        <a style="font-size: 12px" class="w-auto p-1 btn btn-sm btn-primary btn-lg mb-2" th:href="@{|/reviews/${order.orderProductNo}/add|}" th:unless="${order.existsReview}">
+                                            상품평 작성
+                                        </a>
+                                        <p style="font-size: 10px" th:if="${order.existsReview}" class="mb-1">상품평 작성완료</p>
+                                        <ul class="m-0 pt-2">
+                                            <li><span class="mr-2 font-weight-bold">주문번호</span> <span><samp th:text="${order.orderNo}"></samp></span>
                                             </li>
-                                            <li><b>배송유형</b> <span><samp
+                                            <li><span class="mr-2 font-weight-bold">배송유형</span> <span><samp
                                                     th:text="${order.orderProductStatus}"></samp></span>
                                             </li>
-                                            <li><b>배송번호 </b> <span><samp
+                                            <li><span class="mr-2 font-weight-bold">배송번호 </span> <span><samp
                                                     th:text="${order.trackingNo}"></samp></span></li>
-                                            <li>
-                                                <a style="font-size: 12px" class="w-auto p-1 btn btn-sm btn-primary btn-lg " th:href="@{|/reviews/${order.orderProductNo}/add|}" th:unless="${order.existsReview}">
-                                                    상품평 작성
-                                                </a>
-                                                <p style="font-size: 10px" th:if="${order.existsReview}" class="">상품평 작성완료</p>
-                                            </li>
+
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
-                                    <div class="product__details__tab">
+                                    <div class="pt-2 product__details__tab">
                                         <ul class="nav nav-tabs" role="tablist">
                                             <li class="nav-item ">
                                                 <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
