@@ -13,6 +13,8 @@ import shop.gaship.gashipfront.addresslocal.adpter.AddressLocalAdapter;
 import shop.gaship.gashipfront.addresslocal.dto.response.AddressSubLocalResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
+import java.util.List;
+
 /**
  * 배송지목록의 서비스 구현체.
  *
@@ -75,5 +77,10 @@ public class AddressListServiceImpl implements AddressListService {
                 addressAddRequestDto.getRoadAddress(),
                 addressAddRequestDto.getAddressDetail(),
                 addressAddRequestDto.getZonecode()));
+    }
+
+    @Override
+    public List<AddressListResponseDto> findAddressListAll(Integer memberNo) {
+        return addressListAdapter.findAddressListAll(memberNo);
     }
 }

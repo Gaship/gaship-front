@@ -6,6 +6,8 @@ import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestD
 import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
+import java.util.List;
+
 /**
  * 배송지목록 어뎁터 인터페이스입니다.
  *
@@ -56,4 +58,6 @@ public interface AddressListAdapter {
      * @author 최정우
      */
     PageResponse<AddressListResponseDto> findAddressLists(Integer memberNo, Pageable pageable);
+
+    List<AddressListResponseDto> findAddressListAll(Integer memberNo);
 }
