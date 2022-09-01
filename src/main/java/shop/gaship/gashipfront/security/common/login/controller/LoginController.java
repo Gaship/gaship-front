@@ -90,6 +90,6 @@ public class LoginController {
      */
     @GetMapping(value = "/manager/logout")
     public String managerLogoutProcessing() {
-        return "redirect:/manager/login";
+        return "redirect:/logout";
     }
 }
