@@ -50,12 +50,12 @@ public class CouponMemberController {
     @GetMapping("/coupon-generation-issues/member/used-coupons")
     public String couponGenerationIssueUsedByMemberNoList(@PageableDefault Pageable pageable, Model model,
         @ModelAttribute("user") Integer memberNo) {
-        PageResponse<CouponGenerationIssueDto> couponTypeDtoPageResponse =
+        PageResponse<CouponGenerationIssueDto> couponGenerationIssueDtoPageResponse =
             couponMemberService.findCouponGenerationIssueUsedByMemberNo(pageable, memberNo);
 
         model.addAttribute("memberNo", memberNo);
 
-        pagingProcessing(model, couponTypeDtoPageResponse, pageable);
+        pagingProcessing(model, couponGenerationIssueDtoPageResponse, pageable);
 
         model.addAttribute("uri", "/member/coupons/coupon-generation-issue/member/used-coupons");
 
@@ -107,14 +107,14 @@ public class CouponMemberController {
         return "coupon/member/couponGenerationIssueList";
     }
 
-    private void pagingProcessing(Model model, PageResponse<CouponGenerationIssueDto> couponTypeDtoPageResponse,
+    private void pagingProcessing(Model model, PageResponse<CouponGenerationIssueDto> couponGenerationIssueDto,
         Pageable pageable) {
-        model.addAttribute("couponTypeList", couponTypeDtoPageResponse.getContent());
+        model.addAttribute("couponGenerationIssueList", couponGenerationIssueDto.getContent());
 
-        model.addAttribute("next", couponTypeDtoPageResponse.isNext());
-        model.addAttribute("previous", couponTypeDtoPageResponse.isPrevious());
-        model.addAttribute("totalPage", couponTypeDtoPageResponse.getTotalPages());
-        model.addAttribute("pageNum", couponTypeDtoPageResponse.getNumber() + 1);
+        model.addAttribute("next", couponGenerationIssueDto.isNext());
+        model.addAttribute("previous", couponGenerationIssueDto.isPrevious());
+        model.addAttribute("totalPage", couponGenerationIssueDto.getTotalPages());
+        model.addAttribute("pageNum", couponGenerationIssueDto.getNumber() + 1);
         model.addAttribute("previousPageNo", pageable.getPageNumber() - 1);
         model.addAttribute("nextPageNo", pageable.getPageNumber() + 1);
     }
