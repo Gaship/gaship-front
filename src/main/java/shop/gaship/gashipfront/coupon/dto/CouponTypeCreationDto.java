@@ -20,10 +20,12 @@ public class CouponTypeCreationDto {
     @NotBlank(message = "이름은 필수 값 입니다.")
     private String name;
 
+    @NotNull(message = "할인률은 필수 값 입니다.", groups = FixRateGroup.class)
     @Min(value = 0, message = "할인 비율은 0 ~ 100% 입니다.", groups = FixRateGroup.class)
     @Max(value = 100, message = "할인 비율은 0 ~ 100% 입니다.", groups = FixRateGroup.class)
     private Integer discountRate;
 
+    @NotNull(message = "할인액은 필수 값 입니다.", groups = FixAmountGroup.class)
     @Min(value = 0, message = "할인금액은 0원 이상입니다.", groups = FixAmountGroup.class)
     private Long discountAmount;
 

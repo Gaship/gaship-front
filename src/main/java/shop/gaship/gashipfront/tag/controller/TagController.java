@@ -36,10 +36,10 @@ public class TagController {
      * @author 최정우
      */
     @PostMapping
+    @ResponseBody
     public String tagAdd(@RequestBody @Valid TagAddRequestDto request) {
         tagService.addTag(request);
-
-        return "redirect:/tags";
+        return "success";
     }
 
     /**
@@ -50,24 +50,10 @@ public class TagController {
      * @author 최정우
      */
     @PutMapping("/{tagNo}")
+    @ResponseBody
     public String tagModify(@RequestBody @Valid TagModifyRequestDto request) {
         tagService.modifyTag(request);
-        return "redirect:/tags";
-    }
-
-    /**
-     * 태그를 수정하고 태그목록으로 돌아갑니다.
-     *
-     * @param tagNo 조회하려는 태그의 id 입니다.
-     * @return 태그 수정 페이지
-     * @author 최정우
-     */
-    @GetMapping("/{tagNo}")
-    public String tagDetails(@PathVariable Long tagNo,
-                             Model model) {
-        model.addAttribute("response", tagService.findTag(tagNo));
-
-        return "tagInfo";
+        return "true";
     }
 
     /**
@@ -80,6 +66,6 @@ public class TagController {
     @GetMapping
     public String tagList(Model model) {
         model.addAttribute("response", tagService.findTags());
-        return "tags";
+        return "tag/tagList";
     }
 }

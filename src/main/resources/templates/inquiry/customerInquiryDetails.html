@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+
 <head>
     <meta charset="UTF-8">
     <title>고객문의 상세조회</title>
@@ -8,48 +11,103 @@
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <th:block th:replace="layout/fragments/admin/bootstrap :: bootstrap-fragment"></th:block>
 </head>
-<body>
-<div id="form-main">
-    <div id="form-div">
-        <h1>고객문의 상세조회</h1>
-        <div class="card-body p-0">
-            <table class="table table-striped" style="text-align: center">
-                <thead>
+<th:block layout:fragment="content">
 
-                </thead>
-                <tbody>
-                <tr>
-                    <th style="width: auto">글번호</th>
-                    <th style="width: auto">닉네임</th>
-                </tr>
-                <tr>
-                    <td style="width: auto" th:text="${details.inquiryNo}"></td>
-                    <td style="width: auto" th:text="${details.memberNickname}"></td>
-                </tr>
-                <tr>
-                    <th style="width: auto">문의 등록시간</th>
-                    <th style="width: auto">답변상태</th>
-                </tr>
-                <tr>
-                    <td style="width: auto" th:text="${details.registerDatetime}"></td>
-                    <td style="width: auto" th:text="${details.processStatus}"></td>
-                </tr>
-                <tr>
-                    <th style="width: auto" colspan="2">제목</th>
-                </tr>
-                <tr>
-                    <td style="width: auto" colspan="2" th:text="${details.title}"></td>
-                </tr>
-                <tr>
-                    <th style="width: auto" colspan="2">내용</th>
-                </tr>
-                <tr>
-                    <td style="width: auto" colspan="2" th:text="${details.inquiryContent}"></td>
-                </tr>
-                </tbody>
-            </table>
+    <div class="container">
+        <div class="row flex-md-nowrap">
+            <div class="w-25">
+                <th:block th:include="component/userDetailMenu"></th:block>
+            </div>
+            <div role="main" class="container h5">
+                <h1 th:text="${'고객문의 상세조회 [' + details.processStatus + ']'}"></h1>
+                <div class="card-content">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">글 번호</label>
+                        <div class="col-sm-10">
+                            <p class="form-control" th:text="${details.inquiryNo}"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">닉네임</label>
+                        <div class="col-sm-10">
+                            <p class="form-control" th:text="${details.memberNickname}"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">문의 등록일</label>
+                        <div class="col-sm-10">
+                            <p class="form-control" th:text="${details.registerDatetime}"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">제목</label>
+                        <div class="col-sm-10">
+                            <p class="form-control" th:text="${details.title}"></p>
+                        </div>
+                    </div>
+                    <div class="form-group" style="height: 30vh">
+                        <span class="col-sm-2 control-label">내용</span>
+                        <div class="col-sm-10 h-100">
+                <textarea readonly class="form-control h-100"
+                          th:text="${details.inquiryContent}"></textarea>
+                        </div>
+                    </div>
+                    <button style="width: auto; margin-left: 10px" class="btn btn-danger mt-5"
+                            th:value="${details.inquiryNo}" onclick="deleteInquiry(this)">문의삭제
+                    </button>
+                </div>
+
+                <div class="box-content mt-5" th:if="${#strings.equals(details.processStatus, '답변완료')}">
+                    <div class="card-content">
+                        <div class="clearfix ml-3">
+                            <h4 class="box-title pull-left">Answer</h4>
+                        </div>
+                        <form class="form-group">
+                            <div class="form-group">
+                                <span class="col-sm-2 control-label">직원</span>
+                                <div class="col-sm-10 h-100">
+                                    <p class="form-control" th:text="${details.employeeName}"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="height: 30vh">
+                                <span class="col-sm-2 control-label">내용</span>
+                                <div class="col-sm-10 h-100">
+                            <textarea readonly class="form-control h-100"
+                                      th:text="${details.answerContent}"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-5">
+                                <span class="col-sm-2 control-label">답변등록시간</span>
+                                <div class="col-sm-10 h-100">
+                                    <p class="form-control" th:text="${details.answerRegisterDatetime}"></p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <span class="col-sm-2 control-label">답변수정시간</span>
+                                <div class="col-sm-10 h-100">
+                                    <p class="form-control" th:text="${details.answerModifyDatetime}"></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <a href="/inquiries/member-self/customer-inquiries" style="width: auto; margin-left: 10px" type="button"
+                       class="btn btn-outline-primary mt-3">마이페이지 고객문의 목록</a>
+                </div>
+            </div>
         </div>
+
+
+
+        <script th:src="@{/inquiry/js/inquiry.js}"></script>
+        <script th:inline="javascript">
+            let whereUri = "customer";
+            let isUser = true;
+        </script>
     </div>
-</div>
-</body>
+</th:block>
+</html>
 </html>

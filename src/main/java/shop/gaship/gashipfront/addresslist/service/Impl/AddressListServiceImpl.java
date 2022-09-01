@@ -45,7 +45,7 @@ public class AddressListServiceImpl implements AddressListService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteAddressList(Long memberNo, Long addressListNo) {
+    public void deleteAddressList(Integer memberNo, Long addressListNo) {
         addressListAdapter.deleteAddressList(memberNo, addressListNo);
     }
 
@@ -53,7 +53,7 @@ public class AddressListServiceImpl implements AddressListService {
      * {@inheritDoc}
      */
     @Override
-    public AddressListResponseDto findAddressList(Long memberNo, Long addressListNo) {
+    public AddressListResponseDto findAddressList(Integer memberNo, Long addressListNo) {
         return addressListAdapter.findAddressList(memberNo, addressListNo);
     }
 
@@ -61,7 +61,7 @@ public class AddressListServiceImpl implements AddressListService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable) {
+    public PageResponse<AddressListResponseDto> findAddressLists(Integer memberNo, Pageable pageable) {
         return addressListAdapter.findAddressLists(memberNo, pageable);
     }
 

@@ -1,20 +1,17 @@
 package shop.gaship.gashipfront.order.controller;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.service.CartService;
-import shop.gaship.gashipfront.coupon.member.dto.CouponGenerationIssueDto;
+import shop.gaship.gashipfront.coupon.member.dto.response.UnusedMemberCouponResponseDto;
 import shop.gaship.gashipfront.coupon.member.service.CouponMemberService;
-import shop.gaship.gashipfront.security.basic.dto.SignInSuccessUserDetailsDto;
+import shop.gaship.gashipfront.order.dto.request.OrderRegisterRequestDto;
+import shop.gaship.gashipfront.order.dto.response.OrderResponseDto;
+import shop.gaship.gashipfront.order.service.OrderService;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
-
-import java.util.List;
 
 /**
  * 주문 관련 요청을 처리하기 위한 rest controller 입니다.
@@ -28,30 +25,25 @@ import java.util.List;
 public class OrderRestController {
     private final CartService cartService;
     private final CouponMemberService couponMemberService;
+    private final OrderService orderService;
 
     @GetMapping("/products")
     public List<ProductResponseDto> orderProductList(
-            @AuthenticationPrincipal UserDetails user) {
-        if(user instanceof UserDetailsDto) {
-            return cartService.getProductsFromCart(((UserDetailsDto) user).getMemberNo().toString());
-        }
-        return cartService.getProductsFromCart(((SignInSuccessUserDetailsDto) user).getMemberNo().toString());
+            @AuthenticationPrincipal UserDetailsDto user) {
+            return cartService.getProductsFromCart(user.getMemberNo().toString());
     }
 
     @GetMapping("/coupons")
-    public List<CouponGenerationIssueDto> unusedMemberCouponList(
-            @AuthenticationPrincipal UserDetails user) {
-        Integer memberNo;
+    public List<UnusedMemberCouponResponseDto> unusedMemberCouponList(
+            @AuthenticationPrincipal UserDetailsDto user) {
 
-        if(user instanceof UserDetailsDto) {
-            memberNo = ((UserDetailsDto) user).getMemberNo();
-        } else {
-            memberNo = ((SignInSuccessUserDetailsDto) user).getMemberNo().intValue();
-        }
+        return couponMemberService.getUnusedMemberCoupons(user.getMemberNo());
+    }
 
-        return couponMemberService
-                .findCouponGenerationIssueUnusedUnexpiredByMemberNo(
-                        PageRequest.of(0, Integer.MAX_VALUE), memberNo)
-                .getContent();
+    @PostMapping
+    public OrderResponseDto doOrder(@AuthenticationPrincipal UserDetailsDto user,
+                                    @RequestBody OrderRegisterRequestDto requestDto) {
+
+        return orderService.processOrder(user.getMemberNo(), requestDto);
     }
 }

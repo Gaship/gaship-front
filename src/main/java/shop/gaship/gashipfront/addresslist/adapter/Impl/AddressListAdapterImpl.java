@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.addresslist.adapter.Impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,9 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  * @since 1.0
  */
 @Component
+@RequiredArgsConstructor
 public class AddressListAdapterImpl implements AddressListAdapter {
-    private static final String BASE_URL = "http://localhost:7070";
-
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl(BASE_URL)
-            .build();
+    private final WebClient webClient;
 
     /**
      * {@inheritDoc}
@@ -65,7 +63,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
      * {@inheritDoc}
      */
     @Override
-    public void deleteAddressList(Long memberNo, Long addressListNo) {
+    public void deleteAddressList(Integer memberNo, Long addressListNo) {
         webClient.delete()
                 .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
@@ -79,7 +77,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
      * {@inheritDoc}
      */
     @Override
-    public AddressListResponseDto findAddressList(Long memberNo, Long addressListNo) {
+    public AddressListResponseDto findAddressList(Integer memberNo, Long addressListNo) {
         return webClient.get()
                 .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
@@ -93,9 +91,10 @@ public class AddressListAdapterImpl implements AddressListAdapter {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<AddressListResponseDto> findAddressLists(Long memberNo, Pageable pageable) {
+    public PageResponse<AddressListResponseDto> findAddressLists(Integer memberNo, Pageable pageable) {
         return webClient.get()
-                .uri("/api/members/{memberNo}/addressLists", memberNo)
+                .uri("/api/members/{memberNo}/addressLists?page=" + pageable.getPageNumber()
+                        + "&size=" + pageable.getPageSize(), memberNo)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(new ParameterizedTypeReference<PageResponse<AddressListResponseDto>>() {

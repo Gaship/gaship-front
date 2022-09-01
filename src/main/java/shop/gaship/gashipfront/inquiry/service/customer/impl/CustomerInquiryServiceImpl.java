@@ -57,6 +57,7 @@ public class CustomerInquiryServiceImpl implements CustomerInquiryService {
     @Override
     public PageResponse<InquiryListResponseDto> findCustomerInquiriesByMemberNo(Pageable pageable,
                                                                                 Integer memberNo) {
+
         return inquiryAdapter.customerInquiryMemberList(pageable, memberNo);
     }
 }

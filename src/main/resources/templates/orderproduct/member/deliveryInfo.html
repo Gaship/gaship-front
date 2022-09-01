@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/shopping/layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>쿠폰 타입 리스트</title>
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+</head>
+<th:block layout:fragment="content">
+  <div class="card-body">
+    <div class="table-responsive" style="overflow-x: hidden">
+      <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length" id="dataTable_length">
+              <label><a th:href="@{/admin/coupons/coupon-type}">쿠폰 타입</a></button></label></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid"
+                   aria-describedby="dataTable_info" style="width: 100%;">
+              <thead>
+              <tr role="row">
+                <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                    aria-sort="ascending" aria-label="도착시간" style="width: 397px;">
+                  도착시간
+                </th>
+                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                    aria-label="배송 위치 도착 시간" style="width: 297px;">배송 위치 도착 시간
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="deliveryInfo : ${deliveryInfoList}">
+                <td th:text="${deliveryInfo.completionTime}"></td>
+                <td th:text="${deliveryInfo.locationNo}"></td>
+              </tr>
+              </tbody>
+            </table>
+            <p th:text="|현재 상태 :  ${deliveryInfoList.get(0).status.getValue()}|">
+            <p th:text="|배송 완료 시간 :  ${deliveryInfoList.get(0).completionTime}|">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+</html>

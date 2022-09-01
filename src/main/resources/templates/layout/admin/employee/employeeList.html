@@ -6,11 +6,7 @@
     <meta charset="UTF-8">
     <title>직원 관리</title>
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <style>
-        .btn-register{
-            margin: auto;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" th:href="@{/employee/css/employeeList.css}">
 </head>
 
 
@@ -35,7 +31,7 @@
                 <table class="table table-hover table-striped">
                     <thead>
                     <tr role="row">
-                        <td>직원 번호</td>
+                        <td>#</td>
                         <td>직원 이름</td>
                         <td>전화 번호</td>
                         <td>담당 지역</td>
@@ -44,8 +40,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr role="row" th:each="employee:${employees}">
-                        <td th:text="${employee.employeeNo}"></td>
+                    <tr role="row" th:each="employee,stat:${employees}">
+                        <td th:text="${stat.count}"></td>
                         <td th:text="${employee.name}"></td>
                         <td th:text="${employee.phoneNo}"></td>
                         <td th:text="${employee.address}"></td>
@@ -53,20 +49,26 @@
                         <td>
                             <button class="btn btn-outline-primary"
                                     th:onclick="|location.href='@{/admin/employees/modify}/${employee.employeeNo}'|">수정</button>
-                            <button class="btn btn-outline-primary">삭제</button>
+                            <button class="btn btn-outline-secondary deleteButton"
+                                    th:data-employee-no="${employee.employeeNo}">
+                                삭제
+                            </button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+            <div class="card-footer py-3">
+                <th:block th:if="${!#lists.isEmpty(employees)}">
+                    <th:block th:include="component/pageFooter"></th:block>
+                </th:block>
+            </div>
         </div>
-
     </div>
 
 </th:block>
 <th:block layout:fragment="content-js">
-</th:block>
-<script>
+    <script th:src="@{/employee/js/employeeList.js}"></script>
 
-</script>
+</th:block>
 </html>

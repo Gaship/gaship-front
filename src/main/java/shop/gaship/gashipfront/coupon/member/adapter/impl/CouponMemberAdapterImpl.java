@@ -8,9 +8,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.coupon.member.adapter.CouponMemberAdapter;
 import shop.gaship.gashipfront.coupon.member.dto.CouponGenerationIssueDto;
+import shop.gaship.gashipfront.coupon.member.dto.response.UnusedMemberCouponResponseDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
+
+import java.util.List;
 
 /**
  * @author : 조재철
@@ -86,5 +89,16 @@ public class CouponMemberAdapterImpl implements CouponMemberAdapter {
                         .bodyToMono(new ParameterizedTypeReference<PageResponse<CouponGenerationIssueDto>>() {
                         })
                         .blockOptional().orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public List<UnusedMemberCouponResponseDto> findUnusedMemberCouponResponseDto(Integer memberNo) {
+        return webClient.get()
+                .uri(COUPON_TYPE_PREFIX_URL + "?memberNo=" +memberNo)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(new ParameterizedTypeReference<List<UnusedMemberCouponResponseDto>>() {
+                })
+                .blockOptional().orElseThrow(NullResponseBodyException::new);
     }
 }

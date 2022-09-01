@@ -9,12 +9,16 @@ package shop.gaship.gashipfront.inquiry.inquiryenum;
 public enum InquiryViewName {
     VIEW_NAME_CUSTOMER_INQUIRY_LIST("inquiry/customerInquiryList"),
     VIEW_NAME_PRODUCT_INQUIRY_LIST("inquiry/productInquiryList"),
+    VIEW_NAME_CUSTOMER_INQUIRY_LIST_ADMIN("inquiryadmin/customerInquiryListAdmin"),
+    VIEW_NAME_PRODUCT_INQUIRY_LIST_ADMIN("inquiryadmin/productInquiryListAdmin"),
 
     VIEW_NAME_CUSTOMER_INQUIRY_ADD_FORM("inquiry/customerInquiryAddForm"), // 사용자
     VIEW_NAME_PRODUCT_INQUIRY_ADD_FORM("inquiry/productInquiryAddForm"), // 사용자
 
     VIEW_NAME_CUSTOMER_INQUIRY_DETAILS("inquiry/customerInquiryDetails"), // 사용자, 관리자
-    VIEW_NAME_PRODUCT_INQUIRY_DETAILS("inquiry/productInquiryDetails"); // 사용자, 관리자
+    VIEW_NAME_PRODUCT_INQUIRY_DETAILS("inquiry/productInquiryDetails"),
+    VIEW_NAME_CUSTOMER_INQUIRY_DETAILS_ADMIN("inquiryadmin/customerInquiryDetailsAdmin"),
+    VIEW_NAME_PRODUCT_INQUIRY_DETAILS_ADMIN("inquiryadmin/productInquiryDetailsAdmin"); // 사용자, 관리자
 
     private String value;
 

@@ -3,7 +3,7 @@ package shop.gaship.gashipfront.cart.dto.response;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
+import lombok.Setter;
 
 
 /**
@@ -22,4 +22,9 @@ public class ProductResponseDto {
     private Integer orderQuantity;
     private Integer quantity;
     private String filePaths;
+
+    public ProductResponseDto changeQuantityToStock() {
+        this.orderQuantity = Math.min(orderQuantity,quantity);
+        return this;
+    }
 }

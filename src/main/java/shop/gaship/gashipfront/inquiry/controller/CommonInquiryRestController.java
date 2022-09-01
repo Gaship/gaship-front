@@ -13,12 +13,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import shop.gaship.gashipfront.exceptions.MemberNotCreationException;
@@ -38,33 +46,7 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 public class CommonInquiryRestController {
 
     private final CommonInquiryService commonInquiryService;
-    private static final String REDIRECT_URI_FORMAT_MANAGER = "/inquiries/%s-inquiries/";
-
-    /**
-     * 관리자가 문의의 답변을 추가하기 위한 요청을 처리합니다.
-     *
-     * @param inquiryAnswerAddRequestDto 문의답변에 들어가야할 정보들을 가지는 DTO 객체입니다.
-     * @return view 경로를 반환합니다.
-     * @author 최겸준
-     */
-    @PostMapping(value = "/inquiry-answer", params = {"isProduct"})
-    public Map<String, Object> inquiryAnswerAdd(
-        @Valid InquiryAnswerRequestDto inquiryAnswerAddRequestDto,
-        @NotNull Boolean isProduct,
-        RedirectAttributes redirectAttributes) {
-        commonInquiryService.addInquiryAnswer(inquiryAnswerAddRequestDto);
-
-        redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),
-            VALUE_MESSAGE_INQUIRY_ANSWER_ADD_SUCCESS.getValue());
-
-
-        String redirectUri = getRedirectUri(isProduct, REDIRECT_URI_FORMAT_MANAGER);
-        String inquiryNo = inquiryAnswerAddRequestDto.getInquiryNo().toString();
-
-        Map<String, Object> json = new HashMap<>();
-        json.put("redirectUri", Strings.concat(redirectUri, inquiryNo));
-        return json;
-    }
+    private static final String REDIRECT_URI_FORMAT_MANAGER = "/admin/inquiries/%s-inquiries/";
 
     /**
      * 관리자가 문의의 답변을 수정하기 위한 요청을 처리합니다.
@@ -116,10 +98,12 @@ public class CommonInquiryRestController {
      * @author 최겸준
      */
     @DeleteMapping(value = "/{inquiryNo}", params = {"isProduct"})
+    @Secured("ROLE_USER")
     public Map<String, String> inquiryDeleteByMemberSelf(@PathVariable Integer inquiryNo,
                                                          Boolean isProduct,
                                                          RedirectAttributes redirectAttributes,
                                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
         Integer memberNo = userDetailsDto.getMemberNo();
         if (Objects.isNull(memberNo)) {
             throw new MemberNotCreationException();
@@ -145,7 +129,8 @@ public class CommonInquiryRestController {
      * @author 최겸준
      */
     @DeleteMapping(value = "/{inquiryNo}/manager", params = {"isProduct"})
-    public String inquiryDeleteByManager(@PathVariable Integer inquiryNo, Boolean isProduct,
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
+    public Map<String, String> inquiryDeleteByManager(@PathVariable Integer inquiryNo, Boolean isProduct,
                                          RedirectAttributes redirectAttributes) {
 
         commonInquiryService.deleteInquiryManager(inquiryNo);
@@ -153,7 +138,10 @@ public class CommonInquiryRestController {
         redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),
             VALUE_MESSAGE_INQUIRY_DELETE_SUCCESS.getValue());
 
-        return getRedirectUri(isProduct, REDIRECT_URI_FORMAT_MANAGER);
+        String redirectUri = getRedirectUri(isProduct, REDIRECT_URI_FORMAT_MANAGER);
+        Map<String, String> json = new HashMap<>();
+        json.put("redirectUri", redirectUri);
+        return json;
     }
 
     private String getRedirectUri(Boolean isProduct, String redirectUrlFormat) {

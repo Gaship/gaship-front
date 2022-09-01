@@ -12,6 +12,7 @@ import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
+import shop.gaship.gashipfront.member.dto.request.ReissuePasswordRequest;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.member.exception.SignUpDenyException;
@@ -119,7 +120,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void requestApproveEmailVerification(String verifyCode) {
         String message = memberAdapter.approveVerifyCode(verifyCode).getRequestStatus();
-        if(!Objects.equals(message, "success")) {
+        if (!Objects.equals(message, "success")) {
             String errorMessage = "이메일 인증에 실패했습니다.";
             throw new SignUpDenyException(errorMessage);
         }
@@ -136,6 +137,16 @@ public class MemberServiceImpl implements MemberService {
         memberAdapter.checkApprovedVerification(verifyCode);
     }
 
+    @Override
+    public void verifySignUpCode(String email) {
+        memberAdapter.verifySignUpIdentify(email);
+    }
+
+    @Override
+    public void reissuePassword(ReissuePasswordRequest reissuePasswordRequest) {
+        memberAdapter.reissuePasswordRequest(reissuePasswordRequest);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -143,5 +154,4 @@ public class MemberServiceImpl implements MemberService {
     public PageResponse<MemberResponseByAdminDto> findMembers(Pageable pageable) {
         return memberAdapter.findMembers(pageable);
     }
-
 }

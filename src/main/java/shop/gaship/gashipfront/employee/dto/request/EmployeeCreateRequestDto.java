@@ -40,6 +40,7 @@ public class EmployeeCreateRequestDto {
     @Email
     private String email;
 
+    @Setter
     @Pattern(
         // 첫글자는 대문자, 소문자, 숫자, @$!%*#?& 특수문자만 허용하여 8자리 이상 조합
         regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
