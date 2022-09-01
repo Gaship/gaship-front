@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.orderproduct.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author : 조재철
@@ -21,4 +22,7 @@ public class OrderProductResponseDto {
     private String receiptPhoneNumber;
     private String orderStatus;
     private String trackingNo;
+
+    @Setter
+    private Boolean existsReview;
 }

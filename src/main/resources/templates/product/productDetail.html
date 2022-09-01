@@ -116,15 +116,20 @@
                                 <h6>문의하기</h6>
                                 <div class="row justify-content-end">
                                     <th:block sec:authorize="hasAnyRole('ROLE_MEMBER', 'ROLE_USER')">
-                                        <label class="w-100">
-                                            제목
-                                            <input class="form-control w-100 p-2" id="inquiry-title">
-                                        </label>
-                                        <label class="w-100">
-                                            내용
-                                            <textarea id="inquiry-content" rows="5" class="w-100 p-2 mt-2 form-control" style="resize:none;"></textarea>
-                                        </label>
-                                        <button type="button" class="site-btn m-2" id="submit-inquiry">문의등록</button>
+                                        <div class="w-100">
+                                            <form method="post" th:action="@{/inquiries/product-inquiry}" class="w-100 row justify-content-end m-0 p-2">
+                                                <label class="w-100">
+                                                    제목
+                                                    <input class="form-control w-100 p-2" id="title" name="title">
+                                                </label>
+                                                <label class="w-100">
+                                                    내용
+                                                    <textarea id="inquiryContent" name="inquiryContent" rows="5" class="w-100 p-2 mt-2 form-control" style="resize:none;"></textarea>
+                                                </label>
+                                                <input type="hidden" name="productNo" th:value="${product.productNo}">
+                                                <input type="submit" class="site-btn m-2" value="문의등록">
+                                            </form>
+                                        </div>
                                     </th:block>
                                     <th:block sec:authorize="hasRole('ROLE_ANONYMOUS')">
                                         <textarea rows="5" class="w-100 p-2 mb-5" style="resize:none;"
@@ -148,8 +153,5 @@
 </th:block>
 <th:block layout:fragment="content-js">
     <script th:src="@{/product/procutDetail.js}"></script>
-    <th:block sec:authorize="hasAnyRole('ROLE_MEMBER', 'ROLE_USER')">
-        <script th:src="@{/product/procutDetailMember.js}"></script>
-    </th:block>
 </th:block>
 </html>

@@ -36,9 +36,10 @@ public class TagController {
      * @author 최정우
      */
     @PostMapping
+    @ResponseBody
     public String tagAdd(@RequestBody @Valid TagAddRequestDto request) {
         tagService.addTag(request);
-        return "redirect:/tags";
+        return "success";
     }
 
     /**

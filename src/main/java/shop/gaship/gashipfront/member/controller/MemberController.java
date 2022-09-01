@@ -52,7 +52,7 @@ public class MemberController {
      */
     @GetMapping("/members/create")
     public String memberSignup() {
-        return "/member/signUpForm";
+        return "member/signUpForm";
     }
 
     /**
@@ -151,9 +151,9 @@ public class MemberController {
         return "member/memberDetails";
     }
 
-    @GetMapping("/members/{memberNo}/exit")
-    public String showMemberExitPage(@PathVariable Integer memberNo, Model model) {
-        model.addAttribute("memberNo", memberNo);
+    @GetMapping("/members/exit")
+    public String showMemberExitPage(@AuthenticationPrincipal UserDetailsDto userDetails, Model model) {
+        model.addAttribute("memberNo", userDetails.getMemberNo());
         return "member/memberExit";
     }
 

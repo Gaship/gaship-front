@@ -47,6 +47,9 @@
                     </tr>
                     </tbody>
                 </table>
+                <th:block th:if="${!#lists.isEmpty(pageResponse.content)}">
+                    <th:block th:include="component/pageFooter"></th:block>
+                </th:block>
             </div>
 
             <a href="/inquiries/show-form/customer-inquiry-add" style="width: auto; margin-left: 5px" type="button"

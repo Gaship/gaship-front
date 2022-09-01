@@ -100,13 +100,12 @@ public class ProductReviewController {
         return "review/reviewList";
     }
 
-    @GetMapping("/members/{memberNo}/reviews")
-    public String getMemberReviews(@PathVariable Integer memberNo,
-                                   @PageableDefault(size = 5) Pageable pageable,
+    @GetMapping("/members/reviews")
+    public String getMemberReviews(@PageableDefault(size = 5) Pageable pageable,
                                    Model model,
                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         PageResponse<ProductReviewResponseDto> reviews = productReviewService
-                .findReviewsByMember(memberNo, pageable);
+                .findReviewsByMember(userDetailsDto.getMemberNo(), pageable);
         reviews.getContent().forEach(review -> review
                 .setIsWriter(Objects.equals(userDetailsDto.getMemberNo(), review.getWriterNo())));
         model.addAttribute("reviews", reviews);

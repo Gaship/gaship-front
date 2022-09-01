@@ -30,26 +30,6 @@ public class CustomerInquiryController {
 
     private final CommonInquiryService commonInquiryService;
 
-    /**
-     * 관리자 또는 회원본인에 대한 고객문의 상세조회 요청을 처리하는 기능입니다.
-     *
-     * @param inquiryNo 조회의 기준이 되는 문의번호입니다.
-     * @return view 경로를 반환합니다.
-     * @author 최겸준
-     */
-    @GetMapping(value = "/customer-inquiries/{inquiryNo}")
-    @PreAuthorize("isAuthenticated()")
-    public String customerInquiryDetails(
-        @PathVariable Integer inquiryNo, Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-
-        InquiryDetailsResponseDto inquiryDetailsResponseDto =
-            commonInquiryService.findInquiry(inquiryNo);
-
-        Boolean isUser = RoleUserMySelfProcessor.setSelf(userDetailsDto, inquiryDetailsResponseDto);
-        model.addAttribute("isUser", isUser);
-        model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);
-        return VIEW_NAME_CUSTOMER_INQUIRY_DETAILS.getValue();
-    }
 
     /**
      * 고객문의를 추가하기 위한 추가페이지 조회 요청을 처리합니다.

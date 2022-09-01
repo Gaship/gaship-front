@@ -134,7 +134,7 @@ public class ProductController {
     public String productAdd(List<MultipartFile> multipartFiles,
                              @ModelAttribute ProductCreateRequestDto createRequest) {
         productService.addProduct(multipartFiles, createRequest);
-        return "redirect:/";
+        return "redirect:/admin/products";
     }
 
     @GetMapping("/products/modify")
@@ -152,7 +152,7 @@ public class ProductController {
     public String productModify(List<MultipartFile> multipartFiles,
                                 @ModelAttribute ProductModifyRequestDto modifyRequest) {
         productService.modifyProduct(multipartFiles, modifyRequest);
-        return "redirect:/";
+        return "redirect:/admin/products";
     }
 
     @GetMapping("/admin/products")

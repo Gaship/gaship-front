@@ -32,7 +32,7 @@
                         <tr th:each="item : ${pageResponse.content}">
                             <td th:text="${item.inquiryNo}"></td>
                             <td>
-                                <a th:href="@{/inquiries/product-inquiries/{inquiryNo}(inquiryNo = ${item.inquiryNo})}"><span
+                                <a th:href="@{/admin/inquiries/product-inquiries/{inquiryNo}/manager(inquiryNo = ${item.inquiryNo})}"><span
                                         th:text="${item.title}"></span></a>
                             </td>
                             <td th:text="${item.processStatus}"></td>
@@ -47,6 +47,9 @@
                         </tr>
                         </tbody>
                     </table>
+                    <th:block th:if="${!#lists.isEmpty(pageResponse.content)}">
+                        <th:block th:include="component/pageFooter"></th:block>
+                    </th:block>
                 </div>
             </div>
 

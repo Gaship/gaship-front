@@ -16,6 +16,7 @@ import shop.gaship.gashipfront.inquiry.dto.request.InquiryAddRequestDto;
 import shop.gaship.gashipfront.inquiry.dto.response.InquiryListResponseDto;
 import shop.gaship.gashipfront.inquiry.service.common.CommonInquiryService;
 import shop.gaship.gashipfront.inquiry.service.product.ProductInquiryService;
+import shop.gaship.gashipfront.inquiry.util.RoleUserMySelfProcessor;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -34,21 +35,6 @@ public class ProductInquiryRestController {
     private final CommonInquiryService commonInquiryService;
 
     /**
-     * 관리자 또는 회원이 상품상세페이지에서 해당하는 상품에 대한 상품문의목록 조회요청을 처리하는 기능입니다.
-     *
-     * @param pageable  페이지네이션에 맞게 조회하기 위한 정보를 담고있는 객체입니다.
-     * @param productNo 기준이 되는 상품의 식별번호입니다.
-     * @return 문의 목록을 반환합니다.
-     * @author 최겸준
-     */
-    @GetMapping(value = "/products/{productNo}")
-    public PageResponse<InquiryListResponseDto> productInquiryProductList(
-        Pageable pageable, @PathVariable Integer productNo) {
-
-        return productInquiryService.findProductInquiriesByProductNo(pageable, productNo);
-    }
-
-    /**
      * 회원이 상품문의를 추가하기 위한 요청을 처리합니다.
      *
      * @param inquiryAddRequestDto 해당 server로 온 요청을 바인딩하기위한 DTO 객체입니다.
@@ -63,5 +49,25 @@ public class ProductInquiryRestController {
         inquiryAddRequestDto.setIsProduct(PRODUCT_INQUIRY.getValue());
 
         commonInquiryService.addInquiry(inquiryAddRequestDto);
+    }
+
+    /**
+     * 관리자 또는 회원이 상품상세페이지에서 해당하는 상품에 대한 상품문의목록 조회요청을 처리하는 기능입니다.
+     *
+     * @param pageable  페이지네이션에 맞게 조회하기 위한 정보를 담고있는 객체입니다.
+     * @param productNo 기준이 되는 상품의 식별번호입니다.
+     * @return 문의 목록을 보여주는 view name을 반환합니다.
+     * @author 최겸준
+     */
+    @GetMapping(value = "/product/{productNo}")
+    public PageResponse<InquiryListResponseDto> productInquiryProductList(
+        Pageable pageable, @PathVariable Integer productNo,
+        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        PageResponse<InquiryListResponseDto> pageResponse =
+            productInquiryService.findProductInquiriesByProductNo(pageable, productNo);
+
+        RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
+        return pageResponse;
     }
 }
