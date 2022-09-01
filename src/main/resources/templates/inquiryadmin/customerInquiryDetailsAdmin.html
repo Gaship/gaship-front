@@ -50,7 +50,7 @@
                     </div>
 
 
-                    <form action="/js/inquiries/inquiry-answer?isProduct=false" method="POST"
+                    <form action="/inquiries/inquiry-answer?isProduct=false" method="POST"
                           th:if="${#strings.equals(details.processStatus, '답변대기')}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <input name="inquiryNo" type="hidden" th:value="${details.inquiryNo}">

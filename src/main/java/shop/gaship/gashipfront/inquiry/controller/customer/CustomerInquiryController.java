@@ -28,9 +28,6 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 @RequestMapping("/inquiries")
 public class CustomerInquiryController {
 
-    private final CommonInquiryService commonInquiryService;
-
-
     /**
      * 고객문의를 추가하기 위한 추가페이지 조회 요청을 처리합니다.
      *
@@ -38,6 +35,7 @@ public class CustomerInquiryController {
      * @author 최겸준
      */
     @GetMapping("/show-form/customer-inquiry-add")
+    @PreAuthorize("isAuthenticated()")
     public String customerInquiryAddForm() {
 
         return VIEW_NAME_CUSTOMER_INQUIRY_ADD_FORM.getValue();

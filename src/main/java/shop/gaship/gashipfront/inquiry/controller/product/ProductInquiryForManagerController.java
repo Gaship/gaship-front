@@ -35,7 +35,6 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/inquiries")
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
 public class ProductInquiryForManagerController {
 
     private final ProductInquiryService productInquiryService;

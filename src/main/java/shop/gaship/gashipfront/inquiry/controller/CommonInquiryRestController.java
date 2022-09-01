@@ -56,6 +56,7 @@ public class CommonInquiryRestController {
      * @author 최겸준
      */
     @PutMapping(value = "/{inquiryNo}/inquiry-answer", params = {"isProduct"})
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String inquiryAnswerModify(@Valid InquiryAnswerRequestDto inquiryAnswerModifyRequestDto,
                                       @NotNull Boolean isProduct,
                                       RedirectAttributes redirectAttributes) {
@@ -77,6 +78,7 @@ public class CommonInquiryRestController {
      * @author 최겸준
      */
     @DeleteMapping(value = "/{inquiryNo}/inquiry-answer", params = {"isProduct"})
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
     public String inquiryAnswerDelete(@PathVariable @NotNull Integer inquiryNo,
                                       @NotNull Boolean isProduct,
                                       RedirectAttributes redirectAttributes) {

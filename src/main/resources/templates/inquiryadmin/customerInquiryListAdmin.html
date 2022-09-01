@@ -39,7 +39,7 @@
                             <td th:text="${item.memberNickname}"></td>
                             <td th:text="${item.registerDatetime}"></td>
                             <td>
-                                <button th:if = "${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_MANAGER'')')}" style="width: auto; margin-left: 10px" class="btn btn-danger"
+                                <button style="width: auto; margin-left: 10px" class="btn btn-danger"
                                         th:value="${item.inquiryNo}"
                                         onclick="deleteInquiry(this)">삭제
                                 </button>
