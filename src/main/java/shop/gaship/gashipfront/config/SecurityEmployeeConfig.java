@@ -40,9 +40,13 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
             .httpBasic()
             .and()
                 .requestMatchers()
-                    .antMatchers("/admin/**")
-                    .antMatchers("/manager/**")
+                .antMatchers("/admin/**")
+                .antMatchers("/manager/**")
             .and()
+                .authorizeRequests()
+                .antMatchers("/admin/**")
+                .hasAnyAuthority("ROLE_MANAGER", "ROLE_ADMIN")
+                .and()
             .authenticationProvider(authenticationProvider());
 
 
