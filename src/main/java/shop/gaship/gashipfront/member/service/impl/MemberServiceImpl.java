@@ -64,8 +64,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public boolean checkDuplicatedNickname(String nickname) {
-        return memberAdapter.nicknameDuplicationCheckRequest(nickname)
-            .getMemberNo() != null;
+        return memberAdapter.nicknameDuplicationCheckRequest(nickname).getHasNickname();
     }
 
     public MemberNumberPresence findRecommendMemberNo(String nickname) {

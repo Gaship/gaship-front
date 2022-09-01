@@ -5,6 +5,7 @@ import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
+import shop.gaship.gashipfront.member.dto.NicknamePresence;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyRequestDto;
@@ -72,7 +73,7 @@ public interface MemberAdapter {
      * @return MemberNumberPresence : 존재한다면 회원 고유번호가 담겨옵니다.
      * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
-    MemberNumberPresence nicknameDuplicationCheckRequest(String nickName);
+    NicknamePresence nicknameDuplicationCheckRequest(String nickName);
 
     /**
      * 닉네임을 통한 추천회원의 고유 번호를 확인하기위해 쇼핑몰 서버에 요청하는 메서드입니다.

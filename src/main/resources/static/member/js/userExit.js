@@ -4,8 +4,7 @@ document.querySelector('.exit-btn')
     const token = document.getElementById("_csrf").content
     const tokenHeader = document.getElementById("_csrf_header").content;
     if(result) {
-      const memberNo = location.pathname.split("/")[2];
-      fetch(`/api/members/${memberNo}`, {
+      fetch(`/api/members`, {
         method : 'DELETE',
         headers : {
           [`${tokenHeader}`] : token,

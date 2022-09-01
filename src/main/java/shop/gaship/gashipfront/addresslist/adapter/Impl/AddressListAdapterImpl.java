@@ -15,6 +15,8 @@ import shop.gaship.gashipfront.security.common.exception.NullResponseBodyExcepti
 import shop.gaship.gashipfront.util.ExceptionUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
+import java.util.List;
+
 /**
  * 배송지목록 어뎁터 구현체입니다.
  *
@@ -24,6 +26,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @Component
 @RequiredArgsConstructor
 public class AddressListAdapterImpl implements AddressListAdapter {
+    private static final String ADDRESS_LIST_PATH = "/api/members/{memberNo}/addressLists";
     private final WebClient webClient;
 
     /**
@@ -98,6 +101,17 @@ public class AddressListAdapterImpl implements AddressListAdapter {
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(new ParameterizedTypeReference<PageResponse<AddressListResponseDto>>() {
+                })
+                .blockOptional().orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public List<AddressListResponseDto> findAddressListAll(Integer memberNo) {
+        return webClient.get()
+                .uri(ADDRESS_LIST_PATH, memberNo)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .bodyToMono(new ParameterizedTypeReference<List<AddressListResponseDto>>() {
                 })
                 .blockOptional().orElseThrow(NullResponseBodyException::new);
     }

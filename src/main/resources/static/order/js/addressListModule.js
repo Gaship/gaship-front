@@ -1,9 +1,8 @@
-import {pageHelper} from "./pageModule.js";
 import {orderRequestData} from "./order.js";
 
-const addressListPageHelper = pageHelper;
 let token;
 let addressListContainer;
+let addressList = [];
 
 async function getAddressListData() {
     const request = {
@@ -13,7 +12,7 @@ async function getAddressListData() {
         }
     };
 
-    return await fetch("/rest/members/address-list?page=0&size=5", request)
+    return await fetch("/rest/members/address-list", request)
         .then(response => {
             return response.json();
         });
@@ -48,12 +47,14 @@ function drawAddressListContainer() {
     </div>
 </div>
     `
+    setCreateAddressEvent();
+    drawAddressListContent();
 }
 
 function drawAddressListContent() {
     const addressListContent = document.getElementById("addressListContent");
     addressListContent.innerHTML = "";
-    addressListPageHelper.pageItems.forEach(item => {
+    addressList.forEach(item => {
         const trTemplate =
             `
 <tr>
@@ -83,7 +84,7 @@ function setSelectAddressBtnEvent() {
         btn.addEventListener('click', e => {
             const addressListNo = e.target.value;
 
-            const selectAddress = addressListPageHelper.pageItems
+            const selectAddress = addressList
                 .filter(addressInfo => addressInfo.addressListNo == addressListNo);
 
             document.getElementById("sigunguInput").value = selectAddress[0].addressName;
@@ -221,10 +222,11 @@ async function addAddress() {
 const loadAddressList = () => {
     init();
     getAddressListData()
-        .then(addressListPageHelper.initPage)
+        .then((addressListData) => {
+            addressList = addressListData;
+        })
         .then(drawAddressListContainer)
-        .then(setCreateAddressEvent)
         .then(drawAddressListContent);
 }
 
-export {addressListPageHelper, loadAddressList}
+export {loadAddressList}
