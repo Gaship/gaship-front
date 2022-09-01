@@ -42,6 +42,12 @@
                                             </li>
                                             <li><b>배송번호 </b> <span><samp
                                                     th:text="${order.trackingNo}"></samp></span></li>
+                                            <li>
+                                                <a style="font-size: 12px" class="w-auto p-1 btn btn-sm btn-primary btn-lg " th:href="@{|/reviews/${order.orderProductNo}/add|}" th:unless="${order.existsReview}">
+                                                    상품평 작성
+                                                </a>
+                                                <p style="font-size: 10px" th:if="${order.existsReview}" class="">상품평 작성완료</p>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -100,12 +106,6 @@
                                                     <span th:text="${order.receiptSubPhoneNumber}"></span>
                                                 </p>
                                             </div>
-<!--                                            <td>-->
-<!--                                                <a style="font-size: 10px" class="w-auto p-1 btn btn-sm btn-primary btn-lg " th:href="@{|/reviews/${orderProduct.orderProductNo}/add|}" th:unless="${orderProduct.existsReview}">-->
-<!--                                                    작성-->
-<!--                                                </a>-->
-<!--                                                <p style="font-size: 10px" th:if="${orderProduct.existsReview}" class="">작성완료</p>-->
-<!--                                            </td>-->
                                         </div>
                                     </div>
                                 </div>

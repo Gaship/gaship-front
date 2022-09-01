@@ -18,6 +18,4 @@ public class OrderProductResponseDto {
     private LocalDateTime orderDatetime;
     private String receiptName;
     private String receiptPhoneNumber;
-    @Setter
-    private Boolean existsReview;
 }
