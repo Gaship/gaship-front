@@ -10,6 +10,7 @@ import lombok.Setter;
  */
 @Getter
 public class OrderProductDetailResponseDto {
+    private Integer orderProductNo;
     private Integer productNo;
     private Integer orderNo;
     private String productName;
@@ -33,4 +34,7 @@ public class OrderProductDetailResponseDto {
     private Long cancellationAmount;
     private String cancellationReason;
     private String filePath;
+
+    @Setter
+    private Boolean existsReview;
 }
