@@ -157,11 +157,19 @@ public class ProductController {
 
     @GetMapping("/admin/products")
     public String showAdminProductList(@PageableDefault(size = 10) Pageable pageable,
+                                       @RequestParam(value = "code", required = false) String code,
                                        Model model) {
-        model.addAttribute("products", productService.productAllInfoByPageable(
-                String.valueOf(pageable.getPageNumber()),
-                String.valueOf(pageable.getPageSize()),
-                null, null, null));
+        if (Objects.isNull(code) || code.isEmpty()) {
+            model.addAttribute("products", productService.productAllInfoByPageable(
+                    String.valueOf(pageable.getPageNumber()),
+                    String.valueOf(pageable.getPageSize()),
+                    null, null, null));
+        } else {
+            model.addAttribute("products", productService
+                    .findProductListByCode(pageable, code));
+            model.addAttribute("code", code);
+        }
+
         model.addAttribute("salesStatusList",
                 statusCodeAdapter.getStatusCodeList(SalesStatus.GROUP));
         return "product/adminProductList";
