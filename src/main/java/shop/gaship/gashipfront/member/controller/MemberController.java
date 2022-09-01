@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -40,8 +41,8 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class MemberController {
     private final MemberService memberService;
     private static final String RESPONSE = "response";
-    private static final String MEM_NO = "response";
-    private static final String STATUS = "response";
+    private static final String MEM_NO = "memberNo";
+    private static final String STATUS = "status";
     private static final int VERIFICATION_COOKIE_MAX_AGE = 180;
 
     /**
@@ -206,10 +207,20 @@ public class MemberController {
     public String memberList(
             Pageable pageable,
             Model model) {
-        PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(pageable);
-        model.addAttribute(RESPONSE, dto);
+        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(pageable1);
 
-        return "layout/admin/member/memberList";
+        model.addAttribute("content", dto.getContent());
+        model.addAttribute("next", dto.isNext());
+        model.addAttribute("previous", dto.isPrevious());
+        model.addAttribute("totalPage", dto.getTotalPages());
+        model.addAttribute("pageNum", dto.getNumber() + 1);
+        model.addAttribute("previousPageNo", dto.getNumber() - 1);
+        model.addAttribute("nextPageNo", dto.getNumber() + 1);
+        model.addAttribute("size", 10);
+        model.addAttribute("uri", "/admin/members");
+
+        return "member/memberList";
     }
 
     @GetMapping("/members/signUp/email-verify/{verifyCode}")
