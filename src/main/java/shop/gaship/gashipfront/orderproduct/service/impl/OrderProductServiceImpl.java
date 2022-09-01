@@ -34,7 +34,7 @@ public class OrderProductServiceImpl implements OrderProductService {
     }
 
     @Override
-    public OrderProductDetailResponseDto findOrderProductDetail(Integer orderProductNo, Integer memberNo) {
-        return orderProductAdapter.findOrderProductDetail(orderProductNo, memberNo);
+    public PageResponse<OrderProductDetailResponseDto> findOrderProductDetail(Integer orderProductNo, Integer memberNo, Pageable pageable) {
+        return orderProductAdapter.findOrderProductDetail(orderProductNo, memberNo, pageable);
     }
 }
