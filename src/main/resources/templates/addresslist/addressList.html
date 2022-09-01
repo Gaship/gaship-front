@@ -63,6 +63,11 @@
                         </table>
                     </div>
                 </div>
+                <ul class="pagination">
+                    <li style="margin-right: 10px;" class="page-item" th:if="${addressList.previous}"><a class="page-link" th:href="@{''(page=${addressList.number - 1})}">Previous</a></li>
+                    <span class="page-number" th:text="|${addressList.number + 1} / ${addressList.totalPages}|" th:if="${addressList.totalPages > 0}"></span>
+                    <li style="margin-left: 10px" class="page-item" th:if="${addressList.next}"><a class="page-link" th:href="@{''(page=${addressList.number + 1})}">Next</a></li>
+                </ul>
             </div>
             <div class="modalBackground"></div>
             <div class="addressAddFormModalWrap">

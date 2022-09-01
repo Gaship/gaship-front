@@ -3,6 +3,7 @@ package shop.gaship.gashipfront.addresslist.controller;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -103,7 +104,7 @@ public class AddressListController {
      */
     @GetMapping
     public String addressLists(@AuthenticationPrincipal UserDetailsDto user,
-                               Pageable pageable,
+                               @PageableDefault(page = 0, size = 10) Pageable pageable,
                                Model model) {
         if(Objects.isNull(user)) {
             return "redirect:/";
