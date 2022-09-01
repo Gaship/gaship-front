@@ -1,10 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/admin/layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>메인페이지</title>
 </head>
-<body>
+<th:block layout:fragment="content">
 
-</body>
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">사용자관리</h1>
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">사용자 목록</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                        <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-sm table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Name: activate to sort column descending" style="width: 150px;">닉네임</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 150px;">계정</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 150px;">가입일</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 150px;">추천인</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 150px;">누적 구매금액</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 150px;">회원 등급</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="member : ${content}">
+                                    <td>[[${member.nickname}]]</td>
+                                    <td>[[${member.email}]]</td>
+                                    <td>[[${member.registerDatetime}]]</td>
+                                    <td>[[${member.recommendMemberName}]]</td>
+                                    <td>[[${member.accumulatePurchaseAmount}]]</td>
+                                    <td>[[${member.memberGrade}]]</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+<!--                            <ul class="pagination">-->
+<!--                                <li class="page-item" th:if="${previous}"><a class="page-link" th:href="@{''(page=${number - 1})}">Previous</a></li>-->
+<!--                                <span class="page-number" th:text="|${number + 1} / ${totalPage}|" th:if="${reviews.totalPages > 0}"></span>-->
+<!--                                <li class="page-item" th:if="${next}"><a class="page-link" th:href="@{''(page=${reviews.number + 1})}">Next</a></li>-->
+<!--                            </ul>-->
+                            <th:block th:if="${!#lists.isEmpty(content)}">
+                                <th:block th:include="component/pageFooter"></th:block>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="content-js">
+    <script th:src="@{/index/index.js}"></script>
+</th:block>
+
 </html>
