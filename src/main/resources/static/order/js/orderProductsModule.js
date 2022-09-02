@@ -11,10 +11,11 @@ function OrderProduct(index, orderProductData) {
     this.index = index;
     this.imgPath = orderProductData.filePaths;
     this.productNo = orderProductData.productNo;
-    this.amount = orderProductData.amount;
+    this.productAmount = orderProductData.amount;
     this.productName = orderProductData.productName;
     this.couponNo = null;
     this.couponAmount = 0;
+    this.amount = orderProductData.amount;
     this.hopeDate = "";
 }
 
@@ -43,6 +44,7 @@ const orderRequestData = {
             .filter(orderProduct => orderProduct.index === productIndex);
         productTarget[0].couponNo = couponNo;
         productTarget[0].couponAmount = memberCoupons.getDiscountAmount(productTarget[0].amount, couponNo);
+        productTarget[0].amount = productTarget[0].productAmount-productTarget[0].couponAmount;
         const orderProductArrayIndex = orderRequestData.orderProducts.indexOf(productTarget[0]);
         orderRequestData.orderProducts[orderProductArrayIndex] = productTarget[0];
         orderRequestData.setTotalDiscountAmount();
@@ -107,13 +109,13 @@ function drawOrderProductsContent() {
                 <h5>${orderProduct.productName}</h5><br/>
             </td>
             <td style="padding: 10px" class="shoping__cart__price">
-                ${orderProduct.amount}
+                ${orderProduct.productAmount}
             </td>
             <td style="padding: 10px" class="shoping__cart__price">
                 ${orderProduct.couponAmount}
             </td>
             <td style="padding: 10px" class="shoping__cart__total">
-                ${orderProduct.amount - orderProduct.couponAmount}
+                ${orderProduct.amount}
             </td>
             <td style="padding: 10px">
                 <button name="selectCouponBtn" value="${orderProduct.index}" 

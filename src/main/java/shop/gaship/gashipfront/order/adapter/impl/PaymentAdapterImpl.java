@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import shop.gaship.gashipfront.order.adapter.PaymentAdapter;
+import shop.gaship.gashipfront.order.dto.request.OrderPaymentCancelRequestDto;
 import shop.gaship.gashipfront.order.dto.request.PaymentSuccessRequestDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
 
@@ -27,6 +28,18 @@ public class PaymentAdapterImpl implements PaymentAdapter {
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(String.class)
+                .block();
+    }
+
+    @Override
+    public void cancelPayment(Integer orderNo,
+                              OrderPaymentCancelRequestDto orderPaymentCancelRequestDto) {
+        webClient.post()
+                .uri("/payments/{orderNo}/cancel", orderNo)
+                .bodyValue(orderPaymentCancelRequestDto)
+                .retrieve()
+                .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+                .toEntity(void.class)
                 .block();
     }
 }
