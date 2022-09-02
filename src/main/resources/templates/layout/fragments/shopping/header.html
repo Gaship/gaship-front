@@ -44,27 +44,27 @@
                 </div>
                 <div class="header__cart col-lg-4 ">
                     <div class="header__top__right">
+                        <th:block sec:authorize="hasAnyRole('ROLE_ANONYMOUS', 'ROLE_USER')">
                         <div class="header__top__right__social">
                             <a th:href="@{/carts}"><i class="fa fa-shopping-bag"></i></a>
                         </div>
-                        <div class="header__top__right__language">
-                            <div>한국어</div>
-                            <span class="arrow_carrot-down"></span>
-                            <ul>
-                                <li><a href="#">한국어</a></li>
-                                <li><a href="#">English</a></li>
-                            </ul>
-                        </div>
                         <div class="header__top__right__auth w-50">
-                            <th:block sec:authorize="hasRole('ROLE_ANONYMOUS')"><a href="/login"><i class="fa fa-user"></i> 로그인</a></th:block>
+                            <th:block sec:authorize="hasRole('ROLE_ANONYMOUS')">
+                                <a href="/login"><i class="fa fa-user"></i> 로그인</a>
+                            </th:block>
                             <div class="row justify-content-around">
-                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_MEMBER')">
+                            <th:block sec:authorize="hasRole('ROLE_USER')">
                                 <a th:href="@{'/members/details'}"><i class="fa fa-user"></i>마이페이지</a>
                             </th:block>
-                            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER', 'ROLE_MEMBER')">
+                            <th:block sec:authorize="hasRole('ROLE_USER')">
                                 <a th:href="@{/logout}">로그아웃</a>
                             </th:block>
                             </div>
+                            </div>
+                        </th:block>
+                        <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
+                            <a class="text-dark" th:href="@{/manager/logout}">로그아웃</a>
+                        </th:block>
                         </div>
                     </div>
                 </div>

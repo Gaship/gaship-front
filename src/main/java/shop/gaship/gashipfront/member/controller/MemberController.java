@@ -228,8 +228,8 @@ public class MemberController {
     public String memberList(
             Pageable pageable,
             Model model) {
-        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
-        PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(pageable1);
+        Pageable tempPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(tempPageable);
 
         model.addAttribute("content", dto.getContent());
         model.addAttribute("next", dto.isNext());
