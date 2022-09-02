@@ -57,7 +57,7 @@
                 </div>
 
                 <th:block sec:authorize="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
-                    <form action="/js/inquiries/inquiry-answer?isProduct=true" method="POST"
+                    <form action="/inquiries/inquiry-answer?isProduct=true" method="POST"
                           th:if="${#strings.equals(details.processStatus, '답변대기')}">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <input name="inquiryNo" type="hidden" th:value="${details.inquiryNo}">
@@ -87,10 +87,20 @@
                         <div class="form-group" style="height: 30vh">
                             <span class="col-sm-2 control-label">내용</span>
                             <div class="col-sm-10 h-100">
-                                <textarea readonly class="form-control h-100"
+                                <textarea id = "answerContent" readonly class="form-control h-100"
                                           th:text="${details.answerContent}"></textarea>
                             </div>
                         </div>
+
+                        <button style="width: auto; margin-left: 10px; display: none" class="btn btn-outline-primary mt-5"
+                                id = "submitButton" type="button" th:value="${details.inquiryNo}" onclick="submitInquiry(this)" >등록
+                        </button>
+                        <button type = "button" style="width: auto; margin-left: 10px" class="btn btn-outline-primary mt-5"
+                                id = "modifyButton" onclick="modifyInquiry()">수정
+                        </button>
+                        <button style="width: auto; margin-left: 10px;" class="btn btn-outline-primary mt-5"
+                                th:value="${details.inquiryNo}" type="button" onclick="deleteInquiryAnswer(this)" >문의답변삭제
+                        </button>
 
                         <div class="form-group mt-5">
                             <span class="col-sm-2 control-label">답변등록시간</span>
@@ -109,15 +119,8 @@
                 </div>
             </div>
 
-            <th:block sec:authorize="hasRole('ROLE_USER')">
-                <a href="/inquiries/member-self/product-inquiries" style="width: auto; margin-left: 10px" type="button"
-                   class="btn btn-outline-primary mt-3">마이페이지 상품문의 목록</a>
-            </th:block>
-
-            <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
                 <a href="/admin/inquiries/product-inquiries" style="width: auto; margin-left: 10px" type="button"
                    class="btn btn-outline-primary mt-3">관리자 상품문의 목록</a>
-            </th:block>
 
             <script th:src="@{/inquiry/js/inquiry.js}"></script>
             <script th:inline="javascript">

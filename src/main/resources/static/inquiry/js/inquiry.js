@@ -38,6 +38,51 @@ async function deleteInquiry(eventTarget) {
         });
 }
 
-function addInquiryAnswer(eventTarget) {
+function modifyInquiry() {
+    const content = document.getElementById("answerContent");
+    const modifyButton = document.getElementById("modifyButton");
+    const submitButton = document.getElementById("submitButton");
+    content.readOnly = false;
+    modifyButton.style.display="none";
+    submitButton.style.display="block";
+}
 
+async function submitInquiry(eventTarget) {
+    const content = document.getElementById("answerContent");
+
+    let inquiryNo = eventTarget.value;
+    const request = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            [`${tokenHeader}`] : token
+        },
+        body: JSON.stringify({
+            "answerContent" : content.value
+        })
+    };
+
+    await fetch(`/js/inquiries/${inquiryNo}/inquiry-answer`, request)
+        .then(() => {
+            alert('문의답변 수정이 완료되었습니다.');
+            location.reload();
+        });
+}
+
+async function deleteInquiryAnswer(eventTarget) {
+
+    let inquiryNo = eventTarget.value;
+
+    const request = {
+        method: "DELETE",
+        headers: {
+            [`${tokenHeader}`] : token
+        }
+    };
+
+    await fetch(`/js/inquiries/${inquiryNo}/inquiry-answer`, request)
+        .then(() => {
+            alert('문의답변 삭제가 완료되었습니다.');
+            location.reload();
+        });
 }

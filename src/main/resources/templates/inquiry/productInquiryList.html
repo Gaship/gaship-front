@@ -40,8 +40,7 @@
                         <td th:text="${item.memberNickname}"></td>
                         <td th:text="${item.registerDatetime}"></td>
                         <td>
-                            <button th:if="${#authorization.expression('hasRole(''ROLE_USER'')') and item.self}"
-                                    style="width: auto; margin-left: 10px" class="btn btn-danger"
+                            <button style="width: auto; margin-left: 10px" class="btn btn-danger"
                                     th:value="${item.inquiryNo}"
                                     onclick="deleteInquiry(this)">삭제
                             </button>

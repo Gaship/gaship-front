@@ -36,8 +36,6 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequestMapping("/inquiries")
 public class ProductInquiryController {
 
-    private final ProductInquiryService productInquiryService;
-
     /**
      * 상품문의를 추가하기 위한 추가페이지 조회 요청을 처리합니다.
      *
@@ -45,6 +43,7 @@ public class ProductInquiryController {
      * @author 최겸준
      */
     @GetMapping(value = "/show-form/product-inquiry-add", params = {"productNo", "productName"})
+    @PreAuthorize("isAuthenticated()")
     public String productInquiryAddForm(@Valid ProductInfo productInfo, Model model) {
 
         model.addAttribute("productNo", productInfo.getProductNo());

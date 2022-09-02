@@ -16,10 +16,9 @@ import lombok.Setter;
 @Setter
 public class InquiryAnswerRequestDto {
 
-    @NotNull(message = "inquiryNo 는 필수값입니다.")
     @Min(value = 1, message = "inquiryNo 는 최소값이 1입니다.")
     private Integer inquiryNo;
-    
+
     @Min(value = 1, message = "employeeNo 는 최소값이 1입니다.")
     private Integer employeeNo;
 
