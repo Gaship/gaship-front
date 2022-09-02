@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.order.adapter;
 
+import shop.gaship.gashipfront.order.dto.request.OrderPaymentCancelRequestDto;
 import shop.gaship.gashipfront.order.dto.request.PaymentSuccessRequestDto;
 
 /**
@@ -10,4 +11,7 @@ import shop.gaship.gashipfront.order.dto.request.PaymentSuccessRequestDto;
  */
 public interface PaymentAdapter {
     void successPayment(PaymentSuccessRequestDto requestDto);
+
+    void cancelPayment(Integer orderNo,
+                       OrderPaymentCancelRequestDto orderPaymentCancelRequestDto);
 }

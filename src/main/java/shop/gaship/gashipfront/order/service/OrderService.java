@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.order.service;
 
+import shop.gaship.gashipfront.order.dto.request.OrderCancelRequestDto;
 import shop.gaship.gashipfront.order.dto.request.OrderRegisterRequestDto;
 import shop.gaship.gashipfront.order.dto.request.PaymentSuccessRequestDto;
 import shop.gaship.gashipfront.order.dto.response.OrderResponseDto;
@@ -14,4 +15,7 @@ public interface OrderService {
     OrderResponseDto processOrder(Integer memberNo, OrderRegisterRequestDto requestDto);
 
     void successPayment(PaymentSuccessRequestDto requestDto);
+
+    void cancelOrder(Integer orderNo,
+                     OrderCancelRequestDto requestDto, Integer memberNo);
 }
