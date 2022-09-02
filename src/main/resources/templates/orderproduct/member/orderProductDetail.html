@@ -41,8 +41,23 @@
                                         <ul class="m-0 pt-2">
                                             <li><span class="mr-2 font-weight-bold">주문번호</span> <span><samp th:text="${order.orderNo}"></samp></span>
                                             </li>
-                                            <li><span class="mr-2 font-weight-bold">배송유형</span> <span><samp
-                                                    th:text="${order.orderProductStatus}"></samp></span>
+                                            <li><span class="mr-2 font-weight-bold">주문상태</span> <span><samp
+                                                    th:text="${order.orderProductStatus}"></samp>
+                                                <form th:action="@{|/order/${order.orderNo}/cancel|}" method="post">
+                                                    <input th:if="${#strings.equals(order.orderProductStatus, '배송준비중')}" type="hidden" name="cancelReason" value="주문취소"/>
+                                                    <input th:unless="${#strings.equals(order.orderProductStatus, '배송준비중')}" type="hidden" name="cancelReason" value="반품"/>
+                                                    <input type="hidden" name="cancelOrderProductNo" th:value="${order.orderProductNo}">
+                                                    <input type="hidden" name="cancelAmount" th:value="${order.totalOrderAmount}">
+                                                    <button th:if="${#strings.equals(order.orderProductStatus, '배송준비중')}"
+                                                            style="margin-left: 5px; padding: 5px" type="submit" name="orderCancelBtn" class="site-btn">
+                                                                    주문취소
+                                                    </button>
+                                                    <button th:if="${#strings.equals(order.orderProductStatus, '배송중')} or ${#strings.equals(order.orderProductStatus, '배송완료')}"
+                                                            style="margin-left: 5px; padding: 5px" type="submit" name="orderCancelBtn" class="site-btn">
+                                                                    반품
+                                                    </button>
+                                                </form>
+                                            </span>
                                             </li>
                                             <li><span class="mr-2 font-weight-bold">배송번호 </span> <span><samp id = "tracking-no"
                                                     th:text="${order.trackingNo}"></samp></span></li>
