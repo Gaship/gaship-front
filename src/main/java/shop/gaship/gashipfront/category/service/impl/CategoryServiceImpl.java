@@ -2,16 +2,15 @@ package shop.gaship.gashipfront.category.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.category.adapter.CategoryAdapter;
 import shop.gaship.gashipfront.category.dto.request.CategoryCreateRequestDto;
 import shop.gaship.gashipfront.category.dto.request.CategoryModifyRequestDto;
 import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 import shop.gaship.gashipfront.category.service.CategoryService;
+import shop.gaship.gashipfront.config.LocalCacheConfig;
 
 /**
  * 카테고리 서비스 구현체입니다.
@@ -23,8 +22,6 @@ import shop.gaship.gashipfront.category.service.CategoryService;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryAdapter categoryAdapter;
-    private final RedisTemplate redisTemplate;
-    private final static String CATEGORY_KEY = "common_categories";
 
     @Override
     public CategoryResponseDto findCategory(Integer categoryNo) {
@@ -32,16 +29,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(LocalCacheConfig.CATEGORY_CACHE)
     public List<CategoryResponseDto> findCategories() {
-        List<CategoryResponseDto> categories =
-                (List<CategoryResponseDto>) redisTemplate.opsForValue().get(CATEGORY_KEY);
-
-        if (Objects.isNull(categories)) {
-            categories = categoryAdapter.categoryList();
-            redisTemplate.opsForValue().set(CATEGORY_KEY, categories);
-            redisTemplate.expire(CATEGORY_KEY, 60, TimeUnit.SECONDS);
-        }
-        return categories;
+        return categoryAdapter.categoryList();
     }
 
     @Override
@@ -78,6 +68,5 @@ public class CategoryServiceImpl implements CategoryService {
                 flatCategories(flattenCategories, category.getLowerCategories());
             }
         });
-
     }
 }
