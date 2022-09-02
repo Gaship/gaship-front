@@ -1,7 +1,5 @@
 document.querySelector(".email-verify").addEventListener('click', async () => {
   const email = document.querySelector(".sign-up-email").value;
-  const res = await fetch(`/api/members/verify?email=${email}`);
-  const messageJson = await res.json();
 
   if(email === '') {
     return Swal.fire(
@@ -10,6 +8,19 @@ document.querySelector(".email-verify").addEventListener('click', async () => {
       'error'
     );
   }
+
+  const res = await fetch(`/api/members/verify?email=${email}`);
+  const messageJson = await res.json();
+
+
+  if(!res.ok){
+    return Swal.fire(
+      res.status + ' : 에러 발생',
+      messageJson.errorMessage,
+      'error'
+    );
+  }
+
 
   if(messageJson.hasOwnProperty("message")){
     const toast = Swal.mixin({
@@ -52,11 +63,19 @@ document.querySelector('.recommend-btn').addEventListener('click', async () => {
     })
   })
 
-  if(!response.ok) {
+  if(!response.status === 500) {
     return Swal.fire(
       '추천 멤버가 존재하지 않음.',
       '추천하시려는 멤버가 존재하지 않습니다.',
       'warning'
+    );
+  }
+
+  if(!response.ok){
+    return Swal.fire(
+      response.status + ' : 에러 발생',
+      (await response.json()).errorMessage,
+      'error'
     );
   }
 
@@ -91,11 +110,19 @@ document.querySelector('.check-duplication').addEventListener('click', async () 
     })
   });
 
-  if(!response.ok) {
+    if(!response.status === 500) {
     return Swal.fire(
       '존재하는 닉네임',
       '이미 존재하는 닉네임입니다.',
       'warning'
+    );
+  }
+
+  if(!response.ok){
+    return Swal.fire(
+      response.status + ' : 에러 발생',
+      (await response.json()).errorMessage,
+      'error'
     );
   }
 

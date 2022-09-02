@@ -68,6 +68,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
 
-        response.sendRedirect("/admin");
+        response.sendRedirect("/admin/members");
     }
 }
