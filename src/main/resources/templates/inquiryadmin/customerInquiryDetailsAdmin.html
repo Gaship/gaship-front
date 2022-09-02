@@ -81,10 +81,19 @@
                             <div class="form-group" style="height: 30vh">
                                 <span class="col-sm-2 control-label">내용</span>
                                 <div class="col-sm-10 h-100">
-                            <textarea readonly class="form-control h-100"
+                            <textarea id = "answerContent" readonly class="form-control h-100"
                                       th:text="${details.answerContent}"></textarea>
                                 </div>
                             </div>
+                            <button style="width: auto; margin-left: 10px; display: none" class="btn btn-outline-primary mt-5"
+                                    id = "submitButton" type="button" th:value="${details.inquiryNo}" onclick="submitInquiry(this)" >등록
+                            </button>
+                            <button type = "button" style="width: auto; margin-left: 10px" class="btn btn-outline-primary mt-5"
+                                    id = "modifyButton" onclick="modifyInquiry()">수정
+                            </button>
+                            <button style="width: auto; margin-left: 10px;" class="btn btn-outline-primary mt-5"
+                                    th:value="${details.inquiryNo}" type="button" onclick="deleteInquiryAnswer(this)" >문의답변삭제
+                            </button>
 
                             <div class="form-group mt-5">
                                 <span class="col-sm-2 control-label">답변등록시간</span>
@@ -101,7 +110,7 @@
                             </div>
                         </form>
                     </div>
-                    <a href="/admin/inquiries/customer-inquiries" style="width: auto; margin-left: 10px" type="button"
+                    <a href="/admin/inquiries/customer-inquiries" style="width: auto; margin-left: 10px"
                        class="btn btn-outline-primary mt-3">관리자 고객문의 목록</a>
                 </div>
             </div>

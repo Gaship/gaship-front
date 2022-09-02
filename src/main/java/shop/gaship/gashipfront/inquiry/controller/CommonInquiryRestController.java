@@ -55,19 +55,13 @@ public class CommonInquiryRestController {
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @PutMapping(value = "/{inquiryNo}/inquiry-answer", params = {"isProduct"})
+    @PutMapping(value = "/{inquiryNo}/inquiry-answer")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
-    public String inquiryAnswerModify(@Valid InquiryAnswerRequestDto inquiryAnswerModifyRequestDto,
-                                      @NotNull Boolean isProduct,
-                                      RedirectAttributes redirectAttributes) {
+    public void inquiryAnswerModify(@RequestBody @Valid InquiryAnswerRequestDto inquiryAnswerModifyRequestDto,
+                                                   @AuthenticationPrincipal UserDetailsDto userDetailsDto, @PathVariable Integer inquiryNo) {
+        inquiryAnswerModifyRequestDto.setEmployeeNo(userDetailsDto.getMemberNo());
+        inquiryAnswerModifyRequestDto.setInquiryNo(inquiryNo);
         commonInquiryService.modifyInquiryAnswer(inquiryAnswerModifyRequestDto);
-
-        redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),
-            VALUE_MESSAGE_INQUIRY_ANSWER_MODIFY_SUCCESS.getValue());
-
-        String redirectUri = getRedirectUri(isProduct, REDIRECT_URI_FORMAT_MANAGER);
-        String inquiryNo = inquiryAnswerModifyRequestDto.getInquiryNo().toString();
-        return Strings.concat(redirectUri, inquiryNo);
     }
 
     /**
@@ -77,19 +71,10 @@ public class CommonInquiryRestController {
      * @return view 경로를 반환합니다.
      * @author 최겸준
      */
-    @DeleteMapping(value = "/{inquiryNo}/inquiry-answer", params = {"isProduct"})
+    @DeleteMapping(value = "/{inquiryNo}/inquiry-answer")
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
-    public String inquiryAnswerDelete(@PathVariable @NotNull Integer inquiryNo,
-                                      @NotNull Boolean isProduct,
-                                      RedirectAttributes redirectAttributes) {
-
+    public void inquiryAnswerDelete(@PathVariable @NotNull Integer inquiryNo) {
         commonInquiryService.deleteInquiryAnswer(inquiryNo);
-
-        redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),
-            VALUE_MESSAGE_INQUIRY_ANSWER_DELETE_SUCCESS.getValue());
-
-        String redirectUri = getRedirectUri(isProduct, REDIRECT_URI_FORMAT_MANAGER);
-        return Strings.concat(redirectUri, inquiryNo.toString());
     }
 
     /**

@@ -99,8 +99,15 @@ public class ProductInquiryForManagerController {
         PageResponse<InquiryListResponseDto> pageResponse
             = productInquiryService.findProductInquiriesStatusHold(pageable);
 
+        model.addAttribute("next", pageResponse.isNext());
+        model.addAttribute("previous", pageResponse.isPrevious());
+        model.addAttribute("totalPage", pageResponse.getTotalPages());
+        model.addAttribute("pageNum", pageResponse.getNumber() + 1);
+        model.addAttribute("previousPageNo", pageResponse.getNumber() - 1);
+        model.addAttribute("nextPageNo", pageResponse.getNumber() + 1);
+        model.addAttribute("uri", "/admin/inquiries/product-inquiries/status-hold");
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
-        return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
+        return VIEW_NAME_PRODUCT_INQUIRY_LIST_ADMIN.getValue();
     }
 
     /**
@@ -118,7 +125,14 @@ public class ProductInquiryForManagerController {
         PageResponse<InquiryListResponseDto> pageResponse =
             productInquiryService.findProductInquiriesStatusComplete(pageable);
 
+        model.addAttribute("next", pageResponse.isNext());
+        model.addAttribute("previous", pageResponse.isPrevious());
+        model.addAttribute("totalPage", pageResponse.getTotalPages());
+        model.addAttribute("pageNum", pageResponse.getNumber() + 1);
+        model.addAttribute("previousPageNo", pageResponse.getNumber() - 1);
+        model.addAttribute("nextPageNo", pageResponse.getNumber() + 1);
+        model.addAttribute("uri", "/admin/inquiries/product-inquiries/status-complete");
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
-        return VIEW_NAME_PRODUCT_INQUIRY_LIST.getValue();
+        return VIEW_NAME_PRODUCT_INQUIRY_LIST_ADMIN.getValue();
     }
 }
