@@ -16,6 +16,15 @@
         <div class="row flex-md-nowrap">
             <div role="main" class="container h5">
                 <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">상품문의 목록</h1>
+                <a href = "/admin/inquiries/product-inquiries" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                    최신순
+                </a>
+                <a href = "/admin/inquiries/product-inquiries/status-hold" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                    답변 대기
+                </a>
+                <a href="/admin/inquiries/product-inquiries/status-complete" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                    답변 완료
+                </a>
                 <div class="card-body p-0">
                     <table class="table table-striped">
                         <thead>
@@ -39,7 +48,7 @@
                             <td th:text="${item.memberNickname}"></td>
                             <td th:text="${item.registerDatetime}"></td>
                             <td>
-                                <button th:if = "${#authorization.expression('hasAnyRole(''ROLE_ADMIN'', ''ROLE_MANAGER'')')}" style="width: auto; margin-left: 10px" class="btn btn-danger"
+                                <button style="width: auto; margin-left: 10px" class="btn btn-danger"
                                         th:value="${item.inquiryNo}"
                                         onclick="deleteInquiry(this)">삭제
                                 </button>

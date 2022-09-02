@@ -60,10 +60,11 @@ public class ProductInquiryForMemberController {
      */
     @GetMapping(value = "/product-inquiries/{inquiryNo}")
     public String productInquiryDetails(
-        @PathVariable Integer inquiryNo, Model model) {
+        @PathVariable Integer inquiryNo, Model model, UserDetailsDto userDetailsDto) {
 
         InquiryDetailsResponseDto inquiryDetailsResponseDto =
             commonInquiryService.findInquiry(inquiryNo);
+        RoleUserMySelfProcessor.setSelf(userDetailsDto, inquiryDetailsResponseDto);
 
         model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);
         return VIEW_NAME_PRODUCT_INQUIRY_DETAILS.getValue();
@@ -85,7 +86,6 @@ public class ProductInquiryForMemberController {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             productInquiryService.findProductInquiriesByMemberNo(pageable, memberNo);
-        RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
 
         model.addAttribute("next", pageResponse.isNext());
         model.addAttribute("previous", pageResponse.isPrevious());
@@ -118,6 +118,6 @@ public class ProductInquiryForMemberController {
         redirectAttributes.addFlashAttribute(KEY_SUCCESS_MESSAGE.getValue(),
             VALUE_MESSAGE_PRODUCT_INQUIRY_ADD_SUCCESS.getValue());
 
-        return "redirect:/products/" + inquiryAddRequestDto.getProductNo();
+        return "redirect:/inquiries/member-self/product-inquiries";
     }
 }

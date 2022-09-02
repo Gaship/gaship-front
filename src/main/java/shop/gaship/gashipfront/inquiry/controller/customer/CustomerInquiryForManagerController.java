@@ -36,7 +36,6 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @Controller
 @RequestMapping("/admin/inquiries")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')")
 public class CustomerInquiryForManagerController {
 
     private final CustomerInquiryService customerInquiryService;
@@ -100,8 +99,15 @@ public class CustomerInquiryForManagerController {
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiriesStatusHold(pageable);
 
+        model.addAttribute("next", pageResponse.isNext());
+        model.addAttribute("previous", pageResponse.isPrevious());
+        model.addAttribute("totalPage", pageResponse.getTotalPages());
+        model.addAttribute("pageNum", pageResponse.getNumber() + 1);
+        model.addAttribute("previousPageNo", pageResponse.getNumber() - 1);
+        model.addAttribute("nextPageNo", pageResponse.getNumber() + 1);
+        model.addAttribute("uri", "/admin/inquiries/customer-inquiries/status-hold");
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
-        return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();
+        return VIEW_NAME_CUSTOMER_INQUIRY_LIST_ADMIN.getValue();
     }
 
     /**
@@ -118,8 +124,15 @@ public class CustomerInquiryForManagerController {
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiriesStatusComplete(pageable);
 
+        model.addAttribute("next", pageResponse.isNext());
+        model.addAttribute("previous", pageResponse.isPrevious());
+        model.addAttribute("totalPage", pageResponse.getTotalPages());
+        model.addAttribute("pageNum", pageResponse.getNumber() + 1);
+        model.addAttribute("previousPageNo", pageResponse.getNumber() - 1);
+        model.addAttribute("nextPageNo", pageResponse.getNumber() + 1);
+        model.addAttribute("uri", "/admin/inquiries/customer-inquiries/status-complete");
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
-        return VIEW_NAME_CUSTOMER_INQUIRY_LIST.getValue();
+        return VIEW_NAME_CUSTOMER_INQUIRY_LIST_ADMIN.getValue();
     }
 
 }

@@ -13,6 +13,7 @@ import java.util.Objects;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -75,7 +76,7 @@ public class CustomerInquiryForMemberController {
      * @author 최겸준
      */
     @GetMapping(value = "/member-self/customer-inquiries")
-    public String customerInquiryMemberList(Pageable pageable,
+    public String customerInquiryMemberList(@PageableDefault Pageable pageable,
                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto, Model model) {
 
         Integer memberNo = userDetailsDto.getMemberNo();
@@ -85,7 +86,6 @@ public class CustomerInquiryForMemberController {
 
         PageResponse<InquiryListResponseDto> pageResponse =
             customerInquiryService.findCustomerInquiriesByMemberNo(pageable, memberNo);
-        RoleUserMySelfProcessor.setSelfList(userDetailsDto, pageResponse.getContent());
 
         model.addAttribute("next", pageResponse.isNext());
         model.addAttribute("previous", pageResponse.isPrevious());
