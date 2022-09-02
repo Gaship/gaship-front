@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import shop.gaship.gashipfront.config.LocalCacheConfig;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
 import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
@@ -79,26 +81,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(LocalCacheConfig.PRODUCT_CACHE)
     public PageResponse<ProductAllInfoResponseDto> findMainProducts(String page, String size, String category, String minAmount, String maxAmount) {
-        PageResponse<ProductAllInfoResponseDto> result = null;
-        String products = (String) redisTemplate.opsForValue().get(PRODUCT_KEY);
-
-        if (Objects.isNull(products)) {
-            result = productAllInfoByPageable(page, size, category, minAmount, maxAmount);
-            try {
-                redisTemplate.opsForValue().set(PRODUCT_KEY, objectMapper.writeValueAsString(result));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            redisTemplate.expire(PRODUCT_KEY, 60, TimeUnit.SECONDS);
-        } else {
-            try {
-                result = objectMapper.readValue(products, PageResponse.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return result;
+        return productAdapter.productListAll(page, size, category, minAmount, maxAmount);
     }
 }
