@@ -43,7 +43,6 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class MemberController {
     private final MemberService memberService;
     private static final String RESPONSE = "response";
-    private static final String MEM_NO = "memberNo";
     private static final String STATUS = "status";
     private static final int VERIFICATION_COOKIE_MAX_AGE = 180;
 
@@ -123,35 +122,27 @@ public class MemberController {
      *
      * @param request            수정하려는 상태가 담긴 dto
      * @param memberNo           변경하려는 회원의 id
-     * @param redirectAttributes redirectAttributes
      * @return 멤버 전용 회원 개인정보 페이지
      * @author 최정우
      */
     @PutMapping("/admin/members/update/{memberNo}")
     public String memberModifyByAdmins(
             @ModelAttribute @Valid MemberModifyByAdminDto request,
-            @PathVariable Integer memberNo,
-            RedirectAttributes redirectAttributes) {
+            @PathVariable Integer memberNo) {
         memberService.modifyMemberByAdmin(request);
-        redirectAttributes.addAttribute(MEM_NO, memberNo);
-        redirectAttributes.addAttribute(STATUS, true);
 
-        return "redirect:/members/{memberNo}";
+        return "redirect:/members/" + memberNo;
     }
 
     /**
      * 회원을 삭제하는 컨트롤러.
      *
-     * @param memberNo           삭제하려는 회원의 id
-     * @param redirectAttributes redirectAttributes
      * @return 홈페이지.
      * @author 최정우
      */
-    @DeleteMapping("/members/{memberNo}")
-    public String memberRemove(@PathVariable Integer memberNo,
-                               RedirectAttributes redirectAttributes) {
-        memberService.removeMember(memberNo);
-        redirectAttributes.addAttribute(STATUS, true);
+    @DeleteMapping("/members")
+    public String memberRemove(@AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        memberService.removeMember(userDetailsDto.getMemberNo());
 
         return "redirect:/";
     }
@@ -200,7 +191,6 @@ public class MemberController {
      * 관리자가 회원의 상세정보를 조회하는 컨트롤러.
      *
      * @param memberNo 조회하려는 회원 id
-     * @param redirectAttributes redirectAttributes
      * @param model model
      * @return 관리자 전용 회원정보 상세 페이지
      * @author 최정우
@@ -208,12 +198,9 @@ public class MemberController {
     @GetMapping("/admin/members/{memberNo}")
     public String memberDetailsByAdmin(
             @PathVariable Integer memberNo,
-            RedirectAttributes redirectAttributes,
             Model model) {
         MemberResponseByAdminDto dto = memberService.findMemberByAdmin(memberNo);
         model.addAttribute(RESPONSE, dto);
-        redirectAttributes.addAttribute(MEM_NO, memberNo);
-        redirectAttributes.addAttribute(STATUS, true);
 
         return "layout/admin/member";
     }
