@@ -3,12 +3,14 @@ package shop.gaship.gashipfront.category.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.category.adapter.CategoryAdapter;
 import shop.gaship.gashipfront.category.dto.request.CategoryCreateRequestDto;
 import shop.gaship.gashipfront.category.dto.request.CategoryModifyRequestDto;
 import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 import shop.gaship.gashipfront.category.service.CategoryService;
+import shop.gaship.gashipfront.config.LocalCacheConfig;
 
 /**
  * 카테고리 서비스 구현체입니다.
@@ -27,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(LocalCacheConfig.CATEGORY_CACHE)
     public List<CategoryResponseDto> findCategories() {
         return categoryAdapter.categoryList();
     }
@@ -35,7 +38,6 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryResponseDto> findFlattenCategories() {
         List<CategoryResponseDto> categories = findCategories();
         List<CategoryResponseDto> flattenCategories = new ArrayList<>();
-
         flatCategories(flattenCategories, categories);
 
         return flattenCategories;
@@ -66,6 +68,5 @@ public class CategoryServiceImpl implements CategoryService {
                 flatCategories(flattenCategories, category.getLowerCategories());
             }
         });
-
     }
 }

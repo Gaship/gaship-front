@@ -37,8 +37,6 @@ public class OrderProductController {
             orderProductService.findOrderProductListByMemberNo(pageable, userDetailsDto.getMemberNo());
 
         List<OrderProductResponseDto> content = orderProductResponseDtoPageResponse.getContent();
-//        content.forEach(orderProduct -> orderProduct.setExistsReview(
-//            productReviewService.isExist(orderProduct.getOrderProductNo())));
 
         model.addAttribute("orderProductList", content);
 
@@ -62,6 +60,10 @@ public class OrderProductController {
         PageResponse<OrderProductDetailResponseDto> orderProductDetailResponseDto =
             orderProductService.findOrderProductDetail(orderNo, userDetailsDto.getMemberNo(),pageable);
 
+        List<OrderProductDetailResponseDto> content = orderProductDetailResponseDto.getContent();
+        content.forEach(orderProduct -> orderProduct.setExistsReview(
+            productReviewService.isExist(orderProduct.getOrderProductNo())));
+
         model.addAttribute("next", orderProductDetailResponseDto.isNext());
         model.addAttribute("previous", orderProductDetailResponseDto.isPrevious());
         model.addAttribute("totalPage", orderProductDetailResponseDto.getTotalPages());
@@ -71,7 +73,7 @@ public class OrderProductController {
 
         model.addAttribute("uri", "/member/order-product/" + orderNo +"/details");
 
-        model.addAttribute("orderProductDetail", orderProductDetailResponseDto.getContent());
+        model.addAttribute("orderProductDetail", content);
 
         return "orderproduct/member/orderProductDetail";
     }

@@ -15,6 +15,7 @@ import shop.gaship.gashipfront.member.adapter.MemberAdapter;
 import shop.gaship.gashipfront.member.dto.EmailPresence;
 import shop.gaship.gashipfront.member.dto.MemberAllFieldDto;
 import shop.gaship.gashipfront.member.dto.MemberNumberPresence;
+import shop.gaship.gashipfront.member.dto.NicknamePresence;
 import shop.gaship.gashipfront.member.dto.request.FindMemberEmailRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberCreationRequest;
 import shop.gaship.gashipfront.member.dto.request.MemberModifyByAdminDto;
@@ -102,8 +103,10 @@ public class MemberAdapterImpl implements MemberAdapter {
      */
     @Override
     public MemberNumberPresence recommendMemberNoFind(String nickName) {
-        return WebClient.create(serverConfig.getGatewayUrl()).get()
-            .uri("/api/members/retrieve?nickname={nickname}", nickName)
+        return webClient.get()
+            .uri(uriBuilder -> uriBuilder.path("/api/members/recommend-member")
+                .queryParam("nickname", String.valueOf(nickName))
+                .build())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .toEntity(MemberNumberPresence.class)
@@ -120,7 +123,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @throws shop.gaship.gashipfront.exceptions.RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     public boolean signUpRequest(MemberCreationRequest memberCreationRequest) {
-        WebClient.create(serverConfig.getGatewayUrl()).post()
+        webClient.post()
             .uri("/api/members/sign-up")
             .bodyValue(memberCreationRequest)
             .retrieve()
@@ -140,7 +143,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      */
     @Override
     public EmailPresence emailDuplicationCheckRequest(String email) {
-        return WebClient.create(serverConfig.getGatewayUrl()).get()
+        return webClient.get()
             .uri("/api/members/check-email?email={email}", email)
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -158,12 +161,14 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     @Override
-    public MemberNumberPresence nicknameDuplicationCheckRequest(String nickName) {
-        return WebClient.create(serverConfig.getGatewayUrl()).get()
-            .uri("/api/members/check-nickname?nickanme={nickname}", nickName)
+    public NicknamePresence nicknameDuplicationCheckRequest(String nickName) {
+        return webClient.get()
+            .uri(uriBuilder -> uriBuilder.path("/api/members/check-nickname")
+                .queryParam("nickname", String.valueOf(nickName))
+            .build())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
-            .toEntity(MemberNumberPresence.class)
+            .toEntity(NicknamePresence.class)
             .blockOptional()
             .orElseThrow(RequestFailureThrow::new)
             .getBody();
@@ -177,7 +182,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      * @throws RequestFailureThrow 네트워크 혹은 웹 클라이언트의 오류를 던집니다.
      */
     public String findUserEmailRequest(FindMemberEmailRequest findMemberEmailRequest) {
-        return Objects.requireNonNull(WebClient.create(serverConfig.getGatewayUrl()).post()
+        return Objects.requireNonNull(webClient.post()
                 .uri("/api/members/find-email")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -200,7 +205,7 @@ public class MemberAdapterImpl implements MemberAdapter {
      */
     @Override
     public boolean reissuePasswordRequest(ReissuePasswordRequest reissuePasswordRequest) {
-        String result = Objects.requireNonNull(WebClient.create(serverConfig.getGatewayUrl()).post()
+        String result = Objects.requireNonNull(webClient.post()
                 .uri("/api/members/find-password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

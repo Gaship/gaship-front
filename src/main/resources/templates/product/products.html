@@ -52,7 +52,7 @@
                                 <div class="featured__item__pic bg-contain bg-center bg-no-repeaat"
                                      th:style="'background-image: url(&quot' + ${#lists.isEmpty(product.filePaths) ? 'img/no-photo.png' : product.filePaths[0]} + '&quot;);'">
                                     <ul class="featured__item__pic__hover">
-                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                        <li><a th:onclick="addCart([[${product.productNo}]])"><i class="fa fa-shopping-cart"></i></a></li>
                                     </ul>
                                 </div>
                                 <div class="featured__item__text">
@@ -70,6 +70,25 @@
             </div>
         </div>
     </section>
+<script>
+    function addCart(productNo) {
+        const token = document.getElementById("_csrf").content;
+        const header = document.getElementById("_csrf_header").content;
+        $.ajax({
+            url: `/carts/modify-quantity?productNo=${productNo}&productQuantity=1`,
+            method:"PUT",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(header,token);
+            },
+            success: function(data){
+                toastr.success("수량이 변경되었습니다.");
+            },
+            error: function(data){
+                toastr.error("상품이 안담겼습니다.");
+            }
+        })
+    }
+</script>
 </th:block>
 <th:block layout:fragment="content-js">
 </th:block>

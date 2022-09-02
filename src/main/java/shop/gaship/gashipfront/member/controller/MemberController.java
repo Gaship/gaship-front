@@ -1,11 +1,14 @@
 package shop.gaship.gashipfront.member.controller;
 
 import java.util.Objects;
+import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -40,8 +43,8 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 public class MemberController {
     private final MemberService memberService;
     private static final String RESPONSE = "response";
-    private static final String MEM_NO = "response";
-    private static final String STATUS = "response";
+    private static final String MEM_NO = "memberNo";
+    private static final String STATUS = "status";
     private static final int VERIFICATION_COOKIE_MAX_AGE = 180;
 
     /**
@@ -64,11 +67,30 @@ public class MemberController {
     @PostMapping("/members/create")
     public String doSignUp(@Valid MemberCreationRequest memberCreationRequest,
                            @CookieValue(value = "signUp", required = false)
-                           Cookie signUpVerifiedCookie) {
+                           Cookie signUpVerifiedCookie, HttpServletRequest request) {
         if(Objects.isNull(signUpVerifiedCookie)) {
             String errorMessage = "본인 확인 이메일 인증을 완료 후 회원가입을 진행해주십시오.";
             throw new SignUpDenyException(errorMessage);
         }
+
+        HttpSession session = request.getSession(false);
+
+        Optional.ofNullable(session.getAttribute("nicknameDuplication"))
+            .ifPresentOrElse(
+                isNicknameDuplicated -> {
+                    Boolean result = (Boolean) isNicknameDuplicated;
+                    if(result) {
+                        throw new SignUpDenyException("중복된 닉네임입니다. 다른 닉네임을 생각해주세요.");
+                    }
+                },
+                () -> {
+                    throw new SignUpDenyException("닉네임 중복확인이 필요합니다.");
+            });
+
+
+        Optional.ofNullable(session.getAttribute("recommendMember"))
+            .ifPresent(recommendMemberNo ->
+                memberCreationRequest.setRecommendMemberNo((Integer) recommendMemberNo));
 
         String verifyCode = signUpVerifiedCookie.getValue();
         memberService.checkApprovedEmail(verifyCode);
@@ -206,10 +228,20 @@ public class MemberController {
     public String memberList(
             Pageable pageable,
             Model model) {
-        PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(pageable);
-        model.addAttribute(RESPONSE, dto);
+        Pageable tempPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+        PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(tempPageable);
 
-        return "layout/admin/member/memberList";
+        model.addAttribute("content", dto.getContent());
+        model.addAttribute("next", dto.isNext());
+        model.addAttribute("previous", dto.isPrevious());
+        model.addAttribute("totalPage", dto.getTotalPages());
+        model.addAttribute("pageNum", dto.getNumber() + 1);
+        model.addAttribute("previousPageNo", dto.getNumber() - 1);
+        model.addAttribute("nextPageNo", dto.getNumber() + 1);
+        model.addAttribute("size", 10);
+        model.addAttribute("uri", "/admin/members");
+
+        return "member/memberList";
     }
 
     @GetMapping("/members/signUp/email-verify/{verifyCode}")
