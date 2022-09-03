@@ -60,7 +60,7 @@ public class ProductInquiryForMemberController {
      */
     @GetMapping(value = "/product-inquiries/{inquiryNo}")
     public String productInquiryDetails(
-        @PathVariable Integer inquiryNo, Model model, UserDetailsDto userDetailsDto) {
+        @PathVariable Integer inquiryNo, Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         InquiryDetailsResponseDto inquiryDetailsResponseDto =
             commonInquiryService.findInquiry(inquiryNo);

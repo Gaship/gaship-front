@@ -65,6 +65,8 @@
                             class="btn btn-danger mt-3" th:value="${details.inquiryNo}"
                             onclick="deleteInquiry(this)">문의삭제
                     </button>
+                    <a th:href="@{/inquiries/show-form/product-inquiry-add(productNo=${details.productNo}, productName=${details.productName})}"
+                       style="width: auto; margin-left: 5px" type="button" class="btn btn-outline-primary mt-3">상품문의 추가등록</a>
                 </div>
 
                 <div class="box-content mt-5" th:if="${#strings.equals(details.processStatus, '답변완료')}">
