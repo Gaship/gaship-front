@@ -65,14 +65,16 @@ public class MemberController {
      */
     @PostMapping("/members/create")
     public String doSignUp(@Valid MemberCreationRequest memberCreationRequest,
-                           @CookieValue(value = "signUp", required = false)
-                           Cookie signUpVerifiedCookie, HttpServletRequest request) {
-        if(Objects.isNull(signUpVerifiedCookie)) {
+                           HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String verifyCode = session.getAttribute("signUp").toString();
+
+        if(Objects.isNull(verifyCode)) {
             String errorMessage = "본인 확인 이메일 인증을 완료 후 회원가입을 진행해주십시오.";
             throw new SignUpDenyException(errorMessage);
         }
 
-        HttpSession session = request.getSession(false);
+        session.removeAttribute("signUp");
 
         Optional.ofNullable(session.getAttribute("nicknameDuplication"))
             .ifPresentOrElse(
@@ -91,7 +93,6 @@ public class MemberController {
             .ifPresent(recommendMemberNo ->
                 memberCreationRequest.setRecommendMemberNo((Integer) recommendMemberNo));
 
-        String verifyCode = signUpVerifiedCookie.getValue();
         memberService.checkApprovedEmail(verifyCode);
 
         memberCreationRequest.setVerifyCode(verifyCode);
@@ -233,15 +234,12 @@ public class MemberController {
 
     @GetMapping("/members/signUp/email-verify/{verifyCode}")
     public String requestApproveComplete(@PathVariable("verifyCode") String verifyCode,
-                                         HttpServletRequest request, HttpServletResponse httpResponse) {
+                                         HttpServletRequest request) {
         memberService.requestApproveEmailVerification(verifyCode);
 
-        Cookie cookie = new Cookie("signUp", verifyCode);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(VERIFICATION_COOKIE_MAX_AGE);
-        cookie.setSecure(true);
-        httpResponse.addCookie(cookie);
+        HttpSession session = request.getSession(false);
+        session.setAttribute("signUp", verifyCode);
+
         return "member/signUpApprove";
     }
 

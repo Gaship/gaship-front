@@ -49,10 +49,15 @@ public class SecurityEmployeeConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .authenticationProvider(authenticationProvider());
 
-
         http.logout()
                 .logoutUrl("/manager/logout")
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("/")
+                .clearAuthentication(true)
+                .deleteCookies("GASHIP_SESSIONID");
+
+        http.exceptionHandling().accessDeniedHandler((request, response, accessDeniedException) ->
+                response.sendError(403, accessDeniedException.getMessage()))
+            .and();
     }
 
     @Override

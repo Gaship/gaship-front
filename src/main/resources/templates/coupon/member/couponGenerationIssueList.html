@@ -3,60 +3,71 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/shopping/layout}">
 <head>
-  <meta charset="UTF-8">
-  <title>멤버의 쿠폰 생성 발급 리스트</title>
+    <meta charset="UTF-8">
+    <title>멤버의 쿠폰 생성 발급 리스트</title>
 
 </head>
+<th:block layout:fragment="content-js">
+    <script src="/member/js/userDetailMenu.js"></script>
+</th:block>
 <th:block layout:fragment="content">
-  <div style="margin-right: 30px; margin-left: 30px; margin-top: 20px">
+    <div class="container">
+        <div class="row flex-md-nowrap flex-column">
+            <div class="card">
+                <div class="card-header">
+                    <button class="btn btn-outline-info"><a
+                            th:href="@{/member/coupons/coupon-generation-issues/member}">전체
+                        쿠폰</a></button>
+                    <button class="btn btn-outline-info"><a
+                            th:href="@{/member/coupons/coupon-generation-issues/member/used-coupons}">사용한 쿠폰</a>
+                    </button>
+                    <button class="btn btn-outline-warning"><a
+                            th:href="@{/member/coupons/coupon-generation-issues/member/unused-coupons}">사용 하지 않은 쿠폰</a>
+                    </button>
+                    <button class="btn btn-outline-danger"><a
+                            th:href="@{/member/coupons/coupon-generation-issues/member/unused-coupons/expired-coupons}">기간
+                        만료된
+                        쿠폰</a>
+                    </button>
+                    <button class="btn btn-outline-info"><a
+                            th:href="@{/member/coupons/coupon-generation-issues/member/unused-coupons/unexpired-coupons}">유효한
+                        쿠폰</a>
+                    </button>
+                </div>
 
-    <button><a th:href="@{/member/coupons/coupon-generation-issues/member}">전체 쿠폰</a></button>
-    <button><a th:href="@{/member/coupons/coupon-generation-issues/member/used-coupons}">사용한 쿠폰</a></button>
-    <button><a th:href="@{/member/coupons/coupon-generation-issues/member/unused-coupons}">사용 하지 않은 쿠폰</a></button>
-    <button><a th:href="@{/member/coupons/coupon-generation-issues/member/unused-coupons/expired-coupons}">기간 만료된 쿠폰</a>
-    </button>
-    <button><a th:href="@{/member/coupons/coupon-generation-issues/member/unused-coupons/unexpired-coupons}">유효한 쿠폰</a>
-    </button>
+                <div class="card-body table-responsive p-0" style="height: 300px">
+                    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                        <table class="table table-head-fixed text-nowrap">
+                            <thead>
+                            <tr role="row">
+                                <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable"
+                                    rowspan="1" colspan="1"
+                                    aria-sort="ascending" aria-label="이름">
+                                    이름
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                    colspan="1"
+                                    aria-label="만료기간">만료기간
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="couponGenerationIssue : ${couponGenerationIssueList}">
+                                <td th:text="${couponGenerationIssue.name}"></td>
+                                <td th:text="${couponGenerationIssue.expirationDatetime}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-    <div class="card-body">
-      <div class="table-responsive" style="overflow-x: hidden">
-        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-          <div class="row">
-            <div class="col-sm-12 col-md-6">
-              <div class="dataTables_length" id="dataTable_length">
-              </div>
             </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid"
-                       aria-describedby="dataTable_info" style="width: 100%;">
-                  <thead>
-                  <tr role="row">
-                    <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                        aria-sort="ascending" aria-label="이름" style="width: 397px;">
-                      이름
-                    </th>
-                    <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                        aria-label="만료기간" style="width: 584px;">만료기간
-                    </th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr th:each="couponGenerationIssue : ${couponGenerationIssueList}">
-                    <td th:text="${couponGenerationIssue.name}"></td>
-                    <td th:text="${couponGenerationIssue.expirationDatetime}"></td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
+            <div>
+                <th:block th:if="${!#lists.isEmpty(couponGenerationIssueList)}">
+                    <th:block th:include="component/pageFooter"></th:block>
+                </th:block>
             </div>
-            <th:block th:if="${!#lists.isEmpty(couponGenerationIssueList)}">
-              <th:block th:include="component/pageFooter"></th:block>
-            </th:block>
-          </div>
         </div>
-      </div>
     </div>
 </th:block>
-</div>
 </html>

@@ -23,6 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
+        registry.addViewController("/loaderio-3e0715e82d04b682a19347ed96bd23ef/").setViewName("loader");
         registry.addViewController("/all").setViewName("all");
     }
 

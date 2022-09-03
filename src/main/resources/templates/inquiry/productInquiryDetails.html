@@ -61,10 +61,12 @@
                         </div>
                     </div>
 
-                    <button style="width: auto; margin-left: 10px"
+                    <button th:if="${details.self}" style="width: auto; margin-left: 10px"
                             class="btn btn-danger mt-3" th:value="${details.inquiryNo}"
                             onclick="deleteInquiry(this)">문의삭제
                     </button>
+                    <a th:href="@{/inquiries/show-form/product-inquiry-add(productNo=${details.productNo}, productName=${details.productName})}"
+                       style="width: auto; margin-left: 5px" type="button" class="btn btn-outline-primary mt-3">상품문의 추가등록</a>
                 </div>
 
                 <div class="box-content mt-5" th:if="${#strings.equals(details.processStatus, '답변완료')}">
@@ -104,16 +106,9 @@
                     </div>
                 </div>
 
-                <th:block sec:authorize="hasRole('ROLE_USER')">
                     <a href="/inquiries/member-self/product-inquiries" style="width: auto; margin-left: 10px"
                        type="button"
                        class="btn btn-outline-primary mt-3">마이페이지 상품문의 목록</a>
-                </th:block>
-
-                <th:block sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">
-                    <a href="/admin/inquiries/product-inquiries" style="width: auto; margin-left: 10px" type="button"
-                       class="btn btn-outline-primary mt-3">관리자 상품문의 목록</a>
-                </th:block>
 
                 <script th:src="@{/inquiry/js/inquiry.js}"></script>
                 <script th:inline="javascript">

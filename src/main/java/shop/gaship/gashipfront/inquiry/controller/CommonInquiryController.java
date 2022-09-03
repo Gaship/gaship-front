@@ -22,7 +22,7 @@ import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
  * @since 1.0
  */
 @Controller
-@RequestMapping("/js/inquiries")
+@RequestMapping("/inquiries")
 @RequiredArgsConstructor
 public class CommonInquiryController {
     private final CommonInquiryService commonInquiryService;
