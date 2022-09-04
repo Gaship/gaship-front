@@ -2,7 +2,10 @@ package shop.gaship.gashipfront.category.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.category.adapter.CategoryAdapter;
@@ -44,16 +47,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = LocalCacheConfig.CATEGORY_CACHE, allEntries = true)
     public void addCategory(CategoryCreateRequestDto createRequest) {
         categoryAdapter.categoryAdd(createRequest);
     }
 
     @Override
+    @CacheEvict(value = LocalCacheConfig.CATEGORY_CACHE, allEntries = true)
     public void modifyCategory(CategoryModifyRequestDto modifyRequest) {
         categoryAdapter.categoryModify(modifyRequest);
     }
 
     @Override
+    @CacheEvict(value = LocalCacheConfig.CATEGORY_CACHE, allEntries = true)
     public void removeCategory(Integer categoryNo) {
         categoryAdapter.categoryRemove(categoryNo);
     }
