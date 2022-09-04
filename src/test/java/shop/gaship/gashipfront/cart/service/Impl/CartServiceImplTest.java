@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import shop.gaship.gashipfront.cart.dummy.CartDummy;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
+import shop.gaship.gashipfront.cart.exception.ProductStockIsZeroException;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
 
@@ -50,6 +51,7 @@ class CartServiceImplTest {
     @Test
     void modifyProductQuantityFromCartTest() throws Exception {
         doNothing().when(hashOperations).put(any(), any(), any());
+        when(productAdapter.productDetails(any())).thenReturn(CartDummy.productAllInfoResponseDto());
 
         cartService.addProductToCart("1", CartDummy.cartProductModifyRequestDto(1, 1));
 
@@ -60,6 +62,7 @@ class CartServiceImplTest {
     @Test
     void modifyProductQuantityFromCartTestFail() {
         doNothing().when(hashOperations).put(any(), any(), any());
+        when(productAdapter.productDetails(any())).thenReturn(CartDummy.productAllInfoResponseDto());
 
         assertThatThrownBy(()-> cartService.addProductToCart("1", CartDummy.cartProductModifyRequestDto(1, 11)))
                 .isInstanceOf(CartProductAmountException.class);
@@ -71,8 +74,9 @@ class CartServiceImplTest {
     @Test
     void modifyProductQuantityFromCartTestFail2() {
         doNothing().when(hashOperations).put(any(), any(), any());
+        when(productAdapter.productDetails(any())).thenReturn(CartDummy.productAllInfoResponseDto());
 
-        assertThatThrownBy(()-> cartService.addProductToCart("1", CartDummy.cartProductModifyRequestDto(1, 0)))
+            assertThatThrownBy(()-> cartService.addProductToCart("1", CartDummy.cartProductModifyRequestDto(1, 0)))
                 .isInstanceOf(CartProductAmountException.class);
 
         verify(hashOperations, never()).put("1", "1", 1);
