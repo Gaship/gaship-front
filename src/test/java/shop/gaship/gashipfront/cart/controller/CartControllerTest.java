@@ -56,7 +56,7 @@ class CartControllerTest {
     @DisplayName("쿠키가 없는 방문자가 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest1() throws Exception {
-        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(11);
+        when(cartService.addProductToCart(any(), any())).thenReturn(11);
         String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 11));
 
         mockMvc.perform(post("/carts/add-product")
@@ -65,13 +65,13 @@ class CartControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any());
+        verify(cartService, times(1)).addProductToCart(any(), any());
     }
 
     @DisplayName("쿠키가 있는 비회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest2() throws Exception {
-        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(1);
+        when(cartService.addProductToCart(any(), any())).thenReturn(1);
         String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 1));
 
         mockMvc.perform(post("/carts/add-product")
@@ -81,13 +81,13 @@ class CartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(cookie().doesNotExist(CART_ID));
 
-        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any());
+        verify(cartService, times(1)).addProductToCart(any(), any());
     }
 
     @DisplayName("쿠키가 있는 회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest3() throws Exception {
-        when(cartService.modifyProductQuantityFromCart(any(), any())).thenReturn(1);
+        when(cartService.addProductToCart(any(), any())).thenReturn(1);
         String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 1));
 
         mockMvc.perform(post("/carts/add-product")
@@ -98,7 +98,7 @@ class CartControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(cookie().doesNotExist(CART_ID));
 
-        verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any());
+        verify(cartService, times(1)).addProductToCart(any(), any());
     }
 
 

@@ -46,7 +46,7 @@ public class CartController {
     public Integer addToCart(@ModelAttribute CartProductModifyRequestDto request,
                              HttpServletRequest servletRequest) throws CartProductAmountException {
         String cartId = (String) servletRequest.getAttribute(CART_ID);
-        return cartService.modifyProductQuantityFromCart(cartId, request);
+        return cartService.addProductToCart(cartId, request);
     }
 
     /**

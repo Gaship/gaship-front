@@ -21,7 +21,7 @@ public interface CartService {
      * @param request 장바구니에 담을 상품의 정보(상품 id , 보증기간, 갯수)가 담겨 있습니다.
      * @author 최정우
      */
-    Integer modifyProductQuantityFromCart(
+    Integer addProductToCart(
             String cartId, CartProductModifyRequestDto request) throws CartProductAmountException;
 
     /**
