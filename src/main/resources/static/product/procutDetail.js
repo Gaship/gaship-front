@@ -123,8 +123,14 @@ const addCart = function (e) {
       [`${tokenHeader.content}`] : token.content
     },
     method : 'PUT',
-  }).then(() => {
-    toastr.success("장바구니에 담겼습니다.");
+  }).then(res => {
+      if (!res.ok) {
+        throw res
+      }
+    toastr.success("장바구니에 상품이 담겼습니다.");
+  }).catch((error)=>{
+    console.log(error);
+    toastr.error("재고가 없는 상품입니다.");
   });
 };
 
