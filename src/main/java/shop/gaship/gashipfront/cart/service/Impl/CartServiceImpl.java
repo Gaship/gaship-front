@@ -60,7 +60,7 @@ public class CartServiceImpl implements CartService {
         if (request.getQuantity() > 10 || request.getQuantity() < 1) {
             throw new CartProductAmountException();
         }
-        if (hashOperations.size(cartNo) >= (10L)) {
+        if (hashOperations.size(cartNo) > (10L)) {
             throw new CartMaxLimitException();
         }
         hashOperations.put(cartNo, request.getProductId().toString(), request.getQuantity());
