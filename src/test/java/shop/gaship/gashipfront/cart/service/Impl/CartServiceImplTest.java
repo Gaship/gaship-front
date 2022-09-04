@@ -51,7 +51,7 @@ class CartServiceImplTest {
     void modifyProductQuantityFromCartTest() throws Exception {
         doNothing().when(hashOperations).put(any(), any(), any());
 
-        cartService.modifyProductQuantityFromCart("1", CartDummy.cartProductModifyRequestDto(1, 1));
+        cartService.addProductToCart("1", CartDummy.cartProductModifyRequestDto(1, 1));
 
         verify(hashOperations, times(1)).put("1", "1", 1);
     }
@@ -61,7 +61,7 @@ class CartServiceImplTest {
     void modifyProductQuantityFromCartTestFail() {
         doNothing().when(hashOperations).put(any(), any(), any());
 
-        assertThatThrownBy(()-> cartService.modifyProductQuantityFromCart("1", CartDummy.cartProductModifyRequestDto(1, 11)))
+        assertThatThrownBy(()-> cartService.addProductToCart("1", CartDummy.cartProductModifyRequestDto(1, 11)))
                 .isInstanceOf(CartProductAmountException.class);
 
         verify(hashOperations, never()).put("1", "1", 1);
@@ -72,7 +72,7 @@ class CartServiceImplTest {
     void modifyProductQuantityFromCartTestFail2() {
         doNothing().when(hashOperations).put(any(), any(), any());
 
-        assertThatThrownBy(()-> cartService.modifyProductQuantityFromCart("1", CartDummy.cartProductModifyRequestDto(1, 0)))
+        assertThatThrownBy(()-> cartService.addProductToCart("1", CartDummy.cartProductModifyRequestDto(1, 0)))
                 .isInstanceOf(CartProductAmountException.class);
 
         verify(hashOperations, never()).put("1", "1", 1);
