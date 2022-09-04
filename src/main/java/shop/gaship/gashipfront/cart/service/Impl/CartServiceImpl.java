@@ -17,11 +17,11 @@ import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.exception.CartMaxLimitException;
 import shop.gaship.gashipfront.cart.exception.CartMergeException;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
+import shop.gaship.gashipfront.cart.exception.ProductStockIsZeroException;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.cart.util.CartUtil;
 import shop.gaship.gashipfront.product.adapter.ProductAdapter;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
-
 
 
 /**
@@ -51,13 +51,16 @@ public class CartServiceImpl implements CartService {
      * {@inheritDoc}
      */
     @Override
-    public Integer modifyProductQuantityFromCart(
+    public Integer addProductToCart(
             String cartNo, CartProductModifyRequestDto request) throws CartProductAmountException {
         redisTemplate.expire(cartNo, 101, TimeUnit.DAYS);
+        if (productAdapter.productDetails(request.getProductId()).getQuantity() < 0) {
+            throw new ProductStockIsZeroException();
+        }
         if (request.getQuantity() > 10 || request.getQuantity() < 1) {
             throw new CartProductAmountException();
         }
-        if (hashOperations.size(cartNo) > (10L)) {
+        if (hashOperations.size(cartNo) >= (10L)) {
             throw new CartMaxLimitException();
         }
         hashOperations.put(cartNo, request.getProductId().toString(), request.getQuantity());
@@ -71,10 +74,13 @@ public class CartServiceImpl implements CartService {
     public void modifyProductQuantityFromCart(
             String cartNo, Long productNo, Long productQuantity) throws CartProductAmountException {
         redisTemplate.expire(cartNo, 101, TimeUnit.DAYS);
+        if (productAdapter.productDetails(productNo.intValue()).getQuantity() <= 0) {
+            throw new ProductStockIsZeroException();
+        }
         if (productQuantity > 10 || productQuantity < 1) {
             throw new CartProductAmountException();
         }
-        if (hashOperations.size(cartNo) > (10L)) {
+        if (hashOperations.size(cartNo) >= (10L)) {
             throw new CartMaxLimitException();
         }
         hashOperations.put(cartNo, productNo.toString(), productQuantity.toString());
@@ -97,7 +103,8 @@ public class CartServiceImpl implements CartService {
         String key = String.valueOf(memberId);
 
         if (hashOperations.size(key) + hashOperations.size(cartId) > (10L)) {
-            throw new CartMergeException();
+            redisTemplate.delete(cartId);
+            return;
         }
         mergeHashMap(key, map);
         redisTemplate.delete(cartId);
@@ -120,7 +127,7 @@ public class CartServiceImpl implements CartService {
                 Integer.parseInt((String.valueOf(v)))));
         List<ProductAllInfoResponseDto> productList =
                 productAdapter.productNosList(new ArrayList<>(integerMap.keySet()));
-        if (Objects.isNull(productList)){
+        if (Objects.isNull(productList)) {
             return null;
         }
         List<ProductResponseDto> productResponseDtoList = CartUtil.productListToCartList(productList, integerMap);
@@ -139,8 +146,8 @@ public class CartServiceImpl implements CartService {
                 .collect(Collectors.toList());
         // 레디스에서 삭제
         List<Integer> stockZeroList = zeroQuantityProductList.stream().map(ProductResponseDto::getProductNo).collect(Collectors.toList());
-        if(stockZeroList.size() > 0){
-            stockZeroList.forEach(i -> hashOperations.delete(cartId,i.toString()));
+        if (stockZeroList.size() > 0) {
+            stockZeroList.forEach(i -> hashOperations.delete(cartId, i.toString()));
         }
         List<ProductResponseDto> quantityMoreThanOneProductList = list.stream()
                 .filter(ele -> ele.getOrderQuantity() >= 1)
@@ -153,7 +160,7 @@ public class CartServiceImpl implements CartService {
                 .filter(ele -> ele.getOrderQuantity() > ele.getQuantity())
                 .collect(Collectors.toList());
         //레디스의 주문수량을 최대 주문수량인 재고수량으로 변경
-        stockLessThanOrderQuantityList.forEach(ele -> hashOperations.put(cartId,ele.getProductNo().toString(),ele.getQuantity().toString()));
+        stockLessThanOrderQuantityList.forEach(ele -> hashOperations.put(cartId, ele.getProductNo().toString(), ele.getQuantity().toString()));
 
         List<ProductResponseDto> collect = list.stream()
                 .map(ProductResponseDto::changeQuantityToStock)
