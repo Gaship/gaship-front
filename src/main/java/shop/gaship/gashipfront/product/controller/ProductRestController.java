@@ -30,6 +30,15 @@ public class ProductRestController {
         @RequestParam(value = "category", required = false)String category,
         @RequestParam(value = "min-amount", required = false)String minAmount,
         @RequestParam(value = "max-amount", required = false)String maxAmount) {
+        return productService.productAllInfoByPageable(page, size, category, minAmount, maxAmount);
+    }
+
+    @GetMapping("/main")
+    public PageResponse<ProductAllInfoResponseDto> getMainProducts(
+            @RequestParam("page") String page, @RequestParam("size") String size,
+            @RequestParam(value = "category", required = false)String category,
+            @RequestParam(value = "min-amount", required = false)String minAmount,
+            @RequestParam(value = "max-amount", required = false)String maxAmount) {
         return productService.findMainProducts(page, size, category, minAmount, maxAmount);
     }
 

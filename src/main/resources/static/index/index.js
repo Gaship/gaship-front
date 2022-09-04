@@ -38,7 +38,7 @@ const createProductImageDiv = (imageUrl, productNo, productName) => {
 
 window.addEventListener("load", async () => {
   const productSliderWrapper = document.querySelector(".product-wrapper");
-  const res = await fetch("/api/products?page=0&size=12");
+  const res = await fetch("/api/products/main?page=0&size=12");
   const pageSlideProducts = await res.json();
   pageSlideProducts.content
     .map(product => {

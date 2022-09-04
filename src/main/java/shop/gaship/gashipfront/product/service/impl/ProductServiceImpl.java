@@ -1,15 +1,10 @@
 package shop.gaship.gashipfront.product.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import shop.gaship.gashipfront.config.LocalCacheConfig;
@@ -31,9 +26,6 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductAdapter productAdapter;
-    private final RedisTemplate redisTemplate;
-    private final ObjectMapper objectMapper;
-    private static final String PRODUCT_KEY = "common_products";
 
     @Override
     public PageResponse<ProductAllInfoResponseDto> productAllInfoByPageable(
@@ -64,18 +56,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
     public void addProduct(List<MultipartFile> multipartFiles,
                            ProductCreateRequestDto createRequest) {
         productAdapter.productAdd(multipartFiles, createRequest);
     }
 
     @Override
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
     public void modifyProduct(List<MultipartFile> multipartFiles,
                               ProductModifyRequestDto modifyRequest) {
         productAdapter.productModify(multipartFiles, modifyRequest);
     }
 
     @Override
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
     public void modifySalesStatus(SalesStatusModifyRequestDto salesStatusModifyRequest) {
         productAdapter.salesStatusModify(salesStatusModifyRequest);
     }
