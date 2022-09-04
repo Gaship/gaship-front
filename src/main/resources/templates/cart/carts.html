@@ -212,7 +212,9 @@
                     toastr.success("수량이 변경되었습니다.");
                 },
                 error: function(data){
-                    alert(data);
+                    console.log("여기에 걸림");
+                    console.log(stock);
+                    console.log(data);
                 }
             })
             const container = document.querySelectorAll(".allAmount");

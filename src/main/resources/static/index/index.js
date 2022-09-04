@@ -68,7 +68,7 @@ function addCart(productNo) {
             toastr.success("장바구니에 상품이 담겼습니다.");
         },
         error: function(data){
-            toastr.error(data['responseJSON']['message']);
+            toastr.error(data['responseJSON']['errorMessage']);
         }
     })
 }
