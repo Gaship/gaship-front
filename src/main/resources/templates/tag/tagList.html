@@ -94,12 +94,14 @@
                     xhr.setRequestHeader(header,token);
                 },
                 success: function(data){
+                    console.log(data);
                     toastr.success("태그 변경이 완료되었습니다.");
                     let modal = document.getElementById('modalOpenBtn-' + index);
                     modal.innerText = name;
                     closeModal();
                 },
                 error: function(error){
+                    console.log(error);
                     if('errors' in error['responseJSON']){
                         toastr.error(error['responseJSON']['errors'][0]['defaultMessage']);
                     } else {
