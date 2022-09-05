@@ -63,10 +63,10 @@
                             </div>
                         </div>
                     </th:block>
+                    <th:block th:if="${!#lists.isEmpty(products)}">
+                        <th:block th:include="component/pageFooter"></th:block>
+                    </th:block>
                 </div>
-                <th:block th:if="${!#lists.isEmpty(products)}">
-                    <th:block th:include="component/pageFooter"></th:block>
-                </th:block>
             </div>
         </div>
     </section>
