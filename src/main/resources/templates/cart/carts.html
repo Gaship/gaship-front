@@ -212,13 +212,10 @@
                     toastr.success("수량이 변경되었습니다.");
                 },
                 error: function(data){
-                    console.log("여기에 걸림");
-                    console.log(stock);
-                    console.log(data);
+                    toastr.error(data['responseJSON']['errorMessage']);
                 }
             })
             const container = document.querySelectorAll(".allAmount");
-            console.log(container);
             let allResult = 0;
             container.forEach((e)=> allResult += Number((e.innerHTML).slice(1)));
 
