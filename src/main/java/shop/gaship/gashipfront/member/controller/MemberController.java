@@ -216,7 +216,7 @@ public class MemberController {
     public String memberList(
             Pageable pageable,
             Model model) {
-        Pageable tempPageable = PageRequest.of(pageable.getPageNumber (), Math.min(pageable.getPageSize(), 30));
+        Pageable tempPageable = PageRequest.of(pageable.getPageNumber (), 10);
         PageResponse<MemberResponseByAdminDto> dto = memberService.findMembers(tempPageable);
 
         model.addAttribute("content", dto.getContent());
