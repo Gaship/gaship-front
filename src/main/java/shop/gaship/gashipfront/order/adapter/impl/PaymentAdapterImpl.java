@@ -29,10 +29,10 @@ public class PaymentAdapterImpl implements PaymentAdapter {
                 .bodyValue(requestDto)
                 .retrieve()
                 .onStatus(HttpStatus::is4xxClientError, clientResponse -> {
-                    throw new PaymentRequestException();
+                    throw new PaymentServerException();
                 })
                 .onStatus(HttpStatus::is5xxServerError, clientResponse -> {
-                    throw new PaymentServerException();
+                    throw new PaymentRequestException();
                 })
                 .toEntity(void.class)
                 .block();
