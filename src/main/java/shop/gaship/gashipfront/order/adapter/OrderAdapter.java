@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.order.adapter;
 
 import shop.gaship.gashipfront.order.dto.request.OrderRegisterRequestDto;
+import shop.gaship.gashipfront.order.dto.request.SuccessOrderRequestDto;
 import shop.gaship.gashipfront.order.dto.response.OrderResponseDto;
 
 /**
@@ -11,4 +12,6 @@ import shop.gaship.gashipfront.order.dto.response.OrderResponseDto;
  */
 public interface OrderAdapter {
     OrderResponseDto doOrder(OrderRegisterRequestDto requestDto);
+
+    void orderSuccess(SuccessOrderRequestDto requestDto);
 }

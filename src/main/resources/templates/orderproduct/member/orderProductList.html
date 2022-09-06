@@ -43,60 +43,68 @@
                 <th:block th:include="component/userDetailMenu"></th:block>
             </div>
             <div role="main" class="container h5">
-    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-        <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="dataTables_length" id="dataTable_length">
+                <script th:inline="javascript">
+                    /*<![CDATA[*/ /*]]>*/
+                    var orderSuccessMsg = /*[[${orderSuccessMsg}]]*/
+                    if (orderSuccessMsg) {
+                        alert(orderSuccessMsg)
+                    }
+                    /*]]>*/
+                </script>
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="dataTables_length" id="dataTable_length">
+                            </div>
+                        </div>
+                        <div class="row" style="overflow: hidden;
+                       position: relative;
+                       width: 100%;">
+                            <div class="col-sm-12">
+                                <table class="table table-sm table-bordered dataTable" id="dataTable" width="100%" cellspacing="0"
+                                       role="grid"
+                                       aria-describedby="dataTable_info" style="width: 100%;font-size: 10px;">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1"
+                                            colspan="1"
+                                            aria-sort="ascending" aria-label="주문 번호">
+                                            주문 번호
+                                        </th>
+                                        <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                                            aria-label="총 금액">총 금액
+                                        </th>
+                                        <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                                            aria-label="주문 일자">주문 일자
+                                        </th>
+                                        <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                                            aria-label="수령인">수령인
+                                        </th>
+                                        <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
+                                            aria-label="수령인 번호">수령인 번호
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="orderProduct : ${orderProductList}">
+                                        <td>
+                                            <a th:href="@{'/member/order-product/' + ${orderProduct.orderNo} + '/details'}"
+                                               th:text="${orderProduct.orderNo}"></a>
+                                        </td>
+                                        <td th:text="${orderProduct.totalOrderAmount}"></td>
+                                        <td th:text="${orderProduct.orderDatetime}"></td>
+                                        <td th:text="${orderProduct.receiptName}"></td>
+                                        <td th:text="${orderProduct.receiptPhoneNumber}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <th:block th:if="${!#lists.isEmpty(orderProductList)}">
+                            <th:block th:include="component/pageFooter"></th:block>
+                        </th:block>
+                    </div>
                 </div>
-            </div>
-            <div class="row" style="overflow: hidden;
-           position: relative;
-           width: 100%;">
-                <div class="col-sm-12">
-                    <table class="table table-sm table-bordered dataTable" id="dataTable" width="100%" cellspacing="0"
-                           role="grid"
-                           aria-describedby="dataTable_info" style="width: 100%;font-size: 10px;">
-                        <thead>
-                        <tr role="row">
-                            <th class="sorting sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1"
-                                colspan="1"
-                                aria-sort="ascending" aria-label="주문 번호">
-                                주문 번호
-                            </th>
-                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                aria-label="총 금액">총 금액
-                            </th>
-                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                aria-label="주문 일자">주문 일자
-                            </th>
-                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                aria-label="수령인">수령인
-                            </th>
-                            <th class="sorting " tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1"
-                                aria-label="수령인 번호">수령인 번호
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="orderProduct : ${orderProductList}">
-                            <td>
-                                <a th:href="@{'/member/order-product/' + ${orderProduct.orderNo} + '/details'}"
-                                   th:text="${orderProduct.orderNo}"></a>
-                            </td>
-                            <td th:text="${orderProduct.totalOrderAmount}"></td>
-                            <td th:text="${orderProduct.orderDatetime}"></td>
-                            <td th:text="${orderProduct.receiptName}"></td>
-                            <td th:text="${orderProduct.receiptPhoneNumber}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <th:block th:if="${!#lists.isEmpty(orderProductList)}">
-                <th:block th:include="component/pageFooter"></th:block>
-            </th:block>
-        </div>
-    </div>
             </div>
         </div>
     </div>

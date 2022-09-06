@@ -14,6 +14,14 @@
                 <th:block th:include="component/userDetailMenu"></th:block>
             </div>
             <div role="main" class="container h5">
+                <script th:inline="javascript">
+                    /*<![CDATA[*/ /*]]>*/
+                    var cancelSuccessMsg = /*[[${cancelSuccessMsg}]]*/
+                    if (cancelSuccessMsg) {
+                        alert(cancelSuccessMsg)
+                    }
+                    /*]]>*/
+                </script>
                 <p class="display-4 mb-2 text-dark">주문 상세 내역</p>
                 <!-- Page Heading -->
                 <div class="card mb-3" th:each="order : ${orderProductDetail}">

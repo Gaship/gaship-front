@@ -40,14 +40,19 @@ function doPayment(orderRegisterResponseData) {
         inputList[i].setAttribute('readonly', true);
     }
 
-    tossPayments.requestPayment('카드',{
-        amount: orderRegisterResponseData.amount,
-        orderId: "gaship-"+orderRegisterResponseData.orderId,
-        orderName: orderRegisterResponseData.orderName,
-        customerName: orderRegisterResponseData.customerName,
-        successUrl: 'https://gaship.shop/order/success?provider=TOSS',
-        failUrl: 'https://gaship.shop/order/fail'
-    })
+    try {
+        tossPayments.requestPayment('카드',{
+            amount: orderRegisterResponseData.amount,
+            orderId: "gaship-"+orderRegisterResponseData.orderId,
+            orderName: orderRegisterResponseData.orderName,
+            customerName: orderRegisterResponseData.customerName,
+            successUrl: 'https://gaship.shop/order/success?provider=TOSS',
+            failUrl: 'https://gaship.shop/order/fail'
+        })
+    } catch (e) {
+        window.alert("결제사의 사정으로 인해 결제가 불가능합니다.")
+        location.href = '/order/fail';
+    }
 }
 
 
