@@ -22,11 +22,12 @@ public class OrderServiceImpl implements OrderService {
     private final OrderAdapter orderAdapter;
     private final PaymentAdapter paymentAdapter;
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrderResponseDto processOrder(Integer memberNo, OrderRegisterRequestDto requestDto) {
         requestDto.setMemberNo(memberNo);
-
 
         return orderAdapter.doOrder(requestDto);
     }
