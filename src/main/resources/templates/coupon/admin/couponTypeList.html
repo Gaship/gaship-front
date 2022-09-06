@@ -62,7 +62,7 @@
                 <td th:if="${couponType.isStopGenerationIssue}">쿠폰 생성 발급 중지된 쿠폰</td>
                 <td th:unless="${couponType.isStopGenerationIssue}">
                   <button><a th:href="@{'/admin/coupons/coupon-type/' + ${couponType.couponTypeNo} + '/issue-coupon'}">쿠폰
-                    예약 발송하기</a></button>
+                    즉시 발송하기</a></button>
                 </td>
               </tr>
               </tbody>
