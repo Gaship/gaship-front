@@ -7,9 +7,9 @@ package shop.gaship.gashipfront.product.exception;
  * @since 1.0
  */
 public class MainProductParseFailureException extends RuntimeException{
-    public static final String message = "메인페이지 상품을 파싱하는데 실패했습니다.";
+    public static final String MESSAGE = "메인페이지 상품을 파싱하는데 실패했습니다.";
 
     public MainProductParseFailureException() {
-        super(message);
+        super(MESSAGE);
     }
 }

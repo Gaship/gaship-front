@@ -4,10 +4,17 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.cache.Caching;
+import javax.cache.configuration.MutableConfiguration;
+import javax.cache.expiry.CreatedExpiryPolicy;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.MemoryUnit;
+import org.ehcache.jsr107.Eh107Configuration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -32,10 +39,22 @@ public class LocalCacheConfig {
 
     @Bean
     @Primary
-    public CacheManager cacheManager() {
-        SimpleCacheManager simpleCacheManager = new SimpleCacheManager();
-        simpleCacheManager.setCaches(List.of(new ConcurrentMapCache(CATEGORY_CACHE)));
-        return simpleCacheManager;
+    public CacheManager jCacheCacheManager() {
+        javax.cache.CacheManager cacheManager = Caching.getCachingProvider().getCacheManager();
+
+        CacheConfigurationBuilder<Object, Object> configuration =
+                CacheConfigurationBuilder.newCacheConfigurationBuilder(
+                                Object.class,
+                                Object.class,
+                                ResourcePoolsBuilder
+                                        .newResourcePoolsBuilder().offheap(1, MemoryUnit.MB))
+                        .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(60)));
+
+        javax.cache.configuration.Configuration<Object, Object> ehcacheCacheConfiguration =
+                Eh107Configuration.fromEhcacheCacheConfiguration(configuration);
+
+        cacheManager.createCache(CATEGORY_CACHE, ehcacheCacheConfiguration);
+        return new JCacheCacheManager(cacheManager);
     }
 
     @Bean
