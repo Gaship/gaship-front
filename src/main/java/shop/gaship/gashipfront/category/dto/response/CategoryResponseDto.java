@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.category.dto.response;
 
+import java.io.Serializable;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor
-public class CategoryResponseDto {
+public class CategoryResponseDto implements Serializable {
     private Integer no;
     private String name;
     private Integer level;

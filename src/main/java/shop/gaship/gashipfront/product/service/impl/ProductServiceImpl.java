@@ -1,5 +1,7 @@
 package shop.gaship.gashipfront.product.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -13,6 +15,7 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.exception.MainProductParseFailureException;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -26,6 +29,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductAdapter productAdapter;
+    private final ObjectMapper objectMapper;
 
     @Override
     public PageResponse<ProductAllInfoResponseDto> productAllInfoByPageable(
@@ -76,8 +80,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(LocalCacheConfig.PRODUCT_CACHE)
-    public PageResponse<ProductAllInfoResponseDto> findMainProducts(String page, String size, String category, String minAmount, String maxAmount) {
-        return productAdapter.productListAll(page, size, category, minAmount, maxAmount);
+    @Cacheable(value = LocalCacheConfig.PRODUCT_CACHE, cacheManager = "redisCacheManager")
+    public String findMainProducts(String page, String size, String category, String minAmount, String maxAmount) {
+        try {
+            return objectMapper.writeValueAsString(
+                    productAdapter.productListAll(page, size, category, minAmount, maxAmount));
+        } catch (JsonProcessingException e) {
+            throw new MainProductParseFailureException();
+        }
     }
 }
