@@ -69,7 +69,7 @@ public class LocalCacheConfig {
                         .fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
-        cacheConfiguration.put(PRODUCT_CACHE, redisCacheConfiguration.entryTtl(Duration.ofSeconds(180L)));
+        cacheConfiguration.put(PRODUCT_CACHE, redisCacheConfiguration.entryTtl(Duration.ofSeconds(60L)));
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(redisCacheConfiguration)
