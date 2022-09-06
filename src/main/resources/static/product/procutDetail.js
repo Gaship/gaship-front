@@ -129,7 +129,6 @@ const addCart = function (e) {
       }
     toastr.success("장바구니에 상품이 담겼습니다.");
   }).catch((error)=>{
-    console.log(error);
     toastr.error("재고가 없는 상품입니다.");
   });
 };

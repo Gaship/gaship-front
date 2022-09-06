@@ -12,7 +12,10 @@
 </th:block>
 <th:block layout:fragment="content">
     <div class="container">
-        <div class="row flex-md-nowrap flex-column">
+        <div class="row flex-md-nowrap">
+                <div class="w-25">
+                    <th:block th:include="component/userDetailMenu"></th:block>
+                </div>
             <div class="card">
                 <div class="card-header">
                     <button class="btn btn-outline-info"><a
@@ -62,11 +65,11 @@
                 </div>
 
             </div>
-            <div>
-                <th:block th:if="${!#lists.isEmpty(couponGenerationIssueList)}">
-                    <th:block th:include="component/pageFooter"></th:block>
-                </th:block>
-            </div>
+        </div>
+        <div>
+            <th:block th:if="${!#lists.isEmpty(couponGenerationIssueList)}">
+                <th:block th:include="component/pageFooter"></th:block>
+            </th:block>
         </div>
     </div>
 </th:block>

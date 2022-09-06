@@ -58,15 +58,15 @@
                                 <div class="featured__item__text">
                                     <h6><a th:href="@{'/products/' + ${product.productNo}}"
                                            th:text="${product.productName}"></a></h6>
-                                    <h5 th:text="'₩ ' + ${product.amount}"></h5>
+                                    <h5 th:text="${#numbers.formatCurrency(product.amount)}"></h5>
                                 </div>
                             </div>
                         </div>
                     </th:block>
+                    <th:block th:if="${!#lists.isEmpty(products)}">
+                        <th:block th:include="component/pageFooter"></th:block>
+                    </th:block>
                 </div>
-                <th:block th:if="${!#lists.isEmpty(products)}">
-                    <th:block th:include="component/pageFooter"></th:block>
-                </th:block>
             </div>
         </div>
     </section>
@@ -84,7 +84,6 @@
                 toastr.success("장바구니에 상품이 담겼습니다.");
             },
             error: function(data){
-                console.log(data);
                 toastr.error(data['responseJSON']['errorMessage']);
             }
         })

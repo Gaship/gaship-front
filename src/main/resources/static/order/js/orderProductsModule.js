@@ -97,11 +97,18 @@ function setOrderRequestData(orderProductList) {
     drawOrderProductsContent();
 }
 
+const parseKoreaCurrency = (amount) => new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' })
+  .format(amount);
+
 function drawOrderProductsContent() {
     orderProductsContainer = document.getElementById("orderProductsContainer");
     orderProductsContainer.innerHTML = "";
 
     orderRequestData.orderProducts.forEach(orderProduct => {
+      const amount = parseKoreaCurrency(orderProduct.amount);
+      const couponAmount = parseKoreaCurrency(orderProduct.couponAmount);
+      const productAmount = parseKoreaCurrency(orderProduct.productAmount);
+
         const orderProductContentTemplate = `
         <tr>
             <td style="padding: 10px" class="shoping__cart__item">
@@ -109,13 +116,13 @@ function drawOrderProductsContent() {
                 <h5>${orderProduct.productName}</h5><br/>
             </td>
             <td style="padding: 10px" class="shoping__cart__price">
-                ${orderProduct.productAmount}
+                ${productAmount}
             </td>
             <td style="padding: 10px" class="shoping__cart__price">
-                ${orderProduct.couponAmount}
+                ${couponAmount}
             </td>
             <td style="padding: 10px" class="shoping__cart__total">
-                ${orderProduct.amount}
+                ${amount}
             </td>
             <td style="padding: 10px">
                 <button name="selectCouponBtn" value="${orderProduct.index}" 
@@ -192,9 +199,9 @@ function setCouponEvent() {
 }
 
 function setOrderAmountInfo() {
-    document.getElementById("productTotalAmount").innerText = orderProductsTotalAmount;
-    document.getElementById("discountTotalAmount").innerText = discountTotalAmount;
-    document.getElementById("paymentTotalAmount").innerText = orderRequestData.totalAmount;
+    document.getElementById("productTotalAmount").innerText = parseKoreaCurrency(orderProductsTotalAmount);
+    document.getElementById("discountTotalAmount").innerText = parseKoreaCurrency(discountTotalAmount);
+    document.getElementById("paymentTotalAmount").innerText = parseKoreaCurrency(orderRequestData.totalAmount);
 }
 
 const loadOrderProducts = () => {
