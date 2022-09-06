@@ -11,6 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import shop.gaship.gashipfront.cart.exception.ProductStockIsZeroException;
+import shop.gaship.gashipfront.order.exception.CouponProcessException;
 
 /**
  * 설명작성란
@@ -36,5 +38,12 @@ public class RestControllerAdvisor {
             response = ResponseEntity.status(HttpStatus.BAD_GATEWAY);
         }
         return response.body(Map.of("errorMessage", e.getMessage()));
+    }
+
+    @ExceptionHandler({ProductStockIsZeroException.class, CouponProcessException.class})
+    public ResponseEntity<Map<String, String>> orderProcessExceptionHandler(
+            Exception exception) {
+        return ResponseEntity.internalServerError()
+                .body(Map.of("errorMessage", exception.getMessage()));
     }
 }
