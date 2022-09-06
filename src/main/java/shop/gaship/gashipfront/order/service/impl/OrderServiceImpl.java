@@ -50,4 +50,9 @@ public class OrderServiceImpl implements OrderService {
 
         paymentAdapter.cancelPayment(orderNo, orderPaymentCancelRequestDto);
     }
+
+    @Override
+    public void successOrder(SuccessOrderRequestDto requestDto) {
+        orderAdapter.orderSuccess(requestDto);
+    }
 }
