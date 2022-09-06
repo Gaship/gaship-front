@@ -1,5 +1,6 @@
 package shop.gaship.gashipfront.member.controller;
 
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,6 +42,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
  */
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
     private final MemberService memberService;
     private static final String RESPONSE = "response";
@@ -235,6 +238,12 @@ public class MemberController {
     @GetMapping("/members/signUp/email-verify/{verifyCode}")
     public String requestApproveComplete(@PathVariable("verifyCode") String verifyCode,
                                          HttpServletRequest request) {
+        log.error("-----------------------------------------------------");
+        Iterator<String> headers = request.getHeaderNames().asIterator();
+        while (headers.hasNext()){
+            log.debug("인증 요청한 헤더 : key: {}, value : {}", headers.next(), request.getHeader(headers.next()));
+        }
+        log.error("-----------------------------------------------------");
         memberService.requestApproveEmailVerification(verifyCode);
 
         HttpSession session = request.getSession(false);
