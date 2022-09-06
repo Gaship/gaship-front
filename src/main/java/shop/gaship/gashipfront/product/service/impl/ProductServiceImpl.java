@@ -60,21 +60,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, cacheManager = "redisCacheManager", allEntries = true)
     public void addProduct(List<MultipartFile> multipartFiles,
                            ProductCreateRequestDto createRequest) {
         productAdapter.productAdd(multipartFiles, createRequest);
     }
 
     @Override
-    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, cacheManager = "redisCacheManager", allEntries = true)
     public void modifyProduct(List<MultipartFile> multipartFiles,
                               ProductModifyRequestDto modifyRequest) {
         productAdapter.productModify(multipartFiles, modifyRequest);
     }
 
     @Override
-    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, cacheManager = "redisCacheManager", allEntries = true)
     public void modifySalesStatus(SalesStatusModifyRequestDto salesStatusModifyRequest) {
         productAdapter.salesStatusModify(salesStatusModifyRequest);
     }
