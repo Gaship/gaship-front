@@ -9,17 +9,16 @@
     <script th:src="@{/fragments/js/bootstrap.js}"></script>
     <script th:src="@{/fragments/js/sb-admin-2.js}"></script>
     <meta charset="UTF-8">
-    <title>에러 발생!!!</title>
+    <title>403 | 접근권한이 없습니다.</title>
 </head>
 <th:block layout:fragment="content">
     <div id="content-wrapper" class="d-flex flex-column">
         <div id="content">
             <div class="container-fluid">
                 <div class="text-center">
-                    <div class="error mx-auto" data-text="500">500</div>
+                    <div class="error mx-auto" data-text="403">403</div>
                     <div class="container">
-                        <h1>Oops!</h1>
-                        <h2>빠른 시간 내에 문제를 해결하겠습니다. 죄송합니다.</h2>
+                        <pre class="text-dark mb-0 text-left" style="font-size: 1.2rem;">접근권한이 없습니다.</pre>
                     </div>
                     <a href="/">홈으로가기</a>
                 </div>

@@ -31,19 +31,15 @@ public class RestControllerAdvisor {
                 fieldError -> Objects.requireNonNull(fieldError.getDefaultMessage())));
     }
 
-    @ExceptionHandler({ConnectException.class, Throwable.class})
+    @ExceptionHandler({ConnectException.class, ProductStockIsZeroException.class,
+        CouponProcessException.class, Throwable.class})
     public ResponseEntity<Map<String, String>> restAdaptorRefuse(Throwable e) {
-        ResponseEntity.BodyBuilder response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
-        if(e instanceof  ConnectException){
-            response = ResponseEntity.status(HttpStatus.BAD_GATEWAY);
-        }
-        return response.body(Map.of("errorMessage", e.getMessage()));
-    }
+        Map<String, String> errorMessage = Map.of("errorMessage", e.getMessage());
 
-    @ExceptionHandler({ProductStockIsZeroException.class, CouponProcessException.class})
-    public ResponseEntity<Map<String, String>> orderProcessExceptionHandler(
-            Exception exception) {
-        return ResponseEntity.internalServerError()
-                .body(Map.of("errorMessage", exception.getMessage()));
+        if (e instanceof ConnectException) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorMessage);
+        }
+
+        return ResponseEntity.internalServerError().body(errorMessage);
     }
 }
