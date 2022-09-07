@@ -32,7 +32,7 @@ public class RestControllerAdvisor {
     }
 
     @ExceptionHandler({ConnectException.class, ProductStockIsZeroException.class,
-        CouponProcessException.class, Throwable.class})
+        CouponProcessException.class, RuntimeException.class})
     public ResponseEntity<Map<String, String>> restAdaptorRefuse(Throwable e) {
         Map<String, String> errorMessage = Map.of("errorMessage", e.getMessage());
 
