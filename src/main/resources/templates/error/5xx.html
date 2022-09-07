@@ -9,7 +9,7 @@
     <script th:src="@{/fragments/js/bootstrap.js}"></script>
     <script th:src="@{/fragments/js/sb-admin-2.js}"></script>
     <meta charset="UTF-8">
-    <title>에러 발생!!!</title>
+    <title th:text="${status}"></title>
 </head>
 <th:block layout:fragment="content">
     <div id="content-wrapper" class="d-flex flex-column">
@@ -18,8 +18,7 @@
                 <div class="text-center">
                     <div class="error mx-auto" th:text="${status}" th:data-text="${status}"></div>
                     <div class="container">
-                        <pre class="text-dark mb-0 text-left" style="font-size: 1.2rem;" th:text="${message}"></pre>
-                        <pre class="text-dark mb-0 text-left" style="font-size: 1.2rem;" th:text="${error}"></pre>
+                        <h2>빠른 시간 내에 문제를 해결하겠습니다. 죄송합니다.</h2>
                     </div>
                     <a href="/">홈으로가기</a>
                 </div>
