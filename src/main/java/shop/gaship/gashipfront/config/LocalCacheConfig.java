@@ -8,18 +8,14 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.cache.Caching;
-import javax.cache.configuration.MutableConfiguration;
-import javax.cache.expiry.CreatedExpiryPolicy;
 import lombok.RequiredArgsConstructor;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.units.MemoryUnit;
 import org.ehcache.jsr107.Eh107Configuration;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -66,7 +62,7 @@ public class LocalCacheConfig {
                                 Object.class,
                                 ResourcePoolsBuilder
                                         .newResourcePoolsBuilder().offheap(1, MemoryUnit.MB))
-                        .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(60)));
+                        .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(180)));
 
         javax.cache.configuration.Configuration<Object, Object> ehcacheCacheConfiguration =
                 Eh107Configuration.fromEhcacheCacheConfiguration(configuration);
@@ -87,7 +83,7 @@ public class LocalCacheConfig {
                         .fromSerializer(new GenericJackson2JsonRedisSerializer()));
 
         Map<String, RedisCacheConfiguration> cacheConfiguration = new HashMap<>();
-        cacheConfiguration.put(PRODUCT_CACHE, redisCacheConfiguration.entryTtl(Duration.ofSeconds(60L)));
+        cacheConfiguration.put(PRODUCT_CACHE, redisCacheConfiguration.entryTtl(Duration.ofDays(100)));
 
         return RedisCacheManager.builder(cacheRedisConnectionFactory())
                 .cacheDefaults(redisCacheConfiguration)
@@ -96,7 +92,6 @@ public class LocalCacheConfig {
     }
 
     @Bean
-    @Qualifier("cacheRedisConnection")
     public RedisConnectionFactory cacheRedisConnectionFactory() {
         String secretHost;
         String secretPassword;
