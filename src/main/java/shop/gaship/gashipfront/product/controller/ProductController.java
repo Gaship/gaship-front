@@ -23,6 +23,7 @@ import shop.gaship.gashipfront.elastic.service.SearchService;
 import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.statuscode.adapter.StatusCodeAdapter;
 import shop.gaship.gashipfront.statuscode.enumm.DeliveryType;
@@ -87,6 +88,23 @@ public class ProductController {
         model.addAttribute("nextPageNo", page.getPageNumber() + 1);
         model.addAttribute("uri", "/products");
 
+        return "product/products";
+    }
+
+    @GetMapping(value = "/products/category/{categoryNo}")
+    public String findProductUpperCategory(Pageable page,
+                                           @PathVariable("categoryNo") Integer categoryNo,
+                                           Model model) {
+        PageResponse<ProductByCategoryResponseDto> products = productService.findProductByCategory(page, categoryNo, null, null, true);
+
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("next", products.isNext());
+        model.addAttribute("previous", products.isPrevious());
+        model.addAttribute("totalPage", products.getTotalPages());
+        model.addAttribute("pageNum", products.getNumber() + 1);
+        model.addAttribute("previousPageNo", page.getPageNumber() - 1);
+        model.addAttribute("nextPageNo", page.getPageNumber() + 1);
+        model.addAttribute("uri", "/products");
         return "product/products";
     }
 
