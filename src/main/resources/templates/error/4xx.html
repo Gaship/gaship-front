@@ -9,7 +9,7 @@
     <script th:src="@{/fragments/js/bootstrap.js}"></script>
     <script th:src="@{/fragments/js/sb-admin-2.js}"></script>
     <meta charset="UTF-8">
-    <title>에러 발생!!!</title>
+    <title th:text="${status}"></title>
 </head>
 <th:block layout:fragment="content">
     <div id="content-wrapper" class="d-flex flex-column">

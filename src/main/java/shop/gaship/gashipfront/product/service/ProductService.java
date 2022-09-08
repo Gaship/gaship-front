@@ -60,5 +60,5 @@ public interface ProductService {
 
     void modifySalesStatus(SalesStatusModifyRequestDto salesStatusModifyRequest);
 
-    PageResponse<ProductAllInfoResponseDto> findMainProducts(String page, String size, String category, String minAmount, String maxAmount);
+    String findMainProducts(String page, String size, String category, String minAmount, String maxAmount);
 }

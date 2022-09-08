@@ -51,7 +51,7 @@
                         <span class="icon_tag" th:text="${tag}"></span>
                     </th:block>
                 </div>
-                <div class="product__details__price" th:text="${#numbers.formatCurrency(product.amount)}"></div>
+                <div class="product__details__price" th:text="${product.amount}"></div>
 
                 <div class="product__details__quantity">
                     <div class="quantity">

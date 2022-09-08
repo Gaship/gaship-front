@@ -11,6 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import shop.gaship.gashipfront.cart.exception.ProductStockIsZeroException;
+import shop.gaship.gashipfront.order.exception.CouponProcessException;
 
 /**
  * 설명작성란
@@ -29,12 +31,15 @@ public class RestControllerAdvisor {
                 fieldError -> Objects.requireNonNull(fieldError.getDefaultMessage())));
     }
 
-    @ExceptionHandler({ConnectException.class, Throwable.class})
+    @ExceptionHandler({ConnectException.class, ProductStockIsZeroException.class,
+        CouponProcessException.class, RuntimeException.class})
     public ResponseEntity<Map<String, String>> restAdaptorRefuse(Throwable e) {
-        ResponseEntity.BodyBuilder response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
-        if(e instanceof  ConnectException){
-            response = ResponseEntity.status(HttpStatus.BAD_GATEWAY);
+        Map<String, String> errorMessage = Map.of("errorMessage", e.getMessage());
+
+        if (e instanceof ConnectException) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(errorMessage);
         }
-        return response.body(Map.of("errorMessage", e.getMessage()));
+
+        return ResponseEntity.internalServerError().body(errorMessage);
     }
 }

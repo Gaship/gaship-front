@@ -141,7 +141,15 @@ const readMore = fn => (e) => {
 
   fn(pageNo)(e);
 }
+const parseKoreaCurrency = (amount) => new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' })
+  .format(amount);
+
+const changeWonCurrency = () => {
+  const productAmount = document.querySelector(".product__details__price");
+  const amount = productAmount.textContent;
+  productAmount.textContent = parseKoreaCurrency(+amount);
+}
+
+changeWonCurrency();
 document.querySelector(".more-read-btn").addEventListener('click', readMore(inquiryRetrieve))
 document.querySelector(".more-review-read-btn").addEventListener('click', readMore(reviewRetrieve))
-
-
