@@ -15,6 +15,8 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
+import shop.gaship.gashipfront.product.exception.MainProductParseFailureException;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -28,6 +30,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductAdapter productAdapter;
+    private final ObjectMapper objectMapper;
 
     @Override
     public PageResponse<ProductAllInfoResponseDto> productAllInfoByPageable(
