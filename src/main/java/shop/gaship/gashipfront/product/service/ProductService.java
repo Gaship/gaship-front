@@ -8,6 +8,7 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -44,6 +45,12 @@ public interface ProductService {
     PageResponse<ProductAllInfoResponseDto> findProductListByCode(Pageable pageable, String code);
 
     List<ProductAllInfoResponseDto> findProductNosList(List<Integer> productNos);
+
+    PageResponse<ProductByCategoryResponseDto> findProductByCategory(Pageable pageable,
+                                                                     Integer categoryNo,
+                                                                     Long minPrice,
+                                                                     Long maxPrice,
+                                                                     Boolean isUpper);
 
     ProductAllInfoResponseDto findProduct(Integer productNo);
 

@@ -13,6 +13,7 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
@@ -48,6 +49,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductAllInfoResponseDto> findProductNosList(List<Integer> productNos) {
         return productAdapter.productNosList(productNos);
+    }
+
+    @Override
+    public PageResponse<ProductByCategoryResponseDto> findProductByCategory(Pageable pageable,
+                                                                            Integer categoryNo,
+                                                                            Long minPrice,
+                                                                            Long maxPrice,
+                                                                            Boolean isUpper){
+        return productAdapter.productByCategoryAndAmount(pageable, categoryNo, minPrice, maxPrice, isUpper);
     }
 
     @Override

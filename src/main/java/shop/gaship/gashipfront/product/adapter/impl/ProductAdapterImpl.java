@@ -1,7 +1,5 @@
 package shop.gaship.gashipfront.product.adapter.impl;
 
-import static org.springframework.http.MediaType.parseMediaType;
-
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +18,11 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
-import shop.gaship.gashipfront.util.dto.PageResponse;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.dto.PageResponse;
+
+import static org.springframework.http.MediaType.parseMediaType;
 
 /**
  * 상품 어댑터 구현체입니다.
@@ -45,7 +46,7 @@ public class ProductAdapterImpl implements ProductAdapter {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
 
         multipartFiles.forEach(multipartFile ->
-                builder.part("image", multipartFile.getResource(),
+            builder.part("image", multipartFile.getResource(),
                 parseMediaType(Objects.requireNonNull(multipartFile.getContentType()))));
         builder.part("createRequest", createRequest, MediaType.APPLICATION_JSON);
 
@@ -67,8 +68,8 @@ public class ProductAdapterImpl implements ProductAdapter {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
 
         multipartFiles.forEach(multipartFile ->
-                builder.part("image", multipartFile.getResource(),
-                        parseMediaType(Objects.requireNonNull(multipartFile.getContentType()))));
+            builder.part("image", multipartFile.getResource(),
+                parseMediaType(Objects.requireNonNull(multipartFile.getContentType()))));
         builder.part("modifyRequest", modifyRequest, MediaType.APPLICATION_JSON);
 
         webClient.put()
@@ -187,6 +188,7 @@ public class ProductAdapterImpl implements ProductAdapter {
                 .path(REQUEST_URI + "/category/" + categoryNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
+                .queryParam("isUpper",false)
                 .build())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -196,6 +198,7 @@ public class ProductAdapterImpl implements ProductAdapter {
             )
             .block();
     }
+
 
     /**
      * {@inheritDoc}
@@ -230,13 +233,13 @@ public class ProductAdapterImpl implements ProductAdapter {
                     .path(REQUEST_URI)
                     .queryParam("page", page)
                     .queryParam("size", size);
-                if(Objects.nonNull(category)){
+                if (Objects.nonNull(category)) {
                     uri.queryParam("category", category);
                 }
-                if(Objects.nonNull(minAmount)){
+                if (Objects.nonNull(minAmount)) {
                     uri.queryParam("minAmount", minAmount);
                 }
-                if(Objects.nonNull(maxAmount)){
+                if (Objects.nonNull(maxAmount)) {
                     uri.queryParam("maxAmount", maxAmount);
                 }
                 return uri.build();
@@ -244,8 +247,38 @@ public class ProductAdapterImpl implements ProductAdapter {
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(
-                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {})
+                new ParameterizedTypeReference<PageResponse<ProductAllInfoResponseDto>>() {
+                })
             .block();
+    }
+
+    @Override
+    public PageResponse<ProductByCategoryResponseDto> productByCategoryAndAmount(Pageable pageable,
+                                                                                 Integer categoryNo,
+                                                                                 Long minPrice,
+                                                                                 Long maxPrice,
+                                                                                 Boolean isUpper) {
+        return webClient.get()
+            .uri(uriBuilder -> {
+                UriBuilder uri = uriBuilder
+                    .path(REQUEST_URI + "/category/" + categoryNo)
+                    .queryParam("page", pageable.getPageNumber())
+                    .queryParam("size", pageable.getPageSize())
+                    .queryParam("isUpper", isUpper);
+                if (Objects.nonNull(minPrice)) {
+                    uri.queryParam("minPrice", minPrice);
+                }
+                if (Objects.nonNull(maxPrice)) {
+                    uri.queryParam("maxPrice", maxPrice);
+                }
+                return uri.build();
+            })
+            .retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(
+                new ParameterizedTypeReference<PageResponse<ProductByCategoryResponseDto>>() {
+                }
+            ).block();
     }
 
     @Override
