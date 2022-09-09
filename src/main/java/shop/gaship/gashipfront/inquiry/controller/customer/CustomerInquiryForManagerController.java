@@ -56,36 +56,6 @@ public class CustomerInquiryForManagerController {
         return VIEW_NAME_CUSTOMER_INQUIRY_DETAILS_ADMIN.getValue();
     }
 
-
-    /**
-     * 관리자가 모든 고객문의 목록을 최신순으로 조회하는 요청을 처리하는 기능입니다.
-     *
-     * @param pageable 페이지네이션에 맞게 조회하기 위한 정보를 담고있는 객체입니다.
-     * @param model    view에서 처리되어야할 데이터를 저장하는 객체입니다.
-     * @return 문의 목록을 보여주는 view name을 반환합니다.
-     * @author 최겸준
-     */
-//    @GetMapping(value = "/customer-inquiries")
-//    public String customerInquiryList(@PageableDefault Pageable pageable, Model model) {
-//
-//        Instant stime = Instant.now();
-//        PageResponse<InquiryListResponseDto> pageResponse =
-//            customerInquiryService.findCustomerInquiries(pageable);
-//        Instant etime = Instant.now();
-//        long betweenTime = Duration.between(stime, etime).toMillis();
-//        double resultTime = betweenTime / 1000.0;
-//        model.addAttribute("resultTime", resultTime);
-//        model.addAttribute("next", pageResponse.isNext());
-//        model.addAttribute("previous", pageResponse.isPrevious());
-//        model.addAttribute("totalPage", pageResponse.getTotalPages());
-//        model.addAttribute("pageNum", pageResponse.getNumber() + 1);
-//        model.addAttribute("previousPageNo", pageResponse.getNumber() - 1);
-//        model.addAttribute("nextPageNo", pageResponse.getNumber() + 1);
-//        model.addAttribute("uri", "/admin/inquiries/customer-inquiries");
-//        model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
-//        return VIEW_NAME_CUSTOMER_INQUIRY_LIST_ADMIN.getValue();
-//    }
-
     /**
      * 답변대기 상태인 고객문의목록 조회요청을 처리하는 기능입니다.
      *
@@ -127,7 +97,6 @@ public class CustomerInquiryForManagerController {
     @GetMapping(value = {"/customer-inquiries/status-complete", "/customer-inquiries"})
     public String customerInquiryStatusCompleteList(@PageableDefault Pageable pageable, Integer inquiryNo,
                                                     Integer prevPage, Boolean isPrev, Model model, HttpServletRequest request) {
-
 
         if (Objects.isNull(inquiryNo)) {
             inquiryNo = 0;
