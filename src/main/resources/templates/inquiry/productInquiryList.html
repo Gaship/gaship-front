@@ -55,9 +55,14 @@
         </div>
 
         <script th:src="@{/inquiry/js/inquiry.js}"></script>
-        <script>
+        <script th:inline="javascript">
             let whereUri = "product";
             let isUser = true;
+
+            let successMessage = [[${successMessage}]];
+            if (successMessage) {
+                alert(successMessage);
+            }
         </script>
     </div>
     </div>

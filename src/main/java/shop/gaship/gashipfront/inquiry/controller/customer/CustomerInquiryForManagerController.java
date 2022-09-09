@@ -73,6 +73,8 @@ public class CustomerInquiryForManagerController {
         Instant etime = Instant.now();
         long betweenTime = Duration.between(stime, etime).toMillis();
         double resultTime = betweenTime / 1000.0;
+
+        model.addAttribute("filter", "hold");
         model.addAttribute("resultTime", resultTime);
         model.addAttribute("next", pageResponse.isNext());
         model.addAttribute("previous", pageResponse.isPrevious());
@@ -93,7 +95,6 @@ public class CustomerInquiryForManagerController {
      * @return 문의 목록을 보여주는 view name을 반환합니다.
      * @author 최겸준
      */
-
     @GetMapping(value = {"/customer-inquiries/status-complete", "/customer-inquiries"})
     public String customerInquiryStatusCompleteList(@PageableDefault Pageable pageable, Integer inquiryNo,
                                                     Integer prevPage, Boolean isPrev, Model model, HttpServletRequest request) {
@@ -179,9 +180,11 @@ public class CustomerInquiryForManagerController {
         model.addAttribute(KEY_PAGE_RESPONSE.getValue(), pageResponse);
 
         if (status) {
+            model.addAttribute("filter", "complete");
             model.addAttribute("uri", "/admin/inquiries/customer-inquiries/status-complete");
             return;
         }
+        model.addAttribute("filter", "latest");
         model.addAttribute("uri", "/admin/inquiries/customer-inquiries");
     }
 }
