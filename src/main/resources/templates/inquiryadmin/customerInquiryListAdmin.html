@@ -16,15 +16,19 @@
         <div class="row flex-md-nowrap">
             <div role="main" class="container h5">
                 <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">고객문의 목록</h1>
-                <a href = "/admin/inquiries/customer-inquiries" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                <a href="/admin/inquiries/customer-inquiries" style="width: auto; margin-left: 10px"
+                   class="btn btn-outline-primary">
                     최신순
                 </a>
-                <a href = "/admin/inquiries/customer-inquiries/status-hold" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                <a href="/admin/inquiries/customer-inquiries/status-hold" style="width: auto; margin-left: 10px"
+                   class="btn btn-outline-primary">
                     답변 대기
                 </a>
-                <a href="/admin/inquiries/customer-inquiries/status-complete" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                <a href="/admin/inquiries/customer-inquiries/status-complete" style="width: auto; margin-left: 10px"
+                   class="btn btn-outline-primary">
                     답변 완료
                 </a>
+                <span th:if="${resultTime != null}" th:text="${'조회시간 : [' + resultTime + '초]'}"></span>
                 <div class="card-body p-0">
                     <table class="table table-striped">
                         <thead>
@@ -56,8 +60,34 @@
                         </tr>
                         </tbody>
                     </table>
-                    <th:block th:if="${!#lists.isEmpty(pageResponse.content)}">
+                    <th:block th:if="${!#lists.isEmpty(pageResponse.content) and #strings.isEmpty(nowPage)}">
                         <th:block th:include="component/pageFooter"></th:block>
+                    </th:block>
+                    <th:block th:if="${!#lists.isEmpty(pageResponse.content) and not #strings.isEmpty(nowPage)}">
+                                <a class="btn btn-outline-primary" style="width: auto; margin-left: 10%"
+                                   th:href="@{${uri}}"><<</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=9999, prevPage=${nowPage}, inquiryNo = ${firstNo}, isPrev = true)}">10000</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=999, prevPage=${nowPage}, inquiryNo = ${firstNo}, isPrev = true)}">1000</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=99, prevPage=${nowPage}, inquiryNo = ${firstNo}, isPrev = true)}">100</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=9, prevPage=${nowPage}, inquiryNo = ${firstNo}, isPrev = true)}">10</a>
+                                <a th:href="@{${uri}(page=0, prevPage=${nowPage}, inquiryNo = ${firstNo}, isPrev = true)}"><
+                                    &nbsp;</a>
+                            <span th:text="${nowPage + ' / ' + pageResponse.totalPages}"></span>
+                                <a th:href="@{${uri}(page=0, prevPage=${nowPage}, inquiryNo = ${lastNo}, isPrev = false)}"> &nbsp;></a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=9, prevPage=${nowPage}, inquiryNo = ${lastNo}, isPrev = false)}">10</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=99, prevPage=${nowPage}, inquiryNo = ${lastNo}, isPrev = false)}">100</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=999, prevPage=${nowPage}, inquiryNo = ${lastNo}, isPrev = false)}">1000</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=9999, prevPage=${nowPage}, inquiryNo = ${lastNo}, isPrev = false)}">10000</a>
+                                <a class="btn btn-outline-primary"
+                                   th:href="@{${uri}(page=7777, prevPage=${pageResponse.totalPages}, inquiryNo = 0, isPrev = false)}">>></a>
                     </th:block>
                 </div>
             </div>
@@ -71,3 +101,4 @@
     </div>
 </th:block>
 </html>
+

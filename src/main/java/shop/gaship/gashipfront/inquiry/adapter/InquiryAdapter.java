@@ -85,6 +85,12 @@ public interface InquiryAdapter {
      */
     PageResponse<InquiryListResponseDto> customerInquiryList(Pageable pageable);
 
+    PageResponse<InquiryListResponseDto> customerInquiryListPrevPage(Pageable pageable,
+                                                                     Integer inquiryNo);
+
+    PageResponse<InquiryListResponseDto> customerInquiryListNextPage(Pageable pageable,
+                                                                     Integer inquiryNo);
+
     /**
      * 상품문의 목록을 조회하는 요청을 보냅니다.
      *
@@ -102,14 +108,19 @@ public interface InquiryAdapter {
     PageResponse<InquiryListResponseDto> customerInquiryStatusHoldList(
         Pageable pageable);
 
+
+    PageResponse<InquiryListResponseDto> customerInquiryStatusCompleteList(Pageable pageable);
     /**
      * 답변완료 상태인 고객문의목록 조회요청을 보냅니다.
      *
      * @param pageable 조회시 페이지네이션에 맞게 요청할때 필요한 정보를 담고있는 객체입니다.
+     * @param inquiryNo
      * @author 최겸준
      */
-    PageResponse<InquiryListResponseDto> customerInquiryStatusCompleteList(
-        Pageable pageable);
+    PageResponse<InquiryListResponseDto> customerInquiryStatusCompleteListPrevPage(
+        Pageable pageable, Integer inquiryNo);
+
+    PageResponse<InquiryListResponseDto> customerInquiryStatusCompleteListNextPage(Pageable pageable, Integer inquiryNo);
 
     /**
      * 답변대기 상태인 상품문의목록 조회요청을 보냅니다.
@@ -155,6 +166,7 @@ public interface InquiryAdapter {
      */
     PageResponse<InquiryListResponseDto> productInquiryProductList(Pageable pageable,
                                                                    Integer productNo);
+
 
 
 }
