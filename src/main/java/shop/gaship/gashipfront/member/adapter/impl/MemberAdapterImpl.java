@@ -29,6 +29,7 @@ import shop.gaship.gashipfront.member.dto.response.MemberResponseByAdminDto;
 import shop.gaship.gashipfront.member.dto.response.MemberResponseDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.TokenInjectUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -42,7 +43,7 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @Component
 @RequiredArgsConstructor
 public class MemberAdapterImpl implements MemberAdapter {
-    private final ServerConfig serverConfig;
+    private final TokenInjectUtil tokenInjectUtil;
     private final WebClient webClient;
 
     /**
@@ -228,6 +229,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public void modifyMember(MemberModifyRequestDto request) {
         webClient.put().uri("/api/members/{memberNo}", request.getMemberNo())
+                 .headers(tokenInjectUtil.headersConsumer())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -242,6 +244,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public void modifyMemberByAdmin(MemberModifyByAdminDto request) {
         webClient.put().uri("/api/admin/members/{memberNo}", request.getMemberNo())
+                 .headers(tokenInjectUtil.headersConsumer())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -256,6 +259,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public void removeMember(Integer memberNo) {
         webClient.delete().uri("/api/members/{memberNo}", memberNo)
+                 .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .toEntity(void.class)
@@ -268,6 +272,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public MemberResponseDto findMember(Integer memberNo) {
         return webClient.get().uri("/api/members/{memberNo}", memberNo)
+            .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(MemberResponseDto.class)
@@ -281,6 +286,7 @@ public class MemberAdapterImpl implements MemberAdapter {
     @Override
     public MemberResponseByAdminDto findMemberByAdmin(Integer memberNo) {
         return webClient.get().uri("/api/admin/members/{memberNo}", memberNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(MemberResponseByAdminDto.class)
@@ -327,6 +333,7 @@ public class MemberAdapterImpl implements MemberAdapter {
                         .queryParam("page", pageable.getPageNumber())
                         .queryParam("size", pageable.getPageSize())
                         .build())
+                        .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(
