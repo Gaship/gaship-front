@@ -16,13 +16,13 @@
         <div class="row flex-md-nowrap">
             <div role="main" class="container h5">
                 <h1 style="color: black; font-weight: bolder; margin-bottom: 30px">상품문의 목록</h1>
-                <a href = "/admin/inquiries/product-inquiries" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                <a href = "/admin/inquiries/product-inquiries" style="width: auto; margin-left: 10px" class="btn btn-outline-primary" id="latest">
                     최신순
                 </a>
-                <a href = "/admin/inquiries/product-inquiries/status-hold" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                <a href = "/admin/inquiries/product-inquiries/status-hold" style="width: auto; margin-left: 10px" class="btn btn-outline-primary" id="hold">
                     답변 대기
                 </a>
-                <a href="/admin/inquiries/product-inquiries/status-complete" style="width: auto; margin-left: 10px" class="btn btn-outline-primary">
+                <a href="/admin/inquiries/product-inquiries/status-complete" style="width: auto; margin-left: 10px" class="btn btn-outline-primary" id="complete">
                     답변 완료
                 </a>
                 <div class="card-body p-0">
@@ -63,9 +63,20 @@
             </div>
 
             <script th:src="@{/inquiry/js/inquiry.js}"></script>
-            <script>
+            <script th:inline="javascript">
                 let whereUri = "product";
                 let isUser = false;
+                let filter = [[${filter}]];
+
+                let button;
+                if (filter === 'latest') {
+                    button = document.getElementById('latest');
+                } else if (filter === 'hold') {
+                    button = document.getElementById('hold');
+                } else if (filter === 'complete') {
+                    button = document.getElementById('complete');
+                }
+                button.style.backgroundColor = 'lightblue';
             </script>
         </div>
     </div>

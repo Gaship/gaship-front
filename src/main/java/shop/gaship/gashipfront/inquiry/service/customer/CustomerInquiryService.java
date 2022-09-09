@@ -30,14 +30,20 @@ public interface CustomerInquiryService {
      */
     PageResponse<InquiryListResponseDto> findCustomerInquiriesStatusHold(Pageable pageable);
 
+    PageResponse<InquiryListResponseDto> findCustomerInquiriesStatusComplete(Pageable pageable);
     /**
      * 답변완료상태인 고객문의 목록을 찾는 기능입니다.
      *
      * @param pageable       페이징 처리를 위해 사용합니다.
+     * @param inquiryNo
      * @return PageResponse 객체를 반환합니다.
      * @author 최겸준
      */
-    PageResponse<InquiryListResponseDto> findCustomerInquiriesStatusComplete(Pageable pageable);
+    PageResponse<InquiryListResponseDto> findCustomerInquiriesStatusCompletePrevPage(
+        Pageable pageable, Integer inquiryNo);
+
+    PageResponse<InquiryListResponseDto> findCustomerInquiriesStatusCompleteNextPage(Pageable pageable, Integer inquiryNo);
+
 
     /**
      * 특정회원번호를 기준으로 고객문의 목록을 찾는 기능입니다.
@@ -48,4 +54,9 @@ public interface CustomerInquiryService {
      * @author 최겸준
      */
     PageResponse<InquiryListResponseDto> findCustomerInquiriesByMemberNo(Pageable pageable, Integer memberNo);
+
+
+    PageResponse<InquiryListResponseDto> findCustomerInquiriesAllPrevPage(Pageable pageable, Integer inquiryNo);
+
+    PageResponse<InquiryListResponseDto> findCustomerInquiriesAllNextPage(Pageable pageable, Integer inquiryNo);
 }
