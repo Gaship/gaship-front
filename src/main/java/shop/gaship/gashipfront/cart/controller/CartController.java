@@ -1,7 +1,11 @@
 package shop.gaship.gashipfront.cart.controller;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import javax.servlet.http.HttpServlet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.protocol.HTTP;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -87,9 +91,10 @@ public class CartController {
      */
     @GetMapping
     public String getProductsFromCart(HttpServletRequest request,
-                                      Model model) {
+                                      Model model) throws UnknownHostException {
         String cartId = (String) request.getAttribute(CART_ID);
         model.addAttribute("response", cartService.getProductsFromCart(cartId));
+        model.addAttribute("myAddress", InetAddress.getLocalHost());
         return "cart/carts";
     }
 }

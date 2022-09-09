@@ -238,12 +238,6 @@ public class MemberController {
     @GetMapping("/members/signUp/email-verify/{verifyCode}")
     public String requestApproveComplete(@PathVariable("verifyCode") String verifyCode,
                                          HttpServletRequest request) {
-        log.error("-----------------------------------------------------");
-        Iterator<String> headers = request.getHeaderNames().asIterator();
-        while (headers.hasNext()){
-            log.debug("인증 요청한 헤더 : key: {}, value : {}", headers.next(), request.getHeader(headers.next()));
-        }
-        log.error("-----------------------------------------------------");
         memberService.requestApproveEmailVerification(verifyCode);
 
         HttpSession session = request.getSession(false);

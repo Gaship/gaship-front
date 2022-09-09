@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 @Slf4j
 public class ControllerAdvisor {
-    private static final String ERROR_VIEW_PAGE = "exception/exceptionMassageView";
-
     private static FieldError apply(ObjectError objectError) {
         return (FieldError) objectError;
     }
@@ -43,12 +41,10 @@ public class ControllerAdvisor {
     @ExceptionHandler({ConnectException.class, Throwable.class})
     public String adaptorRefuse(Throwable e, Model model) {
         if(e instanceof ConnectException) {
-            model.addAttribute("state", HttpStatus.BAD_GATEWAY.value());
+            model.addAttribute("status", HttpStatus.BAD_GATEWAY.value());
         } else {
-            model.addAttribute("state", HttpStatus.INTERNAL_SERVER_ERROR.value());
+            return "error/500";
         }
-        model.addAttribute("message", e.getMessage());
-
-        return ERROR_VIEW_PAGE;
+        return "error/5xx";
     }
 }

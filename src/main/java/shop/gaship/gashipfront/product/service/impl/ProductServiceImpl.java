@@ -15,6 +15,7 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.product.exception.MainProductParseFailureException;
 import shop.gaship.gashipfront.product.service.ProductService;
 import shop.gaship.gashipfront.util.dto.PageResponse;
@@ -55,26 +56,35 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public PageResponse<ProductByCategoryResponseDto> findProductByCategory(Pageable pageable,
+                                                                            Integer categoryNo,
+                                                                            Long minPrice,
+                                                                            Long maxPrice,
+                                                                            Boolean isUpper){
+        return productAdapter.productByCategoryAndAmount(pageable, categoryNo, minPrice, maxPrice, isUpper);
+    }
+
+    @Override
     public ProductAllInfoResponseDto findProduct(Integer productNo) {
         return productAdapter.productDetails(productNo);
     }
 
     @Override
-    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, cacheManager = "redisCacheManager", allEntries = true)
     public void addProduct(List<MultipartFile> multipartFiles,
                            ProductCreateRequestDto createRequest) {
         productAdapter.productAdd(multipartFiles, createRequest);
     }
 
     @Override
-    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, cacheManager = "redisCacheManager", allEntries = true)
     public void modifyProduct(List<MultipartFile> multipartFiles,
                               ProductModifyRequestDto modifyRequest) {
         productAdapter.productModify(multipartFiles, modifyRequest);
     }
 
     @Override
-    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, allEntries = true)
+    @CacheEvict(value = LocalCacheConfig.PRODUCT_CACHE, cacheManager = "redisCacheManager", allEntries = true)
     public void modifySalesStatus(SalesStatusModifyRequestDto salesStatusModifyRequest) {
         productAdapter.salesStatusModify(salesStatusModifyRequest);
     }

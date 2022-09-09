@@ -23,12 +23,8 @@ async function doOrder() {
 
     return await fetch("/rest/order", request)
         .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            window.alert("죄송합니다. 현재 재고가 부족합니다.")
-            location.href = '/carts';
-        });
+            return response.json();
+        })
 }
 
 function doPayment(orderRegisterResponseData) {
@@ -40,19 +36,14 @@ function doPayment(orderRegisterResponseData) {
         inputList[i].setAttribute('readonly', true);
     }
 
-    try {
-        tossPayments.requestPayment('카드',{
-            amount: orderRegisterResponseData.amount,
-            orderId: "gaship-"+orderRegisterResponseData.orderId,
-            orderName: orderRegisterResponseData.orderName,
-            customerName: orderRegisterResponseData.customerName,
-            successUrl: 'https://gaship.shop/order/success?provider=TOSS',
-            failUrl: 'https://gaship.shop/order/fail'
-        })
-    } catch (e) {
-        window.alert("결제사의 사정으로 인해 결제가 불가능합니다.")
-        location.href = '/order/fail';
-    }
+    tossPayments.requestPayment('카드',{
+        amount: orderRegisterResponseData.amount,
+        orderId: "gaship-"+orderRegisterResponseData.orderId,
+        orderName: orderRegisterResponseData.orderName,
+        customerName: orderRegisterResponseData.customerName,
+        successUrl: 'https://gaship.shop/order/success?provider=TOSS',
+        failUrl: 'https://gaship.shop/order/fail'
+    })
 }
 
 
@@ -63,7 +54,21 @@ doPaymentBtn.addEventListener('click', () => {
     orderRequestData.deliveryRequest = document.getElementById("deliveryRequestInput").value;
 
     doOrder()
-        .then(doPayment);
+        .then(response => {
+            if(response.status !== undefined) {
+                throw new Error(`${response.message}`);
+            } else {
+                try {
+                    doPayment(response)
+                } catch (error) {
+                    throw new Error('결제사의 사정으로 인해 결제가 불가능합니다.')
+                }
+                }
+            })
+        .catch(error => {
+                window.alert("죄송합니다.\n" + error.message + "\n고객센터로 문의해주세요.")
+                location.href = '/carts';
+            })
 })
 
 const init = () => {
