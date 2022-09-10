@@ -26,7 +26,7 @@ public class ServerConfig {
     }
 
     @Bean
-    public WebClient webClient(ServerConfig serverConfig) {
+    public WebClient webClient() {
         return WebClient.builder()
             .baseUrl(gatewayUrl)
             .defaultHeader("Accept", MediaType.APPLICATION_JSON_VALUE)
