@@ -12,6 +12,7 @@ import shop.gaship.gashipfront.membertag.adapter.MemberTagAdapter;
 import shop.gaship.gashipfront.membertag.dto.request.MemberTagRequestDto;
 import shop.gaship.gashipfront.membertag.dto.response.MemberTagResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.TokenInjectUtil;
 
 /**
  * 회원 태그 어뎁터 서비스 구현체.
@@ -24,11 +25,13 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
 public class MemberTagAdapterImpl implements MemberTagAdapter {
     public static final String MEMBER_TAG_PATH = "/api/member-tag";
     private final WebClient webClient;
+    private final TokenInjectUtil tokenInjectUtil;
 
     @Override
     public void deleteAllAndAddAllMemberTags(MemberTagRequestDto request,Integer memberNo) {
         webClient.post()
                 .uri(MEMBER_TAG_PATH + "/" + memberNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .retrieve()
@@ -41,6 +44,7 @@ public class MemberTagAdapterImpl implements MemberTagAdapter {
     public List<MemberTagResponseDto> findMemberTags(Integer memberNo) {
         return webClient.get()
                 .uri("/api/member-tag" + "/" + memberNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToFlux(new ParameterizedTypeReference<MemberTagResponseDto>() {

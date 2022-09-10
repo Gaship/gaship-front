@@ -13,6 +13,7 @@ import shop.gaship.gashipfront.addresslist.dto.request.AddressListModifyRequestD
 import shop.gaship.gashipfront.addresslist.dto.response.AddressListResponseDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.TokenInjectUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
 public class AddressListAdapterImpl implements AddressListAdapter {
     private static final String ADDRESS_LIST_PATH = "/api/members/{memberNo}/addressLists";
     private final WebClient webClient;
+    private final TokenInjectUtil tokenInjectUtil;
 
     /**
      * {@inheritDoc}
@@ -37,6 +39,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
         webClient.post()
                 .uri("/api/members/{memberNo}/addressLists", request.getMemberNo())
                 .contentType(MediaType.APPLICATION_JSON)
+                .headers(tokenInjectUtil.headersConsumer())
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -55,6 +58,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
                 .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
                 .contentType(MediaType.APPLICATION_JSON)
+                .headers(tokenInjectUtil.headersConsumer())
                 .bodyValue(request)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -70,6 +74,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
         webClient.delete()
                 .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .toEntity(void.class)
@@ -84,6 +89,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
         return webClient.get()
                 .uri("/api/members/{memberNo}/addressLists/{addressListNo}",
                         memberNo, addressListNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(AddressListResponseDto.class)
@@ -98,6 +104,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
         return webClient.get()
                 .uri("/api/members/{memberNo}/addressLists?page=" + pageable.getPageNumber()
                         + "&size=" + pageable.getPageSize(), memberNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(new ParameterizedTypeReference<PageResponse<AddressListResponseDto>>() {
@@ -109,6 +116,7 @@ public class AddressListAdapterImpl implements AddressListAdapter {
     public List<AddressListResponseDto> findAddressListAll(Integer memberNo) {
         return webClient.get()
                 .uri(ADDRESS_LIST_PATH, memberNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(new ParameterizedTypeReference<List<AddressListResponseDto>>() {
