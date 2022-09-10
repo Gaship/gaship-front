@@ -18,6 +18,7 @@ import shop.gaship.gashipfront.productreview.dto.request.ProductReviewRequestDto
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewExistsResponseDto;
 import shop.gaship.gashipfront.productreview.dto.response.ProductReviewResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.TokenInjectUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -30,8 +31,9 @@ import shop.gaship.gashipfront.util.dto.PageResponse;
 @Component
 @RequiredArgsConstructor
 public class ProductReviewAdapterImpl implements ProductReviewAdapter {
-    private final WebClient webClient;
     private static final String REVIEW_URI = "/api/reviews/{orderProductNo}";
+    private final WebClient webClient;
+    private final TokenInjectUtil tokenInjectUtil;
 
     @Override
     public void productReviewAdd(MultipartFile multipartFile, ProductReviewRequestDto createRequest) {
@@ -121,6 +123,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
         return webClient.get()
                 .uri("/api/members/{memberNo}/reviews?page={page}&size={size}",
                         memberNo, pageable.getPageNumber(), pageable.getPageSize())
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(
