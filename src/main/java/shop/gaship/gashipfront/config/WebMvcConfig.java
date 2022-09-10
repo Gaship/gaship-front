@@ -6,6 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import shop.gaship.gashipfront.interceptor.ClientIpLogInterceptor;
+import shop.gaship.gashipfront.interceptor.JwtReissueInterceptor;
 import shop.gaship.gashipfront.interceptor.SessionInterceptor;
 
 /**
@@ -19,6 +20,7 @@ import shop.gaship.gashipfront.interceptor.SessionInterceptor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     private final SessionInterceptor sessionInterceptor;
+    private final JwtReissueInterceptor jwtReissueInterceptor;
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -34,5 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(clientIpLogInterceptor);
 
         registry.addInterceptor(sessionInterceptor);
+
+        registry.addInterceptor(jwtReissueInterceptor);
     }
 }

@@ -1,54 +1,45 @@
-package shop.gaship.gashipfront.aspect;
+package shop.gaship.gashipfront.interceptor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.servlet.HandlerInterceptor;
 import shop.gaship.gashipfront.aspect.dto.ReissueJwtRequestDto;
-import shop.gaship.gashipfront.aspect.exception.RefreshTokenExpiredException;
-import shop.gaship.gashipfront.aspect.exception.TokenResponseException;
-import shop.gaship.gashipfront.config.ServerConfig;
+import shop.gaship.gashipfront.interceptor.exception.RefreshTokenExpiredException;
+import shop.gaship.gashipfront.interceptor.exception.TokenResponseException;
 import shop.gaship.gashipfront.security.basic.dto.TokenRequestDto;
 import shop.gaship.gashipfront.security.common.dto.JwtDto;
 
 /**
- * Jwt Access Token의 만료기한을 체크하여 만료된 토큰일시 재요청 하는 어노테이션.
- *
  * @author : 조재철
  * @since 1.0
  */
-@Component
-@Aspect
 @RequiredArgsConstructor
-public class CheckAccessTokenExpireTimeAspect {
+@Component
+public class JwtReissueInterceptor implements HandlerInterceptor {
 
-    private final ServerConfig serverConfig;
     private final WebClient webClient;
-    private final RedisTemplate redisTemplate;
-    private final Integer EXPIRE_TIME_THIRTY_MINUTE = 30;
 
-    @Before("@annotation(shop.gaship.gashipfront.aspect.annotation.JwtExpiredCheck)")
-    public void checkExpireTime() {
-        ServletRequestAttributes requestAttributes =
-            (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest req = Objects.requireNonNull(requestAttributes).getRequest();
-        HttpSession session = req.getSession(true);
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+
+        HttpSession session = request.getSession(true);
         JwtDto jwt = (JwtDto) session.getAttribute("jwt");
 
-        if (jwt.getRefreshTokenExpireDateTime().isAfter(LocalDateTime.now())) {
+        if (jwt == null) {
+            return true;
+        }
+
+        if (jwt.getRefreshTokenExpireDateTime().isBefore(LocalDateTime.now())) {
             throw new RefreshTokenExpiredException();
         }
 
-        if (jwt.getAccessTokenExpireDateTime().isAfter(LocalDateTime.now())) {
+        if (jwt.getAccessTokenExpireDateTime().isBefore(LocalDateTime.now())) {
 
             TokenRequestDto tokenRequestDto = (TokenRequestDto) session.getAttribute("memberInfo");
 
@@ -58,7 +49,7 @@ public class CheckAccessTokenExpireTimeAspect {
             reissueJwtRequestDto.setAuthorities((List<String>) tokenRequestDto.getAuthorities());
 
             JwtDto newToken = webClient.post()
-                                       .uri(uriBuilder -> uriBuilder.path("/securities/reissue-jwt").build())
+                                       .uri(uriBuilder -> uriBuilder.path("/securities/reissue-token").build())
                                        .bodyValue(reissueJwtRequestDto)
                                        .retrieve()
                                        .toEntity(JwtDto.class)
@@ -68,5 +59,8 @@ public class CheckAccessTokenExpireTimeAspect {
 
             session.setAttribute("jwt", newToken);
         }
+
+        return true;
     }
+
 }
