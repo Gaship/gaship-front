@@ -15,6 +15,7 @@ import shop.gaship.gashipfront.orderproduct.dto.response.OrderProductDetailRespo
 import shop.gaship.gashipfront.orderproduct.dto.response.OrderProductResponseDto;
 import shop.gaship.gashipfront.security.common.exception.NullResponseBodyException;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.TokenInjectUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -28,6 +29,7 @@ public class OrderProductAdapterImpl implements OrderProductAdapter {
     public static final String ORDER_PRODUCT_PREFIX_URL = "/api/order-products";
     public static final String DELIVERY_HOST = "http://localhost:9090";
     private final WebClient webClient;
+    private final TokenInjectUtil tokenInjectUtil;
 
     @Override
     public PageResponse<OrderProductResponseDto> findOrderProductListByMemberNo(
@@ -36,6 +38,7 @@ public class OrderProductAdapterImpl implements OrderProductAdapter {
             .uri(ORDER_PRODUCT_PREFIX_URL + "/member/" + memberNo + "?page=" + pageable.getPageNumber()
                 + "&size="
                 + pageable.getPageSize())
+            .headers(tokenInjectUtil.headersConsumer())
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<OrderProductResponseDto>>() {
