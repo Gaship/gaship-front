@@ -52,7 +52,7 @@ const inquiryRetrieve = pageNo => async (e) => {
   const productInquiry = document.querySelector('.product-inquiries');
 
   const productNo = e.currentTarget.getAttribute("product-no");
-  const response = await fetch(`/api/inquires/products/${productNo}?page=${pageNo}`);
+  const response = await fetch(`/api/inquires/product/${productNo}?page=${pageNo}`);
   const inquiries = await response.json();
 
   inquiries.content.forEach(inquiry => {
@@ -84,7 +84,7 @@ const inquiryRetrieve = pageNo => async (e) => {
     inquiryInfoWrapper.classList.add("row", "w-50", "justify-content-around");
 
     link.classList.add('text-black-50')
-    link.href = '/inquires/product-inquiries/'+ inquiry.inquiryNo;
+    link.href = '/inquiries/product-inquiries/'+ inquiry.inquiryNo;
     link.innerText = inquiry.title;
     title.append(link);
 

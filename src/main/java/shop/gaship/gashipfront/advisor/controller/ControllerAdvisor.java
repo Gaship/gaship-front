@@ -4,12 +4,14 @@ import java.net.ConnectException;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import shop.gaship.gashipfront.exceptions.RequestFailureThrow;
 
 /**
  * 설명작성란
@@ -38,6 +40,18 @@ public class ControllerAdvisor {
         return "error/4xx";
     }
 
+    @ExceptionHandler(RequestFailureThrow.class)
+    public String handleRequestFailException(RequestFailureThrow e, Model model) {
+        model.addAttribute("message", e.getMessage());
+        model.addAttribute("status", e.getStatusCode().value());
+        return "error/4xx";
+    }
+    
+    @ExceptionHandler(AccessDeniedException.class)
+    public String handleRequestFailException() {
+        return "error/403";
+    }
+    
     @ExceptionHandler({ConnectException.class, Throwable.class})
     public String adaptorRefuse(Throwable e, Model model) {
         if(e instanceof ConnectException) {
