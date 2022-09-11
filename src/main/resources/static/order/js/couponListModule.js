@@ -15,7 +15,7 @@ const memberCoupons = {
             memberCouponData.couponNo == couponNo
         )
         if (coupon[0].discountAmount === null) {
-            return productAmount * coupon[0].discountRate;
+            return productAmount * (coupon[0].discountRate / 100);
         } else {
             return coupon[0].discountAmount;
         }
@@ -28,10 +28,16 @@ const memberCoupons = {
         const selectedCouponIndex = memberCoupons.memberCouponList.indexOf(selectedCoupon[0]);
         memberCoupons.memberCouponList[selectedCouponIndex] = selectedCoupon[0];
     },
+    unselectCoupon: (couponNo) => {
+        const unSelectedCoupon = memberCoupons.memberCouponList.filter(memberCouponData =>
+            memberCouponData.couponNo == couponNo);
+        unSelectedCoupon[0].used = false;
+
+        const unSelectedCouponIndex = memberCoupons.memberCouponList.indexOf(unSelectedCoupon[0]);
+        memberCoupons.memberCouponList[unSelectedCouponIndex] = unSelectedCoupon[0];
+    },
     getUnselectedCoupon: () => {
-        return memberCoupons.memberCouponList.filter(coupon =>
-            coupon.used === false
-        )
+        return memberCoupons.memberCouponList;
     },
     init: (memberCouponDataList) => {
         memberCoupons.memberCouponList = memberCouponDataList.map(memberCouponData => {

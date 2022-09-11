@@ -224,9 +224,8 @@ const loadAddressList = () => {
     getAddressListData()
         .then((addressListData) => {
             addressList = addressListData;
-        })
-        .then(drawAddressListContainer)
-        .then(drawAddressListContent);
+            drawAddressListContainer();
+        });
 }
 
 export {loadAddressList}
