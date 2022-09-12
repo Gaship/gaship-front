@@ -46,6 +46,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
         webClient.post()
                 .uri("/api/reviews")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
+                .headers(tokenInjectUtil.headersConsumer())
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -65,6 +66,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
         webClient.put()
                 .uri(REVIEW_URI, modifyRequest.getOrderProductNo())
                 .contentType(MediaType.MULTIPART_FORM_DATA)
+                .headers(tokenInjectUtil.headersConsumer())
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -76,6 +78,7 @@ public class ProductReviewAdapterImpl implements ProductReviewAdapter {
     public void productReviewRemove(Integer orderProductNo) {
         webClient.delete()
                 .uri(REVIEW_URI, orderProductNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(Void.class)

@@ -10,6 +10,7 @@ import shop.gaship.gashipfront.category.dto.request.CategoryCreateRequestDto;
 import shop.gaship.gashipfront.category.dto.request.CategoryModifyRequestDto;
 import shop.gaship.gashipfront.category.dto.response.CategoryResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.TokenInjectUtil;
 
 /**
  * 카테고리 어댑터 구현체입니다.
@@ -22,6 +23,7 @@ import shop.gaship.gashipfront.util.ExceptionUtil;
 @RequiredArgsConstructor
 public class CategoryAdapterImpl implements CategoryAdapter {
     private final WebClient webClient;
+    private final TokenInjectUtil tokenInjectUtil;
     /**
      * {@inheritDoc}
      */
@@ -29,6 +31,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     public void categoryAdd(CategoryCreateRequestDto createRequest) {
         webClient.post()
                 .uri("/api/categories")
+                .headers(tokenInjectUtil.headersConsumer())
                 .bodyValue(createRequest)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -43,6 +46,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     public void categoryModify(CategoryModifyRequestDto modifyRequest) {
         webClient.put()
                 .uri("/api/categories/{categoryNo}", modifyRequest.getNo())
+                .headers(tokenInjectUtil.headersConsumer())
                 .bodyValue(modifyRequest)
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -98,6 +102,7 @@ public class CategoryAdapterImpl implements CategoryAdapter {
     public void categoryRemove(Integer categoryNo) {
         webClient.delete()
                 .uri("/api/categories/{categoryNo}", categoryNo)
+                .headers(tokenInjectUtil.headersConsumer())
                 .retrieve()
                 .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
                 .bodyToMono(Void.class)
