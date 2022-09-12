@@ -77,6 +77,10 @@ public interface InquiryAdapter {
      */
     InquiryDetailsResponseDto inquiryDetails(Integer inquiryNo);
 
+    InquiryDetailsResponseDto productInquiryDetailsMemberSelf(Integer inquiryNo);
+
+    InquiryDetailsResponseDto customerInquiryDetailsMemberSelf(Integer inquiryNo, Integer memberNo);
+
     /**
      * 고객문의 목록을 조회하는 요청을 보냅니다.
      *

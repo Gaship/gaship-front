@@ -36,7 +36,10 @@ public class InquiryAdapterImpl implements InquiryAdapter {
      */
     @Override
     public void inquiryAdd(InquiryAddRequestDto inquiryDto) {
-        webClient.post().uri("/api/inquiries").contentType(MediaType.APPLICATION_JSON)
+
+        Integer memberNo = inquiryDto.getMemberNo();
+        inquiryDto.setMemberNo(null);
+        webClient.post().uri(uriBuilder -> uriBuilder.path("/api/inquiries").queryParam("memberNo", memberNo).build()).contentType(MediaType.APPLICATION_JSON)
             .bodyValue(inquiryDto)
             .headers(tokenInjectUtil.headersConsumer())
             .retrieve()
@@ -117,6 +120,31 @@ public class InquiryAdapterImpl implements InquiryAdapter {
     public InquiryDetailsResponseDto inquiryDetails(Integer inquiryNo) {
 
         return webClient.get().uri("/api/inquiries/{inquiryNo}", inquiryNo)
+            .headers(tokenInjectUtil.headersConsumer())
+            .accept(MediaType.APPLICATION_JSON).retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(InquiryDetailsResponseDto.class).blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public InquiryDetailsResponseDto productInquiryDetailsMemberSelf(Integer inquiryNo) {
+
+        return webClient.get().uri("/api/inquiries/{inquiryNo}/member-self/product", inquiryNo)
+            .headers(tokenInjectUtil.headersConsumer())
+            .accept(MediaType.APPLICATION_JSON).retrieve()
+            .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
+            .bodyToMono(InquiryDetailsResponseDto.class).blockOptional()
+            .orElseThrow(NullResponseBodyException::new);
+    }
+
+    @Override
+    public InquiryDetailsResponseDto customerInquiryDetailsMemberSelf(Integer inquiryNo, Integer memberNo) {
+
+        return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/{inquiryNo}/member-self/customer")
+                .queryParam("memberNo", memberNo)
+                .build(inquiryNo))
+            .headers(tokenInjectUtil.headersConsumer())
             .accept(MediaType.APPLICATION_JSON).retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(InquiryDetailsResponseDto.class).blockOptional()
@@ -183,7 +211,9 @@ public class InquiryAdapterImpl implements InquiryAdapter {
         return webClient.get().uri(uriBuilder -> uriBuilder.path("/api/inquiries/product-inquiries")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
-                .build()).retrieve()
+                .build())
+            .headers(tokenInjectUtil.headersConsumer())
+            .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
             .bodyToMono(new ParameterizedTypeReference<PageResponse<InquiryListResponseDto>>() {
             }).blockOptional().orElseThrow(NullResponseBodyException::new);

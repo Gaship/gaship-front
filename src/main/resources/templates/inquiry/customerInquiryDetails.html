@@ -53,11 +53,9 @@
                           th:text="${details.inquiryContent}"></textarea>
                         </div>
                     </div>
-                    <th:block sec:authentication="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')">
-                        <button style="width: auto; margin-left: 10px" class="btn btn-danger mt-5"
-                                th:value="${details.inquiryNo}" onclick="deleteInquiry(this)">문의삭제
-                        </button>
-                    </th:block>
+                    <button style="width: auto; margin-left: 10px" class="btn btn-danger mt-5"
+                            th:value="${details.inquiryNo}" onclick="deleteInquiry(this)">문의삭제
+                    </button>
                 </div>
 
                 <div class="box-content mt-5" th:if="${#strings.equals(details.processStatus, '답변완료')}">
@@ -98,12 +96,12 @@
                     </div>
                 </div>
                 <th:block sec:authorize="hasRole('ROLE_USER')">
-                    <a href="/inquiries/member-self/customer-inquiries" style="width: auto; margin-left: 10px" type="button"
+                    <a href="/inquiries/member-self/customer-inquiries" style="width: auto; margin-left: 10px"
+                       type="button"
                        class="btn btn-outline-primary mt-3">마이페이지 고객문의 목록</a>
                 </th:block>
             </div>
         </div>
-
 
 
         <script th:src="@{/inquiry/js/inquiry.js}"></script>

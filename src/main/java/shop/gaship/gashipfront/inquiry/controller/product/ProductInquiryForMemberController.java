@@ -52,7 +52,7 @@ public class ProductInquiryForMemberController {
     private final CommonInquiryService commonInquiryService;
 
     /**
-     * 회원이 상품문의 상세조회 요청을 처리하는 기능입니다.
+     * 회원이 상품문의 상세조회 요청을 처리하는 기능입니다.u
      *
      * @param inquiryNo 조회의 기준이 되는 문의번호입니다.
      * @return view 경로를 반환합니다.
@@ -63,7 +63,7 @@ public class ProductInquiryForMemberController {
         @PathVariable Integer inquiryNo, Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         InquiryDetailsResponseDto inquiryDetailsResponseDto =
-            commonInquiryService.findInquiry(inquiryNo);
+            commonInquiryService.findProductInquiryMemberSelf(inquiryNo);
         RoleUserMySelfProcessor.setSelf(userDetailsDto, inquiryDetailsResponseDto);
 
         model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);

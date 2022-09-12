@@ -49,7 +49,6 @@ public class CustomerInquiryForMemberController {
     private final CustomerInquiryService customerInquiryService;
     private final CommonInquiryService commonInquiryService;
 
-
     /**
      * 회원본인에 대한 고객문의 상세조회 요청을 처리하는 기능입니다.
      *
@@ -59,10 +58,10 @@ public class CustomerInquiryForMemberController {
      */
     @GetMapping(value = "/customer-inquiries/{inquiryNo}")
     public String customerInquiryDetails(
-        @PathVariable Integer inquiryNo, Model model) {
+        @PathVariable Integer inquiryNo, Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         InquiryDetailsResponseDto inquiryDetailsResponseDto =
-            commonInquiryService.findInquiry(inquiryNo);
+            commonInquiryService.findCustomerInquiryMemberSelf(inquiryNo, userDetailsDto.getMemberNo());
 
         model.addAttribute(KEY_DETAILS.getValue(), inquiryDetailsResponseDto);
         return VIEW_NAME_CUSTOMER_INQUIRY_DETAILS.getValue();

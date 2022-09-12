@@ -76,4 +76,14 @@ public class CommonInquiryServiceImpl implements CommonInquiryService {
     public InquiryDetailsResponseDto findInquiry(Integer inquiryNo) {
         return inquiryAdapter.inquiryDetails(inquiryNo);
     }
+
+    @Override
+    public InquiryDetailsResponseDto findProductInquiryMemberSelf(Integer inquiryNo) {
+        return inquiryAdapter.productInquiryDetailsMemberSelf(inquiryNo);
+    }
+
+    @Override
+    public InquiryDetailsResponseDto findCustomerInquiryMemberSelf(Integer inquiryNo, Integer memberNo) {
+        return inquiryAdapter.customerInquiryDetailsMemberSelf(inquiryNo, memberNo);
+    }
 }
