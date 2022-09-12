@@ -73,4 +73,7 @@ public interface CommonInquiryService {
     InquiryDetailsResponseDto findInquiry(Integer inquiryNo);
 
 
+    InquiryDetailsResponseDto findProductInquiryMemberSelf(Integer inquiryNo);
+
+    InquiryDetailsResponseDto findCustomerInquiryMemberSelf(Integer inquiryNo, Integer memberNo);
 }
