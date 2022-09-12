@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.dto.response.ProductResponseDto;
 import shop.gaship.gashipfront.cart.exception.CartMaxLimitException;
-import shop.gaship.gashipfront.cart.exception.CartMergeException;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
+import shop.gaship.gashipfront.cart.exception.ProductStockIsLessThanOrderQuantity;
 import shop.gaship.gashipfront.cart.exception.ProductStockIsZeroException;
 import shop.gaship.gashipfront.cart.service.CartService;
 import shop.gaship.gashipfront.cart.util.CartUtil;
@@ -53,17 +53,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public Integer addProductToCart(
             String cartNo, CartProductModifyRequestDto request) throws CartProductAmountException {
-        redisTemplate.expire(cartNo, 101, TimeUnit.DAYS);
-        if (productAdapter.productDetails(request.getProductId()).getQuantity() < 0) {
-            throw new ProductStockIsZeroException();
-        }
-        if (request.getQuantity() > 10 || request.getQuantity() < 1) {
-            throw new CartProductAmountException();
-        }
-        if (hashOperations.size(cartNo) > (10L)) {
-            throw new CartMaxLimitException();
-        }
-        hashOperations.put(cartNo, request.getProductId().toString(), request.getQuantity());
+        redisTemplate.expire(cartNo, 7, TimeUnit.DAYS);
+        productStockMoreThanOneCheck(request.getProductNo());
+        orderQuantityAmountCheck(request.getProductNo(),request.getQuantity());
+        cartSizeIsMaxCheck(cartNo);
+        hashOperations.put(cartNo, request.getProductNo().toString(), request.getQuantity());
         return request.getQuantity();
     }
 
@@ -72,17 +66,11 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void modifyProductQuantityFromCart(
-            String cartNo, Long productNo, Long productQuantity) throws CartProductAmountException {
-        redisTemplate.expire(cartNo, 101, TimeUnit.DAYS);
-        if (productAdapter.productDetails(productNo.intValue()).getQuantity() <= 0) {
-            throw new ProductStockIsZeroException();
-        }
-        if (productQuantity > 10 || productQuantity < 1) {
-            throw new CartProductAmountException();
-        }
-        if (hashOperations.size(cartNo) > (10L)) {
-            throw new CartMaxLimitException();
-        }
+            String cartNo, Integer productNo, Integer productQuantity) throws CartProductAmountException {
+        redisTemplate.expire(cartNo, 7, TimeUnit.DAYS);
+        productStockMoreThanOneCheck(productNo);
+        orderQuantityAmountCheck(productNo, productQuantity);
+        cartSizeIsMaxCheck(cartNo);
         hashOperations.put(cartNo, productNo.toString(), productQuantity.toString());
     }
 
@@ -90,38 +78,83 @@ public class CartServiceImpl implements CartService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteProductFromCart(String cartNo, Long id) {
-        hashOperations.delete(cartNo, id.toString());
+    public void deleteProductFromCart(String cartNo, Long productNo) {
+        hashOperations.delete(cartNo, productNo.toString());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void mergeCart(String cartId, Integer memberId) {
-        Map<Object, Object> map = hashOperations.entries(cartId);
-        String key = String.valueOf(memberId);
-
-        if (hashOperations.size(key) + hashOperations.size(cartId) > (10L)) {
-            redisTemplate.delete(cartId);
+    public void mergeCart(String nonMemberCartNo, String memberNo) {
+        Map<Object, Object> nonMemberCartInfo = hashOperations.entries(nonMemberCartNo);
+        if (isMergedCartSizeOverLimit(nonMemberCartNo, memberNo)) {
+            redisTemplate.delete(nonMemberCartNo);
             return;
         }
-        mergeHashMap(key, map);
-        redisTemplate.delete(cartId);
+        mergeHashMap(memberNo, nonMemberCartInfo);
+        redisTemplate.delete(nonMemberCartNo);
+    }
+
+    /**
+     * 비회원때의 장바구니에 담은 상품 갯수와 회원장바구니상품의 갯수가 장바구니 한계를 넘는지 체크합니다.
+     *
+     * @param nonMemberCartNo 비회원 장바구니 id
+     * @param memberCartNo 회원 장바구니 id
+     * @return 장바구니 한계를 넘는지 여부
+     */
+    private boolean isMergedCartSizeOverLimit(String nonMemberCartNo, String memberCartNo) {
+        return hashOperations.size(memberCartNo) + hashOperations.size(nonMemberCartNo) > (10L);
     }
 
     /**
      * 키 값이 다른 두개의 레디스를 합치는 메서드 입니다.
      */
-    private void mergeHashMap(String key, Map<Object, Object> map) {
-        map.forEach((key1, value) -> hashOperations.putIfAbsent(key, key1, value));
+    private void mergeHashMap(String memberCartNo, Map<Object, Object> map) {
+        map.forEach((productNo, quantity) -> hashOperations.putIfAbsent(memberCartNo, productNo, quantity));
     }
 
+    /**
+     * 장바구니에 담긴 상품의 종류가 한계를 넘었는지 체크합니다.
+     *
+     * @param cartNo 회원의 장바구니 id
+     */
+    private void cartSizeIsMaxCheck(String cartNo) {
+        if (hashOperations.size(cartNo) > (10L)) {
+            throw new CartMaxLimitException();
+        }
+    }
+
+    /**
+     * 장바구니에 담으려는 상품의 갯수가 적절한지 체크합니다.
+     *
+     * @param orderQuantity 장바구니에 담으려는 상품의 갯수
+     */
+    private void orderQuantityAmountCheck(Integer productNo,Integer orderQuantity) throws CartProductAmountException {
+        if (orderQuantity > 10 || orderQuantity < 1) {
+            throw new CartProductAmountException();
+        }
+        if (productAdapter.productDetails(productNo).getQuantity() < orderQuantity){
+            throw new ProductStockIsLessThanOrderQuantity();
+        }
+    }
+
+    /**
+     * 장바구니에 담으려는 상품의 재고가 남아있는지 체크합니다.
+     *
+     * @param
+     */
+    private void productStockMoreThanOneCheck(Integer productNo) {
+        if (productAdapter.productDetails(productNo).getQuantity() <= 0) {
+            throw new ProductStockIsZeroException();
+        }
+    }
+    
     @Override
-    public List<ProductResponseDto> getProductsFromCart(String cartId) {
-        redisTemplate.expire(cartId, 101, TimeUnit.DAYS);
+    public List<ProductResponseDto> getProductsFromCart(String cartNo) {
+        redisTemplate.expire(cartNo, 7, TimeUnit.DAYS);
         Map<Integer, Integer> integerMap = new HashMap<>();
-        Map<Object, Object> cartInfo = hashOperations.entries(cartId);
+        Map<Object, Object> cartInfo = hashOperations.entries(cartNo);
         cartInfo.forEach((k, v) -> integerMap.put(
                 Integer.parseInt((String.valueOf(k))),
                 Integer.parseInt((String.valueOf(v)))));
@@ -132,14 +165,14 @@ public class CartServiceImpl implements CartService {
         }
         List<ProductResponseDto> productResponseDtoList = CartUtil.productListToCartList(productList, integerMap);
         // 재고수량이 0이면 장바구니, 레디스에서 삭제하는 로직
-        List<ProductResponseDto> stockMoreThanOneDtoList = stockCheckAndDeleteFromCart(cartId, productResponseDtoList);
+        List<ProductResponseDto> stockMoreThanOneDtoList = stockCheckAndDeleteFromCart(cartNo, productResponseDtoList);
         // 재고수량이 1이상이고, 장바구니에 담은 상품의 수량이 재고수량보다 많은 경우 강제로 재고수량으로 맞춰준다.
         // 장바구니에서 재고보다 많은 수량을 선택할 경우를 막고, 장바구니 조회에서도 막는다.
         //quantity > 0  && quantity < orderquantity 인 경우 orderquantity = quantity 로 레디스를 변경
-        return changeOrderQuantityToMaxStock(cartId, stockMoreThanOneDtoList);
+        return changeOrderQuantityToMaxStock(cartNo, stockMoreThanOneDtoList);
     }
 
-    private List<ProductResponseDto> stockCheckAndDeleteFromCart(String cartId, List<ProductResponseDto> list) {
+    private List<ProductResponseDto> stockCheckAndDeleteFromCart(String cartNo, List<ProductResponseDto> list) {
         //재고가 0인것을 찾고
         List<ProductResponseDto> zeroQuantityProductList = list.stream()
                 .filter(ele -> ele.getQuantity() < 1)
@@ -147,7 +180,7 @@ public class CartServiceImpl implements CartService {
         // 레디스에서 삭제
         List<Integer> stockZeroList = zeroQuantityProductList.stream().map(ProductResponseDto::getProductNo).collect(Collectors.toList());
         if (stockZeroList.size() > 0) {
-            stockZeroList.forEach(i -> hashOperations.delete(cartId, i.toString()));
+            stockZeroList.forEach(i -> hashOperations.delete(cartNo, i.toString()));
         }
         List<ProductResponseDto> quantityMoreThanOneProductList = list.stream()
                 .filter(ele -> ele.getOrderQuantity() >= 1)
@@ -155,12 +188,12 @@ public class CartServiceImpl implements CartService {
         return quantityMoreThanOneProductList;
     }
 
-    private List<ProductResponseDto> changeOrderQuantityToMaxStock(String cartId, List<ProductResponseDto> list) {
+    private List<ProductResponseDto> changeOrderQuantityToMaxStock(String cartNo, List<ProductResponseDto> list) {
         List<ProductResponseDto> stockLessThanOrderQuantityList = list.stream()
                 .filter(ele -> ele.getOrderQuantity() > ele.getQuantity())
                 .collect(Collectors.toList());
         //레디스의 주문수량을 최대 주문수량인 재고수량으로 변경
-        stockLessThanOrderQuantityList.forEach(ele -> hashOperations.put(cartId, ele.getProductNo().toString(), ele.getQuantity().toString()));
+        stockLessThanOrderQuantityList.forEach(ele -> hashOperations.put(cartNo, ele.getProductNo().toString(), ele.getQuantity().toString()));
 
         List<ProductResponseDto> collect = list.stream()
                 .map(ProductResponseDto::changeQuantityToStock)
@@ -169,7 +202,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteOrderedProductFromCart(String cartId) {
-        redisTemplate.delete(cartId);
+    public void deleteOrderedProductFromCart(String cartNo) {
+        redisTemplate.delete(cartNo);
     }
 }
