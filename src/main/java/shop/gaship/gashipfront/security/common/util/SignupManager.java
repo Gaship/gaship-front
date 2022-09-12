@@ -43,7 +43,7 @@ public class SignupManager {
             member = memberService.getMemberByEmail(info.getEmail());
         } catch (RequestFailureThrow e) {
 
-            if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+            if (!e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
                 throw e;
             }
             return retryGetMember(info);
@@ -67,7 +67,7 @@ public class SignupManager {
         try {
             member = memberService.getMemberByEmail(email);
         } catch (RequestFailureThrow e) {
-            if (!e.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+            if (!e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
                 throw e;
             }
             return retryGetMember(email);
