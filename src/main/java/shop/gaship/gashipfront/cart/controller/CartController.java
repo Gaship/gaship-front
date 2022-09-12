@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import shop.gaship.gashipfront.cart.dto.request.CartProductModifyRequestDto;
 import shop.gaship.gashipfront.cart.exception.CartProductAmountException;
 import shop.gaship.gashipfront.cart.service.CartService;
+import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,9 +58,9 @@ public class CartController {
     @PutMapping("/modify-quantity")
     @ResponseBody
     public boolean modifyFromCart(HttpServletRequest servletRequest,
-                                 @RequestParam Long productNo,
-                                 @RequestParam Long productQuantity) throws CartProductAmountException {
-        String cartId = (String) servletRequest.getAttribute(CART_ID);
+                                 @RequestParam Integer productNo,
+                                 @RequestParam Integer productQuantity) throws CartProductAmountException {
+        String cartId = servletRequest.getAttribute(CART_ID).toString();
         cartService.modifyProductQuantityFromCart(cartId, productNo, productQuantity);
         return true;
     }
