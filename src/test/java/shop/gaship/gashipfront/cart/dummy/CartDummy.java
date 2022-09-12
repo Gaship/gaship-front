@@ -15,14 +15,14 @@ import java.util.List;
 public class CartDummy {
     public static CartProductDeleteRequestDto cartProductDeleteRequestDto(Integer productId) {
         CartProductDeleteRequestDto dto = new CartProductDeleteRequestDto();
-        ReflectionTestUtils.setField(dto, "productId", productId);
+        ReflectionTestUtils.setField(dto, "productNo", productId);
 
         return dto;
     }
 
     public static CartProductModifyRequestDto cartProductModifyRequestDto(Integer productId, Integer quantity) {
         CartProductModifyRequestDto dto = new CartProductModifyRequestDto();
-        ReflectionTestUtils.setField(dto, "productId", productId);
+        ReflectionTestUtils.setField(dto, "productNo", productId);
         ReflectionTestUtils.setField(dto, "quantity", quantity);
 
         return dto;

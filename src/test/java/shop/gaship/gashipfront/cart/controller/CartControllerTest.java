@@ -104,13 +104,14 @@ class CartControllerTest {
 
     @DisplayName("비회원이 장바구니에서 상품에 수량 변경")
     @Test
-    void modifyFromCartTes2t() throws Exception {
+    void modifyFromCartTest2() throws Exception {
         doNothing().when(cartService).modifyProductQuantityFromCart(any(), any(),any());
 
         mockMvc.perform(put("/carts/modify-quantity")
                         .contentType(MediaType.APPLICATION_JSON)
                         .queryParam("productNo","1")
                         .queryParam("productQuantity","1")
+                        .requestAttr(CART_ID,"1")
                         .accept(MediaType.APPLICATION_JSON));
 
         verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any(),any());
@@ -125,6 +126,7 @@ class CartControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .queryParam("productNo","1")
                         .queryParam("productQuantity","1")
+                        .requestAttr(CART_ID,"1")
                         .accept(MediaType.APPLICATION_JSON));
 
         verify(cartService, times(1)).modifyProductQuantityFromCart(any(), any(),any());
