@@ -145,8 +145,10 @@ public class MemberController {
      * @author 최정우
      */
     @DeleteMapping("/members")
-    public String memberRemove(@AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public String memberRemove(@AuthenticationPrincipal UserDetailsDto userDetailsDto, HttpSession session) {
         memberService.removeMember(userDetailsDto.getMemberNo());
+
+        session.invalidate();
 
         return "redirect:/";
     }
