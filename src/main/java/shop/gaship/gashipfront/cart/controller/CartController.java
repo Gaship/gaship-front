@@ -2,6 +2,8 @@ package shop.gaship.gashipfront.cart.controller;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -96,6 +98,18 @@ public class CartController {
         String cartId = (String) request.getAttribute(CART_ID);
         model.addAttribute("response", cartService.getProductsFromCart(cartId));
         model.addAttribute("myAddress", InetAddress.getLocalHost());
+
+        Cookie sessionCookie =
+            Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("GASHIP_SESSIONID"))
+                  .findFirst().orElse(null);
+
+        String sessionId = null;
+
+        if (sessionCookie != null) {
+            sessionId = sessionCookie.getValue();
+        }
+
+        model.addAttribute("sessionId", sessionId);
         return "cart/carts";
     }
 }
