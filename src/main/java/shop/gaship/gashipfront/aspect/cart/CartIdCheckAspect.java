@@ -1,25 +1,21 @@
 package shop.gaship.gashipfront.aspect.cart;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import shop.gaship.gashipfront.cart.service.CartService;
-import shop.gaship.gashipfront.security.basic.dto.SignInUserDetailsDto;
 import shop.gaship.gashipfront.security.common.dto.UserDetailsDto;
 
 /**
@@ -35,7 +31,7 @@ public class CartIdCheckAspect {
     public static final String CART_ID = "CID";
     public static final String ANONYMOUS_USER = "anonymousUser";
     private final CartService cartService;
-    private static String userId;
+    private static String USER_ID;
 
     /**
      * 회원 유형에 따라
@@ -55,22 +51,22 @@ public class CartIdCheckAspect {
         UserType userType = getUserType(principal, nonMemberCookie);
         if (userType == UserType.MEMBER){
             UserDetailsDto userDetailsDto = (UserDetailsDto) principal;
-            userId = userDetailsDto.getMemberNo().toString();
+            USER_ID = userDetailsDto.getMemberNo().toString();
         } else if(userType == UserType.MEMBER_WITH_COOKIE){
             UserDetailsDto userDetailsDto = (UserDetailsDto) principal;
-            userId = userDetailsDto.getMemberNo().toString();
-            cartService.mergeCart(nonMemberCookie.get().getValue(), userId);
+            USER_ID = userDetailsDto.getMemberNo().toString();
+            cartService.mergeCart(nonMemberCookie.get().getValue(), USER_ID);
             killCookie(response);
         } else if(userType == UserType.NONMEMBER){
-            userId  = setNonMemberCookie(response);
+            USER_ID = setNonMemberCookie(response);
         } else if(userType == UserType.NONMEMBER_WITH_COOKIE){
             refreshNonMemberCookie(response, nonMemberCookie);
-            userId = nonMemberCookie.get().getValue();
+            USER_ID = nonMemberCookie.get().getValue();
         } else {
             return;
         }
         // 도출해낸 cartKey 를 치환시키고 컨트롤러 실행
-        request.setAttribute(CART_ID, userId);
+        request.setAttribute(CART_ID, USER_ID);
     }
 
     private UserType getUserType(Object principal, Optional<Cookie> nonMemberCookie) {
