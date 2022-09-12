@@ -20,6 +20,7 @@ import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
 import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.util.ExceptionUtil;
+import shop.gaship.gashipfront.util.TokenInjectUtil;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 import static org.springframework.http.MediaType.parseMediaType;
@@ -36,6 +37,7 @@ import static org.springframework.http.MediaType.parseMediaType;
 public class ProductAdapterImpl implements ProductAdapter {
     private static final String REQUEST_URI = "/api/products";
     private final WebClient webClient;
+    private final TokenInjectUtil tokenInjectUtil;
 
     /**
      * {@inheritDoc}
@@ -53,6 +55,7 @@ public class ProductAdapterImpl implements ProductAdapter {
         webClient.post()
             .uri(REQUEST_URI)
             .contentType(MediaType.MULTIPART_FORM_DATA)
+            .headers(tokenInjectUtil.headersConsumer())
             .body(BodyInserters.fromMultipartData(builder.build()))
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
@@ -75,6 +78,7 @@ public class ProductAdapterImpl implements ProductAdapter {
         webClient.put()
             .uri(REQUEST_URI + "/{productNo}", modifyRequest.getNo())
             .contentType(MediaType.MULTIPART_FORM_DATA)
+            .headers(tokenInjectUtil.headersConsumer())
             .body(BodyInserters.fromMultipartData(builder.build()))
             .retrieve()
             .onStatus(HttpStatus::isError, ExceptionUtil::createErrorMono)
