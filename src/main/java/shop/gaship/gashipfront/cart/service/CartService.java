@@ -31,7 +31,7 @@ public interface CartService {
      * @author 최정우
      */
     void modifyProductQuantityFromCart(
-            String cartId, Long productNo, Long productQuantity) throws CartProductAmountException;
+            String cartId, Integer productNo, Integer productQuantity) throws CartProductAmountException;
 
     /**
      * 장바구니에서 상품을 삭제하는 메서드입니다.
@@ -50,7 +50,7 @@ public interface CartService {
      * @param memberId        회원일 때의 장바구니 id
      * @author 최정우
      */
-    void mergeCart(String nonMemberCartId, Integer memberId);
+    void mergeCart(String nonMemberCartId, String memberId);
 
     /**
      * 장바구니에 담긴 상품들의 정보를 얻는 메서드 입니다.
