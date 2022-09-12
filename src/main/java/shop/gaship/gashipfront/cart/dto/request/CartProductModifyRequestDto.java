@@ -16,7 +16,7 @@ import lombok.Setter;
 @Setter
 public class CartProductModifyRequestDto {
     @Min(value = 1, message = "상품 id 는 1 이상이어야합니다.")
-    private Integer productId;
+    private Integer productNo;
 
     @Min(value = 1, message = "상품은 한개 이상부터 주문가응합니다.")
     @Max(value = 10, message = "상품은 한 번에 열개 까지 구매가능합니다.")
