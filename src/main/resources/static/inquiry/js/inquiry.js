@@ -35,6 +35,7 @@ async function deleteInquiry(eventTarget) {
         .then(data => {
             let redirectUri = data.redirectUri;
             location.href=redirectUri;
+            alert('문의 삭제가 완료되었습니다.');
         });
 }
 

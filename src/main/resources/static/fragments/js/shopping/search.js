@@ -25,6 +25,11 @@ const doSearch = async (e) => {
   }
 
   if (searchResult.length > 0) {
+    const searchResults = document.querySelector(".search-result");
+    if(searchResults){
+      searchWrapper.removeChild(searchResults);
+    }
+
     const searchResultBox = document.createElement("div");
     searchResultBox.classList.add("search-result");
     searchResult.forEach(result => {
@@ -49,7 +54,7 @@ const doSearch = async (e) => {
 
 const searchEvent = () => document
   .querySelector(".search-box")
-  .addEventListener("change", debounce(doSearch, 500));
+  .addEventListener("change", e => debounce(doSearch, 500)(e));
 
 const searchKeywordEvent = () => document.querySelector(".search-form").addEventListener('submit', (e) => {
   e.preventDefault();

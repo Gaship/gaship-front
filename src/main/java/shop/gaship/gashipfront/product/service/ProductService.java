@@ -8,6 +8,7 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -45,6 +46,12 @@ public interface ProductService {
 
     List<ProductAllInfoResponseDto> findProductNosList(List<Integer> productNos);
 
+    PageResponse<ProductByCategoryResponseDto> findProductByCategory(Pageable pageable,
+                                                                     Integer categoryNo,
+                                                                     Long minPrice,
+                                                                     Long maxPrice,
+                                                                     Boolean isUpper);
+
     ProductAllInfoResponseDto findProduct(Integer productNo);
 
     void addProduct(List<MultipartFile> multipartFiles, ProductCreateRequestDto createRequest);
@@ -53,5 +60,5 @@ public interface ProductService {
 
     void modifySalesStatus(SalesStatusModifyRequestDto salesStatusModifyRequest);
 
-    PageResponse<ProductAllInfoResponseDto> findMainProducts(String page, String size, String category, String minAmount, String maxAmount);
+    String findMainProducts(String page, String size, String category, String minAmount, String maxAmount);
 }

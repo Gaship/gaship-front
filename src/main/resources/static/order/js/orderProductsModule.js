@@ -42,17 +42,36 @@ const orderRequestData = {
     setCoupon: (couponNo, productIndex) => {
         const productTarget = orderRequestData.orderProducts
             .filter(orderProduct => orderProduct.index === productIndex);
-        productTarget[0].couponNo = couponNo;
-        productTarget[0].couponAmount = memberCoupons.getDiscountAmount(productTarget[0].amount, couponNo);
-        productTarget[0].amount = productTarget[0].productAmount-productTarget[0].couponAmount;
-        const orderProductArrayIndex = orderRequestData.orderProducts.indexOf(productTarget[0]);
-        orderRequestData.orderProducts[orderProductArrayIndex] = productTarget[0];
+
+        if(productTarget[0].couponNo !== null) {
+            memberCoupons.unselectCoupon(productTarget[0].couponNo);
+
+            productTarget[0].couponNo = null;
+            productTarget[0].couponAmount = 0;
+            productTarget[0].amount = productTarget[0].productAmount;
+        }
+
+        if(couponNo === "") {
+            productTarget[0].couponNo = null;
+            productTarget[0].couponAmount = 0;
+            productTarget[0].amount = productTarget[0].productAmount;
+            orderRequestData.reloadData(productTarget[0]);
+        } else {
+            productTarget[0].couponNo = couponNo;
+            productTarget[0].couponAmount = memberCoupons.getDiscountAmount(productTarget[0].amount, couponNo);
+            productTarget[0].amount = productTarget[0].productAmount-productTarget[0].couponAmount;
+            orderRequestData.reloadData(productTarget[0]);
+
+            memberCoupons.selectCoupon(couponNo);
+        }
+    },
+    reloadData:(productTarget) => {
+        const orderProductArrayIndex = orderRequestData.orderProducts.indexOf(productTarget);
+        orderRequestData.orderProducts[orderProductArrayIndex] = productTarget;
         orderRequestData.setTotalDiscountAmount();
         orderRequestData.setTotalAmount();
         setOrderAmountInfo();
         drawOrderProductsContent();
-
-        memberCoupons.selectCoupon(couponNo);
     },
     setTotalDiscountAmount: () => {
         discountTotalAmount = orderRequestData.orderProducts
@@ -97,11 +116,18 @@ function setOrderRequestData(orderProductList) {
     drawOrderProductsContent();
 }
 
+const parseKoreaCurrency = (amount) => new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' })
+  .format(amount);
+
 function drawOrderProductsContent() {
     orderProductsContainer = document.getElementById("orderProductsContainer");
     orderProductsContainer.innerHTML = "";
 
     orderRequestData.orderProducts.forEach(orderProduct => {
+      const amount = parseKoreaCurrency(orderProduct.amount);
+      const couponAmount = parseKoreaCurrency(orderProduct.couponAmount);
+      const productAmount = parseKoreaCurrency(orderProduct.productAmount);
+
         const orderProductContentTemplate = `
         <tr>
             <td style="padding: 10px" class="shoping__cart__item">
@@ -109,13 +135,13 @@ function drawOrderProductsContent() {
                 <h5>${orderProduct.productName}</h5><br/>
             </td>
             <td style="padding: 10px" class="shoping__cart__price">
-                ${orderProduct.productAmount}
+                ${productAmount}
             </td>
             <td style="padding: 10px" class="shoping__cart__price">
-                ${orderProduct.couponAmount}
+                ${couponAmount}
             </td>
             <td style="padding: 10px" class="shoping__cart__total">
-                ${orderProduct.amount}
+                ${amount}
             </td>
             <td style="padding: 10px">
                 <button name="selectCouponBtn" value="${orderProduct.index}" 
@@ -151,6 +177,9 @@ function setCouponEvent() {
             let optionTemplate;
             couponSelectBox.addEventListener('click', () => {
                 clearCouponSelectBox(targetValue);
+                couponSelectBox.insertAdjacentHTML("beforeend", `
+                    <option value="">선택안함</option>
+                `)
                 memberCoupons.getUnselectedCoupon().forEach(coupon => {
                     if(coupon.used === true) {
                         optionTemplate = `
@@ -177,24 +206,16 @@ function setCouponEvent() {
         selectCouponBox.addEventListener('change', e => {
             const selectCouponNo = e.target.value;
             const productIndex = e.target.id.split("-couponSelectBox")[0];
-            if(selectCouponNo === ""){
 
-            } else {
-                if(memberCoupons.checkSelectedCoupon(selectCouponNo)) {
-                    window.alert("이미 선택된 쿠폰입니다.")
-                    e.target.options(0).selected = true;
-                } else {
-                    orderRequestData.setCoupon(selectCouponNo, productIndex);
-                }
-            }
+            orderRequestData.setCoupon(selectCouponNo, productIndex);
         })
     })
 }
 
 function setOrderAmountInfo() {
-    document.getElementById("productTotalAmount").innerText = orderProductsTotalAmount;
-    document.getElementById("discountTotalAmount").innerText = discountTotalAmount;
-    document.getElementById("paymentTotalAmount").innerText = orderRequestData.totalAmount;
+    document.getElementById("productTotalAmount").innerText = parseKoreaCurrency(orderProductsTotalAmount);
+    document.getElementById("discountTotalAmount").innerText = parseKoreaCurrency(discountTotalAmount);
+    document.getElementById("paymentTotalAmount").innerText = parseKoreaCurrency(orderRequestData.totalAmount);
 }
 
 const loadOrderProducts = () => {

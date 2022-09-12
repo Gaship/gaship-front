@@ -1,6 +1,7 @@
 package shop.gaship.gashipfront.cart.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import shop.gaship.gashipfront.config.SecurityEmployeeConfig;
 import javax.servlet.http.Cookie;
 import java.util.List;
 import java.util.UUID;
+import shop.gaship.gashipfront.config.WebMvcConfig;
+import shop.gaship.gashipfront.interceptor.JwtReissueInterceptor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -48,10 +51,17 @@ class CartControllerTest {
     private static final String CART_ID = "CID";
     @MockBean
     CartService cartService;
+    @MockBean
+    JwtReissueInterceptor jwtReissueInterceptor;
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        when(jwtReissueInterceptor.preHandle(any(), any(), any())).thenReturn(true);
+    }
 
     @DisplayName("쿠키가 없는 방문자가 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test

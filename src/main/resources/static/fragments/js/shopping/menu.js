@@ -61,16 +61,18 @@ const shoppingMallCategories = async () => {
   flattedCategories.forEach(loadedCategory => {
     const category = document.createElement("li");
     const categoryAtag = document.createElement("a");
-    categoryAtag.href = '/products?page=0&size=12&category=' + loadedCategory.no;
     categoryAtag.innerHTML = loadedCategory.name;
     if(loadedCategory.level === 1){
       categoryAtag.classList.add("categories__item__level_1")
+        categoryAtag.href = '/products/category/' + loadedCategory.no +'?page=0&size=12';
     }
     if(loadedCategory.level === 2){
       categoryAtag.classList.add("categories__item__level_2")
+        categoryAtag.href = '/products/category/' + loadedCategory.no +'?page=0&size=12';
     }
     if(loadedCategory.level === 3){
       categoryAtag.classList.add("categories__item__level_3")
+        categoryAtag.href = '/products?page=0&size=12&category=' + loadedCategory.no;
     }
     categoryAtag.innerHTML = loadedCategory.name;
     category.appendChild(categoryAtag);

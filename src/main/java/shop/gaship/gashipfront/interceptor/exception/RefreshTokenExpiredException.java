@@ -1,4 +1,4 @@
-package shop.gaship.gashipfront.aspect.exception;
+package shop.gaship.gashipfront.interceptor.exception;
 
 /**
  * refreshToken 의 인증기간이 만료되었을때 발생하는 예외 클래스 입니다.

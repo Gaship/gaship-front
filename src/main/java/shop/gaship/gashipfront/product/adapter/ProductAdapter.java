@@ -7,6 +7,7 @@ import shop.gaship.gashipfront.product.dto.request.ProductCreateRequestDto;
 import shop.gaship.gashipfront.product.dto.request.ProductModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.request.SalesStatusModifyRequestDto;
 import shop.gaship.gashipfront.product.dto.response.ProductAllInfoResponseDto;
+import shop.gaship.gashipfront.product.dto.response.ProductByCategoryResponseDto;
 import shop.gaship.gashipfront.util.dto.PageResponse;
 
 /**
@@ -107,6 +108,12 @@ public interface ProductAdapter {
     PageResponse<ProductAllInfoResponseDto> productListAll(String page, String size,
                                                            String category, String minAmount,
                                                            String maxAmount);
+
+    PageResponse<ProductByCategoryResponseDto> productByCategoryAndAmount(Pageable pageable,
+                                                                          Integer categoryNo,
+                                                                          Long minPrice,
+                                                                          Long maxPrice,
+                                                                          Boolean isUpper);
 
     List<ProductAllInfoResponseDto> productNosList(List<Integer> productNos);
 }

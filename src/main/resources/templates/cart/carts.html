@@ -12,9 +12,9 @@
 </head>
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->
-    <div class="container-fluid">
+    <div class="container">
 
-        <div class="rs-bag-button-header large-12">
+        <div class="rs-bag-button-header large-12 container">
             <h1 class="rs-bag-header" data-autom="bag-header" tabindex="-1">장바구니에 들어 있는 제품입니다</h1>
             <h1 th:id="result" class="rs-bag-header" data-autom="bag-header" tabindex="-1"></h1>
             <span class="visuallyhidden" aria-live="polite"></span>
@@ -34,14 +34,15 @@
                 </div>
             </div>
         </div>
+        <p th:text="|현재 host : ${myAddress}|" style="font-size: 1.5rem;"></p>
         <!-- DataTales Example -->
         <div class=" ">
             <div class="">
                 <div class="">
                     <div id="dataTable_wrapper" class=" "><div class="row">
                         <div class="col-sm-12">
-
-                            <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+                            <div style="overflow-x: scroll;">
+                            <table class="table table-bordered dataTable container" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
                                 <thead>
                                 <tr role="row">
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Name: activate to sort column descending" style="width: 400px;">상품사진</th>
@@ -53,7 +54,6 @@
                                     <th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 100px;">삭제</th>
                                 </tr>
                                 </thead>
-                                <iframe id="cartdelete" name="cartdelete" style="display:none"></iframe>
                                 <tbody>
                                 <tr th:each="product : ${response}">
                                     <td><img th:src="${product.filePaths}"/></td>
@@ -90,6 +90,7 @@
 
                                 </tbody>
                             </table>
+                            </div>
                             <div class="rs-summary ">
                                 <div class="large-9 large-offset-3 small-12 small-offset-0">
                                     <div class="rs-summary-content rs-summary-subtotal">

@@ -60,7 +60,10 @@ public class MemberCreationRequest {
     private String nickName;
 
     @NotBlank
-    @Length(max = 1)
+    @Pattern(
+        regexp = "^[남,여]$",
+        message = "성별을 올바르게 입력해 주세요."
+    )
     private String gender;
 
     @Setter

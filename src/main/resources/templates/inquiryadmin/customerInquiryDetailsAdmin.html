@@ -110,17 +110,25 @@
                             </div>
                         </form>
                     </div>
-                    <a href="/admin/inquiries/customer-inquiries" style="width: auto; margin-left: 10px"
-                       class="btn btn-outline-primary mt-3">관리자 고객문의 목록</a>
                 </div>
+                <a href="/admin/inquiries/customer-inquiries" style="width: auto; margin-left: 10px"
+                   class="btn btn-outline-primary mt-3">최신순</a>
+                <a href="/admin/inquiries/customer-inquiries/status-hold" style="width: auto; margin-left: 10px"
+                   class="btn btn-outline-primary mt-3">답변대기</a>
+                <a href="/admin/inquiries/customer-inquiries/status-complete" style="width: auto; margin-left: 10px"
+                   class="btn btn-outline-primary mt-3">답변완료</a>
             </div>
         </div>
-
 
         <script th:src="@{/inquiry/js/inquiry.js}"></script>
         <script th:inline="javascript">
             let whereUri = "customer";
             let isUser = false;
+
+            let successMessage = [[${successMessage}]];
+            if (successMessage) {
+                alert(successMessage);
+            }
         </script>
     </div>
 </th:block>
