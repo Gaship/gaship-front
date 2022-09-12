@@ -66,7 +66,7 @@ class CartControllerTest {
     @DisplayName("쿠키가 없는 방문자가 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest1() throws Exception {
-        when(cartService.addProductToCart(any(), any())).thenReturn(11);
+        doNothing().when(cartService).addProductToCart(any(),any());
         String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 11));
 
         mockMvc.perform(post("/carts/add-product")
@@ -81,7 +81,7 @@ class CartControllerTest {
     @DisplayName("쿠키가 있는 비회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest2() throws Exception {
-        when(cartService.addProductToCart(any(), any())).thenReturn(1);
+        doNothing().when(cartService).addProductToCart(any(),any());
         String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 1));
 
         mockMvc.perform(post("/carts/add-product")
@@ -97,7 +97,7 @@ class CartControllerTest {
     @DisplayName("쿠키가 있는 회원이 물건 상세페이지에서 수량을 선택한 후 장바구니에 담기 버튼을 클릭했을 때")
     @Test
     void addToCartTest3() throws Exception {
-        when(cartService.addProductToCart(any(), any())).thenReturn(1);
+        doNothing().when(cartService).addProductToCart(any(),any());
         String body = objectMapper.writeValueAsString(CartDummy.cartProductModifyRequestDto(1, 1));
 
         mockMvc.perform(post("/carts/add-product")

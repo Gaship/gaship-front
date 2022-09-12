@@ -51,14 +51,13 @@ public class CartServiceImpl implements CartService {
      * {@inheritDoc}
      */
     @Override
-    public Integer addProductToCart(
+    public void addProductToCart(
             String cartNo, CartProductModifyRequestDto request) throws CartProductAmountException {
         redisTemplate.expire(cartNo, 7, TimeUnit.DAYS);
         productStockMoreThanOneCheck(request.getProductNo());
         orderQuantityAmountCheck(request.getProductNo(),request.getQuantity());
         cartSizeIsMaxCheck(cartNo);
         hashOperations.put(cartNo, request.getProductNo().toString(), request.getQuantity());
-        return request.getQuantity();
     }
 
     /**

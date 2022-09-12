@@ -48,10 +48,11 @@ public class CartController {
      */
     @PostMapping("/add-product")
     @ResponseBody
-    public Integer addToCart(@ModelAttribute CartProductModifyRequestDto request,
+    public boolean addToCart(@ModelAttribute CartProductModifyRequestDto request,
                              HttpServletRequest servletRequest) throws CartProductAmountException {
         String cartId = (String) servletRequest.getAttribute(CART_ID);
-        return cartService.addProductToCart(cartId, request);
+        cartService.addProductToCart(cartId, request);
+        return true;
     }
 
     /**
