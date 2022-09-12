@@ -103,12 +103,15 @@ public class CartController {
             Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("GASHIP_SESSIONID"))
                   .findFirst().orElse(null);
 
+        String cookieName = null;
         String sessionId = null;
 
         if (sessionCookie != null) {
+            cookieName = sessionCookie.getName();
             sessionId = sessionCookie.getValue();
         }
 
+        model.addAttribute("cookieName", cookieName);
         model.addAttribute("sessionId", sessionId);
         return "cart/carts";
     }
