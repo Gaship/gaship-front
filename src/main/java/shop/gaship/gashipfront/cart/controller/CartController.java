@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.protocol.HTTP;
@@ -93,7 +94,7 @@ public class CartController {
      * @author 최정우
      */
     @GetMapping
-    public String getProductsFromCart(HttpServletRequest request,
+    public String getProductsFromCart(HttpServletRequest request, HttpServletResponse response,
                                       Model model) throws UnknownHostException {
         String cartId = (String) request.getAttribute(CART_ID);
         model.addAttribute("response", cartService.getProductsFromCart(cartId));
@@ -104,15 +105,16 @@ public class CartController {
                   .findFirst().orElse(null);
 
         String cookieName = null;
-        String sessionId = null;
 
         if (sessionCookie != null) {
             cookieName = sessionCookie.getName();
-            sessionId = sessionCookie.getValue();
         }
+
+        String sessionId = request.getSession().getId();
 
         model.addAttribute("cookieName", cookieName);
         model.addAttribute("sessionId", sessionId);
+
         return "cart/carts";
     }
 }
