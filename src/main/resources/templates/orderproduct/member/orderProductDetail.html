@@ -42,10 +42,12 @@
                                         <h3 th:text="${order.productName}"></h3>
                                         <div class="product__details__price"
                                              th:text="${'₩' + order.totalOrderAmount}"></div>
-                                        <a style="font-size: 12px" class="w-auto p-1 btn btn-sm btn-primary btn-lg mb-2" th:href="@{|/reviews/${order.orderProductNo}/add|}" th:unless="${order.existsReview}">
-                                            상품평 작성
-                                        </a>
-                                        <p style="font-size: 10px" th:if="${order.existsReview}" class="mb-1">상품평 작성완료</p>
+                                        <div th:if="${#strings.equals(order.orderProductStatus, '배송완료')}">
+                                            <a style="font-size: 12px" class="w-auto p-1 btn btn-sm btn-primary btn-lg mb-2" th:href="@{|/reviews/${order.orderProductNo}/add|}" th:unless="${order.existsReview}">
+                                                상품평 작성
+                                            </a>
+                                            <p style="font-size: 10px" th:if="${order.existsReview}" class="mb-1">상품평 작성완료</p>
+                                        </div>
                                         <ul class="m-0 pt-2">
                                             <li><span class="mr-2 font-weight-bold">주문번호</span> <span><samp th:text="${order.orderNo}"></samp></span>
                                             </li>
