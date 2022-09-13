@@ -38,6 +38,7 @@ public class RedisConfig implements BeanClassLoaderAware {
     private ClassLoader classLoader;
 
     private static final Integer THIRTEEN_MINUTES_SECONDS = 1800;
+    private static final Integer ONE_DAY = 60 * 60 * 24;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(SecureManagerConfig secureManagerConfig) {
@@ -80,7 +81,7 @@ public class RedisConfig implements BeanClassLoaderAware {
 
         serializer.setUseSecureCookie(true);
         serializer.setUseHttpOnlyCookie(true);
-        serializer.setCookieMaxAge(THIRTEEN_MINUTES_SECONDS);   // 3일
+        serializer.setCookieMaxAge(ONE_DAY);
         serializer.setCookiePath("/");
 
         return serializer;
