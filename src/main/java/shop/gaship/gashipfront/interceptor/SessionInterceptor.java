@@ -17,7 +17,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class SessionInterceptor implements HandlerInterceptor {
 
     public static final String SESSION_ID = "GASHIP_SESSIONID";
-    public static final Integer SESSION_AND_COOKIE_TIME_OUT_SECOND = 30 * 60;
+    public static final Integer SESSION_AND_COOKIE_TIME_OUT_SECOND = 60 * 60 * 24;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
